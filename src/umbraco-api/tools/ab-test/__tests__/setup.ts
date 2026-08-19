@@ -5,13 +5,7 @@ import {
 } from "@umbraco-cms/mcp-server-sdk/testing";
 import { configureApiClient } from "@umbraco-cms/mcp-server-sdk";
 import { getUmbracoEngageManagementAPI } from "../../../api/generated/umbracoEngageManagementApi.js";
-import { CustomerJourneyBuilder } from "./helpers/customer-journey-builder.js";
 
 configureApiClient(() => getUmbracoEngageManagementAPI());
 
-export {
-  setupTestEnvironment,
-  createMockRequestHandlerExtra,
-  createSnapshotResult,
-  CustomerJourneyBuilder,
-};
+export { setupTestEnvironment, createMockRequestHandlerExtra, createSnapshotResult };
