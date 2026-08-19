@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`post-referral-group creates a new referral group 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "created": "NORMALIZED_DATE",
+    "customerJourneyScoring": [],
+    "description": "",
+    "id": 0,
+    "invalid": false,
+    "name": "",
+    "pages": [],
+    "personaScoring": [],
+    "unique": "NORMALIZED_UNIQUE",
+  },
+}
+`;

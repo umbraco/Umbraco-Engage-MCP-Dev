@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`post-segments creates a new segment 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "controlGroupSize": 0,
+    "created": "NORMALIZED_DATE",
+    "description": "",
+    "endTime": null,
+    "id": "00000000-0000-0000-0000-000000000000",
+    "isTemporary": false,
+    "name": "",
+    "rules": [],
+    "sortOrder": 0,
+    "unique": "NORMALIZED_UNIQUE",
+  },
+}
+`;
