@@ -132,7 +132,7 @@ Custom fields defined in `config/server-config.ts`.
 `scripts/start-umbraco.sh` expects a `demo-site/` project but none ships with this repo — `npx @umbraco-cms/create-umbraco-mcp-server init` doesn't scaffold Engage-specific packages, so build it by hand:
 
 1. **`demo-site/demo-site.csproj`** — `Microsoft.NET.Sdk.Web`, `net10.0`, referencing:
-   - `Umbraco.Cms` — pin to a version Engage supports (check the target `Umbraco.Engage` nuspec's `Umbraco.Engage.Core` → `Umbraco.Cms.Web.Website` dependency range; `17.6.0` paired with `Umbraco.Engage 17.2.0` is confirmed working)
+   - `Umbraco.Cms` — pin to a version Engage supports (check the target `Umbraco.Engage` nuspec's `Umbraco.Engage.Core` → `Umbraco.Cms.Web.Website` dependency range; `17.6.0` paired with `Umbraco.Engage 17.2.1` is confirmed working). Use exactly `17.2.1`, not `17.2.0` — the `get-package` integration test's checked-in snapshot expects `version: "17.2.1+cb3108d"` (the NuGet package's embedded repository commit); any other Engage version fails that snapshot on build/version alone.
    - `Umbraco.Cms.DevelopmentMode.Backoffice` (same version)
    - `Umbraco.Engage` — do **not** add the `Clean` starter-kit package alongside it unless you pin a `Clean` version whose own `Umbraco.Cms.Web.Website` dependency matches (mismatched ranges cause an `NU1107` version-conflict restore failure)
 2. **`Program.cs`** — copy the minimal `CreateUmbracoBuilder().AddBackOffice().AddWebsite().AddComposers().Build()` pattern from a sibling `umbraco-mcp-*` repo's `demo-site/Program.cs`
