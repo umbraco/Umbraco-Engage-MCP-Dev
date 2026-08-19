@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`post-customer-journey creates a new customer journey 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "journey": {
+      "createdByUmbracoUserKey": "00000000-0000-0000-0000-000000000000",
+      "createdByUmbracoUserName": null,
+      "createdOn": "NORMALIZED_DATE",
+      "description": null,
+      "expiration": null,
+      "expirationType": null,
+      "id": 0,
+      "minimumDeviation": null,
+      "minimumDeviationType": null,
+      "minimumParticipationScoreThreshold": null,
+      "steps": [],
+      "title": null,
+      "unique": "NORMALIZED_UNIQUE",
+      "updatedByUmbracoUserKey": null,
+      "updatedByUmbracoUserName": null,
+      "updatedOn": null,
+      "upperScoreLimit": null,
+    },
+    "validationResults": {
+      "errors": [],
+      "isValid": true,
+      "warnings": [],
+    },
+  },
+}
+`;
