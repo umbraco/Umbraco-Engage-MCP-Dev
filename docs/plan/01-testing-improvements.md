@@ -1,0 +1,66 @@
+# Stage 1 — Testing Improvements
+
+Ordered roughly by leverage (biggest pain removed per unit of effort first).
+
+## 1. Adopt `cms-dev-mcp`'s demo-site provisioning pattern
+
+This session hand-built `demo-site/` from scratch: wrote `demo-site.csproj`/`Program.cs`/`appsettings*.json` by hand, spun up a SQL Server container in Docker, manually created the target database via `sqlcmd`, and manually ran `dotnet dev-certs https --trust` (which needed a macOS Keychain prompt approved by a human). None of that is necessary — `umbraco-mcp-dev-cms` already solved it:
+
+- **`demo-site-template/`** — a tracked template project (csproj, `Program.cs`, `appsettings.json`, composers) that is the actual source of truth, copied into the gitignored `demo-site/` by a script rather than hand-authored per checkout.
+- **`scripts/bootstrap-demo-site.sh`** — `rsync`s the template in (idempotent; `--force` to reset), and critically supports a **`--sqlite` flag** that writes a zero-dependency SQLite connection string instead of a SQL Server one:
+  ```
+  "umbracoDbDSN": "Data Source=|DataDirectory|/Umbraco.sqlite.db;Cache=Shared;Foreign Keys=True;Pooling=True"
+  ```
+  This alone removes the Docker + SQL Server dependency entirely — a new contributor (or a fresh agent session) could go from clone to running demo-site with no external services.
+
+**Action:** create `demo-site-template/` in this repo (adapted from `umbraco-mcp-dev-cms`'s, swapping `Umbraco.Cms`-only packages for the `Umbraco.Cms` + `Umbraco.Engage 17.2.1` pairing confirmed working this session — see [Upgrades](02-upgrades.md) for why the exact patch version matters), and port `bootstrap-demo-site.sh` with the `--sqlite` option. Update `scripts/start-umbraco.sh` (currently a stub that just errors) to actually call it.
+
+## 2. Rewrite the eval tests against real tool names
+
+Confirmed this session: `tests/evals/example-crud.test.ts` and `tests/evals/tool-filtering.test.ts` reference `get-example`, `create-example`, `get-widget`, `create-widget`, etc. — tools that do not exist anywhere in this project's 37 collections. They're unmodified copies from the generic SDK template scaffold, never adapted. Only `mcp-chaining.test.ts` tests something real (the `get-chained-info` delegation pattern), and even that exercises the generic mechanism rather than an Engage-specific scenario.
+
+`umbraco-mcp-dev-cms` has **16 real eval files** (`create-data-type`, `create-document-type`, `member-management`, `schema-driven-content-creation`, etc.), each verified against actual tool names in that project. That's the bar to match.
+
+**Action:**
+- Rewrite `example-crud.test.ts` into something like `ab-test-project-crud.test.ts`: create an A/B test project, list it, update it, delete it — using the real `post-ab-test-project`/`get-ab-test-project-all`/`put-ab-test-project`/`delete-ab-test-project` tools.
+- Rewrite `tool-filtering.test.ts`'s assertions to use real Engage tool/collection/mode names (e.g. `UMBRACO_TOOL_MODES=ab-testing`, `UMBRACO_INCLUDE_SLICES=read`) instead of `example`/`example-2`.
+- Keep `mcp-chaining.test.ts` as-is — it's testing the SDK mechanism, which is legitimately generic.
+
+## 2a. Fix the eval harness crash (blocks the above until done — see Upgrades §1)
+
+Running any eval test in this environment currently crashes before reaching tool logic:
+```
+TypeError: Object not disposable
+  at ... node_modules/@anthropic-ai/claude-agent-sdk/sdk.mjs
+```
+This is a `@anthropic-ai/claude-agent-sdk` issue (currently pinned to `0.2.39`; 268 versions have shipped since, up to `0.3.235`). Upgrading is a prerequisite for eval test rewrites to be verifiable at all — see [Upgrades §1](02-upgrades.md#1-anthropic-aiclaude-agent-sdk--highest-priority).
+
+## 3. Add CI
+
+This repo has no `.github/` directory — zero CI. `umbraco-mcp-dev-cms`'s `test.yml` is the template: compile → build → `dotnet dev-certs https --trust` → bootstrap demo-site (with `--sqlite`, so no service containers needed) → boot Umbraco with a status-poll wait loop → create the API user via `scripts/create-api-user.mjs` → `npm test` → (separately) Playwright e2e. A second `evals` job, gated to release PRs targeting `main` with `ANTHROPIC_API_KEY` from repo secrets, runs the eval suite only where it's worth the cost.
+
+**Action:** port `test.yml`, adapted for this repo (no SQL Server container needed if using `--sqlite`; `scripts/create-api-user.mjs` already exists here with the version-specific Swagger redirect-URI fix from this session already applied). Add `.github/dependabot.yml` for npm security-update rollups.
+
+## 4. Close the test-builder/helper gap
+
+`umbraco-mcp-dev-cms` has **29** `__tests__/helpers/` directories; this project has 4 — the pre-existing `AnnotationBuilder`, plus `AbTestProjectBuilder`, `DocumentTypeFixture`, and `DomainFixture` added this session. Several CMS helpers are substantial enough to have their own unit tests (e.g. `document/__tests__/helpers/document-builder.test.ts`) — a level of rigor this project hasn't reached yet.
+
+**Action:** as new integration tests are added for currently-untested tools/slices, follow the builder pattern established this session (see [Recent changes §Fixture builders](03-recent-changes.md#fixture-builders-for-integration-tests)) rather than writing ad hoc setup code per test file. Two established sub-patterns to reuse:
+- **Engage-native entities** (A/B tests, personas, segments, …): call `getUmbracoEngageManagementAPI()` directly in a builder.
+- **CMS-native entities** the Engage tools only *read* (content types, documents, domains): use `mcpClientManager.callTool("cms", toolName, args)` — see `content-types/__tests__/helpers/document-type-fixture.ts` and `cockpit-auth/__tests__/helpers/domain-fixture.ts` for the pattern, including the `content[].text` fallback for chained tools without an `outputSchema`.
+
+## 5. Keep extending `normalizeVolatileFields`, don't hand-patch with `-u`
+
+This session found and fixed a real trap: several tests were "passing" only because their snapshots had just been regenerated with `jest -u`, while the underlying values (job timestamps, durations, run ids, machine timezone, install-identity strings) are inherently non-reproducible and will drift again on the very next run — including in CI on a different container. The fix was a shared, extensible helper (`src/testing/normalize-volatile-fields.ts`), not one-off snapshot updates.
+
+**Action:** when a new test flakes on re-run for the same reason, add the field name to the appropriate list in `normalize-volatile-fields.ts` rather than running `-u` and moving on. If `umbraco-mcp-dev-cms`'s inline per-test patches (e.g. `user-test-helper.ts`) are ever ported here, consider consolidating them into this shared helper too — it's already more DRY than that pattern.
+
+## 6. Consider whether the MSW mock-API layer is worth keeping
+
+`src/mocks/` (MSW handlers, `USE_MOCK_API`) exists in this project but `umbraco-mcp-dev-cms` has no equivalent at all — its tests always hit a real Umbraco instance. Every fix made this session went through the real API; the mock layer wasn't exercised. Either it's dead weight worth removing, or it has a real purpose (e.g. fast unit-level tests without a live instance) that should be demonstrated with at least one test using it — currently unclear which.
+
+## 7. Nice-to-haves from `cms-dev-mcp` not yet assessed for priority
+
+- `scripts/test-changed.mjs` — git-diff-aware `jest --findRelatedTests`, useful for fast local iteration and the automated issue-loop tooling other Umbraco MCP repos use.
+- `scripts/worktree-create.sh` / `worktree-remove.sh` — parallel-worktree dev support.
+- `tests/e2e-sdk/` — a third test tier this project has no equivalent of; assess whether Engage needs one or whether integration + hosted-e2e is sufficient coverage.
