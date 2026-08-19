@@ -111,6 +111,13 @@ Custom fields defined in `config/server-config.ts`.
 - Call `setupTestEnvironment()` in describe block
 - Use builder pattern for test data (e.g., `ExampleBuilder`)
 - Test tool handlers directly
+- **Seeding fixtures for a fresh/empty demo-site:** some tools list data that doesn't exist on a brand-new install (an A/B test project, a content type, a registered domain). Two patterns, pick by where the entity lives:
+  - **Engage-native entities** (A/B tests, personas, annotations, segments, …) — call the Engage API directly via `getUmbracoEngageManagementAPI()` in a builder (see `ab-test-project/__tests__/helpers/ab-test-project-builder.ts`), same as the existing `AnnotationBuilder`. No chaining needed.
+  - **CMS-native entities** (content types, documents, domains) that Engage only *reads* — use the chained CMS MCP via `mcpClientManager.callTool("cms", toolName, args)` from `../../../mcp-client.js` (see `content-types/__tests__/helpers/document-type-fixture.ts` and `cockpit-auth/__tests__/helpers/domain-fixture.ts`). Notes:
+    - Proxied chained tools often have no `outputSchema`, so results land in `content[].text` (JSON string) rather than `structuredContent` — use `extractChainedResult`/`extractId` from `src/testing/chained-tool-result.ts` to handle both.
+    - `mcpClientManager` spawns the chained server as a child process on first `callTool()`/`connect()` — call `mcpClientManager.disconnectAll()` in `afterAll` or Jest hangs on an open handle.
+    - Create in `beforeAll`, delete in `afterAll` (delete the document before its document type — Umbraco won't delete a type with content still using it).
+  - **Fields you can't seed** — some snapshot fields are inherent to the *original install*, not the data: `createdByUmbracoUserName` on server-generated records (e.g. Engage's own built-in default traffic-filter rule) reflects whichever account performed setup and can't be overridden via the request body; Umbraco's auto-increment integer content IDs (`rootContentId` etc.) are never reproducible across environments/runs — normalize these locally in the test (see `get-cockpit-auth-domains.test.ts`) rather than chasing an exact match.
 
 **Eval tests (`tests/evals/`):**
 - LLM-based acceptance tests using Claude Agent SDK

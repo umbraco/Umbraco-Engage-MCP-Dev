@@ -6,89 +6,9 @@ exports[`get-content-types-all returns all Engage content types 1`] = `
   "structuredContent": {
     "items": [
       {
-        "alias": "contentBase",
+        "alias": "testContentBase",
         "id": "00000000-0000-0000-0000-000000000000",
-        "name": "Content Base",
-      },
-      {
-        "alias": "navigationBase",
-        "id": "00000000-0000-0000-0000-000000000000",
-        "name": "Navigation Base",
-      },
-      {
-        "alias": "blog",
-        "id": "00000000-0000-0000-0000-000000000000",
-        "name": "Blog",
-      },
-      {
-        "alias": "blogpost",
-        "id": "00000000-0000-0000-0000-000000000000",
-        "name": "Blogpost",
-      },
-      {
-        "alias": "contact",
-        "id": "00000000-0000-0000-0000-000000000000",
-        "name": "Contact",
-      },
-      {
-        "alias": "contentPage",
-        "id": "00000000-0000-0000-0000-000000000000",
-        "name": "Content Page",
-      },
-      {
-        "alias": "home",
-        "id": "00000000-0000-0000-0000-000000000000",
-        "name": "Home",
-      },
-      {
-        "alias": "people",
-        "id": "00000000-0000-0000-0000-000000000000",
-        "name": "People",
-      },
-      {
-        "alias": "person",
-        "id": "00000000-0000-0000-0000-000000000000",
-        "name": "Person",
-      },
-      {
-        "alias": "product",
-        "id": "00000000-0000-0000-0000-000000000000",
-        "name": "Product",
-      },
-      {
-        "alias": "products",
-        "id": "00000000-0000-0000-0000-000000000000",
-        "name": "Products",
-      },
-      {
-        "alias": "latestBlogposts",
-        "id": "00000000-0000-0000-0000-000000000000",
-        "name": "Latest Blogposts",
-      },
-      {
-        "alias": "feature",
-        "id": "00000000-0000-0000-0000-000000000000",
-        "name": "Feature",
-      },
-      {
-        "alias": "umbBlockGridDemoHeadlineBlock",
-        "id": "00000000-0000-0000-0000-000000000000",
-        "name": "Headline",
-      },
-      {
-        "alias": "umbBlockGridDemoImageBlock",
-        "id": "00000000-0000-0000-0000-000000000000",
-        "name": "Image",
-      },
-      {
-        "alias": "umbBlockGridDemoRichTextBlock",
-        "id": "00000000-0000-0000-0000-000000000000",
-        "name": "Rich Text",
-      },
-      {
-        "alias": "umbBlockGridDemoTwoColumnLayoutBlock",
-        "id": "00000000-0000-0000-0000-000000000000",
-        "name": "Two Column Layout",
+        "name": "Test Content Base",
       },
     ],
   },

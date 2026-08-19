@@ -11,7 +11,7 @@ exports[`get-ab-test-project-all returns all A/B test projects 1`] = `
         "amountOfTests": 0,
         "archived": false,
         "created": "NORMALIZED_DATE",
-        "createdByUmbracoUserName": "Engage",
+        "createdByUmbracoUserName": "MCP API User",
         "description": "Test project",
         "id": "00000000-0000-0000-0000-000000000000",
         "invalid": false,
