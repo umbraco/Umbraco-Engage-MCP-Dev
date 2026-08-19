@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`post-persona creates a new persona group 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "persona": {
+      "createdByUmbracoUserKey": "00000000-0000-0000-0000-000000000000",
+      "createdByUmbracoUserName": null,
+      "createdOn": "NORMALIZED_DATE",
+      "description": null,
+      "expiration": null,
+      "expirationType": "never",
+      "id": 0,
+      "minimumDeviation": null,
+      "minimumDeviationType": "Absolute",
+      "minimumParticipationScoreThreshold": null,
+      "personas": [],
+      "title": null,
+      "unique": "NORMALIZED_UNIQUE",
+      "updatedByUmbracoUserKey": null,
+      "updatedByUmbracoUserName": null,
+      "updatedOn": null,
+      "upperScoreLimit": null,
+    },
+    "validationResults": {
+      "errors": [],
+      "isValid": true,
+      "warnings": [],
+    },
+  },
+}
+`;

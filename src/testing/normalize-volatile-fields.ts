@@ -9,7 +9,7 @@
  * timezone — none of which will ever match a checked-in snapshot value
  * captured on a different machine or at a different moment in time.
  */
-const DATE_LIKE_FIELDS = ["started", "finished", "lastGenerated"];
+const DATE_LIKE_FIELDS = ["started", "finished", "lastGenerated", "createdOn", "updatedOn"];
 const DURATION_FIELDS = ["durationMs", "totalDurationMs"];
 const GUID_LIKE_FIELDS = ["runId"];
 const MACHINE_LOCAL_FIELDS = ["reportingTimeZone"];
@@ -17,6 +17,10 @@ const MACHINE_LOCAL_FIELDS = ["reportingTimeZone"];
 // migration — permanent for a given database, but never reproducible across
 // a different environment's install (a fresh demo-site, a CI container).
 const INSTALL_IDENTITY_FIELDS = ["createdByUmbracoUserName"];
+// GUID identifiers of the *calling* Umbraco user (as opposed to a display
+// name) — varies per environment's API user, same category as
+// INSTALL_IDENTITY_FIELDS but a GUID rather than a string.
+const USER_KEY_FIELDS = ["createdByUmbracoUserKey", "updatedByUmbracoUserKey"];
 
 export function normalizeVolatileFields(value: unknown): unknown {
   if (Array.isArray(value)) {
@@ -25,11 +29,19 @@ export function normalizeVolatileFields(value: unknown): unknown {
   if (value && typeof value === "object") {
     const out: Record<string, unknown> = {};
     for (const [key, val] of Object.entries(value)) {
-      if (DATE_LIKE_FIELDS.includes(key)) {
+      // Nullable volatile fields (e.g. updatedOn/updatedByUmbracoUserKey
+      // before anything has updated the record) should stay null/undefined
+      // rather than be replaced with a placeholder — null is itself a
+      // meaningful, reproducible value.
+      if (val === null || val === undefined) {
+        out[key] = val;
+      } else if (DATE_LIKE_FIELDS.includes(key)) {
         out[key] = "NORMALIZED_DATE";
       } else if (DURATION_FIELDS.includes(key)) {
         out[key] = 0;
       } else if (GUID_LIKE_FIELDS.includes(key)) {
+        out[key] = "00000000-0000-0000-0000-000000000000";
+      } else if (USER_KEY_FIELDS.includes(key)) {
         out[key] = "00000000-0000-0000-0000-000000000000";
       } else if (MACHINE_LOCAL_FIELDS.includes(key)) {
         out[key] = "NORMALIZED_TIMEZONE";
