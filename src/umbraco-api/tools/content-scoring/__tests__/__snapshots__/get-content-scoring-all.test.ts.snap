@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-content-scoring-all returns all content scoring assignments 1`] = `
+{
+  "content": [],
+  "isError": true,
+  "structuredContent": {
+    "detail": "Bad Request",
+    "status": 400,
+  },
+}
+`;

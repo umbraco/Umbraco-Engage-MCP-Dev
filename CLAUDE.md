@@ -1,0 +1,187 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with the MCP server template.
+
+## Template Overview
+
+Starter kit for creating new Umbraco MCP server projects. Copy this folder to start a new project. Not published to npm.
+
+## Commands
+
+```bash
+npm run build          # Build with tsup
+npm run compile        # Type-check only
+npm run generate       # Generate API client from OpenAPI spec (Orval)
+npm run inspect        # Run MCP inspector
+npm run test           # Unit tests only
+npm run test:evals     # LLM eval tests (requires Claude Code subscription or ANTHROPIC_API_KEY)
+npm run test:all       # Both unit and eval tests
+```
+
+**Single test:** `npm test -- --testPathPattern=src/path/__tests__/file.test.ts`
+
+**Always use npm scripts** (`npm run compile`, `npm test`, `npm run build`) — never run `node`, `npx tsc`, or `jest` directly.
+
+## Source Structure
+
+```
+src/
+├── umbraco-api/
+│   ├── api/
+│   │   ├── client.ts          # API client configuration
+│   │   └── generated/         # Orval-generated client and Zod schemas
+│   ├── tools/
+│   │   └── {collection-name}/
+│   │       ├── index.ts       # ToolCollectionExport
+│   │       ├── get/           # GET tools
+│   │       ├── post/          # POST tools
+│   │       ├── put/           # PUT tools
+│   │       ├── delete/        # DELETE tools
+│   │       └── __tests__/     # Integration tests
+│   └── mcp-client.ts          # MCP chaining client instance
+├── config/
+│   ├── index.ts               # Exports all config
+│   ├── server-config.ts       # Custom config field definitions
+│   ├── slice-registry.ts      # Valid slice names
+│   ├── mode-registry.ts       # Mode-to-collection mappings
+│   └── mcp-servers.ts         # Chained MCP server configs
+├── mocks/
+│   ├── server.ts              # MSW server setup
+│   ├── handlers.ts            # API mock handlers
+│   ├── store.ts               # In-memory mock data
+│   └── jest-setup.ts          # Test setup file
+├── testing/                   # Test helpers specific to this project
+└── index.ts                   # Server entry point
+tests/
+└── evals/
+    ├── jest.config.ts         # Separate Jest config for evals
+    ├── helpers/
+    │   └── e2e-setup.ts       # configureEvals setup (loaded via setupFilesAfterEnv)
+    └── *.test.ts              # LLM eval test files
+```
+
+## Configuration
+
+**Environment Variables / CLI Flags:**
+
+| Variable | CLI Flag | Purpose |
+|----------|----------|---------|
+| `UMBRACO_CLIENT_ID` | `--umbraco-client-id` | OAuth client ID |
+| `UMBRACO_CLIENT_SECRET` | `--umbraco-client-secret` | OAuth client secret |
+| `UMBRACO_BASE_URL` | `--umbraco-base-url` | Umbraco instance URL |
+| `UMBRACO_TOOL_MODES` | `--umbraco-tool-modes` | Comma-separated modes |
+| `UMBRACO_INCLUDE_SLICES` | `--umbraco-include-slices` | Include only these slices |
+| `UMBRACO_EXCLUDE_SLICES` | `--umbraco-exclude-slices` | Exclude these slices |
+| `UMBRACO_READONLY` | `--umbraco-readonly` | Block write operations |
+| `DISABLE_MCP_CHAINING` | `--disable-mcp-chaining` | Disable MCP server chaining |
+
+Custom fields defined in `config/server-config.ts`.
+
+## Registries
+
+**slice-registry.ts** - Valid slice names for tool categorization:
+- Base slices: `create`, `read`, `update`, `delete`, `list`
+- Extended: `tree`, `search`, `publish`, `move`, `copy`, etc.
+- Tools with empty slices array are categorized as `other`
+
+**mode-registry.ts** - Named groups mapping to collections:
+- Example: `example` mode includes `example` collection
+- Users set `UMBRACO_TOOL_MODES=example,content` to enable groups
+
+## Tool Conventions
+
+- One file per tool in operation-type subfolder (`get/`, `post/`, etc.)
+- Export default with `withStandardDecorators(tool)`
+- Use Zod schemas from Orval-generated `*.zod.ts` files
+- Set `slices` array for filtering categorization
+- Set `annotations` for MCP hints (`readOnlyHint`, `destructiveHint`, `idempotentHint`)
+
+## Testing
+
+**Testing with Claude Code (`.mcp.json`):**
+- The project ships with `.mcp.json` which registers this MCP server in Claude Code automatically
+- After `init` + `discover` + `npm run build`, open the project directory in Claude Code — the server is immediately callable
+- `.mcp.json` uses `node --env-file=.env ./dist/index.js` so credentials stay in `.env` (gitignored)
+- No manual `claude mcp add` required
+- **Requires a running `demo-site/` instance** matching `UMBRACO_BASE_URL` in `.env` — see **Demo Site Setup** below if `demo-site/` doesn't exist yet
+
+**Integration tests (`__tests__/`):**
+- Run against the real Umbraco instance — no mocking
+- Require a running Umbraco instance with an API user configured (see below)
+- Call `setupTestEnvironment()` in describe block
+- Use builder pattern for test data (e.g., `ExampleBuilder`)
+- Test tool handlers directly
+
+**Eval tests (`tests/evals/`):**
+- LLM-based acceptance tests using Claude Agent SDK
+- Require Claude Code subscription or `ANTHROPIC_API_KEY`
+- Use `runScenarioTest` with prompt, tools, requiredTools, successPattern
+- Separate Jest config at `tests/evals/jest.config.ts`
+- Setup loaded automatically via `setupFilesAfterEnv` (no per-file import needed)
+- Run with `--runInBand` to avoid parallel API calls
+
+## Demo Site Setup
+
+`scripts/start-umbraco.sh` expects a `demo-site/` project but none ships with this repo — `npx @umbraco-cms/create-umbraco-mcp-server init` doesn't scaffold Engage-specific packages, so build it by hand:
+
+1. **`demo-site/demo-site.csproj`** — `Microsoft.NET.Sdk.Web`, `net10.0`, referencing:
+   - `Umbraco.Cms` — pin to a version Engage supports (check the target `Umbraco.Engage` nuspec's `Umbraco.Engage.Core` → `Umbraco.Cms.Web.Website` dependency range; `17.6.0` paired with `Umbraco.Engage 17.2.0` is confirmed working)
+   - `Umbraco.Cms.DevelopmentMode.Backoffice` (same version)
+   - `Umbraco.Engage` — do **not** add the `Clean` starter-kit package alongside it unless you pin a `Clean` version whose own `Umbraco.Cms.Web.Website` dependency matches (mismatched ranges cause an `NU1107` version-conflict restore failure)
+2. **`Program.cs`** — copy the minimal `CreateUmbracoBuilder().AddBackOffice().AddWebsite().AddComposers().Build()` pattern from a sibling `umbraco-mcp-*` repo's `demo-site/Program.cs`
+3. **`appsettings.local.json`** (gitignored) — SQL Server connection string, e.g. against a local `sql` docker container:
+   ```json
+   { "ConnectionStrings": { "umbracoDbDSN": "Server=localhost,1433;Database=umbraco-engage-mcp;User Id=sa;password=<pwd>;TrustServerCertificate=True" } }
+   ```
+   Create the target database first (`CREATE DATABASE [umbraco-engage-mcp]`) — Umbraco's unattended install does not create it for you against an existing SQL Server login.
+4. **`appsettings.Development.json`** — `Umbraco:CMS:Unattended.InstallUnattended: true` with `UnattendedUserEmail: admin@admin.com` / `UnattendedUserPassword: 1234567890` for a one-shot install
+5. **`Properties/launchSettings.json`** — pin `applicationUrl` to match `UMBRACO_BASE_URL` in `.env` (e.g. `https://localhost:44448`) instead of the default dynamic port, so `.env` doesn't need updating every run
+6. Trust the dev HTTPS cert once per machine so a browser (or Chrome automation) can open the backoffice without hitting an interstitial: `dotnet dev-certs https --trust`
+7. Run it: `cd demo-site && ASPNETCORE_ENVIRONMENT=Development dotnet run`
+
+## API User Setup
+
+Integration tests and the `.mcp.json` server both require an API user in Umbraco with Client ID `umbraco-back-office-mcp` / Secret `1234567890` (matching `.env`).
+
+**Preferred: `scripts/create-api-user.mjs`** — creates the user via the Management API directly (admin login → PKCE token exchange → create API user → set client credentials), no backoffice UI needed:
+
+```bash
+NODE_TLS_REJECT_UNAUTHORIZED=0 node scripts/create-api-user.mjs https://localhost:44448 admin@admin.com 1234567890
+```
+
+This script was copied from `umbraco-mcp-dev-cms/scripts/`. **Check the hardcoded Swagger OAuth `redirect_uri` before reusing it against a different Umbraco version** — it must match the `umbraco-swagger` OpenIddict client's registered redirect URI for your installed CMS version (query `SELECT ClientId, RedirectUris FROM umbracoOpenIddictApplications` in the demo-site's DB to confirm; this changed from `/umbraco/openapi/oauth2-redirect.html` to `/umbraco/swagger/oauth2-redirect.html` between versions).
+
+**Fallback: manually via the Umbraco backoffice UI** (Settings > Users > Create > API User) if the script's OAuth flow doesn't match your version — grant the user appropriate permissions for the APIs being tested, then set the same Client ID/Secret above.
+
+## Tool Types Codegen
+
+`npm run build` runs `umbraco-mcp-generate-types` as a `postbuild` step. This walks the compiled `dist/collections.js`, runs every tool's input/output Zod schema through codegen, and writes a typed registry to `dist/tool-types.d.ts`. The `./tool-types` subpath in `package.json#exports` makes this importable by anyone who depends on this package and wants to chain to it with type safety:
+
+```ts
+import type { McpTemplateTools } from "@umbraco-cms/mcp-template/tool-types";
+```
+
+If your MCP is private/internal and no other MCP will chain to it, you can remove the `postbuild` script and the `./tool-types` export — neither is required for the server to run.
+
+See the [SDK docs](../packages/mcp-server-sdk/README.md) and the published [Tool Types Codegen guide](https://docs.umbraco.com/) for full usage.
+
+## API Client
+
+Uses Orval to generate typed client from OpenAPI spec:
+1. Configure `orval.config.ts` with the Swagger URL
+2. Run `npm run generate`
+3. Client and Zod schemas generated to `src/umbraco-api/api/generated/`
+
+Always pass `CAPTURE_RAW_HTTP_RESPONSE` to API methods when using toolkit helpers.
+
+## Hosted Worker (`src/worker.ts`)
+
+The template includes a Cloudflare Worker entry point for hosted deployment. Key configuration:
+
+- `McpAgent.serve("/mcp", { binding: "MCP_AGENT" })` — use `.serve()` for Streamable HTTP (NOT `.mount()` which is SSE)
+- `new_sqlite_classes` in `wrangler.toml` migrations (agents library requires SQLite-backed DOs)
+- `.dev.vars` — local secrets including `UMBRACO_SERVER_URL` for self-signed cert workaround
+- Umbraco needs the Worker registered as an authorization_code OpenIdDict client via a C# Composer (backoffice UI only supports client_credentials)
+
+Run locally: `npx wrangler dev --port 8787`
+Test with MCP Inspector in Direct mode: `http://localhost:8787/`

@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-annotations-empty returns an empty annotation template 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "created": "NORMALIZED_DATE",
+    "createdByUserName": "",
+    "description": "",
+    "id": 0,
+    "invalid": false,
+    "pageVariants": [],
+    "timestamp": "1970-01-01T00:00:00.000Z",
+    "visibility": "Always",
+  },
+}
+`;

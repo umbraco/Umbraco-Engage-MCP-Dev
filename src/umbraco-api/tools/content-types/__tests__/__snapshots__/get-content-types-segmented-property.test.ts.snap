@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-content-types-segmented-property returns segmented property flag for an unknown unique 1`] = `
+{
+  "content": [],
+  "structuredContent": false,
+}
+`;

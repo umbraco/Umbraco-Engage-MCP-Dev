@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`post-analytics-query runs an analytics query for a recent date range 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "columns": [
+      "date",
+      "pageviews",
+    ],
+    "currentPage": 1,
+    "fromRow": 1,
+    "reportsExist": true,
+    "rows": [],
+    "rowsPerPage": 9999,
+    "toRow": 0,
+    "totalPages": 1,
+    "totalRows": 0,
+  },
+}
+`;

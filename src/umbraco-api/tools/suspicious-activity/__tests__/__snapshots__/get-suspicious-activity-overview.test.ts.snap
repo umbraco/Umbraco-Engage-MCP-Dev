@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-suspicious-activity-overview returns suspicious activity overview 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "results": [],
+    "totalResults": 0,
+  },
+}
+`;

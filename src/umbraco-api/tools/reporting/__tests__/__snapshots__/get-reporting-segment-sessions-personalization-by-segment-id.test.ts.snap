@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-reporting-segment-sessions-personalization-by-segment-id returns segment-sessions personalization for segmentId=0 1`] = `
+{
+  "content": [],
+  "structuredContent": null,
+}
+`;

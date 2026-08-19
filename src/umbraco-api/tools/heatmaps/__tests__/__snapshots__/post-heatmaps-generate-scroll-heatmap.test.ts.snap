@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`post-heatmaps-generate-scroll-heatmap returns an empty heatmap for an unknown page 1`] = `
+{
+  "content": [],
+  "structuredContent": null,
+}
+`;

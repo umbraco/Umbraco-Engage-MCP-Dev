@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`post-cockpit-delete-cookie executes without throwing 1`] = `
+{
+  "content": [],
+  "isError": true,
+  "structuredContent": {
+    "detail": "Forbidden",
+    "status": 403,
+  },
+}
+`;

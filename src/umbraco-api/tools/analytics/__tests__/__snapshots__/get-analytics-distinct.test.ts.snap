@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-analytics-distinct returns distinct values for the 'country' dimension 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "items": [
+      "<unknown>",
+    ],
+  },
+}
+`;

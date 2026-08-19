@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-cockpit-get-umbraco-page-info returns page info for an unknown page 1`] = `
+{
+  "content": [],
+  "isError": true,
+  "structuredContent": {
+    "detail": "Forbidden",
+    "status": 403,
+  },
+}
+`;

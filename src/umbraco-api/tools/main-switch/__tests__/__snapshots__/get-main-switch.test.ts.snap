@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-main-switch returns the current main-switch state 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "on": true,
+  },
+}
+`;

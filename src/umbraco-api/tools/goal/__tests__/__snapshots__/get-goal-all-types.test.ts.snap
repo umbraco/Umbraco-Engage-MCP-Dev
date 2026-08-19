@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-goal-all-types returns all goal types 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "items": [
+      {
+        "configurationEditorAlias": "CustomGoal",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "name": "Custom code",
+      },
+      {
+        "configurationEditorAlias": "PageEventGoal",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "name": "Event",
+      },
+      {
+        "configurationEditorAlias": "PageviewGoal",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "name": "Pageview",
+      },
+    ],
+  },
+}
+`;

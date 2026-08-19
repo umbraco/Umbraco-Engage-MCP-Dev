@@ -1,0 +1,120 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-configuration returns Engage configuration 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "abTesting": {
+      "minimumPercentageMacroGoalWarning": 10,
+      "requiredVisitorPercentageBeforeShowingAdvice": 10,
+    },
+    "analytics": {
+      "dataCleanup": {
+        "commandTimeout": 1200,
+        "enabled": true,
+        "firstRunTime": "",
+        "interval": "1.00:00:00",
+        "intervalInSeconds": 86400,
+        "numberOfRows": 1000,
+        "startAfterSeconds": 300,
+        "startupDelay": "00:05:00",
+      },
+      "dataCollection": {
+        "anonymizeIPAddress": true,
+        "flushIntervalInSeconds": 30,
+        "flushRateInRecords": 100,
+        "internalSiteSearch": {
+          "automaticSearchTracking": true,
+          "categoryParameters": [],
+          "searchBoxParameters": [],
+          "searchTermParameters": [
+            "q",
+          ],
+        },
+        "regexTimeoutInMilliseconds": 100,
+      },
+      "dataProcessing": {
+        "intervalInSeconds": 30,
+        "isProcessingServer": true,
+        "sessionLengthInMinutes": 30,
+      },
+      "dataStorage": {
+        "anonymizeAnalyticsDataAfterDays": 730,
+        "deleteAnalyticsDataAfterDays": 1095,
+        "deleteControlGroupDataAfterDays": 180,
+        "deleteRawDataAfterDays": 2,
+      },
+      "visitorCookie": {
+        "cookieName": "umbracoEngageAnalyticsVisitorId",
+        "expirationInDays": 365,
+        "includeSubdomains": false,
+        "legacyCookieName": "uMarketingSuiteAnalyticsVisitorId",
+      },
+    },
+    "backoffice": {
+      "customerJourneyColorPicker": "29aedd1b-3e4b-4e1d-b3dc-d34d6ab90754",
+      "customerJourneyIconPicker": "29aedd2b-4e4c-4e1d-b3dc-d34d6ab90754",
+      "personaGroupColorPicker": "19aedd1b-3e4b-4e1d-b3dc-c34d6ab90753",
+      "personaGroupMediaPicker": "49addd1b-4e3c-4e2d-b3dc-d24d6ab90756",
+    },
+    "cockpit": {
+      "authentication": {
+        "cleanupIntervalMinutes": 60,
+        "requireHttps": true,
+        "sessionCookieSameSite": "Lax",
+        "sessionLifetimeMinutes": 30,
+        "sessionRetentionBufferMinutes": 1440,
+        "tokenLifetimeSeconds": 60,
+        "tokenRetentionBufferMinutes": 5,
+      },
+      "enableInjection": true,
+    },
+    "deliveryApi": {
+      "disableVisitorCookie": false,
+      "segmentation": {
+        "anySegmentationEnabled": true,
+        "contentById": true,
+        "contentByIds": true,
+        "contentByPath": true,
+        "contentByQuery": true,
+      },
+    },
+    "profiles": {
+      "identification": {
+        "abbreviation": "{{name[0]}}",
+        "name": "{{name}}",
+      },
+      "potential": {
+        "activeThresholdInDays": 30,
+        "engagedThresholdInSeconds": 300,
+        "engagedThresholdNumberOfSessions": 3,
+      },
+    },
+    "reporting": {
+      "dataGenerationEnabled": true,
+      "dataGenerationTime": "04:00:00",
+      "reportingTimeZone": {
+        "baseUtcOffset": "01:00:00",
+        "daylightName": "W. Europe Daylight Time",
+        "displayName": "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna",
+        "hasIanaId": false,
+        "id": "W. Europe Standard Time",
+        "standardName": "W. Europe Standard Time",
+        "supportsDaylightSavingTime": true,
+      },
+      "timezone": null,
+    },
+    "segmentation": {
+      "excludedPropertyAliases": [],
+    },
+    "settings": {
+      "databaseConnectionStringName": "umbracoDbDSN",
+      "enabled": true,
+      "suspiciousActivity": {
+        "pageviewThreshold": 250,
+      },
+      "useLegacySegmentNames": false,
+    },
+  },
+}
+`;

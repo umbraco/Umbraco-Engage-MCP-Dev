@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-package returns Umbraco Engage package information 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "currentPageviewsThisMonth": 0,
+    "domains": [],
+    "expirationDate": null,
+    "expiresSoon": false,
+    "featureAbTestingEnabled": true,
+    "featureAnalyticsEnabled": true,
+    "featurePersonalizationEnabled": true,
+    "isNearLimit": false,
+    "isPackageEnabled": true,
+    "isTrialMode": true,
+    "licenseStatus": "Valid",
+    "monthlyPageviewLimit": 2147483647,
+    "tierName": "Unknown",
+    "version": "17.2.1+cb3108d",
+    "whitelistedDomainRegexes": [
+      "^localhost$",
+      "^.*\\.local$",
+      "^.*\\.test$",
+    ],
+  },
+}
+`;

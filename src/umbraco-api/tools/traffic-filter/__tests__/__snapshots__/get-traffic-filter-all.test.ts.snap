@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-traffic-filter-all returns all traffic filter rules 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "items": [
+      {
+        "condition": "Contains",
+        "created": "NORMALIZED_DATE",
+        "createdByUmbracoUserName": "Engage",
+        "description": "Headless Chrome",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "isActive": true,
+        "key": "6e3a36ac-2d10-4485-8f99-e22b80a85332",
+        "mode": "Block",
+        "name": "Headless Chrome",
+        "type": "UserAgent",
+        "value": "HeadlessChrome",
+        "values": [],
+      },
+    ],
+  },
+}
+`;

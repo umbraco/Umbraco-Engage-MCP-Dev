@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-statistics returns Engage statistics 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "numberOfBotVisitors": 0,
+    "numberOfEvents": 0,
+    "numberOfPageviews": 0,
+    "numberOfPersonVisitors": 1,
+    "numberOfSegmentSettings": 0,
+  },
+}
+`;

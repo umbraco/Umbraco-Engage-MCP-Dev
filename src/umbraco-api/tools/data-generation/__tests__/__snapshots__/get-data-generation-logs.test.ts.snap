@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-data-generation-logs returns data generation logs 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "items": [
+      {
+        "errorMessage": null,
+        "failed": false,
+        "finished": "2026-08-19T08:20:03.1566667Z",
+        "started": "2026-08-19T08:20:02.5133333Z",
+      },
+    ],
+    "nextCursor": undefined,
+    "total": 1,
+  },
+}
+`;

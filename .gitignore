@@ -1,0 +1,24 @@
+# Environment files — never commit credentials
+.env
+.dev.vars
+
+# Cloudflare Worker local state
+.wrangler/
+
+# Build output
+dist/
+
+# Umbraco instance (contains credentials, DB files, build artifacts)
+demo-site/
+
+# Dependencies
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code local/session state (not shared project config)
+.claude/settings.local.json
+.claude/kanban-state.json
+.claude/scheduled_tasks.lock

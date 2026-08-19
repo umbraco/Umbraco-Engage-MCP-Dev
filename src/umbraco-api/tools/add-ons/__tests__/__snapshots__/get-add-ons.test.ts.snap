@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-add-ons returns enabled add-ons 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "umbracoCommerce": false,
+    "umbracoForms": false,
+  },
+}
+`;
