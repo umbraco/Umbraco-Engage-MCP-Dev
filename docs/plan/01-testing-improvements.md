@@ -41,13 +41,32 @@ This repo has no `.github/` directory — zero CI. `umbraco-mcp-dev-cms`'s `test
 
 **Action:** port `test.yml` — full breakdown of both its jobs, including the `serverStatus`-polling boot-wait pattern worth adopting independently of everything else, in [Recent Changes §F](03-recent-changes.md#f-githubworkflowstestyml). Use this project's own `scripts/create-api-user.mjs` (already fixed for this Umbraco version's Swagger redirect URI — `cms-dev-mcp`'s own copy still has the old, broken one; don't port theirs). Add `.github/dependabot.yml` ([Recent Changes §G](03-recent-changes.md#g-githubdependabotyml)) for npm/actions security-update rollups — decide on a `target-branch` first, since this project has no `dev` branch yet.
 
-## 4. Close the test-builder/helper gap
+## 4. Integration test coverage is critically low — mutation tools especially
 
-`umbraco-mcp-dev-cms` has **29** `__tests__/helpers/` directories; this project has 4 — the pre-existing `AnnotationBuilder`, plus `AbTestProjectBuilder`, `DocumentTypeFixture`, and `DomainFixture` added this session. Several CMS helpers are substantial enough to have their own unit tests (e.g. `document/__tests__/helpers/document-builder.test.ts`) — a level of rigor this project hasn't reached yet.
+The "48 passing test suites" headline elsewhere in this plan measures *tests that exist*, not *coverage*. Measured directly against the actual tool files this session (not estimated):
 
-**Action:** as new integration tests are added for currently-untested tools/slices, follow the builder pattern established this session (see [Session Changelog §Fixture builders](04-session-changelog.md#fixture-builders-for-integration-tests)) rather than writing ad hoc setup code per test file. Two established sub-patterns to reuse:
-- **Engage-native entities** (A/B tests, personas, segments, …): call `getUmbracoEngageManagementAPI()` directly in a builder.
+| | Count | % |
+|---|---|---|
+| Total tool files | 146 | — |
+| Tool files never imported by any test | **99** | **68%** |
+| Total mutation tool files (`post`/`put`/`delete`) | 56 | — |
+| Mutation tool files with **zero** test coverage of any kind | **52** | **93%** |
+| Mutation tool files with a test that imports and calls the **tool handler itself** | **4** | **7%** |
+
+The 4 that are properly covered (`post-analytics-query`, `post-cockpit-delete-cookie`, `post-cockpit-auth-generate-token`, `post-heatmaps-generate-scroll-heatmap`) are, not coincidentally, the low-risk ones — a query, a cookie delete, a token generation, a heatmap render. **Every tool that creates, updates, or deletes a real Engage entity — `post`/`put`-`ab-test-project`, `post-persona`/`delete-persona`, `post-segments`/`delete-segments`, `post-annotations`/`delete-annotations`, `post-customer-journey`, `post-traffic-filter`, and 45 others — has no test that ever invokes its own handler code.**
+
+This is a sharper problem than "the fixture/helper gap versus `cms-dev-mcp`" (29 helper dirs there vs. 4 here) makes it sound, and it's important to be precise about *why*: the 3 fixture builders added this session (`AbTestProjectBuilder`, `DocumentTypeFixture`, `DomainFixture`) create/delete data by calling the **raw Orval API client directly** (`getUmbracoEngageManagementAPI().postAbTestProject(...)`) or the **chained CMS MCP** — neither path invokes this project's own `post-ab-test-project.ts` tool handler. So even `ab-test-project`, which now has a real fixture, still has **zero coverage of the actual `post-ab-test-project`/`put-ab-test-project`/`delete-ab-test-project` tool code** — the input validation, output shaping, and `withStandardDecorators` error handling that code path is responsible for. Seeding fixture data and testing a tool are two different things; this session only did the first for anything beyond a handful of tools.
+
+**Action — prioritize by risk, not by convenience:**
+1. **First**: every `delete-*` tool (14 total, ~13 currently untested) — these are `destructiveHint: true` by definition; an untested delete tool is the single highest-risk gap in the whole project.
+2. **Second**: the `post`/`put` tools for entities other tools *read* elsewhere in the suite (`post-ab-test-project`, `post-persona`, `post-segments`, `post-annotations`, `post-customer-journey`, `post-campaign-group`, `post-referral-group`, `post-content-scoring-save`, `post-traffic-filter`) — call the tool handler directly (not the raw API client) in a `beforeAll`/`afterAll` alongside the existing read-tool test, verifying the tool's own response shape, not just that the underlying API call succeeded.
+3. **Third**: the remaining read-only (`get`) tools that also have zero coverage — lower risk than mutations, but 90 `get` tools exist and several collections (`ab-test`, `profile`, `referral-scoring`, `umbraco-server`) have none tested at all despite having 1–17 `get` tools each.
+
+Follow the two established fixture sub-patterns when building out coverage (see [Session Changelog §Fixture builders](04-session-changelog.md#fixture-builders-for-integration-tests)), but make sure the actual **test** for a mutation imports and calls that tool's own `handler`, not just the builder that seeds data for a different test — those are complementary, not substitutes for each other:
+- **Engage-native entities** (A/B tests, personas, segments, …): call `getUmbracoEngageManagementAPI()` directly in a builder for setup/teardown; write a *separate* test that imports and calls the actual tool (e.g. `post-persona.ts`'s `handler`) and asserts on its own return shape.
 - **CMS-native entities** the Engage tools only *read* (content types, documents, domains): use `mcpClientManager.callTool("cms", toolName, args)` — see `content-types/__tests__/helpers/document-type-fixture.ts` and `cockpit-auth/__tests__/helpers/domain-fixture.ts` for the pattern, including the `content[].text` fallback for chained tools without an `outputSchema`.
+
+`umbraco-mcp-dev-cms` has **29** `__tests__/helpers/` directories to this project's 4 (up from 1 before this session) — some substantial enough to have their own unit tests (e.g. `document/__tests__/helpers/document-builder.test.ts`). That gap is real, but it's a symptom of the coverage problem above, not the problem itself — more helpers without more tests calling actual tool handlers won't move the 93% number.
 
 ## 5. Keep extending `normalizeVolatileFields`, don't hand-patch with `-u`
 

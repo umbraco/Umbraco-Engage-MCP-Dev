@@ -31,6 +31,20 @@ TypeError: Object not disposable
 
 **Concrete reason this matters beyond "staying current":** the installed `17.0.0-beta.28` has no `./orval` subpath export at all (confirmed — its `package.json` exports only `.`, `./testing`, `./evals`, `./config`, `./helpers`, `./types`, `./constants`). `umbraco-mcp-dev-cms`'s newer SDK exports `postProcessZodFiles` from `@umbraco-cms/mcp-server-sdk/orval`, which relaxes generated `zod.uuid()` calls to `zod.guid()` — necessary because Umbraco returns non-RFC4122-compliant GUIDs in some responses (e.g. sequential IDs packed into GUID format), which strict `zod.uuid()` rejects. This project's generated `umbracoEngageManagementApi.zod.ts` currently has 605 `zod.uuid()` calls and zero `zod.guid()` calls — a live, untested risk that any Engage response containing such an ID would fail output validation. See [Recent Changes §I](03-recent-changes.md#i-claudemd--rulesyncrulesmd--structure-worth-adopting-one-piece-of-content-is-a-real-bug-risk-finding) for the full finding. This fix is not portable by copying code — it requires this SDK upgrade first.
 
+**A second concrete reason, found while checking the above — telemetry: neither `umbraco-mcp-dev-cms` nor this project has it yet, but the gap is closing under us.** Verified directly against published npm tarballs, not just local checkouts:
+
+| SDK version | Has telemetry exports? |
+|---|---|
+| `17.0.0-beta.28` (this project) | No |
+| `1.0.0-beta.31` (`umbraco-mcp-dev-cms`, checked its installed `node_modules`) | No |
+| `1.0.0-beta.36` (latest on npm) | **Yes** |
+
+`umbraco-mcp-base`'s `packages/mcp-server-sdk/src/telemetry/` (`with-telemetry.ts`, `adapter.ts`, `attributes.ts`, `tool-collection-registry.ts`) implements one OpenTelemetry-style span per tool call, applied automatically to **every** tool via `withStandardDecorators` — not an opt-in a tool author has to remember. It's deliberately privacy-conscious: per its own doc comment, it records outcome *category* only (`success`/`validation_error`/`api_error`/`handler_error`/`unknown_error`), never tool arguments, results, or error message text, since those routinely carry customer paths/ids/payloads. The actual tracing backend is host-injected (`setTelemetryAdapter`) — the SDK ships the instrumentation points, not a vendor.
+
+Since this project already calls `withStandardDecorators(tool)` on every one of its 146 tools (confirmed — `grep -rl withStandardDecorators` matches all of them), **upgrading the SDK turns telemetry on for the entire tool surface with zero changes to any individual tool file.** No portable code to copy from `cms-dev-mcp` here (it doesn't have this either yet) — this is purely a reason to prioritize the SDK upgrade itself.
+
+**One more thing worth knowing before upgrading:** the same `1.0.0-beta.36` tarball also now exports `extractChainedResult` directly from the SDK's root — the exact function name this session wrote from scratch into `src/testing/chained-tool-result.ts` because the installed SDK didn't have it. After upgrading, delete this project's local copy and import the SDK's version instead.
+
 ## 3. `@modelcontextprotocol/sdk`
 
 | | |
