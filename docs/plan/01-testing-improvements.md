@@ -13,7 +13,7 @@ This session hand-built `demo-site/` from scratch: wrote `demo-site.csproj`/`Pro
   ```
   This alone removes the Docker + SQL Server dependency entirely — a new contributor (or a fresh agent session) could go from clone to running demo-site with no external services.
 
-**Action:** create `demo-site-template/` in this repo (adapted from `umbraco-mcp-dev-cms`'s, swapping `Umbraco.Cms`-only packages for the `Umbraco.Cms` + `Umbraco.Engage 17.2.1` pairing confirmed working this session — see [Upgrades](02-upgrades.md) for why the exact patch version matters), and port `bootstrap-demo-site.sh` with the `--sqlite` option. Update `scripts/start-umbraco.sh` (currently a stub that just errors) to actually call it.
+**Action:** `bootstrap-demo-site.sh` itself is generic and portable as-is (full content in [Recent Changes §D](03-recent-changes.md#d-scriptsbootstrap-demo-sitesh)). `demo-site-template/` needs real adaptation, not a verbatim copy — `cms-dev-mcp`'s currently targets `Umbraco.Cms 18.0.0`, incompatible with `Umbraco.Engage 17.2.1`'s `[17.2.0, 18.0.0)` dependency range (see [Recent Changes §E](03-recent-changes.md#e-demo-site-template--needs-adapting-not-copying-verbatim) for the specific diffs needed). Update `scripts/start-umbraco.sh` (currently a stub that just errors) to actually call the ported bootstrap script.
 
 ## 2. Rewrite the eval tests against real tool names
 
@@ -33,19 +33,19 @@ Running any eval test in this environment currently crashes before reaching tool
 TypeError: Object not disposable
   at ... node_modules/@anthropic-ai/claude-agent-sdk/sdk.mjs
 ```
-This is a `@anthropic-ai/claude-agent-sdk` issue (currently pinned to `0.2.39`; 268 versions have shipped since, up to `0.3.235`). Upgrading is a prerequisite for eval test rewrites to be verifiable at all — see [Upgrades §1](02-upgrades.md#1-anthropic-aiclaude-agent-sdk--highest-priority).
+**This is not a `@anthropic-ai/claude-agent-sdk` version issue** — verified `umbraco-mcp-dev-cms` pins the exact same `0.2.39` and its evals work. The cause is something specific to this project's eval setup or environment, not the dependency. Diff `tests/evals/helpers/e2e-setup.ts` against `umbraco-mcp-dev-cms`'s equivalent before touching anything else — see [Upgrades §1](02-upgrades.md#1-anthropic-aiclaude-agent-sdk--investigate-dont-just-bump) for the correction and [Recent Changes §Corrections](03-recent-changes.md#corrections-to-the-earlier-structural-pass-readmemd--02-upgradesmd) for how this was verified.
 
 ## 3. Add CI
 
 This repo has no `.github/` directory — zero CI. `umbraco-mcp-dev-cms`'s `test.yml` is the template: compile → build → `dotnet dev-certs https --trust` → bootstrap demo-site (with `--sqlite`, so no service containers needed) → boot Umbraco with a status-poll wait loop → create the API user via `scripts/create-api-user.mjs` → `npm test` → (separately) Playwright e2e. A second `evals` job, gated to release PRs targeting `main` with `ANTHROPIC_API_KEY` from repo secrets, runs the eval suite only where it's worth the cost.
 
-**Action:** port `test.yml`, adapted for this repo (no SQL Server container needed if using `--sqlite`; `scripts/create-api-user.mjs` already exists here with the version-specific Swagger redirect-URI fix from this session already applied). Add `.github/dependabot.yml` for npm security-update rollups.
+**Action:** port `test.yml` — full breakdown of both its jobs, including the `serverStatus`-polling boot-wait pattern worth adopting independently of everything else, in [Recent Changes §F](03-recent-changes.md#f-githubworkflowstestyml). Use this project's own `scripts/create-api-user.mjs` (already fixed for this Umbraco version's Swagger redirect URI — `cms-dev-mcp`'s own copy still has the old, broken one; don't port theirs). Add `.github/dependabot.yml` ([Recent Changes §G](03-recent-changes.md#g-githubdependabotyml)) for npm/actions security-update rollups — decide on a `target-branch` first, since this project has no `dev` branch yet.
 
 ## 4. Close the test-builder/helper gap
 
 `umbraco-mcp-dev-cms` has **29** `__tests__/helpers/` directories; this project has 4 — the pre-existing `AnnotationBuilder`, plus `AbTestProjectBuilder`, `DocumentTypeFixture`, and `DomainFixture` added this session. Several CMS helpers are substantial enough to have their own unit tests (e.g. `document/__tests__/helpers/document-builder.test.ts`) — a level of rigor this project hasn't reached yet.
 
-**Action:** as new integration tests are added for currently-untested tools/slices, follow the builder pattern established this session (see [Recent changes §Fixture builders](03-recent-changes.md#fixture-builders-for-integration-tests)) rather than writing ad hoc setup code per test file. Two established sub-patterns to reuse:
+**Action:** as new integration tests are added for currently-untested tools/slices, follow the builder pattern established this session (see [Session Changelog §Fixture builders](04-session-changelog.md#fixture-builders-for-integration-tests)) rather than writing ad hoc setup code per test file. Two established sub-patterns to reuse:
 - **Engage-native entities** (A/B tests, personas, segments, …): call `getUmbracoEngageManagementAPI()` directly in a builder.
 - **CMS-native entities** the Engage tools only *read* (content types, documents, domains): use `mcpClientManager.callTool("cms", toolName, args)` — see `content-types/__tests__/helpers/document-type-fixture.ts` and `cockpit-auth/__tests__/helpers/domain-fixture.ts` for the pattern, including the `content[].text` fallback for chained tools without an `outputSchema`.
 
@@ -59,8 +59,19 @@ This session found and fixed a real trap: several tests were "passing" only beca
 
 `src/mocks/` (MSW handlers, `USE_MOCK_API`) exists in this project but `umbraco-mcp-dev-cms` has no equivalent at all — its tests always hit a real Umbraco instance. Every fix made this session went through the real API; the mock layer wasn't exercised. Either it's dead weight worth removing, or it has a real purpose (e.g. fast unit-level tests without a live instance) that should be demonstrated with at least one test using it — currently unclear which.
 
-## 7. Nice-to-haves from `cms-dev-mcp` not yet assessed for priority
+## 7. Adopt the Jest infrastructure this project is missing
 
-- `scripts/test-changed.mjs` — git-diff-aware `jest --findRelatedTests`, useful for fast local iteration and the automated issue-loop tooling other Umbraco MCP repos use.
+Fully specified with copyable content in [Recent Changes §A/B/C](03-recent-changes.md#a-jestsetup-after-envts--global-snapshot-path-normalizer):
+- **`jest.setup-after-env.ts`** — a snapshot serializer that strips machine-specific filesystem paths from *any* snapshot automatically, no per-test opt-in. Complementary to `normalizeVolatileFields()` (§5 above), not a replacement — that handles job-data fields, this handles path leakage.
+- **`jest-failure-reporter.ts`** — writes `test-failures.log` after any failing run, paired with a `test:rerun-failures` npm script. Would have sped up this session's repeated full-suite reruns.
+- **`test:one` (with `--forceExit`)** — this session hit exactly the failure mode this guards against (an open TLS handle / chained-MCP child process keeping Jest from exiting).
+- **`umbraco:stop`** — a one-line port-kill script. This session repeatedly killed the demo-site process by hand across restarts; this would have saved that every time.
+
+## 8. Add `scripts/test-changed.mjs`
+
+Git-diff-aware `jest --findRelatedTests` pre-flight for fast local iteration — fully specified in [Recent Changes §H](03-recent-changes.md#h-scriptstest-changedmjs). Portable as-is; its branch-fallback chain already degrades gracefully to `main` for a repo (like this one, today) with no `dev` branch yet.
+
+## 9. Nice-to-haves from `cms-dev-mcp` not yet assessed for priority
+
 - `scripts/worktree-create.sh` / `worktree-remove.sh` — parallel-worktree dev support.
 - `tests/e2e-sdk/` — a third test tier this project has no equivalent of; assess whether Engage needs one or whether integration + hosted-e2e is sufficient coverage.

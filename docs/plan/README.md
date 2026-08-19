@@ -9,11 +9,12 @@ This Engage MCP server is **functionally solid**: 146 tools across 37 real colle
 
 Structurally, though, it's **much younger** than its sibling `umbraco-mcp-dev-cms`, for a simple reason: `umbraco-mcp-dev-cms` has 378 commits over 15 months of real iteration; this repo has 5 commits, all from today, because it had no git history at all before this session. Every maturity gap below is a "hasn't had time yet" gap, not a design flaw — `cms-dev-mcp` is the answer key for what this project should grow into.
 
-This folder breaks the path there into three independent stage plans:
+This folder breaks the path there into three independent stage plans, plus a changelog:
 
 1. **[Testing improvements](01-testing-improvements.md)** — demo-site setup without Docker, real eval tests, CI, and closing the fixture/helper gap with `cms-dev-mcp`.
 2. **[Upgrades](02-upgrades.md)** — concrete dependency version deltas (SDK, Engage, Playwright, orval, claude-agent-sdk) and which ones are load-bearing vs. cosmetic.
-3. **[Recent additions and changes](03-recent-changes.md)** — a changelog of everything done this session, as a baseline for what "recent" means going forward.
+3. **[Recent changes in `cms-dev-mcp` not yet in this MCP](03-recent-changes.md)** — the actual portable diff: concrete infra/pattern changes (scripts, Jest config, CI, a real bug-risk finding around GUID validation) verified directly against `cms-dev-mcp`'s current files, to bring this project into line. Also corrects two claims from this doc's own comparison table below (the `claude-agent-sdk` row, and the SDK-versioning framing) — see its "Corrections" section.
+4. **[Session changelog](04-session-changelog.md)** — what this session itself did to get from 37/49 to 48/49 passing integration tests, kept as context for what "recent" means for *this* project going forward.
 
 ## Comparison table
 
@@ -37,6 +38,6 @@ This folder breaks the path there into three independent stage plans:
 
 Each stage doc is independent and can be picked up on its own. Recommended order given what's actually blocking right now:
 
-1. Start with **testing improvements** §1 (demo-site via `bootstrap-demo-site.sh --sqlite`) — it removes the single biggest source of session friction (Docker, SQL Server, manual cert trust) for anyone picking this project up next.
-2. **Upgrades** §1 (`@anthropic-ai/claude-agent-sdk`) directly unblocks eval tests, which testing improvements otherwise can't move past.
-3. Everything else in testing improvements and upgrades can be done in any order after that.
+1. Start with **testing improvements** §1 (demo-site via `bootstrap-demo-site.sh --sqlite`, portable as-is per [recent changes §D](03-recent-changes.md#d-scriptsbootstrap-demo-sitesh)) — it removes the single biggest source of session friction (Docker, SQL Server, manual cert trust) for anyone picking this project up next.
+2. **Testing improvements** §2a — diagnose the eval-harness crash by diffing eval setup against `cms-dev-mcp`'s (confirmed *not* an `@anthropic-ai/claude-agent-sdk` version issue — see [upgrades §1](02-upgrades.md#1-anthropic-aiclaude-agent-sdk--investigate-dont-just-bump)). This unblocks eval-test rewrites (§2), which testing improvements otherwise can't move past.
+3. Everything else in testing improvements, upgrades, and recent changes can be done in any order after that.

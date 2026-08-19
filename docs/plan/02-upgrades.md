@@ -2,19 +2,20 @@
 
 Concrete version deltas found this session (checked against the npm registry / NuGet directly, not guessed). Ordered by how load-bearing each one is, not by size of the version jump.
 
-## 1. `@anthropic-ai/claude-agent-sdk` — highest priority
+## 1. `@anthropic-ai/claude-agent-sdk` — investigate, don't just bump
 
 | | |
 |---|---|
 | Current | `^0.2.39` |
 | Latest | `0.3.235` (268 versions shipped since ours) |
+| `umbraco-mcp-dev-cms` uses | `0.2.39` — **the exact same version, pinned with no caret**, and its 16 eval tests reportedly work |
 
-This isn't cosmetic — it's the direct blocker for [Testing Improvements §2a](01-testing-improvements.md#2a-fix-the-eval-harness-crash-blocks-the-above-until-done--see-upgrades-1). Running any eval test in this environment currently crashes inside the SDK's own initialization:
+**Correction, verified against `umbraco-mcp-dev-cms` directly:** this section originally recommended bumping this package to fix the eval-harness crash below. That recommendation was wrong. Since the sibling project pins the identical version and its evals work, the crash is not an upstream SDK bug waiting to be fixed by a version bump — it's something specific to this project's environment or eval setup:
 ```
 TypeError: Object not disposable
   at ... node_modules/@anthropic-ai/claude-agent-sdk/sdk.mjs:8:1096
 ```
-before any tool logic runs. Given ~268 patch releases have shipped between our pinned version and latest, this class of bug (looks like a `Symbol.dispose`/explicit-resource-management issue) is plausibly already fixed upstream. **Recommendation:** bump this first, in isolation, and re-run one eval test to check whether the crash is gone before doing any eval-rewrite work from the testing plan.
+**Recommendation:** before touching the version pin, diff this project's `tests/evals/helpers/e2e-setup.ts` against `umbraco-mcp-dev-cms`'s equivalent eval setup/config — the difference is almost certainly there (a missing flag, a Node version mismatch, a config option their setup passes that ours doesn't), not in the dependency version. See [Recent Changes §Corrections](03-recent-changes.md#corrections-to-the-earlier-structural-pass-readmemd--02-upgradesmd) for the verification.
 
 ## 2. `@umbraco-cms/mcp-server-sdk` and `@umbraco-cms/mcp-hosted`
 
@@ -27,6 +28,8 @@ before any tool logic runs. Given ~268 patch releases have shipped between our p
 **This is a versioning-epoch change, not a normal patch bump.** The SDK appears to have been renumbered from a CMS-major-tied scheme (`17.x`) to a product-independent one (`1.x`) at some point after `17.0.0-beta.28` was cut. `umbraco-mcp-dev-cms` already tracks the new scheme; this project is pinned to the old one and is now two things behind at once: the epoch change itself, plus 8 beta releases within the new epoch (`.31` → `.36` is what CMS uses; latest is `.36`).
 
 **Recommendation:** don't blind-bump this — check `umbraco-mcp-base`'s (the SDK's source monorepo, checked out locally at `/Users/philw/Projects/umbraco-mcp-base`) commit history between the two versions for breaking changes before upgrading, since a full version-scheme migration is exactly the kind of change likely to include breaking API changes to `ToolDefinition`, `createMcpClientManager`, or the CLI flags this project depends on throughout `src/`. Test thoroughly against the full integration suite (now 48/49 genuinely passing — a good regression baseline) after upgrading.
+
+**Concrete reason this matters beyond "staying current":** the installed `17.0.0-beta.28` has no `./orval` subpath export at all (confirmed — its `package.json` exports only `.`, `./testing`, `./evals`, `./config`, `./helpers`, `./types`, `./constants`). `umbraco-mcp-dev-cms`'s newer SDK exports `postProcessZodFiles` from `@umbraco-cms/mcp-server-sdk/orval`, which relaxes generated `zod.uuid()` calls to `zod.guid()` — necessary because Umbraco returns non-RFC4122-compliant GUIDs in some responses (e.g. sequential IDs packed into GUID format), which strict `zod.uuid()` rejects. This project's generated `umbracoEngageManagementApi.zod.ts` currently has 605 `zod.uuid()` calls and zero `zod.guid()` calls — a live, untested risk that any Engage response containing such an ID would fail output validation. See [Recent Changes §I](03-recent-changes.md#i-claudemd--rulesyncrulesmd--structure-worth-adopting-one-piece-of-content-is-a-real-bug-risk-finding) for the full finding. This fix is not portable by copying code — it requires this SDK upgrade first.
 
 ## 3. `@modelcontextprotocol/sdk`
 
