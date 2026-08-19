@@ -13,6 +13,10 @@ const DATE_LIKE_FIELDS = ["started", "finished", "lastGenerated"];
 const DURATION_FIELDS = ["durationMs", "totalDurationMs"];
 const GUID_LIKE_FIELDS = ["runId"];
 const MACHINE_LOCAL_FIELDS = ["reportingTimeZone"];
+// Set at install time by whichever account performed the install/seed
+// migration — permanent for a given database, but never reproducible across
+// a different environment's install (a fresh demo-site, a CI container).
+const INSTALL_IDENTITY_FIELDS = ["createdByUmbracoUserName"];
 
 export function normalizeVolatileFields(value: unknown): unknown {
   if (Array.isArray(value)) {
@@ -29,6 +33,8 @@ export function normalizeVolatileFields(value: unknown): unknown {
         out[key] = "00000000-0000-0000-0000-000000000000";
       } else if (MACHINE_LOCAL_FIELDS.includes(key)) {
         out[key] = "NORMALIZED_TIMEZONE";
+      } else if (INSTALL_IDENTITY_FIELDS.includes(key)) {
+        out[key] = "NORMALIZED_USER";
       } else {
         out[key] = normalizeVolatileFields(val);
       }
