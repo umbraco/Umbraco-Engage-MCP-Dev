@@ -12,9 +12,9 @@ exports[`get-data-cleanup-last-run returns the last data-cleanup run 1`] = `
     "deletedVisitors": 0,
     "errorMessage": null,
     "failed": false,
-    "finished": "2026-08-19T09:10:27.39Z",
-    "started": "2026-08-19T09:10:27.3133333Z",
-    "totalDurationMs": 44,
+    "finished": "NORMALIZED_DATE",
+    "started": "NORMALIZED_DATE",
+    "totalDurationMs": 0,
   },
 }
 `;

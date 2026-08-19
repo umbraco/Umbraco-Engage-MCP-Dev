@@ -93,15 +93,7 @@ exports[`get-configuration returns Engage configuration 1`] = `
     "reporting": {
       "dataGenerationEnabled": true,
       "dataGenerationTime": "04:00:00",
-      "reportingTimeZone": {
-        "baseUtcOffset": "01:00:00",
-        "daylightName": "W. Europe Daylight Time",
-        "displayName": "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna",
-        "hasIanaId": false,
-        "id": "W. Europe Standard Time",
-        "standardName": "W. Europe Standard Time",
-        "supportsDaylightSavingTime": true,
-      },
+      "reportingTimeZone": "NORMALIZED_TIMEZONE",
       "timezone": null,
     },
     "segmentation": {

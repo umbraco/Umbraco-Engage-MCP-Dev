@@ -6,7 +6,7 @@ exports[`get-reporting-generation-status returns reporting generation status 1`]
   "structuredContent": {
     "databaseIsRunningStatus": false,
     "isGenerating": false,
-    "lastGenerated": "2026-08-19T08:20:02.5133333Z",
+    "lastGenerated": "NORMALIZED_DATE",
     "reportingTablesExist": true,
   },
 }
