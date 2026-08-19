@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`post-applied-personalization-segment returns an error for this endpoint's current (undiagnosed) precondition 1`] = `
+{
+  "content": [],
+  "isError": true,
+  "structuredContent": {
+    "detail": "Bad Request",
+    "status": 400,
+  },
+}
+`;
