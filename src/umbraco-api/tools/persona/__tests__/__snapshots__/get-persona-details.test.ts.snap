@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-persona-details should return details for an existing persona 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "createdByUmbracoUserKey": "00000000-0000-0000-0000-000000000000",
+    "createdByUmbracoUserName": "NORMALIZED_USER",
+    "createdOn": "NORMALIZED_DATE",
+    "description": "",
+    "expiration": 0,
+    "expirationType": "never",
+    "id": 0,
+    "minimumDeviation": 0,
+    "minimumDeviationType": "Absolute",
+    "minimumParticipationScoreThreshold": 25,
+    "personas": [],
+    "title": "_Test Persona Details",
+    "unique": "00000000-0000-0000-0000-000000000000",
+    "updatedByUmbracoUserKey": null,
+    "updatedByUmbracoUserName": null,
+    "updatedOn": "NORMALIZED_DATE",
+    "upperScoreLimit": 10,
+  },
+}
+`;

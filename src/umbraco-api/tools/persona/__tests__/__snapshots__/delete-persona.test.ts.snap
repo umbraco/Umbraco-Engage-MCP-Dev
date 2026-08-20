@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`delete-persona should delete an existing persona 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "errors": [],
+    "isValid": true,
+    "warnings": [],
+  },
+}
+`;
