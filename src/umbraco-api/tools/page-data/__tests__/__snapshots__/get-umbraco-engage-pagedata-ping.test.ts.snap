@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`get-umbraco-engage-pagedata-ping ping endpoint returns successfully 1`] = `
+exports[`get-umbraco-engage-pagedata-ping returns a 405 Method Not Allowed - only the POST variant of this endpoint is supported 1`] = `
 {
   "content": [],
   "isError": true,
