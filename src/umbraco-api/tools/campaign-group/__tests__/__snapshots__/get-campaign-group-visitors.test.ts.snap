@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-campaign-group-visitors returns campaign group visitor counts 1`] = `
+{
+  "content": [],
+  "structuredContent": {},
+}
+`;
+
+exports[`get-campaign-group-visitors returns campaign group visitor counts without an amountOfDays filter 1`] = `
+{
+  "content": [],
+  "structuredContent": {},
+}
+`;
