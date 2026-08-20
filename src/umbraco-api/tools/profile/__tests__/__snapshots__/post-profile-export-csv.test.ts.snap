@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`post-profile-export-csv exports visitor profiles as csv 1`] = `
+{
+  "content": [],
+  "structuredContent": "Type,Sessions,Pageviews,First session,Last session,Total goal completions,Total goal value,Id,Profile url,Member name,Member e-mail
+",
+}
+`;
