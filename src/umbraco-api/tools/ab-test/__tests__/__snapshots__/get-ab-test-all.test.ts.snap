@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-ab-test-all lists all A/B tests 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "items": [],
+  },
+}
+`;

@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-ab-test-preview-url returns a soft not-found errorMessage for a non-existent A/B test id 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "errorMessage": "A/B Test #999999 not found.",
+    "previewUrl": null,
+  },
+}
+`;
