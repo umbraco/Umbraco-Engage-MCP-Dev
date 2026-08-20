@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-customer-journey-details should return details for an existing customer journey 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "createdByUmbracoUserKey": "00000000-0000-0000-0000-000000000000",
+    "createdByUmbracoUserName": "NORMALIZED_USER",
+    "createdOn": "NORMALIZED_DATE",
+    "description": "",
+    "expiration": 0,
+    "expirationType": "never",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "minimumDeviation": 0,
+    "minimumDeviationType": "Absolute",
+    "minimumParticipationScoreThreshold": 25,
+    "steps": [],
+    "title": "_Test Customer Journey Details",
+    "unique": "00000000-0000-0000-0000-000000000000",
+    "updatedByUmbracoUserKey": null,
+    "updatedByUmbracoUserName": null,
+    "updatedOn": "NORMALIZED_DATE",
+    "upperScoreLimit": 10,
+  },
+}
+`;

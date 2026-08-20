@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`delete-customer-journey should delete an existing customer journey 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "errors": [],
+    "isValid": true,
+    "warnings": [],
+  },
+}
+`;
