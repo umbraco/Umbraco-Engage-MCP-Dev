@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-referral-group should return an existing referral group by id 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "created": "NORMALIZED_DATE",
+    "customerJourneyScoring": [],
+    "description": "",
+    "id": 0,
+    "invalid": false,
+    "name": "_Test Referral Group Get",
+    "pages": [],
+    "personaScoring": [],
+    "unique": "00000000-0000-0000-0000-000000000000",
+  },
+}
+`;

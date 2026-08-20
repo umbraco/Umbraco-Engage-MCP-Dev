@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-referral-group-visitors should return visitor counts (empty on an instance with no data) 1`] = `
+{
+  "content": [],
+  "structuredContent": {},
+}
+`;
+
+exports[`get-referral-group-visitors should return visitor counts scoped to amountOfDays 1`] = `
+{
+  "content": [],
+  "structuredContent": {},
+}
+`;

@@ -1,10 +1,20 @@
-import { setupTestEnvironment, createMockRequestHandlerExtra, createSnapshotResult } from "./setup.js";
+import {
+  setupTestEnvironment,
+  createMockRequestHandlerExtra,
+  createSnapshotResult,
+  ReferralGroupTestHelper,
+} from "./setup.js";
+import { normalizeVolatileFields } from "../../../../testing/normalize-volatile-fields.js";
 import tool from "../get/get-referral-group-all.js";
 
 describe("get-referral-group-all", () => {
   setupTestEnvironment();
   it("returns all referral groups", async () => {
     const result = await tool.handler({}, createMockRequestHandlerExtra());
-    expect(createSnapshotResult(result)).toMatchSnapshot();
+    expect(
+      normalizeVolatileFields(
+        ReferralGroupTestHelper.normalizeIds(createSnapshotResult(result)),
+      ),
+    ).toMatchSnapshot();
   });
 });
