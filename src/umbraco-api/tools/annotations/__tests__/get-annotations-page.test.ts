@@ -20,6 +20,7 @@ describe("get-annotations-page", () => {
       },
       context,
     );
+    expect(result.isError).toBeFalsy();
     const normalized = {
       ...result,
       structuredContent: Array.isArray(result.structuredContent)

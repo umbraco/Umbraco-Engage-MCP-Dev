@@ -12,6 +12,7 @@ describe("get-annotations-empty", () => {
   it("returns an empty annotation template", async () => {
     const context = createMockRequestHandlerExtra();
     const result = await getAnnotationsEmptyTool.handler({}, context);
+    expect(result.isError).toBeFalsy();
     const normalized = {
       ...result,
       structuredContent: AnnotationTestHelper.normalizeAnnotation(result.structuredContent),

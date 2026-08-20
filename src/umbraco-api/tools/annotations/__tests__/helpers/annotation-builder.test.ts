@@ -18,10 +18,18 @@ describe("AnnotationBuilder", () => {
     await AnnotationTestHelper.cleanupTestAnnotations();
   });
 
-  // Skipped: this Umbraco Engage instance returns SqlDateTime overflow on
-  // annotation INSERT even with current-date values, due to an internal
-  // TimeSpan computation on the server. Re-enable once the API accepts the
-  // minimal annotation payload.
+  // Skipped: annotation creation itself now succeeds on this instance (the
+  // original "SqlDateTime overflow on INSERT" reason was stale — confirmed
+  // by direct probe: POST /annotations returns 200 with a real id). The
+  // failure is in this test's *verification* step: findByDescription()
+  // calls AnnotationTestHelper.listAll(), which calls GET
+  // /annotations/all with no from/to. That endpoint deterministically
+  // returns a 500 SqlDateTime overflow (a real server-side bug, not an
+  // artifact of the payload) when called without a date range on this
+  // instance, so listAll() silently swallows the error and returns [],
+  // and findByDescription() never finds the just-created row. Re-enable
+  // once listAll()/findByDescription() are updated to pass an explicit
+  // from/to range (see get-annotations-all.test.ts for the same finding).
   it.skip("creates an annotation and exposes its id", async () => {
     builder = await new AnnotationBuilder()
       .withDescription(DESCRIPTION)

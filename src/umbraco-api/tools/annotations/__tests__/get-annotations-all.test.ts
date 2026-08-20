@@ -7,17 +7,53 @@ import getAnnotationsAllTool from "../get/get-annotations-all.js";
 describe("get-annotations-all", () => {
   setupTestEnvironment();
 
-  // The Engage annotations repository on this instance throws SqlDateTime
-  // overflow when the from/to range expands to a TimeSpan that exceeds
-  // SqlDateTime bounds. The endpoint reliably returns an error here, so we
-  // assert on the error contract rather than snapshotting the volatile body.
-  it("returns a result for all annotations (success or known error)", async () => {
+  it("returns an error when from/to are omitted (SqlDateTime overflow on this instance)", async () => {
     const context = createMockRequestHandlerExtra();
     const result = await getAnnotationsAllTool.handler(
       { from: undefined, to: undefined },
       context,
     );
-    expect(result).toBeDefined();
-    expect(result).toHaveProperty("structuredContent");
+
+    // Confirmed via direct probe: omitting from/to (both schema-optional)
+    // causes the Engage annotations repository on this instance to compute
+    // a TimeSpan that overflows SqlDateTime bounds, and the endpoint
+    // deterministically returns a 500 with a .NET stack trace body. This is
+    // real, reproducible server behavior, not flakiness — so we assert the
+    // error contract explicitly rather than the vague "toBeDefined()" check
+    // this test used to have. The stack trace body itself is not
+    // snapshotted since its exact content (line numbers, assembly paths)
+    // is non-deterministic across .NET/Engage versions.
+    expect(result.isError).toBe(true);
+  });
+
+  it("returns annotations for a real from/to range", async () => {
+    const context = createMockRequestHandlerExtra();
+    const result = await getAnnotationsAllTool.handler(
+      { from: "2020-01-01T00:00:00.000Z", to: new Date().toISOString() },
+      context,
+    );
+
+    expect(result.isError).toBeFalsy();
+    const items = (result.structuredContent as { items?: unknown[] } | undefined)?.items;
+    expect(Array.isArray(items)).toBe(true);
+
+    // Annotation rows accumulate on this shared instance across test runs
+    // (other tests/builders create and clean up their own rows, but rows
+    // can also pre-exist from earlier sessions), so there is no guaranteed
+    // count. A full-array snapshot would be brittle and re-recording it
+    // would just drift again on the next run — so we assert on the shape
+    // of whatever rows are present instead of snapshotting the array.
+    for (const item of items as Record<string, unknown>[]) {
+      expect(item).toMatchObject({
+        id: expect.any(Number),
+        created: expect.any(String),
+        timestamp: expect.any(String),
+        description: expect.any(String),
+        createdByUserName: expect.any(String),
+        visibility: expect.any(String),
+        invalid: expect.any(Boolean),
+        pageVariants: expect.any(Array),
+      });
+    }
   });
 });
