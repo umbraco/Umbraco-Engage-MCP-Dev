@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-ab-test-project-details returns details for an existing A/B test project 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "abTests": [],
+    "amountOfActiveTests": 0,
+    "amountOfTests": 0,
+    "archived": false,
+    "created": "NORMALIZED_DATE",
+    "createdByUmbracoUserKey": "00000000-0000-0000-0000-000000000000",
+    "createdByUmbracoUserName": "NORMALIZED_USER",
+    "description": "Test project - details",
+    "id": 0,
+    "invalid": false,
+    "name": "Test project - details",
+    "unique": "00000000-0000-0000-0000-000000000000",
+    "updated": null,
+    "updatedByUmbracoUserKey": null,
+    "updatedByUmbracoUserName": null,
+  },
+}
+`;

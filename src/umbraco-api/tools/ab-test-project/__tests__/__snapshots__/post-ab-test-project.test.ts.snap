@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`post-ab-test-project creates a new A/B test project 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "abTests": [],
+    "amountOfActiveTests": 0,
+    "amountOfTests": 0,
+    "archived": false,
+    "created": "NORMALIZED_DATE",
+    "createdByUmbracoUserName": "NORMALIZED_USER",
+    "description": "Test project - post",
+    "id": 0,
+    "invalid": false,
+    "name": "Test project - post",
+    "unique": "00000000-0000-0000-0000-000000000000",
+  },
+}
+`;
