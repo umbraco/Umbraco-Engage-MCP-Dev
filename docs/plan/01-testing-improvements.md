@@ -15,25 +15,22 @@ This session hand-built `demo-site/` from scratch: wrote `demo-site.csproj`/`Pro
 
 **Action:** `bootstrap-demo-site.sh` itself is generic and portable as-is (full content in [Recent Changes §D](03-recent-changes.md#d-scriptsbootstrap-demo-sitesh)). `demo-site-template/` needs real adaptation, not a verbatim copy — `cms-dev-mcp`'s currently targets `Umbraco.Cms 18.0.0`, incompatible with `Umbraco.Engage 17.2.1`'s `[17.2.0, 18.0.0)` dependency range (see [Recent Changes §E](03-recent-changes.md#e-demo-site-template--needs-adapting-not-copying-verbatim) for the specific diffs needed). Update `scripts/start-umbraco.sh` (currently a stub that just errors) to actually call the ported bootstrap script.
 
-## 2. Rewrite the eval tests against real tool names
+## 2. Rewrite the eval tests against real tool names — done
 
-Confirmed this session: `tests/evals/example-crud.test.ts` and `tests/evals/tool-filtering.test.ts` reference `get-example`, `create-example`, `get-widget`, `create-widget`, etc. — tools that do not exist anywhere in this project's 37 collections. They're unmodified copies from the generic SDK template scaffold, never adapted. Only `mcp-chaining.test.ts` tests something real (the `get-chained-info` delegation pattern), and even that exercises the generic mechanism rather than an Engage-specific scenario.
+`tests/evals/example-crud.test.ts` and `tests/evals/tool-filtering.test.ts` referenced `get-example`, `create-example`, `get-widget`, `create-widget`, etc. — tools that never existed anywhere in this project's 37 collections, unmodified copies from the generic SDK template scaffold. `mcp-chaining.test.ts` was already fine (tests the real `get-chained-info` delegation pattern).
 
-`umbraco-mcp-dev-cms` has **16 real eval files** (`create-data-type`, `create-document-type`, `member-management`, `schema-driven-content-creation`, etc.), each verified against actual tool names in that project. That's the bar to match.
+**Done:** `example-crud.test.ts` renamed to `ab-test-project-crud.test.ts` and rewritten as a real create/list/update/delete flow against `post-ab-test-project`/`get-ab-test-project-all`/`put-ab-test-project`/`delete-ab-test-project`. `tool-filtering.test.ts`'s 12 tests rewritten against `ab-test-project` (full read/list/create/update/delete) and `document-type-permissions` (read/list/create only) — chosen because their slices and mode membership (`ab-testing` vs `administration`) don't overlap. All 3 files (14 tests) pass against the real instance; the CRUD test's fixture was verified deleted via direct SQL check afterward.
 
-**Action:**
-- Rewrite `example-crud.test.ts` into something like `ab-test-project-crud.test.ts`: create an A/B test project, list it, update it, delete it — using the real `post-ab-test-project`/`get-ab-test-project-all`/`put-ab-test-project`/`delete-ab-test-project` tools.
-- Rewrite `tool-filtering.test.ts`'s assertions to use real Engage tool/collection/mode names (e.g. `UMBRACO_TOOL_MODES=ab-testing`, `UMBRACO_INCLUDE_SLICES=read`) instead of `example`/`example-2`.
-- Keep `mcp-chaining.test.ts` as-is — it's testing the SDK mechanism, which is legitimately generic.
+## 2a. Fix the eval harness crash — done; root cause was the SDK version after all
 
-## 2a. Fix the eval harness crash (blocks the above until done — see Upgrades §1)
-
-Running any eval test in this environment currently crashes before reaching tool logic:
+Every eval test crashed before reaching tool logic:
 ```
 TypeError: Object not disposable
   at ... node_modules/@anthropic-ai/claude-agent-sdk/sdk.mjs
 ```
-**This is not a `@anthropic-ai/claude-agent-sdk` version issue** — verified `umbraco-mcp-dev-cms` pins the exact same `0.2.39` and its evals work. The cause is something specific to this project's eval setup or environment, not the dependency. Diff `tests/evals/helpers/e2e-setup.ts` against `umbraco-mcp-dev-cms`'s equivalent before touching anything else — see [Upgrades §1](02-upgrades.md#1-anthropic-aiclaude-agent-sdk--investigate-dont-just-bump) for the correction and [Recent Changes §Corrections](03-recent-changes.md#corrections-to-the-earlier-structural-pass-readmemd--02-upgradesmd) for how this was verified.
+**Correcting an earlier claim in this doc**: this *was* a `@anthropic-ai/claude-agent-sdk` version issue, despite `package.json` declaring the same `^0.2.39` range as `umbraco-mcp-dev-cms` (whose evals work). The caret let it drift to an actually-installed `0.2.141`, while `umbraco-mcp-dev-cms` pins the version exactly (no caret) and has `0.2.39` installed — the two projects' *declared* ranges matched, but their *installed* versions didn't. Verified by temporarily reinstalling `0.2.39` (`npm install @anthropic-ai/claude-agent-sdk@0.2.39 --no-save`): the crash disappeared entirely and every eval file ran real agent calls successfully. **Fix applied**: `package.json` now pins `"@anthropic-ai/claude-agent-sdk": "0.2.39"` exactly, matching `umbraco-mcp-dev-cms`.
+
+A second, unrelated fix was needed to make the harness actually useful: `tests/evals/helpers/e2e-setup.ts` set `USE_MOCK_API: "true"`, but `src/umbraco-api/api/client.ts`'s mock mode only understands a leftover template `/item` CRUD shape and 404s on every real Engage endpoint — every tool-calling eval would have failed regardless of the SDK fix. Evals now run against the real Umbraco+Engage instance (same one integration tests use), matching `umbraco-mcp-dev-cms`'s own working setup — see item 2 above.
 
 ## 3. Add CI
 

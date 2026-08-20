@@ -2,20 +2,20 @@
 
 Concrete version deltas found this session (checked against the npm registry / NuGet directly, not guessed). Ordered by how load-bearing each one is, not by size of the version jump.
 
-## 1. `@anthropic-ai/claude-agent-sdk` — investigate, don't just bump
+## 1. `@anthropic-ai/claude-agent-sdk` — done: pinned to `0.2.39`, fixing the eval crash
 
 | | |
 |---|---|
-| Current | `^0.2.39` |
-| Latest | `0.3.235` (268 versions shipped since ours) |
-| `umbraco-mcp-dev-cms` uses | `0.2.39` — **the exact same version, pinned with no caret**, and its 16 eval tests reportedly work |
+| Was | `^0.2.39` in `package.json`, but resolved/installed at `0.2.141` |
+| Now | `0.2.39` exactly, no caret |
+| `umbraco-mcp-dev-cms` uses | `0.2.39` — the exact same version, pinned with no caret, and its eval tests work |
 
-**Correction, verified against `umbraco-mcp-dev-cms` directly:** this section originally recommended bumping this package to fix the eval-harness crash below. That recommendation was wrong. Since the sibling project pins the identical version and its evals work, the crash is not an upstream SDK bug waiting to be fixed by a version bump — it's something specific to this project's environment or eval setup:
+**This doc previously carried two wrong claims in sequence about this crash** — first that bumping the version would fix it, then (a "correction") that it wasn't a version issue at all since both projects declared the same `^0.2.39` range. Both were wrong in the same way: they compared the *declared* semver range, not the *actually installed* version. `npm install` had let this project's caret drift to `0.2.141`, while `umbraco-mcp-dev-cms`'s exact pin kept it at `0.2.39`. The crash:
 ```
 TypeError: Object not disposable
   at ... node_modules/@anthropic-ai/claude-agent-sdk/sdk.mjs:8:1096
 ```
-**Recommendation:** before touching the version pin, diff this project's `tests/evals/helpers/e2e-setup.ts` against `umbraco-mcp-dev-cms`'s equivalent eval setup/config — the difference is almost certainly there (a missing flag, a Node version mismatch, a config option their setup passes that ours doesn't), not in the dependency version. See [Recent Changes §Corrections](03-recent-changes.md#corrections-to-the-earlier-structural-pass-readmemd--02-upgradesmd) for the verification.
+was reproduced and then eliminated by temporarily reinstalling the exact `0.2.39` version (`npm install @anthropic-ai/claude-agent-sdk@0.2.39 --no-save`) — every eval file ran real agent calls successfully with no other changes. **Fixed**: `package.json` now pins `"@anthropic-ai/claude-agent-sdk": "0.2.39"` exactly. See [Testing Improvements §2a](01-testing-improvements.md#2a-fix-the-eval-harness-crash--done-root-cause-was-the-sdk-version-after-all).
 
 ## 2. `@umbraco-cms/mcp-server-sdk` and `@umbraco-cms/mcp-hosted`
 
