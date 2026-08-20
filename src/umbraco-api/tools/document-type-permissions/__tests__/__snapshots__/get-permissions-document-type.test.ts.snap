@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-permissions-document-type returns a default permission entry for a non-existent content type id 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "allowAbTesting": true,
+    "allowApplyPersonalization": true,
+    "allowScorePersonalization": true,
+    "contentTypeId": 0,
+    "contentTypeName": null,
+    "id": 0,
+    "showAnalytics": true,
+    "updated": "NORMALIZED_DATE",
+    "updatedByUmbracoUser": "NORMALIZED_USER",
+    "updatedByUmbracoUserKey": "00000000-0000-0000-0000-000000000000",
+  },
+}
+`;
