@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-profile-statistics-total returns total visitor statistics 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "identified": 0,
+    "unknown": 0,
+  },
+}
+`;
