@@ -6,3 +6,28 @@ exports[`get-ab-test-variant-segment returns a null body rather than throwing fo
   "structuredContent": null,
 }
 `;
+
+exports[`get-ab-test-variant-segment returns the real, persisted variant for its own real auto-generated segment 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "abTestId": 0,
+    "created": "NORMALIZED_DATE",
+    "createdByUmbracoUserKey": "00000000-0000-0000-0000-000000000000",
+    "css": "",
+    "description": "",
+    "disabled": null,
+    "disabledByUmbracoUserKey": null,
+    "id": "00000000-0000-0000-0000-000000000000",
+    "isBenchmark": false,
+    "isDisabled": false,
+    "javascript": "",
+    "name": "",
+    "redirectNodeKey": null,
+    "segment": "engage_ab-testing_NORMALIZED_ID",
+    "totalPageviewsForVariant": 0,
+    "totalVisitorsForVariant": 0,
+    "unique": "00000000-0000-0000-0000-000000000000",
+  },
+}
+`;

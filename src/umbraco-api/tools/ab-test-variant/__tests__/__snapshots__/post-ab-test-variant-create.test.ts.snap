@@ -1,17 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`get-ab-test-variant returns an empty body rather than throwing for a non-existent id 1`] = `
-{
-  "content": [
-    {
-      "text": "",
-      "type": "text",
-    },
-  ],
-}
-`;
-
-exports[`get-ab-test-variant returns the real, persisted variant data for a real id 1`] = `
+exports[`post-ab-test-variant-create creates a real, additional variant against a real, persisted parent A/B test 1`] = `
 {
   "content": [],
   "structuredContent": {

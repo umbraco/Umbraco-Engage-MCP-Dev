@@ -1,5 +1,72 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`get-ab-test-variant-all lists the real, persisted variant under its real parent abTestId 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "items": [
+      {
+        "abTestId": 0,
+        "created": "NORMALIZED_DATE",
+        "createdByUmbracoUserKey": "00000000-0000-0000-0000-000000000000",
+        "css": "",
+        "description": "",
+        "disabled": null,
+        "disabledByUmbracoUserKey": null,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "isBenchmark": true,
+        "isDisabled": false,
+        "javascript": "",
+        "name": "Original",
+        "redirectNodeKey": null,
+        "segment": null,
+        "totalPageviewsForVariant": 0,
+        "totalVisitorsForVariant": 0,
+        "unique": "00000000-0000-0000-0000-000000000000",
+      },
+      {
+        "abTestId": 0,
+        "created": "NORMALIZED_DATE",
+        "createdByUmbracoUserKey": "00000000-0000-0000-0000-000000000000",
+        "css": "",
+        "description": "",
+        "disabled": null,
+        "disabledByUmbracoUserKey": null,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "isBenchmark": false,
+        "isDisabled": false,
+        "javascript": "",
+        "name": "Variant B",
+        "redirectNodeKey": null,
+        "segment": "engage_ab-testing_NORMALIZED_ID",
+        "totalPageviewsForVariant": 0,
+        "totalVisitorsForVariant": 0,
+        "unique": "00000000-0000-0000-0000-000000000000",
+      },
+      {
+        "abTestId": 0,
+        "created": "NORMALIZED_DATE",
+        "createdByUmbracoUserKey": "00000000-0000-0000-0000-000000000000",
+        "css": "",
+        "description": "",
+        "disabled": null,
+        "disabledByUmbracoUserKey": null,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "isBenchmark": false,
+        "isDisabled": false,
+        "javascript": "",
+        "name": "",
+        "redirectNodeKey": null,
+        "segment": "engage_ab-testing_NORMALIZED_ID",
+        "totalPageviewsForVariant": 0,
+        "totalVisitorsForVariant": 0,
+        "unique": "00000000-0000-0000-0000-000000000000",
+      },
+    ],
+  },
+}
+`;
+
 exports[`get-ab-test-variant-all returns A/B test variants for an unknown test 1`] = `
 {
   "content": [

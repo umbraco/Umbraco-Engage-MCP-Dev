@@ -1,15 +1,35 @@
-import { setupTestEnvironment, createMockRequestHandlerExtra } from "./setup.js";
+import { jest } from "@jest/globals";
+import {
+  setupTestEnvironment,
+  createMockRequestHandlerExtra,
+  createSnapshotResult,
+} from "./setup.js";
 import postAbTestVariantDisableTool from "../post/post-ab-test-variant-disable.js";
+import getAbTestVariantTool from "../get/get-ab-test-variant.js";
+import { normalizeVolatileFields } from "../../../../testing/normalize-volatile-fields.js";
+import { disconnectChainedCms } from "../../../../testing/content-page-fixture.js";
+import { AbTestVariantBuilder } from "./helpers/ab-test-variant-builder.js";
+import { normalizeAbTestVariantIdentifiers } from "./helpers/normalize-ab-test-variant.js";
 
-// A genuinely persisted A/B test variant can't be built for this collection
-// (requires an existing parent A/B test — an expensive fixture chain out of
-// scope, see sibling `ab-test` collection tests for the same limitation).
-// This documents the real, verified behavior for a non-existent variantId
-// instead of forcing a fake happy path.
+jest.setTimeout(60000);
+
+// A non-existent variantId case, documented alongside the real happy path
+// below.
 const TEST_NON_EXISTENT_VARIANT_ID = 999999999;
 
 describe("post-ab-test-variant-disable", () => {
   setupTestEnvironment();
+
+  let builder: AbTestVariantBuilder | undefined;
+
+  afterEach(async () => {
+    if (builder) await builder.delete();
+    builder = undefined;
+  });
+
+  afterAll(async () => {
+    await disconnectChainedCms();
+  }, 30000);
 
   it("returns a 404 error for a non-existent variantId", async () => {
     const context = createMockRequestHandlerExtra();
@@ -27,5 +47,33 @@ describe("post-ab-test-variant-disable", () => {
       status: 404,
       detail: "Not Found",
     });
+  });
+
+  it("really disables a real, persisted variant — isDisabled flips to true afterwards", async () => {
+    builder = await new AbTestVariantBuilder().create();
+    const variantId = builder.getVariantId();
+    const context = createMockRequestHandlerExtra();
+
+    const disableResult = await postAbTestVariantDisableTool.handler({ variantId }, context);
+    expect(disableResult.isError).toBeFalsy();
+
+    // Empirically observed: the disable response itself already reflects
+    // isDisabled: true.
+    expect(
+      (disableResult.structuredContent as { isDisabled?: boolean } | undefined)?.isDisabled,
+    ).toBe(true);
+
+    expect(
+      normalizeAbTestVariantIdentifiers(
+        normalizeVolatileFields(createSnapshotResult(disableResult)),
+      ),
+    ).toMatchSnapshot();
+
+    // Confirmed independently via a follow-up get-ab-test-variant read too.
+    const getResult = await getAbTestVariantTool.handler({ id: variantId }, context);
+    expect(getResult.isError).toBeFalsy();
+    expect(
+      (getResult.structuredContent as { isDisabled?: boolean } | undefined)?.isDisabled,
+    ).toBe(true);
   });
 });

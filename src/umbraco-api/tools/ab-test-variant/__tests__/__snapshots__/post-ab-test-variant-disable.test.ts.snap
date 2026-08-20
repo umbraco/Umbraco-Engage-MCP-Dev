@@ -1,17 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`get-ab-test-variant returns an empty body rather than throwing for a non-existent id 1`] = `
-{
-  "content": [
-    {
-      "text": "",
-      "type": "text",
-    },
-  ],
-}
-`;
-
-exports[`get-ab-test-variant returns the real, persisted variant data for a real id 1`] = `
+exports[`post-ab-test-variant-disable really disables a real, persisted variant — isDisabled flips to true afterwards 1`] = `
 {
   "content": [],
   "structuredContent": {
@@ -20,11 +9,11 @@ exports[`get-ab-test-variant returns the real, persisted variant data for a real
     "createdByUmbracoUserKey": "00000000-0000-0000-0000-000000000000",
     "css": "",
     "description": "",
-    "disabled": null,
-    "disabledByUmbracoUserKey": null,
+    "disabled": "NORMALIZED_DATE",
+    "disabledByUmbracoUserKey": "00000000-0000-0000-0000-000000000000",
     "id": "00000000-0000-0000-0000-000000000000",
     "isBenchmark": false,
-    "isDisabled": false,
+    "isDisabled": true,
     "javascript": "",
     "name": "",
     "redirectNodeKey": null,
