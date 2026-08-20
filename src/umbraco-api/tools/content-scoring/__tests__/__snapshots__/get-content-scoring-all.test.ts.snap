@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`get-content-scoring-all returns all content scoring assignments 1`] = `
+exports[`get-content-scoring-all returns a 400 error when unique is omitted despite being marked optional 1`] = `
 {
   "content": [],
   "isError": true,

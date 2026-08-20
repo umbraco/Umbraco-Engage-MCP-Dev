@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-content-scoring-export-persona returns the persona content scoring CSV export 1`] = `
+{
+  "content": [],
+  "structuredContent": "ContentLink,ContentName
+",
+}
+`;
