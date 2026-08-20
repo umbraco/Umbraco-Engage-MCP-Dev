@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-profile-statistics-identification returns zeroed identification counts on a fresh instance 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "formerlyUnknown": 0,
+    "newlyIdentified": 0,
+    "unknown": 0,
+  },
+}
+`;

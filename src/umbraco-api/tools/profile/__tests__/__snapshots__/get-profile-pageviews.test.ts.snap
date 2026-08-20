@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-profile-pageviews returns an empty list for a non-existent session id 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "items": [],
+  },
+}
+`;

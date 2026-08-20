@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-profile-persona-scores returns an empty list for a non-existent visitor id 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "items": [],
+  },
+}
+`;
