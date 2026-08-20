@@ -1,12 +1,21 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`get-reporting returns reporting rows (no segment filter) 1`] = `
+exports[`get-reporting returns a 400 error when segmentId is omitted despite being marked optional 1`] = `
 {
   "content": [],
   "isError": true,
   "structuredContent": {
     "detail": "Bad Request",
     "status": 400,
+  },
+}
+`;
+
+exports[`get-reporting returns reporting rows for a non-existent segmentId 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "items": [],
   },
 }
 `;

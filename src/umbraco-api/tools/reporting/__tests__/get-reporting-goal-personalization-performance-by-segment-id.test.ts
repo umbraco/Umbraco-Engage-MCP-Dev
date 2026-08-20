@@ -11,6 +11,7 @@ describe("get-reporting-goal-personalization-performance-by-segment-id", () => {
   it("returns goal personalization performance for segmentId=0", async () => {
     const context = createMockRequestHandlerExtra();
     const result = await tool.handler({ segmentId: 0 }, context);
+    expect(result.isError).toBeFalsy();
     expect(createSnapshotResult(result)).toMatchSnapshot();
   });
 });

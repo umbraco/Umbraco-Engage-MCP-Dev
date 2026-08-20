@@ -11,6 +11,7 @@ describe("get-reporting-segment-sessions-personalization-by-segment-id", () => {
   it("returns segment-sessions personalization for segmentId=0", async () => {
     const context = createMockRequestHandlerExtra();
     const result = await tool.handler({ segmentId: 0 }, context);
+    expect(result.isError).toBeFalsy();
     expect(createSnapshotResult(result)).toMatchSnapshot();
   });
 });
