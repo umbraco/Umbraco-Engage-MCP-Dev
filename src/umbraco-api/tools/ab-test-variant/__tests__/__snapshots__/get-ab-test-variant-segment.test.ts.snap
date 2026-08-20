@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-ab-test-variant-segment returns a null body rather than throwing for a non-existent segment 1`] = `
+{
+  "content": [],
+  "structuredContent": null,
+}
+`;
