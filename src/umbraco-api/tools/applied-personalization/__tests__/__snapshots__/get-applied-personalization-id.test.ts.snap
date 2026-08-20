@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-applied-personalization-id should return the applied personalization by id 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "contentTypes": [],
+    "created": "NORMALIZED_DATE",
+    "createdByUmbracoUserName": "NORMALIZED_USER",
+    "css": "",
+    "description": "",
+    "id": 0,
+    "isActive": true,
+    "javascript": "",
+    "name": "_Test Applied Personalization",
+    "pages": [],
+    "previewUrl": null,
+    "segment": null,
+    "segmentId": 0,
+    "started": null,
+    "type": "SinglePage",
+    "umbracoSegmentAlias": "NORMALIZED_SEGMENT_ALIAS",
+    "unique": "00000000-0000-0000-0000-000000000000",
+    "updatedByUmbracoUserName": null,
+  },
+}
+`;

@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`post-applied-personalization should create a new applied personalization 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "contentTypes": [],
+    "created": "NORMALIZED_DATE",
+    "createdByUmbracoUserName": "NORMALIZED_USER",
+    "css": "",
+    "description": "",
+    "id": 0,
+    "isActive": true,
+    "javascript": "",
+    "name": "",
+    "pages": [],
+    "previewUrl": null,
+    "segment": null,
+    "segmentId": null,
+    "started": null,
+    "type": "SinglePage",
+    "umbracoSegmentAlias": "NORMALIZED_SEGMENT_ALIAS",
+    "unique": "00000000-0000-0000-0000-000000000000",
+    "updatedByUmbracoUserName": null,
+  },
+}
+`;

@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-applied-personalization-segment should return a null result for a non-existent segment 1`] = `
+{
+  "content": [],
+  "structuredContent": null,
+}
+`;
