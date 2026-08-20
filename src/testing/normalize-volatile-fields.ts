@@ -9,7 +9,19 @@
  * timezone — none of which will ever match a checked-in snapshot value
  * captured on a different machine or at a different moment in time.
  */
-const DATE_LIKE_FIELDS = ["started", "finished", "lastGenerated", "createdOn", "updatedOn"];
+// `created`/`updated` are in the SDK's own DATE_FIELDS list, but that
+// normalization is shallow (top-level structuredContent keys only) — a
+// nested `created` several levels deep (e.g. inside an array item's
+// sub-object) is missed and needs this recursive pass instead.
+const DATE_LIKE_FIELDS = [
+  "started",
+  "finished",
+  "lastGenerated",
+  "createdOn",
+  "updatedOn",
+  "created",
+  "updated",
+];
 const DURATION_FIELDS = ["durationMs", "totalDurationMs"];
 const GUID_LIKE_FIELDS = ["runId"];
 const MACHINE_LOCAL_FIELDS = ["reportingTimeZone"];
