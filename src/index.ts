@@ -103,11 +103,11 @@ configureApiClient(() => getUmbracoEngageManagementAPI());
 // hosted deployments behave consistently.
 //
 // const server = new McpServer(
-//   { name: "my-umbraco-mcp", version: packageJson.version },
+//   { name: "umbraco-engage-editor-mcp", version: packageJson.version },
 //   { instructions: "When summarising results, refer to items by name, not by ID." },
 // );
 const server = new McpServer({
-  name: "my-umbraco-mcp",
+  name: "umbraco-engage-editor-mcp",
   version: packageJson.version,
 });
 

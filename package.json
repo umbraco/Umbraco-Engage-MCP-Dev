@@ -1,8 +1,8 @@
 {
-  "name": "umbraco-engage-mcp",
+  "name": "umbraco-engage-editor-mcp",
   "version": "1.0.0",
   "type": "module",
-  "description": "MCP server for umbraco-engage-mcp",
+  "description": "MCP server for umbraco-engage-editor-mcp",
   "main": "dist/index.js",
   "exports": {
     ".": "./dist/index.js",
@@ -12,7 +12,7 @@
     }
   },
   "bin": {
-    "umbraco-engage-mcp": "./dist/index.js"
+    "umbraco-engage-editor-mcp": "./dist/index.js"
   },
   "scripts": {
     "clean": "rimraf dist",
