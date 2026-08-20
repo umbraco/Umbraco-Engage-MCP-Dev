@@ -9,7 +9,22 @@
  * - UMBRACO_INCLUDE_TOOLS / UMBRACO_EXCLUDE_TOOLS
  *
  * These tests use `useServerFiltering: true` to let the server handle
- * tool filtering rather than the test harness.
+ * tool filtering rather than the test harness. They only ever list tools
+ * (maxTurns: 1, no tool calls are actually made), so USE_MOCK_API is safe
+ * here even though it can't serve any real Engage endpoint — see
+ * helpers/e2e-setup.ts for why the other eval tests don't use it.
+ *
+ * Two collections are used as filtering targets because their tool slices
+ * don't overlap and they belong to different modes (verified against
+ * src/config/mode-registry.ts and each tool's own `slices` array):
+ * - `ab-test-project`: read (get-ab-test-project, get-ab-test-project-details),
+ *   list (get-ab-test-project-all), create (post-ab-test-project),
+ *   update (put-ab-test-project), delete (delete-ab-test-project) — in the
+ *   `ab-testing` mode.
+ * - `document-type-permissions`: read (get-permissions-document-type), list
+ *   (get-permissions-document-type-all), create
+ *   (post-permissions-document-type), no update/delete tools — in the
+ *   `administration` mode.
  */
 
 import { describe, it, expect } from "@jest/globals";
@@ -40,7 +55,7 @@ describe("Tool Filtering", () => {
 
   describe("Slice Filtering", () => {
     it(
-      "should only expose read tools from both collections when UMBRACO_INCLUDE_SLICES=read",
+      "should only expose read-slice tools when UMBRACO_INCLUDE_SLICES=read",
       async () => {
         const result = await runAgentTest(
           "List all available tools you can use.",
@@ -58,16 +73,16 @@ describe("Tool Filtering", () => {
 
         const shortNames = result.availableTools.map(getShortToolName);
 
-        // Read slice tools from both collections should be available
-        expect(shortNames).toContain("get-example");
-        expect(shortNames).toContain("get-widget");
+        // Read slice tools should be available
+        expect(shortNames).toContain("get-ab-test-project");
+        expect(shortNames).toContain("get-permissions-document-type");
 
         // Non-read tools should NOT be available
-        expect(shortNames).not.toContain("create-example");
-        expect(shortNames).not.toContain("update-example");
-        expect(shortNames).not.toContain("delete-example");
-        expect(shortNames).not.toContain("list-widgets"); // list slice, not read
-        expect(shortNames).not.toContain("create-widget");
+        expect(shortNames).not.toContain("get-ab-test-project-all"); // list slice
+        expect(shortNames).not.toContain("post-ab-test-project");
+        expect(shortNames).not.toContain("put-ab-test-project");
+        expect(shortNames).not.toContain("delete-ab-test-project");
+        expect(shortNames).not.toContain("post-permissions-document-type");
       },
       timeout
     );
@@ -92,13 +107,13 @@ describe("Tool Filtering", () => {
         const shortNames = result.availableTools.map(getShortToolName);
 
         // Read and list slice tools should be available
-        expect(shortNames).toContain("get-example");
-        expect(shortNames).toContain("list-examples");
+        expect(shortNames).toContain("get-ab-test-project");
+        expect(shortNames).toContain("get-ab-test-project-all");
 
         // Create/update/delete should NOT be available
-        expect(shortNames).not.toContain("create-example");
-        expect(shortNames).not.toContain("update-example");
-        expect(shortNames).not.toContain("delete-example");
+        expect(shortNames).not.toContain("post-ab-test-project");
+        expect(shortNames).not.toContain("put-ab-test-project");
+        expect(shortNames).not.toContain("delete-ab-test-project");
       },
       timeout
     );
@@ -123,13 +138,13 @@ describe("Tool Filtering", () => {
         const shortNames = result.availableTools.map(getShortToolName);
 
         // All non-delete tools should be available
-        expect(shortNames).toContain("get-example");
-        expect(shortNames).toContain("list-examples");
-        expect(shortNames).toContain("create-example");
-        expect(shortNames).toContain("update-example");
+        expect(shortNames).toContain("get-ab-test-project");
+        expect(shortNames).toContain("get-ab-test-project-all");
+        expect(shortNames).toContain("post-ab-test-project");
+        expect(shortNames).toContain("put-ab-test-project");
 
         // Delete tools should NOT be available
-        expect(shortNames).not.toContain("delete-example");
+        expect(shortNames).not.toContain("delete-ab-test-project");
       },
       timeout
     );
@@ -137,7 +152,7 @@ describe("Tool Filtering", () => {
 
   describe("Collection Filtering", () => {
     it(
-      "should only expose example collection when UMBRACO_INCLUDE_TOOL_COLLECTIONS=example",
+      "should only expose ab-test-project collection when UMBRACO_INCLUDE_TOOL_COLLECTIONS=ab-test-project",
       async () => {
         const result = await runAgentTest(
           "List all available tools you can use.",
@@ -145,7 +160,7 @@ describe("Tool Filtering", () => {
           {
             serverEnv: {
               ...BASE_ENV,
-              UMBRACO_INCLUDE_TOOL_COLLECTIONS: "example",
+              UMBRACO_INCLUDE_TOOL_COLLECTIONS: "ab-test-project",
             },
             useServerFiltering: true,
             maxTurns: 1,
@@ -155,23 +170,23 @@ describe("Tool Filtering", () => {
 
         const shortNames = result.availableTools.map(getShortToolName);
 
-        // Example collection tools should be available
-        expect(shortNames).toContain("get-example");
-        expect(shortNames).toContain("list-examples");
-        expect(shortNames).toContain("create-example");
-        expect(shortNames).toContain("update-example");
-        expect(shortNames).toContain("delete-example");
+        // ab-test-project collection tools should be available
+        expect(shortNames).toContain("get-ab-test-project");
+        expect(shortNames).toContain("get-ab-test-project-all");
+        expect(shortNames).toContain("post-ab-test-project");
+        expect(shortNames).toContain("put-ab-test-project");
+        expect(shortNames).toContain("delete-ab-test-project");
 
-        // Example-2 collection tools should NOT be available
-        expect(shortNames).not.toContain("get-widget");
-        expect(shortNames).not.toContain("list-widgets");
-        expect(shortNames).not.toContain("create-widget");
+        // document-type-permissions collection tools should NOT be available
+        expect(shortNames).not.toContain("get-permissions-document-type");
+        expect(shortNames).not.toContain("get-permissions-document-type-all");
+        expect(shortNames).not.toContain("post-permissions-document-type");
       },
       timeout
     );
 
     it(
-      "should only expose example-2 collection when UMBRACO_INCLUDE_TOOL_COLLECTIONS=example-2",
+      "should only expose document-type-permissions collection when UMBRACO_INCLUDE_TOOL_COLLECTIONS=document-type-permissions",
       async () => {
         const result = await runAgentTest(
           "List all available tools you can use.",
@@ -179,7 +194,7 @@ describe("Tool Filtering", () => {
           {
             serverEnv: {
               ...BASE_ENV,
-              UMBRACO_INCLUDE_TOOL_COLLECTIONS: "example-2",
+              UMBRACO_INCLUDE_TOOL_COLLECTIONS: "document-type-permissions",
             },
             useServerFiltering: true,
             maxTurns: 1,
@@ -189,21 +204,21 @@ describe("Tool Filtering", () => {
 
         const shortNames = result.availableTools.map(getShortToolName);
 
-        // Example-2 collection tools should be available
-        expect(shortNames).toContain("get-widget");
-        expect(shortNames).toContain("list-widgets");
-        expect(shortNames).toContain("create-widget");
+        // document-type-permissions collection tools should be available
+        expect(shortNames).toContain("get-permissions-document-type");
+        expect(shortNames).toContain("get-permissions-document-type-all");
+        expect(shortNames).toContain("post-permissions-document-type");
 
-        // Example collection tools should NOT be available
-        expect(shortNames).not.toContain("get-example");
-        expect(shortNames).not.toContain("list-examples");
-        expect(shortNames).not.toContain("create-example");
+        // ab-test-project collection tools should NOT be available
+        expect(shortNames).not.toContain("get-ab-test-project");
+        expect(shortNames).not.toContain("get-ab-test-project-all");
+        expect(shortNames).not.toContain("post-ab-test-project");
       },
       timeout
     );
 
     it(
-      "should exclude example collection when UMBRACO_EXCLUDE_TOOL_COLLECTIONS=example",
+      "should exclude ab-test-project collection when UMBRACO_EXCLUDE_TOOL_COLLECTIONS=ab-test-project",
       async () => {
         const result = await runAgentTest(
           "List all available tools you can use.",
@@ -211,7 +226,7 @@ describe("Tool Filtering", () => {
           {
             serverEnv: {
               ...BASE_ENV,
-              UMBRACO_EXCLUDE_TOOL_COLLECTIONS: "example",
+              UMBRACO_EXCLUDE_TOOL_COLLECTIONS: "ab-test-project",
             },
             useServerFiltering: true,
             maxTurns: 1,
@@ -221,15 +236,15 @@ describe("Tool Filtering", () => {
 
         const shortNames = result.availableTools.map(getShortToolName);
 
-        // Example collection tools should NOT be available
-        expect(shortNames).not.toContain("get-example");
-        expect(shortNames).not.toContain("list-examples");
-        expect(shortNames).not.toContain("create-example");
+        // ab-test-project collection tools should NOT be available
+        expect(shortNames).not.toContain("get-ab-test-project");
+        expect(shortNames).not.toContain("get-ab-test-project-all");
+        expect(shortNames).not.toContain("post-ab-test-project");
 
-        // Example-2 collection tools SHOULD be available
-        expect(shortNames).toContain("get-widget");
-        expect(shortNames).toContain("list-widgets");
-        expect(shortNames).toContain("create-widget");
+        // document-type-permissions collection tools SHOULD be available
+        expect(shortNames).toContain("get-permissions-document-type");
+        expect(shortNames).toContain("get-permissions-document-type-all");
+        expect(shortNames).toContain("post-permissions-document-type");
       },
       timeout
     );
@@ -237,7 +252,7 @@ describe("Tool Filtering", () => {
 
   describe("Mode Filtering", () => {
     it(
-      "should expose only example collection when UMBRACO_TOOL_MODES=example",
+      "should expose the ab-testing mode's collections when UMBRACO_TOOL_MODES=ab-testing",
       async () => {
         const result = await runAgentTest(
           "List all available tools you can use.",
@@ -245,7 +260,7 @@ describe("Tool Filtering", () => {
           {
             serverEnv: {
               ...BASE_ENV,
-              UMBRACO_TOOL_MODES: "example",
+              UMBRACO_TOOL_MODES: "ab-testing",
             },
             useServerFiltering: true,
             maxTurns: 1,
@@ -255,20 +270,20 @@ describe("Tool Filtering", () => {
 
         const shortNames = result.availableTools.map(getShortToolName);
 
-        // Example mode maps to example collection
-        expect(shortNames).toContain("get-example");
-        expect(shortNames).toContain("list-examples");
-        expect(shortNames).toContain("create-example");
+        // ab-testing mode includes the ab-test-project collection
+        expect(shortNames).toContain("get-ab-test-project");
+        expect(shortNames).toContain("get-ab-test-project-all");
+        expect(shortNames).toContain("post-ab-test-project");
 
-        // Example-2 should NOT be available
-        expect(shortNames).not.toContain("get-widget");
-        expect(shortNames).not.toContain("list-widgets");
+        // administration mode's collections should NOT be available
+        expect(shortNames).not.toContain("get-permissions-document-type");
+        expect(shortNames).not.toContain("get-permissions-document-type-all");
       },
       timeout
     );
 
     it(
-      "should expose only example-2 collection when UMBRACO_TOOL_MODES=example-2",
+      "should expose the administration mode's collections when UMBRACO_TOOL_MODES=administration",
       async () => {
         const result = await runAgentTest(
           "List all available tools you can use.",
@@ -276,7 +291,7 @@ describe("Tool Filtering", () => {
           {
             serverEnv: {
               ...BASE_ENV,
-              UMBRACO_TOOL_MODES: "example-2",
+              UMBRACO_TOOL_MODES: "administration",
             },
             useServerFiltering: true,
             maxTurns: 1,
@@ -286,18 +301,17 @@ describe("Tool Filtering", () => {
 
         const shortNames = result.availableTools.map(getShortToolName);
 
-        // Example-2 mode maps to example-2 collection
-        expect(shortNames).toContain("get-widget");
-        expect(shortNames).toContain("list-widgets");
-        expect(shortNames).toContain("create-widget");
+        // administration mode includes the document-type-permissions collection
+        expect(shortNames).toContain("get-permissions-document-type");
+        expect(shortNames).toContain("get-permissions-document-type-all");
+        expect(shortNames).toContain("post-permissions-document-type");
 
-        // Example should NOT be available
-        expect(shortNames).not.toContain("get-example");
-        expect(shortNames).not.toContain("list-examples");
+        // ab-testing mode's collections should NOT be available
+        expect(shortNames).not.toContain("get-ab-test-project");
+        expect(shortNames).not.toContain("get-ab-test-project-all");
       },
       timeout
     );
-
   });
 
   describe("Individual Tool Filtering", () => {
@@ -310,7 +324,8 @@ describe("Tool Filtering", () => {
           {
             serverEnv: {
               ...BASE_ENV,
-              UMBRACO_INCLUDE_TOOLS: "get-example,list-examples,get-widget",
+              UMBRACO_INCLUDE_TOOLS:
+                "get-ab-test-project,get-ab-test-project-all,get-permissions-document-type",
             },
             useServerFiltering: true,
             maxTurns: 1,
@@ -321,18 +336,18 @@ describe("Tool Filtering", () => {
         const shortNames = result.availableTools.map(getShortToolName);
 
         // Only specified tools should be available (from both collections)
-        expect(shortNames).toContain("get-example");
-        expect(shortNames).toContain("list-examples");
-        expect(shortNames).toContain("get-widget");
+        expect(shortNames).toContain("get-ab-test-project");
+        expect(shortNames).toContain("get-ab-test-project-all");
+        expect(shortNames).toContain("get-permissions-document-type");
 
-        // Other tools from example should NOT be available
-        expect(shortNames).not.toContain("create-example");
-        expect(shortNames).not.toContain("update-example");
-        expect(shortNames).not.toContain("delete-example");
+        // Other tools from ab-test-project should NOT be available
+        expect(shortNames).not.toContain("post-ab-test-project");
+        expect(shortNames).not.toContain("put-ab-test-project");
+        expect(shortNames).not.toContain("delete-ab-test-project");
 
-        // Other tools from example-2 should NOT be available
-        expect(shortNames).not.toContain("list-widgets");
-        expect(shortNames).not.toContain("create-widget");
+        // Other tools from document-type-permissions should NOT be available
+        expect(shortNames).not.toContain("get-permissions-document-type-all");
+        expect(shortNames).not.toContain("post-permissions-document-type");
       },
       timeout
     );
@@ -346,7 +361,8 @@ describe("Tool Filtering", () => {
           {
             serverEnv: {
               ...BASE_ENV,
-              UMBRACO_EXCLUDE_TOOLS: "delete-example,update-example,create-widget",
+              UMBRACO_EXCLUDE_TOOLS:
+                "delete-ab-test-project,put-ab-test-project,post-permissions-document-type",
             },
             useServerFiltering: true,
             maxTurns: 1,
@@ -356,19 +372,19 @@ describe("Tool Filtering", () => {
 
         const shortNames = result.availableTools.map(getShortToolName);
 
-        // Non-excluded tools from example should be available
-        expect(shortNames).toContain("get-example");
-        expect(shortNames).toContain("list-examples");
-        expect(shortNames).toContain("create-example");
+        // Non-excluded tools from ab-test-project should be available
+        expect(shortNames).toContain("get-ab-test-project");
+        expect(shortNames).toContain("get-ab-test-project-all");
+        expect(shortNames).toContain("post-ab-test-project");
 
-        // Non-excluded tools from example-2 should be available
-        expect(shortNames).toContain("get-widget");
-        expect(shortNames).toContain("list-widgets");
+        // Non-excluded tools from document-type-permissions should be available
+        expect(shortNames).toContain("get-permissions-document-type");
+        expect(shortNames).toContain("get-permissions-document-type-all");
 
         // Excluded tools should NOT be available
-        expect(shortNames).not.toContain("delete-example");
-        expect(shortNames).not.toContain("update-example");
-        expect(shortNames).not.toContain("create-widget");
+        expect(shortNames).not.toContain("delete-ab-test-project");
+        expect(shortNames).not.toContain("put-ab-test-project");
+        expect(shortNames).not.toContain("post-permissions-document-type");
       },
       timeout
     );
@@ -385,7 +401,7 @@ describe("Tool Filtering", () => {
             serverEnv: {
               ...BASE_ENV,
               UMBRACO_INCLUDE_SLICES: "read,list,create",
-              UMBRACO_EXCLUDE_TOOLS: "create-example",
+              UMBRACO_EXCLUDE_TOOLS: "post-ab-test-project",
             },
             useServerFiltering: true,
             maxTurns: 1,
@@ -396,15 +412,15 @@ describe("Tool Filtering", () => {
         const shortNames = result.availableTools.map(getShortToolName);
 
         // Read and list tools should be available
-        expect(shortNames).toContain("get-example");
-        expect(shortNames).toContain("list-examples");
+        expect(shortNames).toContain("get-ab-test-project");
+        expect(shortNames).toContain("get-ab-test-project-all");
 
-        // create-example excluded even though create slice is included
-        expect(shortNames).not.toContain("create-example");
+        // post-ab-test-project excluded even though create slice is included
+        expect(shortNames).not.toContain("post-ab-test-project");
 
         // Update/delete not in included slices
-        expect(shortNames).not.toContain("update-example");
-        expect(shortNames).not.toContain("delete-example");
+        expect(shortNames).not.toContain("put-ab-test-project");
+        expect(shortNames).not.toContain("delete-ab-test-project");
       },
       timeout
     );
@@ -427,18 +443,18 @@ describe("Tool Filtering", () => {
 
         const shortNames = result.availableTools.map(getShortToolName);
 
-        // All example collection tools should be available
-        expect(shortNames).toContain("get-example");
-        expect(shortNames).toContain("list-examples");
-        expect(shortNames).toContain("search-examples");
-        expect(shortNames).toContain("create-example");
-        expect(shortNames).toContain("update-example");
-        expect(shortNames).toContain("delete-example");
+        // All ab-test-project collection tools should be available
+        expect(shortNames).toContain("get-ab-test-project");
+        expect(shortNames).toContain("get-ab-test-project-all");
+        expect(shortNames).toContain("get-ab-test-project-details");
+        expect(shortNames).toContain("post-ab-test-project");
+        expect(shortNames).toContain("put-ab-test-project");
+        expect(shortNames).toContain("delete-ab-test-project");
 
-        // All example-2 collection tools should be available
-        expect(shortNames).toContain("get-widget");
-        expect(shortNames).toContain("list-widgets");
-        expect(shortNames).toContain("create-widget");
+        // All document-type-permissions collection tools should be available
+        expect(shortNames).toContain("get-permissions-document-type");
+        expect(shortNames).toContain("get-permissions-document-type-all");
+        expect(shortNames).toContain("post-permissions-document-type");
       },
       timeout
     );
