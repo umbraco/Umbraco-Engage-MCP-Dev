@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`get-ab-test-preview-url returns a soft "could not generate preview" errorMessage for a real, valid, but draft-status variant 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "errorMessage": "Could not generate preview for A/B Test variant #NORMALIZED_ID.",
+    "previewUrl": null,
+  },
+}
+`;
+
 exports[`get-ab-test-preview-url returns a soft not-found errorMessage for a non-existent A/B test id 1`] = `
 {
   "content": [],

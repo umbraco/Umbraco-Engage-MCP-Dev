@@ -7,6 +7,20 @@ import getAbTestEmptyTool from "../get/get-ab-test-empty.js";
 import postAbTestRuntimeIndicationTool from "../post/post-ab-test-runtime-indication.js";
 import { normalizeVolatileFields } from "../../../../testing/normalize-volatile-fields.js";
 
+// Investigated (not added as a permanent test): feeding a real,
+// AbTestBuilder-created test's own object (fetched via get-ab-test) into
+// this tool instead of get-ab-test-empty's draft produces no meaningfully
+// different result - `requiredVisitorsTotal`/`requiredVisitorsPerVariant`
+// come out numerically IDENTICAL either way (60492/30246), since
+// AbTestBuilder doesn't override the draft's default
+// baselineConversionRate/minimumDetectableEffect, and this response schema
+// has no `previewUrl` field for the real page/variant to populate. The only
+// differences observed were the variant `name`/`segment` strings, which are
+// pure echoes of whatever was fed in as input (real or draft), not new
+// computed behavior. A permanent snapshot of the real-test variant would
+// therefore just be testing "the tool echoes back the name I gave it" again
+// under a different fixture, not a new code path.
+
 const TEST_TEST_TYPE = "SinglePage" as const;
 
 // Recursively blanks any key literally named `unique` — the response nests

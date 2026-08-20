@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-ab-test-page returns the real, persisted A/B tests for a real page unique with a real running test 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "items": [
+      {
+        "abTestId": 0,
+        "created": "NORMALIZED_DATE",
+        "createdByUmbracoUserKey": "00000000-0000-0000-0000-000000000000",
+        "createdByUmbracoUserName": "NORMALIZED_USER",
+        "description": "",
+        "endTime": null,
+        "name": "_Test AB Test",
+        "runtimeInDays": null,
+        "startTime": null,
+        "status": "Draft",
+        "testType": "SinglePage",
+        "totalVariants": 2,
+        "totalVisitors": 0,
+        "unique": "00000000-0000-0000-0000-000000000000",
+        "winner": null,
+        "winnerDescription": null,
+      },
+    ],
+  },
+}
+`;

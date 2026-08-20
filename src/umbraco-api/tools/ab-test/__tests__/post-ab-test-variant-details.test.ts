@@ -7,6 +7,17 @@ import getAbTestEmptyTool from "../get/get-ab-test-empty.js";
 import postAbTestVariantDetailsTool from "../post/post-ab-test-variant-details.js";
 import { normalizeVolatileFields } from "../../../../testing/normalize-volatile-fields.js";
 
+// Investigated (not added as a permanent test): feeding a real,
+// AbTestBuilder-created test's own object (fetched via get-ab-test) into
+// this tool instead of get-ab-test-empty's draft produces echoed-back
+// differences only (goalValue 1 vs 0, real name/id/unique/segment instead of
+// draft placeholders) - no NEW computed behavior. In particular, the one
+// field worth checking specifically - `previewUrl` - stays `null` for both
+// variants even with a real, published page attached, matching
+// get-ab-test-preview-url's own finding that a Draft-status test (which is
+// all AbTestBuilder can produce, absent a post-ab-test-start tool) can't
+// generate a preview regardless of how real the rest of the test is.
+
 const TEST_TEST_TYPE = "SinglePage" as const;
 
 // Recursively blanks any key literally named `unique` — the response nests
