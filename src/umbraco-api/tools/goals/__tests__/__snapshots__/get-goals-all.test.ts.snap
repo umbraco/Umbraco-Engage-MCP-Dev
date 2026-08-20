@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`get-profile-export returns an empty export when no profiles exist 1`] = `
+exports[`get-goals-all returns all goals 1`] = `
 {
   "content": [],
   "structuredContent": {

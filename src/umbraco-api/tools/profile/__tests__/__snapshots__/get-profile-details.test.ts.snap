@@ -1,9 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`get-profile-details returns an error for a non-existent visitorId 1`] = `
-{
-  "content": [],
-  "isError": true,
-  "structuredContent": "{"type":"Error","title":"Profile not found","status":404}",
-}
-`;

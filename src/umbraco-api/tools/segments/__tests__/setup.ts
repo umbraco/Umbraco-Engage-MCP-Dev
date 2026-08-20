@@ -5,13 +5,7 @@ import {
 } from "@umbraco-cms/mcp-server-sdk/testing";
 import { configureApiClient } from "@umbraco-cms/mcp-server-sdk";
 import { getUmbracoEngageManagementAPI } from "../../../api/generated/umbracoEngageManagementApi.js";
-import { SegmentsBuilder } from "./helpers/segments-builder.js";
 
 configureApiClient(() => getUmbracoEngageManagementAPI());
 
-export {
-  setupTestEnvironment,
-  createMockRequestHandlerExtra,
-  createSnapshotResult,
-  SegmentsBuilder,
-};
+export { setupTestEnvironment, createMockRequestHandlerExtra, createSnapshotResult };
