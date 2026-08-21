@@ -3,7 +3,9 @@
 exports[`get-content-scoring-export-customer-journey returns the customer journey content scoring CSV export 1`] = `
 {
   "content": [],
-  "structuredContent": "
+  "structuredContent": {
+    "csv": "
 ",
+  },
 }
 `;

@@ -5,26 +5,34 @@ import {
   type ToolDefinition,
 } from "@umbraco-cms/mcp-server-sdk";
 import { z } from "zod";
-import { getContentScoringExportCustomerJourneyResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
 import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbracoEngageManagementApi.js";
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
 const inputSchema = z.object({});
-const outputSchema = getContentScoringExportCustomerJourneyResponse;
+// The generated schema declares this as a File, but the real response is
+// plain CSV text placed directly in structuredContent (confirmed
+// empirically) - a bare string violates the MCP requirement that
+// structuredContent be a JSON object, so it's wrapped as { csv: string }.
+const outputSchema = z.object({ csv: z.string() });
 
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-content-scoring-export-customer-journey",
   description:
-    "Get the Umbraco Engage Content Scoring Export Customer Journey resource. Calls GET /umbraco/engage/management/api/v1/content-scoring/export/customer-journey.",
+    "Export all customer-journey content-scoring data as CSV text (header row starts with ContentLink, ContentName - further columns depend on which journey steps have scored content). Returns the full, unfiltered dataset - use get-content-scoring-all instead to query scores for one specific document.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],
   annotations: { readOnlyHint: true },
   handler: async () => {
-    return executeGetApiCall<ReturnType<ApiClient["getContentScoringExportCustomerJourney"]>, ApiClient>(
+    const result = await executeGetApiCall<ReturnType<ApiClient["getContentScoringExportCustomerJourney"]>, ApiClient>(
       (client) => client.getContentScoringExportCustomerJourney(CAPTURE_RAW_HTTP_RESPONSE),
     );
+    // MCP structuredContent must be a JSON object — wrap the raw CSV string.
+    if (!result.isError && typeof result.structuredContent === "string") {
+      return { ...result, structuredContent: { csv: result.structuredContent } };
+    }
+    return result;
   },
 };
 
