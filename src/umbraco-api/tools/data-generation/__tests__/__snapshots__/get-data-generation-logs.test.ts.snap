@@ -119,9 +119,33 @@ exports[`get-data-generation-logs returns data generation logs 1`] = `
         "finished": "NORMALIZED_DATE",
         "started": "NORMALIZED_DATE",
       },
+      {
+        "errorMessage": null,
+        "failed": false,
+        "finished": "NORMALIZED_DATE",
+        "started": "NORMALIZED_DATE",
+      },
+      {
+        "errorMessage": null,
+        "failed": false,
+        "finished": "NORMALIZED_DATE",
+        "started": "NORMALIZED_DATE",
+      },
+      {
+        "errorMessage": null,
+        "failed": false,
+        "finished": "NORMALIZED_DATE",
+        "started": "NORMALIZED_DATE",
+      },
+      {
+        "errorMessage": null,
+        "failed": false,
+        "finished": "NORMALIZED_DATE",
+        "started": "NORMALIZED_DATE",
+      },
     ],
     "nextCursor": undefined,
-    "total": 19,
+    "total": 23,
   },
 }
 `;
