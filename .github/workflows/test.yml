@@ -129,6 +129,35 @@ jobs:
           done
           exit 1
 
+      - name: Generate Engage reporting tables
+        run: |
+          # A brand-new install has never run this job, so Engage's reporting/
+          # analytics query tables are either missing entirely or empty - several
+          # tools (analytics, get-ab-test-empty's daily-visitor lookup) query them
+          # unconditionally and error otherwise. Trigger the same background job
+          # post-reporting-generation-start starts, then wait for it to finish.
+          TOKEN=$(curl -sf -X POST http://localhost:44449/umbraco/management/api/v1/security/back-office/token \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -d "grant_type=client_credentials&client_id=umbraco-back-office-mcp&client_secret=1234567890" \
+            | python3 -c "import json,sys; print(json.load(sys.stdin)['access_token'])")
+
+          curl -sf -X POST http://localhost:44449/umbraco/engage/management/api/v1/reporting/generation/start \
+            -H "Authorization: Bearer $TOKEN"
+
+          for i in $(seq 1 24); do
+            STATUS_JSON=$(curl -sf http://localhost:44449/umbraco/engage/management/api/v1/reporting/generation/status \
+              -H "Authorization: Bearer $TOKEN")
+            EXISTS=$(echo "$STATUS_JSON" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d['reportingTablesExist'] and not d['isGenerating'])")
+            if [ "$EXISTS" = "True" ]; then
+              echo "Reporting tables generated: $STATUS_JSON"
+              exit 0
+            fi
+            echo "Attempt $i/24 - status='$STATUS_JSON' - waiting 5s..."
+            sleep 5
+          done
+          echo "Reporting generation did not finish within 2 minutes."
+          exit 1
+
       - name: Run tests per collection
         run: |
           set +e
