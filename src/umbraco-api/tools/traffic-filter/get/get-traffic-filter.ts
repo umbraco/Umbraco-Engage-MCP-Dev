@@ -1,21 +1,24 @@
+import { z } from "zod";
 import {
   withStandardDecorators,
   executeGetApiCall,
   CAPTURE_RAW_HTTP_RESPONSE,
   type ToolDefinition,
 } from "@umbraco-cms/mcp-server-sdk";
-import { getTrafficFilterQueryParams, getTrafficFilterResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
+import { getTrafficFilterResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
 import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbracoEngageManagementApi.js";
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
-const inputSchema = getTrafficFilterQueryParams;
+// The generated schema marks `key` optional, but a lookup with no target is
+// meaningless - required here so callers get a clear schema error instead.
+const inputSchema = z.object({ key: z.uuid() });
 const outputSchema = getTrafficFilterResponse;
 
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-traffic-filter",
   description:
-    "Get the Umbraco Engage Traffic Filter resource. Calls GET /umbraco/engage/management/api/v1/traffic-filter.",
+    "Get a single traffic filter rule by its `key` guid.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

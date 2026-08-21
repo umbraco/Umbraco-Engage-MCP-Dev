@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getReferralGroupAllResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-referral-group-all",
   description:
-    "List the Umbraco Engage Referral Group All resource. Calls GET /umbraco/engage/management/api/v1/referral-group/all.",
+    "List every referral group, each with its full pages/persona-scoring/customer-journey-scoring associations. Unfiltered and unpaginated. Each item's `unique` guid is what get-referral-group/delete-referral-group expect as `id`.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

@@ -16,10 +16,10 @@ const outputSchema = getTrafficFilterEmptyResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-traffic-filter-empty",
   description:
-    "Get the Umbraco Engage Traffic Filter Empty resource. Calls GET /umbraco/engage/management/api/v1/traffic-filter/empty.",
+    "Get a blank traffic filter template with default field values. Useful for inspecting the shape/defaults post-traffic-filter expects - not required to create a filter, since post-traffic-filter applies its own defaults internally when fields are omitted.",
   inputSchema: inputSchema.shape,
   outputSchema,
-  slices: ["read"],
+  slices: ["other"],
   annotations: { readOnlyHint: true },
   handler: async () => {
     return executeGetApiCall<ReturnType<ApiClient["getTrafficFilterEmpty"]>, ApiClient>(

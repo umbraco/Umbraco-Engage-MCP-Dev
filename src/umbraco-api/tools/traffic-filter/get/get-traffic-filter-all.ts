@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getTrafficFilterAllResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-traffic-filter-all",
   description:
-    "List the Umbraco Engage Traffic Filter All resource. Calls GET /umbraco/engage/management/api/v1/traffic-filter/all.",
+    "List every traffic filter rule (rules that block or filter incoming traffic matching a condition, e.g. a user-agent pattern). Includes a built-in default rule always present on a fresh install. Each item's `key` guid is what get-traffic-filter/delete-traffic-filter expect.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

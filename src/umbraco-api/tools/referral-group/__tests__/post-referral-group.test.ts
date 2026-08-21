@@ -43,8 +43,7 @@ describe("post-referral-group", () => {
 
     const result = await tool.handler(
       {
-        id: 0,
-        created: new Date().toISOString(),
+        id: undefined,
         unique,
         name: TEST_REFERRAL_GROUP_TITLE,
         description: null,

@@ -21,14 +21,9 @@ describe("post-traffic-filter", () => {
 
   it("should create a traffic filter and return its key", async () => {
     const context = createMockRequestHandlerExtra();
-    const key = crypto.randomUUID();
 
     const result = await postTrafficFilterTool.handler(
       {
-        id: 0,
-        created: new Date().toISOString(),
-        key,
-        createdByUmbracoUserName: null,
         name: TEST_TRAFFIC_FILTER_NAME,
         description: "test",
         type: "UserAgent",
@@ -41,13 +36,11 @@ describe("post-traffic-filter", () => {
       context,
     );
 
-    createdKey = key;
-
     expect(result.isError).toBeFalsy();
-
-    // The create response is a BARE uuid string (the created key), echoing back
-    // whatever key was supplied — assert equality directly rather than
-    // snapshotting, since a snapshot would capture this per-run random value.
-    expect(result.structuredContent).toBe(key);
+    const structuredContent = result.structuredContent as { key?: string };
+    expect(structuredContent.key).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+    );
+    createdKey = structuredContent.key;
   }, 30000);
 });
