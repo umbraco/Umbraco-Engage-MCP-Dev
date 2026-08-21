@@ -16,7 +16,7 @@ const outputSchema = getStatisticsResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-statistics",
   description:
-    "Get the Umbraco Engage Statistics resource. Calls GET /umbraco/engage/management/api/v1/statistics.",
+    "Get site-wide Umbraco Engage totals: pageview count, person vs. bot visitor counts, tracked event count, and configured segment-setting count.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

@@ -10,13 +10,17 @@ import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbra
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
-const inputSchema = getSearchTermsQueryParams;
+const inputSchema = getSearchTermsQueryParams.extend({
+  visitorId: getSearchTermsQueryParams.shape.visitorId.describe(
+    "Scope results to one visitor's search terms. Omitting it returns search terms across all visitors, unfiltered and unpaginated.",
+  ),
+});
 const outputSchema = z.object({ items: getSearchTermsResponse });
 
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-search-terms",
   description:
-    "List the Umbraco Engage Search Terms resource. Calls GET /umbraco/engage/management/api/v1/search-terms.",
+    "List on-site search queries recorded by Umbraco Engage, with their timestamps. Pass `visitorId` to scope to one visitor.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

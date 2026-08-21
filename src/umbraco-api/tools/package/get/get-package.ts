@@ -16,7 +16,7 @@ const outputSchema = getPackageResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-package",
   description:
-    "Get the Umbraco Engage Package resource. Calls GET /umbraco/engage/management/api/v1/package.",
+    "Get the installed Umbraco Engage license/package info: license tier, whitelisted domains, and which features (analytics, A/B testing, personalization) are enabled, plus license expiration.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

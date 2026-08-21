@@ -15,10 +15,10 @@ const outputSchema = getSuspiciousActivityOverviewResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-suspicious-activity-overview",
   description:
-    "Get the Umbraco Engage Suspicious Activity Overview resource. Calls GET /umbraco/engage/management/api/v1/suspicious-activity/overview.",
+    "List visitors flagged with unusually high pageview counts (possible bots/scrapers), with their IP address and user agent. Supports `skip`/`take` pagination; use the response's `totalResults` to know when to stop paging.",
   inputSchema: inputSchema.shape,
   outputSchema,
-  slices: ["read"],
+  slices: ["list"],
   annotations: { readOnlyHint: true },
   handler: async (params) => {
     return executeGetApiCall<ReturnType<ApiClient["getSuspiciousActivityOverview"]>, ApiClient>(

@@ -10,13 +10,17 @@ import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbra
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
-const inputSchema = getCulturesQueryParams;
+const inputSchema = getCulturesQueryParams.extend({
+  id: getCulturesQueryParams.shape.id.describe(
+    "Optional numeric id to filter to a single culture record. Omit to list all cultures.",
+  ),
+});
 const outputSchema = z.object({ items: getCulturesResponse });
 
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-cultures",
   description:
-    "List the Umbraco Engage Cultures resource. Calls GET /umbraco/engage/management/api/v1/cultures.",
+    "List the visitor cultures/locales tracked by Umbraco Engage analytics.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

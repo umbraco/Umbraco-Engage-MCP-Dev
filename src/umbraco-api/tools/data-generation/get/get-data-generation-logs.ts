@@ -15,10 +15,10 @@ const outputSchema = getDataGenerationLogsResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-data-generation-logs",
   description:
-    "Get the Umbraco Engage Data Generation Logs resource. Calls GET /umbraco/engage/management/api/v1/data-generation/logs.",
+    "List logs of Engage's demo-data-generation background jobs. Supports `skip`/`take` pagination (default take shown by the schema); use the response's `total` to know when to stop paging.",
   inputSchema: inputSchema.shape,
   outputSchema,
-  slices: ["read"],
+  slices: ["list"],
   annotations: { readOnlyHint: true },
   handler: async (params) => {
     return executeGetApiCall<ReturnType<ApiClient["getDataGenerationLogs"]>, ApiClient>(
