@@ -19,7 +19,6 @@
  * ```
  */
 
-import umbracoServerCollection from "./umbraco-api/tools/umbraco-server/index.js";
 import packageCollection from "./umbraco-api/tools/package/index.js";
 import abTestCollection from "./umbraco-api/tools/ab-test/index.js";
 import abTestProjectCollection from "./umbraco-api/tools/ab-test-project/index.js";
@@ -44,7 +43,6 @@ import goalCollection from "./umbraco-api/tools/goal/index.js";
 import goalsCollection from "./umbraco-api/tools/goals/index.js";
 import heatmapsCollection from "./umbraco-api/tools/heatmaps/index.js";
 import mainSwitchCollection from "./umbraco-api/tools/main-switch/index.js";
-import pageDataCollection from "./umbraco-api/tools/page-data/index.js";
 import personaCollection from "./umbraco-api/tools/persona/index.js";
 import profileCollection from "./umbraco-api/tools/profile/index.js";
 import referralGroupCollection from "./umbraco-api/tools/referral-group/index.js";
@@ -58,7 +56,6 @@ import trafficFilterCollection from "./umbraco-api/tools/traffic-filter/index.js
 import userGroupPermissionsCollection from "./umbraco-api/tools/user-group-permissions/index.js";
 
 export const collections = [
-  umbracoServerCollection,
   packageCollection,
   abTestCollection,
   abTestProjectCollection,
@@ -83,7 +80,6 @@ export const collections = [
   goalsCollection,
   heatmapsCollection,
   mainSwitchCollection,
-  pageDataCollection,
   personaCollection,
   profileCollection,
   referralGroupCollection,

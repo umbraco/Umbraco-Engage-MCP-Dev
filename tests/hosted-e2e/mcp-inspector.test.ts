@@ -37,7 +37,6 @@ const ALL_TOOLS = [
   "get-widget",
   "list-widgets",
   "create-widget",
-  "get-server-info",
 ];
 
 // ============================================================================
@@ -89,11 +88,14 @@ test.describe("MCP Inspector E2E", () => {
     await handleOAuthFlow(page, oauthPage);
 
     const tools = await getToolNames(page, ALL_TOOLS);
-    expect(tools).toContain("get-server-info");
+    expect(tools).toContain("get-widget");
 
     // Call a tool and verify the response contains expected text
-    const result = await callTool(page, "get-server-info", "assemblyVersion");
-    expect(result).toContain("assemblyVersion");
+    // NOTE: this placeholder ALL_TOOLS list (get-example/get-widget/etc.) was
+    // never adapted to this project's real collections - update to a real
+    // tool name and expected substring before relying on this test.
+    const result = await callTool(page, "get-widget", "widget");
+    expect(result).toContain("widget");
   });
 
   test("consent screen mode filtering", async ({ page }) => {
@@ -109,7 +111,6 @@ test.describe("MCP Inspector E2E", () => {
     // Only example collection tools should be present
     expect(tools).toContain("get-example");
     expect(tools).not.toContain("get-widget");
-    expect(tools).not.toContain("get-server-info");
   });
 
   test("readOnly toggle excludes write tools", async ({ page }) => {
@@ -126,6 +127,5 @@ test.describe("MCP Inspector E2E", () => {
 
     // Read-only tools should remain
     expect(tools).toContain("get-example");
-    expect(tools).toContain("get-server-info");
   });
 });

@@ -25,12 +25,6 @@ import type { ToolModeDefinition } from "@umbraco-cms/mcp-server-sdk";
  */
 export const toolModes: ToolModeDefinition[] = [
   {
-    name: 'umbraco-server',
-    displayName: 'Umbraco Server',
-    description: 'Server information and status from the Umbraco Management API',
-    collections: ['umbraco-server']
-  },
-  {
     name: 'ab-testing',
     displayName: 'A/B Testing',
     description: 'A/B tests, projects, and variants',
@@ -40,7 +34,7 @@ export const toolModes: ToolModeDefinition[] = [
     name: 'analytics',
     displayName: 'Analytics & Reporting',
     description: 'Analytics queries, reporting, statistics, search terms and heatmaps',
-    collections: ['analytics', 'reporting', 'statistics', 'search-terms', 'heatmaps', 'page-data']
+    collections: ['analytics', 'reporting', 'statistics', 'search-terms', 'heatmaps']
   },
   {
     name: 'personalization',

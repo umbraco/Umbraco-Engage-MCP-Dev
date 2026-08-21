@@ -73,9 +73,8 @@ Modes are named groups that enable related collections together. Set `UMBRACO_TO
 
 | Mode | Collections |
 |---|---|
-| `umbraco-server` | `umbraco-server` |
 | `ab-testing` | `ab-test`, `ab-test-project`, `ab-test-variant` |
-| `analytics` | `analytics`, `reporting`, `statistics`, `search-terms`, `heatmaps`, `page-data` |
+| `analytics` | `analytics`, `reporting`, `statistics`, `search-terms`, `heatmaps` |
 | `personalization` | `persona`, `segments`, `applied-personalization`, `customer-journey` |
 | `campaigns` | `campaigns`, `campaign-group`, `goal`, `goals`, `annotations` |
 | `scoring` | `content-scoring`, `referral-scoring`, `referral-group` |
@@ -111,7 +110,6 @@ Modes are named groups that enable related collections together. Set `UMBRACO_TO
 | `heatmaps` | 2 | Heatmap variants and scroll heatmap generation |
 | `main-switch` | 3 | Engage main switch state and toggling |
 | `package` | 1 | Engage package metadata |
-| `page-data` | 4 | Engage page data ping and collect endpoints |
 | `persona` | 7 | Persona CRUD, lock/unlock, details |
 | `profile` | 17 | Visitor profiles: details, sessions, page events, statistics, export |
 | `referral-group` | 5 | Referral groups, visitors, CRUD |
@@ -122,7 +120,6 @@ Modes are named groups that enable related collections together. Set `UMBRACO_TO
 | `statistics` | 1 | Overall Engage statistics |
 | `suspicious-activity` | 1 | Suspicious activity overview |
 | `traffic-filter` | 5 | Traffic filter CRUD |
-| `umbraco-server` | 1 | Server information and status |
 | `user-group-permissions` | 3 | User-group-level Engage permissions |
 
 ### Slices
