@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getPermissionsDocumentTypeAllResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-permissions-document-type-all",
   description:
-    "List the Umbraco Engage Permissions Document Type All resource. Calls GET /umbraco/engage/management/api/v1/permissions/document-type/all.",
+    "List Engage access permissions (analytics, A/B testing, personalization) for every document type that has a stored entry. Not paginated.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

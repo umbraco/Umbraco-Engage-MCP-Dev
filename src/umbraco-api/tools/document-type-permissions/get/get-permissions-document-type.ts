@@ -15,7 +15,7 @@ const outputSchema = getPermissionsDocumentTypeResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-permissions-document-type",
   description:
-    "Get the Umbraco Engage Permissions Document Type resource. Calls GET /umbraco/engage/management/api/v1/permissions/document-type.",
+    "Get the Engage access-permissions entry for a document type by its `contentTypeId`. Unlike get-permissions-user-group, a contentTypeId with no stored entry does NOT error - it returns a synthetic default entry (id 0, all permission flags true) rather than a genuine stored record. Call this before post-permissions-document-type to check whether a real entry already exists (that tool is insert-only and creating a duplicate permanently breaks get-permissions-document-type-all) - a default (id 0) response means none exists yet.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getPermissionsUserGroupAllResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-permissions-user-group-all",
   description:
-    "List the Umbraco Engage Permissions User Group All resource. Calls GET /umbraco/engage/management/api/v1/permissions/user-group/all.",
+    "List Engage access permissions (analytics, A/B testing, personalization, settings, profiles, reporting) for every Umbraco user group that has a stored entry. Not paginated.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

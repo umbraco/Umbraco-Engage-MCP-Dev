@@ -35,8 +35,6 @@ describe("post-permissions-user-group", () => {
 
     const result = await postTool.handler(
       {
-        id: 0,
-        unique: crypto.randomUUID(),
         userGroupKey,
         userGroupName: "_Test User Group",
         userGroupAlias: "_testUserGroup",
@@ -47,8 +45,6 @@ describe("post-permissions-user-group", () => {
         accessToSettings: true,
         accessToProfiles: true,
         accessToReporting: true,
-        updated: new Date().toISOString(),
-        updatedByUmbracoUserKey: crypto.randomUUID(),
         updatedByUmbracoUser: null,
       },
       createMockRequestHandlerExtra(),

@@ -37,15 +37,12 @@ describe("post-permissions-document-type", () => {
       {
         items: [
           {
-            id: 0,
             contentTypeId,
             contentTypeName: TEST_CONTENT_TYPE_NAME,
             showAnalytics: true,
             allowAbTesting: true,
             allowScorePersonalization: true,
             allowApplyPersonalization: true,
-            updated: new Date().toISOString(),
-            updatedByUmbracoUserKey: crypto.randomUUID(),
             updatedByUmbracoUser: null,
           },
         ],
