@@ -14,10 +14,10 @@ const inputSchema = z.object({});
 const tool: ToolDefinition<typeof inputSchema.shape> = {
   name: "post-main-switch-turn-off",
   description:
-    "Post the Umbraco Engage Main Switch Turn Off resource. Calls POST /umbraco/engage/management/api/v1/main-switch/turn-off.",
+    "Turn off Umbraco Engage tracking site-wide - disables analytics, A/B testing, and personalization data collection for all visitors until turned back on. This stops data capture for the whole site, not just one feature.",
   inputSchema: inputSchema.shape,
-  slices: ["create"],
-  annotations: { destructiveHint: false, idempotentHint: false },
+  slices: ["update"],
+  annotations: { destructiveHint: true, idempotentHint: true },
   handler: async () => {
     return executeVoidApiCall<ApiClient>(
       (client) => client.postMainSwitchTurnOff(CAPTURE_RAW_HTTP_RESPONSE),

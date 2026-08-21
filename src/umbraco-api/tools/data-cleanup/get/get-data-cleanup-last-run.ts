@@ -16,7 +16,7 @@ const outputSchema = getDataCleanupLastRunResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-data-cleanup-last-run",
   description:
-    "Get the Umbraco Engage Data Cleanup Last Run resource. Calls GET /umbraco/engage/management/api/v1/data-cleanup/last-run.",
+    "Get the status of the most recently completed Engage data-cleanup job (a single record, not history). See get-data-cleanup-runs for historical runs with per-table breakdown, or get-data-cleanup-logs for flat per-table log entries.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

@@ -14,10 +14,10 @@ const inputSchema = z.object({});
 const tool: ToolDefinition<typeof inputSchema.shape> = {
   name: "post-main-switch-turn-on",
   description:
-    "Post the Umbraco Engage Main Switch Turn On resource. Calls POST /umbraco/engage/management/api/v1/main-switch/turn-on.",
+    "Turn on Umbraco Engage tracking site-wide - enables analytics, A/B testing, and personalization data collection for all visitors.",
   inputSchema: inputSchema.shape,
-  slices: ["create"],
-  annotations: { destructiveHint: false, idempotentHint: false },
+  slices: ["update"],
+  annotations: { destructiveHint: false, idempotentHint: true },
   handler: async () => {
     return executeVoidApiCall<ApiClient>(
       (client) => client.postMainSwitchTurnOn(CAPTURE_RAW_HTTP_RESPONSE),

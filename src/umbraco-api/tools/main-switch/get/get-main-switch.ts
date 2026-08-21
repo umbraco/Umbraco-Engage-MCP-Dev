@@ -16,7 +16,7 @@ const outputSchema = getMainSwitchResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-main-switch",
   description:
-    "Get the Umbraco Engage Main Switch resource. Calls GET /umbraco/engage/management/api/v1/main-switch.",
+    "Get whether Umbraco Engage tracking (analytics, A/B testing, personalization data collection) is currently enabled site-wide.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

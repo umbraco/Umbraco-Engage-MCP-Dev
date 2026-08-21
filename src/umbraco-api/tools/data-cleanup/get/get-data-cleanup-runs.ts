@@ -15,10 +15,10 @@ const outputSchema = getDataCleanupRunsResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-data-cleanup-runs",
   description:
-    "Get the Umbraco Engage Data Cleanup Runs resource. Calls GET /umbraco/engage/management/api/v1/data-cleanup/runs.",
+    "List historical Engage data-cleanup runs, most recent first, each with a per-table `details` breakdown. Supports `skip`/`take` pagination; use the response's `total` to know when to stop paging. See get-data-cleanup-last-run for just the most recent run.",
   inputSchema: inputSchema.shape,
   outputSchema,
-  slices: ["read"],
+  slices: ["list"],
   annotations: { readOnlyHint: true },
   handler: async (params) => {
     return executeGetApiCall<ReturnType<ApiClient["getDataCleanupRuns"]>, ApiClient>(
