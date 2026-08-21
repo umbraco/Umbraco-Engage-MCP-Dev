@@ -16,7 +16,7 @@ const outputSchema = getCockpitAuthDomainsResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-cockpit-auth-domains",
   description:
-    "Get the Umbraco Engage Cockpit Auth Domains resource. Calls GET /umbraco/engage/management/api/v1/cockpit-auth/domains.",
+    "List the domains whitelisted to embed the Engage Cockpit editor overlay widget - a security-relevant configuration check. Each domain's `rootContentId` is a raw integer content node id with no accompanying name; resolve it via a CMS content tool if a human-readable label is needed.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

@@ -14,10 +14,10 @@ const inputSchema = z.object({});
 const tool: ToolDefinition<typeof inputSchema.shape> = {
   name: "post-cockpit-delete-cookie",
   description:
-    "Post the Umbraco Engage Cockpit Delete Cookie resource. Calls POST /umbraco/engage/management/api/v1/cockpit/delete-cookie.",
+    "Clear the browser cookie used by the Engage Cockpit editor overlay to track the current visitor's session. This is a Cockpit-UI-oriented operation - an MCP caller has no browser cookie jar of its own, so this has no observable effect when called outside that context.",
   inputSchema: inputSchema.shape,
-  slices: ["create"],
-  annotations: { destructiveHint: false, idempotentHint: false },
+  slices: ["delete"],
+  annotations: { destructiveHint: true, idempotentHint: false },
   handler: async () => {
     return executeVoidApiCall<ApiClient>(
       (client) => client.postCockpitDeleteCookie(CAPTURE_RAW_HTTP_RESPONSE),

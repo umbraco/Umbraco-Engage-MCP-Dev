@@ -16,7 +16,7 @@ const outputSchema = postCockpitAuthGenerateTokenResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "post-cockpit-auth-generate-token",
   description:
-    "Post the Umbraco Engage Cockpit Auth Generate Token resource. Calls POST /umbraco/engage/management/api/v1/cockpit-auth/generate-token.",
+    "Issue a short-lived bearer token (with an `expires` timestamp) authorizing the Engage Cockpit editor overlay widget. The returned `token` is a live credential - avoid displaying or logging its full value unnecessarily.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["create"],
