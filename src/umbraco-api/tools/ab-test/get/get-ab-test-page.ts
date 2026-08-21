@@ -5,18 +5,22 @@ import {
   type ToolDefinition,
 } from "@umbraco-cms/mcp-server-sdk";
 import { z } from "zod";
-import { getAbTestPageQueryParams, getAbTestPageResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
+import { getAbTestPageResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
 import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbracoEngageManagementApi.js";
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
-const inputSchema = getAbTestPageQueryParams;
+// The generated schema marks `unique` optional, but the real API always
+// returns 400 Bad Request when it's omitted, and also 400s for a
+// well-formed but non-existent guid (confirmed empirically) - required here
+// so callers get a clear schema-validation error instead of an opaque 400.
+const inputSchema = z.object({ unique: z.uuid() });
 const outputSchema = z.object({ items: getAbTestPageResponse });
 
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-ab-test-page",
   description:
-    "List the Umbraco Engage Ab Test Page resource. Calls GET /umbraco/engage/management/api/v1/ab-test/page.",
+    "List all A/B tests that target a given Umbraco content page, identified by the page's `unique` guid. Here 'page' means a content page (an Umbraco document), not a page of paginated results - for the unfiltered list of every A/B test, use get-ab-test-all instead. Returns 400 if `unique` doesn't resolve to a real content page.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

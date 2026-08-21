@@ -15,7 +15,7 @@ const outputSchema = getAbTestEmptyResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-ab-test-empty",
   description:
-    "Get the Umbraco Engage Ab Test Empty resource. Calls GET /umbraco/engage/management/api/v1/ab-test/empty.",
+    "Get a blank draft A/B test template for the given test type, with all fields at their real server-side defaults (participationPercentage: 1, minimumDetectableEffect: 0.1, two unnamed variant stubs, etc.) and no goal or content page assigned. Useful for inspecting the exact shape/defaults post-ab-test expects - not needed to actually create a test, since post-ab-test builds this shape internally from a minimal input.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

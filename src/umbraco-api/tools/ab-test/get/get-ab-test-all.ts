@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getAbTestAllResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-ab-test-all",
   description:
-    "List the Umbraco Engage Ab Test All resource. Calls GET /umbraco/engage/management/api/v1/ab-test/all.",
+    "List every A/B test in the site, across all statuses (Draft, Running, Completed) and test types. Each item includes the numeric `id` (for get-ab-test) and `unique` guid (for get-ab-test-view-model, delete-ab-test). Not filtered by content page - use get-ab-test-page to scope to a single page.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

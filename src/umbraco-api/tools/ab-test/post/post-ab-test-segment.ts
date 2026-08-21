@@ -15,7 +15,7 @@ const outputSchema = postAbTestSegmentResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "post-ab-test-segment",
   description:
-    "Post the Umbraco Engage Ab Test Segment resource. Calls POST /umbraco/engage/management/api/v1/ab-test/segment.",
+    "Record which A/B test variant segment a visitor falls into for a content page. In practice this consistently returns a generic 400 Bad Request (with no further detail) for every input combination tried - including a real test's own `unique`, its real content page's `unique`, and the test's real server-assigned segment value. This is very likely because the endpoint requires the target test to be in Running status, and no tool in this collection can transition a test out of Draft - so this tool is likely unusable via this MCP server today.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["create"],

@@ -15,7 +15,7 @@ const outputSchema = getAbTestPreviewUrlResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-ab-test-preview-url",
   description:
-    "Get the Umbraco Engage Ab Test Preview Url resource. Calls GET /umbraco/engage/management/api/v1/ab-test/preview-url.",
+    "Get a preview URL for a specific A/B test variant. Never returns a hard error: for a non-existent test/variant id, or a real variant on a test that hasn't been started (still in Draft status), it returns HTTP 200 with { errorMessage: '<reason>', previewUrl: null } - check `errorMessage`/`previewUrl`, not `isError`, to tell success from failure. A non-null previewUrl requires the test to be in Running status, which no tool in this collection can currently set.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

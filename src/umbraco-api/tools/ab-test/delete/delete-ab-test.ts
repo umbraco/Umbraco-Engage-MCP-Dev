@@ -4,18 +4,24 @@ import {
   CAPTURE_RAW_HTTP_RESPONSE,
   type ToolDefinition,
 } from "@umbraco-cms/mcp-server-sdk";
-import { deleteAbTestQueryParams, deleteAbTestResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
+import { z } from "zod";
+import { deleteAbTestResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
 import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbracoEngageManagementApi.js";
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
-const inputSchema = deleteAbTestQueryParams;
+// The generated schema marks `unique` optional, but omitting it does NOT
+// error - confirmed empirically, the real API silently treats a missing
+// `unique` as the all-zero guid and returns a normal, non-error
+// `{ isValid: false, errors: [...] }` result for it. Required here so a
+// caller can't accidentally "delete nothing" and get a confusing response.
+const inputSchema = z.object({ unique: z.uuid() });
 const outputSchema = deleteAbTestResponse;
 
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "delete-ab-test",
   description:
-    "Delete the Umbraco Engage Ab Test resource. Calls DELETE /umbraco/engage/management/api/v1/ab-test.",
+    "Delete an A/B test by its `unique` guid. Returns HTTP 200 with { isValid: false, errors: [...] } (not an error result) if no test has that unique - check `isValid` to confirm deletion succeeded.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["delete"],
