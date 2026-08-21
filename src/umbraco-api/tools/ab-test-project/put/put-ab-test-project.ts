@@ -15,7 +15,7 @@ const outputSchema = putAbTestProjectResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "put-ab-test-project",
   description:
-    "Update the Umbraco Engage Ab Test Project resource. Calls PUT /umbraco/engage/management/api/v1/ab-test-project.",
+    "Update an existing A/B test project's fields. This is a full replace, not a partial patch - call get-ab-test-project first with the same `unique` to fetch current values for every field (amountOfTests, amountOfActiveTests, invalid, archived, abTests, etc.), then resupply all of them here with only your intended changes (e.g. `name`) modified. Omitting or zeroing a field you didn't intend to change will overwrite it on the server.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["update"],

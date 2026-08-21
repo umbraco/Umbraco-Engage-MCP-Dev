@@ -9,7 +9,7 @@ exports[`post-ab-test-project creates a new A/B test project 1`] = `
     "amountOfTests": 0,
     "archived": false,
     "created": "NORMALIZED_DATE",
-    "createdByUmbracoUserName": "NORMALIZED_USER",
+    "createdByUmbracoUserName": null,
     "description": "Test project - post",
     "id": 0,
     "invalid": false,

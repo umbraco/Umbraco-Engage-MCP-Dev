@@ -4,18 +4,21 @@ import {
   CAPTURE_RAW_HTTP_RESPONSE,
   type ToolDefinition,
 } from "@umbraco-cms/mcp-server-sdk";
-import { getAbTestProjectQueryParams, getAbTestProjectResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
+import { z } from "zod";
+import { getAbTestProjectResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
 import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbracoEngageManagementApi.js";
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
-const inputSchema = getAbTestProjectQueryParams;
+// The generated schema marks `id` optional, but a lookup with no target is
+// meaningless - required here so callers get a clear schema error instead.
+const inputSchema = z.object({ id: z.uuid() });
 const outputSchema = getAbTestProjectResponse;
 
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-ab-test-project",
   description:
-    "Get the Umbraco Engage Ab Test Project resource. Calls GET /umbraco/engage/management/api/v1/ab-test-project.",
+    "Get a single A/B test project (including every A/B test nested under it, in full detail) by its `id` - which is the project's `unique` guid, not the numeric `id` field on the returned entity. Prefer get-ab-test-project-details for a lighter-weight summary (test counts, runtime, winner name) when full nested test detail isn't needed.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

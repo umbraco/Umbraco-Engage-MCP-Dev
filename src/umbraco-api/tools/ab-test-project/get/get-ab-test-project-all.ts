@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getAbTestProjectAllResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-ab-test-project-all",
   description:
-    "List the Umbraco Engage Ab Test Project All resource. Calls GET /umbraco/engage/management/api/v1/ab-test-project/all.",
+    "List every A/B test project, each with its full nested A/B tests (goal, variants, winner, etc. per test). Each item's `unique` guid is what get-ab-test-project/get-ab-test-project-details/put-ab-test-project/delete-ab-test-project expect as `id` - not the numeric `id` field.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],
