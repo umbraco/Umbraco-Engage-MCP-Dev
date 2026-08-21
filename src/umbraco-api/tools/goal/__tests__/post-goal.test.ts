@@ -11,12 +11,9 @@ describe("post-goal", () => {
     "creates a goal and returns its unique id",
     async () => {
       const context = createMockRequestHandlerExtra();
-      const uniqueId = crypto.randomUUID();
 
       const result = await tool.handler(
         {
-          id: null,
-          unique: uniqueId,
           name: TEST_GOAL_NAME,
           value: 1,
           goalTypeId: TEST_GOAL_TYPE_ID,
@@ -33,7 +30,10 @@ describe("post-goal", () => {
       );
 
       expect(result.isError).toBeFalsy();
-      expect(result.structuredContent).toBe(uniqueId);
+      const structuredContent = result.structuredContent as { unique?: string };
+      expect(structuredContent.unique).toMatch(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+      );
     },
     15000,
   );

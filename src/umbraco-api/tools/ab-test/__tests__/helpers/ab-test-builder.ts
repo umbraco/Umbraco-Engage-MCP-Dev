@@ -1,4 +1,3 @@
-import { randomUUID } from "node:crypto";
 import { createMockRequestHandlerExtra } from "@umbraco-cms/mcp-server-sdk/testing";
 import { ContentPageFixture } from "../../../../../testing/content-page-fixture.js";
 import postAbTestTool from "../../post/post-ab-test.js";
@@ -77,11 +76,8 @@ export class AbTestBuilder {
       );
     }
 
-    const goalUnique = randomUUID();
     const goalResult = await postGoalTool.handler(
       {
-        id: null,
-        unique: goalUnique,
         name: this.goalName,
         value: 1,
         goalTypeId: customGoalType.id,
@@ -101,6 +97,7 @@ export class AbTestBuilder {
         `Failed to create goal for A/B test: ${JSON.stringify(goalResult.content)}`,
       );
     }
+    const goalUnique = (goalResult.structuredContent as { unique: string }).unique;
 
     // 3. Resolve the goal's real numeric id - post-ab-test's `goalId` needs
     // this numeric id, not the goal's uuid `unique`.

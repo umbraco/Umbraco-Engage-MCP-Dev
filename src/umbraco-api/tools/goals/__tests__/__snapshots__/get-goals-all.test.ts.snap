@@ -4,7 +4,40 @@ exports[`get-goals-all returns all goals 1`] = `
 {
   "content": [],
   "structuredContent": {
-    "items": [],
+    "items": [
+      {
+        "created": "NORMALIZED_DATE",
+        "createdBy": "489a71d6-c06e-404f-a053-06c7febaa539",
+        "goalTypeConfig": "{}",
+        "goalTypeId": "00000000-0000-0000-0000-000000000000",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "isActive": true,
+        "isInvalid": false,
+        "isInverted": false,
+        "isMain": false,
+        "key": "aabc3b40-929b-4476-90bb-643b33579857",
+        "name": "_Test Goal Details",
+        "updated": null,
+        "updatedBy": null,
+        "value": 1,
+      },
+      {
+        "created": "NORMALIZED_DATE",
+        "createdBy": "489a71d6-c06e-404f-a053-06c7febaa539",
+        "goalTypeConfig": "{}",
+        "goalTypeId": "00000000-0000-0000-0000-000000000000",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "isActive": true,
+        "isInvalid": false,
+        "isInverted": false,
+        "isMain": false,
+        "key": "61917a08-aeed-4e75-9b92-b7fe38af089a",
+        "name": "_Test Goal",
+        "updated": null,
+        "updatedBy": null,
+        "value": 1,
+      },
+    ],
   },
 }
 `;

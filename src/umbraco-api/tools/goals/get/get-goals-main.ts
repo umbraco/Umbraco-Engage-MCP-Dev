@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getGoalsMainResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-goals-main",
   description:
-    "List the Umbraco Engage Goals Main resource. Calls GET /umbraco/engage/management/api/v1/goals/main.",
+    "List goals from the 'main' goals endpoint - a separate collection from the `goal` (singular) tools despite covering similar data. The precise distinction from get-goals-all is not documented upstream and unconfirmed by testing; each returned item still carries its own `isMain` flag.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

@@ -15,11 +15,11 @@ const outputSchema = postGoalAllResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "post-goal-all",
   description:
-    "Post the Umbraco Engage Goal All resource. Calls POST /umbraco/engage/management/api/v1/goal/all.",
+    "Search goals with pagination, optional name filtering (`filterBy`), sorting (`orderBy`), and an option to include invalid goals. Despite the POST verb, this is read-only - no goal is created or modified. See get-goals-all/get-goals-main for simpler, unpaginated full-array alternatives over the same underlying goals.",
   inputSchema: inputSchema.shape,
   outputSchema,
-  slices: ["create"],
-  annotations: { destructiveHint: false, idempotentHint: false },
+  slices: ["search"],
+  annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   handler: async (params) => {
     return executeGetApiCall<ReturnType<ApiClient["postGoalAll"]>, ApiClient>(
       (client) => client.postGoalAll(params, CAPTURE_RAW_HTTP_RESPONSE),

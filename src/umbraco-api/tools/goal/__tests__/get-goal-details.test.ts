@@ -19,12 +19,9 @@ describe("get-goal-details", () => {
     "returns details for an existing goal",
     async () => {
       const context = createMockRequestHandlerExtra();
-      const uniqueId = crypto.randomUUID();
 
       const created = await postGoalTool.handler(
         {
-          id: null,
-          unique: uniqueId,
           name: TEST_GOAL_NAME,
           value: TEST_GOAL_VALUE,
           goalTypeId: TEST_GOAL_TYPE_ID,
@@ -40,6 +37,7 @@ describe("get-goal-details", () => {
         context,
       );
       expect(created.isError).toBeFalsy();
+      const uniqueId = (created.structuredContent as { unique: string }).unique;
 
       const result = await tool.handler({ id: uniqueId }, context);
 

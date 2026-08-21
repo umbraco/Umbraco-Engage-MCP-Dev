@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getGoalsAllResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-goals-all",
   description:
-    "List the Umbraco Engage Goals All resource. Calls GET /umbraco/engage/management/api/v1/goals/all.",
+    "List every goal, unpaginated. A separate collection from the `goal` (singular) tools despite covering the same underlying data - see post-goal-all for a paginated/filterable/sortable alternative, or get-goals-main for only goals flagged as the site's main goal.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

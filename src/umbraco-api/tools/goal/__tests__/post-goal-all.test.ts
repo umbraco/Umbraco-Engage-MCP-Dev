@@ -30,8 +30,6 @@ describe("post-goal-all", () => {
     for (const goal of TEST_GOALS) {
       const result = await postGoalTool.handler(
         {
-          id: null,
-          unique: crypto.randomUUID(),
           name: goal.name,
           value: goal.value,
           goalTypeId: "00000000-0000-0000-0000-000000000000",
