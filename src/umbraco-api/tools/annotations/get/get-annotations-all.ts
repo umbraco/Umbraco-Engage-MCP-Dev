@@ -5,18 +5,22 @@ import {
   type ToolDefinition,
 } from "@umbraco-cms/mcp-server-sdk";
 import { z } from "zod";
-import { getAnnotationsAllQueryParams, getAnnotationsAllResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
+import { getAnnotationsAllResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
 import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbracoEngageManagementApi.js";
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
-const inputSchema = getAnnotationsAllQueryParams;
+// The generated schema marks `from`/`to` optional, but on this instance
+// omitting either causes a real, deterministic server-side SqlDateTime
+// overflow (a 500, not a clean validation error) - required here so
+// callers can't hit that.
+const inputSchema = z.object({ from: z.iso.datetime(), to: z.iso.datetime() });
 const outputSchema = z.object({ items: getAnnotationsAllResponse });
 
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-annotations-all",
   description:
-    "List the Umbraco Engage Annotations All resource. Calls GET /umbraco/engage/management/api/v1/annotations/all.",
+    "List analytics annotations (timeline markers, e.g. deploys or campaign notes, attached to analytics data) across the whole site within a date range. Both `from` and `to` are required - omitting either causes a server-side date-overflow error on some instances.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

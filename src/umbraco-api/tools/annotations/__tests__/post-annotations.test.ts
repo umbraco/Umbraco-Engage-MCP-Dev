@@ -31,9 +31,7 @@ describe("post-annotations", () => {
 
     const result = await postAnnotationsTool.handler(
       {
-        id: 0,
-        created: new Date().toISOString(),
-        timestamp: new Date().toISOString(),
+        timestamp: undefined,
         description: TEST_DESCRIPTION,
         createdByUserName: "_test",
         visibility: "Always",

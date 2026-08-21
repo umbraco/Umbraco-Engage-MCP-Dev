@@ -9,20 +9,24 @@ describe("get-annotations-all", () => {
 
   it("returns an error when from/to are omitted (SqlDateTime overflow on this instance)", async () => {
     const context = createMockRequestHandlerExtra();
+    // `from`/`to` are now required in the tool's own schema (a real MCP
+    // caller can no longer omit them) - this still documents the real
+    // server-side bug that motivated that change, via a direct handler
+    // call that bypasses schema validation.
     const result = await getAnnotationsAllTool.handler(
-      { from: undefined, to: undefined },
+      { from: undefined, to: undefined } as unknown as { from: string; to: string },
       context,
     );
 
-    // Confirmed via direct probe: omitting from/to (both schema-optional)
-    // causes the Engage annotations repository on this instance to compute
-    // a TimeSpan that overflows SqlDateTime bounds, and the endpoint
-    // deterministically returns a 500 with a .NET stack trace body. This is
-    // real, reproducible server behavior, not flakiness — so we assert the
-    // error contract explicitly rather than the vague "toBeDefined()" check
-    // this test used to have. The stack trace body itself is not
-    // snapshotted since its exact content (line numbers, assembly paths)
-    // is non-deterministic across .NET/Engage versions.
+    // Confirmed via direct probe: omitting from/to causes the Engage
+    // annotations repository on this instance to compute a TimeSpan that
+    // overflows SqlDateTime bounds, and the endpoint deterministically
+    // returns a 500 with a .NET stack trace body. This is real,
+    // reproducible server behavior, not flakiness — so we assert the error
+    // contract explicitly rather than the vague "toBeDefined()" check this
+    // test used to have. The stack trace body itself is not snapshotted
+    // since its exact content (line numbers, assembly paths) is
+    // non-deterministic across .NET/Engage versions.
     expect(result.isError).toBe(true);
   });
 

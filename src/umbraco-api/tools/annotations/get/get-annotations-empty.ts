@@ -16,10 +16,10 @@ const outputSchema = getAnnotationsEmptyResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-annotations-empty",
   description:
-    "Get the Umbraco Engage Annotations Empty resource. Calls GET /umbraco/engage/management/api/v1/annotations/empty.",
+    "Get a blank annotation template with default field values (id 0, empty description, visibility 'Always') - a starting point for constructing a new annotation before calling post-annotations. Returns a template, not an existing stored annotation.",
   inputSchema: inputSchema.shape,
   outputSchema,
-  slices: ["read"],
+  slices: ["other"],
   annotations: { readOnlyHint: true },
   handler: async () => {
     return executeGetApiCall<ReturnType<ApiClient["getAnnotationsEmpty"]>, ApiClient>(

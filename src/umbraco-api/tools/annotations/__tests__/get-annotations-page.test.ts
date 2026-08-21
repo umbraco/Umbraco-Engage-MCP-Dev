@@ -16,7 +16,7 @@ describe("get-annotations-page", () => {
         unique: "00000000-0000-0000-0000-000000000000",
         from: undefined,
         to: undefined,
-        culture: undefined,
+        culture: "",
       },
       context,
     );

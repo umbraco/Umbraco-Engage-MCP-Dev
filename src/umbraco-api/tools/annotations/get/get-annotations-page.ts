@@ -10,13 +10,19 @@ import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbra
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
-const inputSchema = getAnnotationsPageQueryParams;
+// `unique` is required here - a lookup with no target page is meaningless
+// (unlike from/to, which this endpoint tolerates omitted). `culture`
+// defaults to "" (invariant culture) matching the real API's own default.
+const inputSchema = getAnnotationsPageQueryParams.extend({
+  unique: z.uuid(),
+  culture: getAnnotationsPageQueryParams.shape.culture.default(""),
+});
 const outputSchema = z.object({ items: getAnnotationsPageResponse });
 
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-annotations-page",
   description:
-    "List the Umbraco Engage Annotations Page resource. Calls GET /umbraco/engage/management/api/v1/annotations/page.",
+    "List analytics annotations (timeline markers, e.g. deploys or campaign notes) attached to a specific content page, identified by its `unique` guid. Optionally filter by date range and culture; `culture` defaults to the invariant culture.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

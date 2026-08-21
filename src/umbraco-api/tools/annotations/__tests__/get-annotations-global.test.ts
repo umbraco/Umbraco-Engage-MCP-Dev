@@ -9,8 +9,12 @@ describe("get-annotations-global", () => {
 
   it("returns an error when from/to are omitted (SqlDateTime overflow on this instance)", async () => {
     const context = createMockRequestHandlerExtra();
+    // `from`/`to` are now required in the tool's own schema (a real MCP
+    // caller can no longer omit them) - this still documents the real
+    // server-side bug that motivated that change, via a direct handler
+    // call that bypasses schema validation.
     const result = await getAnnotationsGlobalTool.handler(
-      { from: undefined, to: undefined },
+      { from: undefined, to: undefined } as unknown as { from: string; to: string },
       context,
     );
 
