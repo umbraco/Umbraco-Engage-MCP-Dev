@@ -118,7 +118,8 @@ Custom fields defined in `config/server-config.ts`.
     - `mcpClientManager` spawns the chained server as a child process on first `callTool()`/`connect()` — call `mcpClientManager.disconnectAll()` in `afterAll` or Jest hangs on an open handle.
     - Create in `beforeAll`, delete in `afterAll` (delete the document before its document type — Umbraco won't delete a type with content still using it).
   - **Fields you can't seed to a specific value** — `createdByUmbracoUserName` on server-generated records (e.g. Engage's own built-in default traffic-filter rule, or any record the request body can't override) reflects whichever account performed the original install or is calling the API right now — the server ignores what you put in the request body. Umbraco's auto-increment integer content IDs (`rootContentId` etc.) are similarly never reproducible. Don't chase an exact match — normalize the field instead (next bullet).
-  - **CI-stability, not just local-machine drift:** several tools return background-job data — timestamps, durations, run ids (`get-data-cleanup-*`, `get-data-generation-logs`, `get-reporting-generation-status`) — machine-local values (`get-configuration`'s `reporting.reportingTimeZone`), and install-identity strings (`createdByUmbracoUserName` on `get-traffic-filter-all`, `get-ab-test-project-all`). None of these will ever match a checked-in snapshot on a *different* run, machine, API-user name, or CI container, even right after `-u` — re-running `-u` is a trap, not a fix, since the values just drift again next run. Use the shared `normalizeVolatileFields()` helper (`src/testing/normalize-volatile-fields.ts`) on the result before `toMatchSnapshot()`; extend its field lists if a new tool surfaces the same category of value.
+  - **CI-stability, not just local-machine drift:** several tools return background-job data — timestamps, durations, run ids (`get-reporting-generation-status`) — machine-local values (`get-configuration`'s `reporting.reportingTimeZone`), and install-identity strings (`createdByUmbracoUserName` on `get-traffic-filter-all`, `get-ab-test-project-all`). None of these will ever match a checked-in snapshot on a *different* run, machine, API-user name, or CI container, even right after `-u` — re-running `-u` is a trap, not a fix, since the values just drift again next run. Use the shared `normalizeVolatileFields()` helper (`src/testing/normalize-volatile-fields.ts`) on the result before `toMatchSnapshot()`; extend its field lists if a new tool surfaces the same category of value.
+  - **When even the *count* isn't stable, don't snapshot at all:** `get-data-cleanup-runs`/`-logs` and `get-data-generation-logs` list a background job's run history with no API to trigger that job on demand — how many runs exist by the time the test executes is a race against Engage's own internal scheduler, not just a timestamp-formatting issue. Confirmed empirically in CI: two clean-install runs of the same workflow returned different run counts (0 vs 1). `normalizeVolatileFields()` can't fix this since the *array length* itself differs, not just field values inside it — these three tests assert response shape/types instead of `toMatchSnapshot()`.
 
 **Eval tests (`tests/evals/`):**
 - LLM-based acceptance tests using Claude Agent SDK
@@ -128,9 +129,29 @@ Custom fields defined in `config/server-config.ts`.
 - Setup loaded automatically via `setupFilesAfterEnv` (no per-file import needed)
 - Run with `--runInBand` to avoid parallel API calls
 
+## PR / CI Workflow
+
+Always work via a branch + PR — never push directly to `main`. Create a branch, push it, open a PR, and let `.github/workflows/test.yml` run before merging.
+
+Whenever you open a new PR or push updates to an existing one, do NOT consider the task done at push time. Watch the CI checks and fix any failures automatically:
+
+1. Open / update the PR.
+2. Poll the PR checks (`gh pr checks <number>` / `gh run watch <run-id>`) until every required check has reported, or until a check has clearly failed.
+3. For any failing check, read the failure log, diagnose the root cause, fix it in code or the workflow, and push a new commit.
+4. Loop on steps 2-3 until all required checks are green.
+5. Only then report the PR as ready for review/merge.
+
+Treat a CI failure the same as a local test failure — it's a real regression that blocks shipping, not something to leave for the reviewer to chase down.
+
 ## Demo Site Setup
 
-`scripts/start-umbraco.sh` expects a `demo-site/` project but none ships with this repo — `npx @umbraco-cms/create-umbraco-mcp-server init` doesn't scaffold Engage-specific packages, so build it by hand:
+Run `npm run umbraco:bootstrap` (or `npm run umbraco:start` to bootstrap and launch it in one step) to materialize `demo-site/` from the tracked `demo-site-template/` via `scripts/bootstrap-demo-site.sh` — idempotent, pass `--force` to recreate it. `demo-site-template/` is the source of truth (Umbraco.Cms 17.6.0 + Umbraco.Cms.DevelopmentMode.Backoffice 17.6.0 + Umbraco.Engage 17.2.1 — see its `demo-site-template.csproj`); `demo-site/` itself stays gitignored, since it's each developer's/CI's own working instance including generated `bin/`/`obj/`/`wwwroot/`/`umbraco/` and local secrets in `appsettings.local.json`.
+
+After bootstrapping, write `demo-site/appsettings.local.json` with your DB connection string (see `.github/workflows/test.yml`'s "Configure Umbraco for CI" step for the exact shape), then run `npm run umbraco:start` (or `cd demo-site && dotnet run` if already bootstrapped).
+
+CI (`.github/workflows/test.yml`) does this from scratch on every push/PR: boots a SQL Server service container, bootstraps `demo-site/` from the template, creates the database and the API user, generates Engage's reporting tables (a brand-new install has never run that background job, and several tools query those tables unconditionally), then runs the integration suite collection-by-collection — each collection in its own `jest` process, to avoid a single long-lived process accumulating enough heap across ~35 collections' worth of real API calls to OOM.
+
+If you ever need to rebuild `demo-site-template/` from scratch instead (e.g. bumping the Umbraco/Engage version), the original manual steps were:
 
 1. **`demo-site/demo-site.csproj`** — `Microsoft.NET.Sdk.Web`, `net10.0`, referencing:
    - `Umbraco.Cms` — pin to a version Engage supports (check the target `Umbraco.Engage` nuspec's `Umbraco.Engage.Core` → `Umbraco.Cms.Web.Website` dependency range; `17.6.0` paired with `Umbraco.Engage 17.2.1` is confirmed working). Use exactly `17.2.1`, not `17.2.0` — the `get-package` integration test's checked-in snapshot expects `version: "17.2.1+cb3108d"` (the NuGet package's embedded repository commit); any other Engage version fails that snapshot on build/version alone.
