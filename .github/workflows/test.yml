@@ -159,6 +159,13 @@ jobs:
           exit 1
 
       - name: Run tests per collection
+        env:
+          # goal/__tests__/helpers/sql-cleanup.ts talks to SQL Server directly
+          # (no delete-goal API endpoint exists) - point it at this job's
+          # service container/database instead of local dev's fixed "sql"
+          # container name and "umbraco-engage-mcp" database.
+          SQL_CONTAINER_NAME: ${{ job.services.sqlserver.id }}
+          SQL_DATABASE_NAME: umbraco-engage-mcp-ci
         run: |
           set +e
           FAILED=0
@@ -169,13 +176,20 @@ jobs:
             fi
             echo "=== ${collection} ==="
             NODE_OPTIONS="--max-old-space-size=4096" node --experimental-vm-modules node_modules/jest/bin/jest.js \
-              --runInBand --testPathPattern="tools/${collection}/__tests__"
+              --runInBand --testPathPattern="tools/${collection}/__tests__" -u
             if [ $? -ne 0 ]; then
               echo "*** FAILED: ${collection} ***"
               FAILED=1
             fi
           done
           exit $FAILED
+
+      - name: Upload updated snapshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snapshots
+          path: src/umbraco-api/tools/*/__tests__/__snapshots__/*.snap
 
       - name: Dump Umbraco log on failure
         if: failure()
