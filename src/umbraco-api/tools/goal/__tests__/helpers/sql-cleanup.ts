@@ -6,8 +6,11 @@ import path from "node:path";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const APPSETTINGS_LOCAL_PATH = path.resolve(__dirname, "../../../../../../demo-site/appsettings.local.json");
 
-const DOCKER_CONTAINER = "sql";
-const DATABASE = "umbraco-engage-mcp";
+// Overridable for CI, where the SQL Server service container has an
+// auto-generated name/database rather than the local dev container's
+// fixed "sql" name and "umbraco-engage-mcp" database.
+const DOCKER_CONTAINER = process.env.SQL_CONTAINER_NAME || "sql";
+const DATABASE = process.env.SQL_DATABASE_NAME || "umbraco-engage-mcp";
 const GOAL_TABLE = "umbracoEngageSettingsGoal";
 const AB_TEST_TABLE = "umbracoEngageAbTestingAbTest";
 

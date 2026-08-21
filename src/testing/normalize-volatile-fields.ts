@@ -23,8 +23,12 @@ const DATE_LIKE_FIELDS = [
   "updated",
 ];
 const DURATION_FIELDS = ["durationMs", "totalDurationMs"];
-const GUID_LIKE_FIELDS = ["runId"];
+const GUID_LIKE_FIELDS = ["runId", "icon"];
 const MACHINE_LOCAL_FIELDS = ["reportingTimeZone"];
+// Umbraco generates a random short folder hash per media item
+// (e.g. /media/eoliknpp/journey-speaker.png) - differs on every fresh
+// install of the package-seeded default media, never reproducible.
+const MEDIA_URL_FIELDS = ["iconUrl"];
 // Set at install time by whichever account performed the install/seed
 // migration — permanent for a given database, but never reproducible across
 // a different environment's install (a fresh demo-site, a CI container).
@@ -57,6 +61,8 @@ export function normalizeVolatileFields(value: unknown): unknown {
         out[key] = "00000000-0000-0000-0000-000000000000";
       } else if (MACHINE_LOCAL_FIELDS.includes(key)) {
         out[key] = "NORMALIZED_TIMEZONE";
+      } else if (MEDIA_URL_FIELDS.includes(key)) {
+        out[key] = "NORMALIZED_MEDIA_URL";
       } else if (INSTALL_IDENTITY_FIELDS.includes(key)) {
         out[key] = "NORMALIZED_USER";
       } else {
