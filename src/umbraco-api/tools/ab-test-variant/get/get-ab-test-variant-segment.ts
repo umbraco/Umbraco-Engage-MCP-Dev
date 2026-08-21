@@ -15,7 +15,7 @@ const outputSchema = getAbTestVariantSegmentResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-ab-test-variant-segment",
   description:
-    "Get the Umbraco Engage Ab Test Variant Segment resource. Calls GET /umbraco/engage/management/api/v1/ab-test-variant/segment.",
+    "Get the A/B test variant currently assigned to a given visitor segment (a segment alias/name, not a guid - see the segments collection for discovering valid values).",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

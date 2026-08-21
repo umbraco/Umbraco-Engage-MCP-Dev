@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getAbTestVariantAllResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-ab-test-variant-all",
   description:
-    "List the Umbraco Engage Ab Test Variant All resource. Calls GET /umbraco/engage/management/api/v1/ab-test-variant/all.",
+    "List A/B test variants (the treatment/control arms of an A/B test), optionally scoped to a single test via `abTestId` - omit `abTestId` to list every variant across every test.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],
