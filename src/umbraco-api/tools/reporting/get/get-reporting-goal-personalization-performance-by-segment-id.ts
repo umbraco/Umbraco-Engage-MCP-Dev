@@ -10,13 +10,15 @@ import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbra
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
-const inputSchema = z.object({ segmentId: z.number() });
+const inputSchema = z.object({
+  segmentId: z.number().describe("The segment's numeric id (from get-segments-all), not its unique guid."),
+});
 const outputSchema = z.object({ items: getReportingGoalPersonalizationPerformanceBySegmentIdResponse });
 
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-reporting-goal-personalization-performance-by-segment-id",
   description:
-    "List the Umbraco Engage Reporting Goal Personalization Performance By Segment Id resource. Calls GET /umbraco/engage/management/api/v1/reporting/goal/personalization/performance/{segmentId}.",
+    "List goal-personalization performance rows (control group vs. personalized group completions/value) for a segment. Same response shape as get-reporting - the functional difference between the two, if any, is undocumented upstream.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

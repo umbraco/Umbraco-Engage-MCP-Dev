@@ -4,7 +4,7 @@ exports[`post-reporting-generation-start starts a reporting generation job 1`] =
 {
   "content": [
     {
-      "text": "",
+      "text": "Reporting generation started.",
       "type": "text",
     },
   ],

@@ -10,13 +10,15 @@ import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbra
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
-const inputSchema = z.object({ segmentId: z.number() });
+const inputSchema = z.object({
+  segmentId: z.number().describe("The segment's numeric id (from get-segments-all), not its unique guid."),
+});
 const outputSchema = getReportingSegmentSessionsPotentialBySegmentIdResponse;
 
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-reporting-segment-sessions-potential-by-segment-id",
   description:
-    "Get the Umbraco Engage Reporting Segment Sessions Potential By Segment Id resource. Calls GET /umbraco/engage/management/api/v1/reporting/segment/sessions/potential/{segmentId}.",
+    "Get session-count buckets (`one`/`two`/`three`/`four`/`moreThanFour` sessions) for a segment's 'potential' view - i.e. how many visitors had exactly that many sessions. See get-reporting-segment-sessions-personalization-by-segment-id for the 'personalization' view over the same segment; the precise distinction between the two is not documented upstream.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

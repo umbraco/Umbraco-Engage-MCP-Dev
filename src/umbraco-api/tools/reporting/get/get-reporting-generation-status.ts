@@ -16,7 +16,7 @@ const outputSchema = getReportingGenerationStatusResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-reporting-generation-status",
   description:
-    "Get the Umbraco Engage Reporting Generation Status resource. Calls GET /umbraco/engage/management/api/v1/reporting/generation/status.",
+    "Check the status of Engage's reporting-table generation job: whether the tables exist yet (`reportingTablesExist`), whether generation is currently running (`isGenerating`), and when it last completed (`lastGenerated`). Use after calling post-reporting-generation-start.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

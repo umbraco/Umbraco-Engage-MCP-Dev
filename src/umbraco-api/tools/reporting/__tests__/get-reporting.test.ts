@@ -17,7 +17,14 @@ describe("get-reporting", () => {
   // non-existent one, succeeds with an empty items array.
   it("returns a 400 error when segmentId is omitted despite being marked optional", async () => {
     const context = createMockRequestHandlerExtra();
-    const result = await getReportingTool.handler({ segmentId: undefined }, context);
+    // `segmentId` is now required in the tool's own schema (a real MCP
+    // caller can no longer omit it) - this still documents the real 400
+    // that motivated that change, via a direct handler call that bypasses
+    // schema validation.
+    const result = await getReportingTool.handler(
+      { segmentId: undefined } as unknown as { segmentId: number },
+      context,
+    );
     expect(result.isError).toBe(true);
     expect(createSnapshotResult(result)).toMatchSnapshot();
   });

@@ -14,14 +14,21 @@ const inputSchema = z.object({});
 const tool: ToolDefinition<typeof inputSchema.shape> = {
   name: "post-reporting-generation-start",
   description:
-    "Post the Umbraco Engage Reporting Generation Start resource. Calls POST /umbraco/engage/management/api/v1/reporting/generation/start.",
+    "Start an asynchronous reporting-table generation job. Call get-reporting-generation-status afterward to check progress (`isGenerating`) and completion (`reportingTablesExist`, `lastGenerated`).",
   inputSchema: inputSchema.shape,
   slices: ["create"],
   annotations: { destructiveHint: false, idempotentHint: false },
   handler: async () => {
-    return executeVoidApiCall<ApiClient>(
+    const result = await executeVoidApiCall<ApiClient>(
       (client) => client.postReportingGenerationStart(CAPTURE_RAW_HTTP_RESPONSE),
     );
+    if (!result.isError) {
+      return {
+        ...result,
+        content: [{ type: "text" as const, text: "Reporting generation started." }],
+      };
+    }
+    return result;
   },
 };
 
