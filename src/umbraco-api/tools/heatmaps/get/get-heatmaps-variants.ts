@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getHeatmapsVariantsResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-heatmaps-variants",
   description:
-    "List the Umbraco Engage Heatmaps Variants resource. Calls GET /umbraco/engage/management/api/v1/heatmaps/variants.",
+    "List the distinct URL-variant combinations (query-string permutations) tracked for a page, to pick a variant/culture before calling post-heatmaps-generate-scroll-heatmap.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

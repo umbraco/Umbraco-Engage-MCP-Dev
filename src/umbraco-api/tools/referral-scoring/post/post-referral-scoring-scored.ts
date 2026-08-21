@@ -9,17 +9,21 @@ import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbra
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
-const inputSchema = postReferralScoringScoredBody;
+const inputSchema = postReferralScoringScoredBody.extend({
+  page: postReferralScoringScoredBody.shape.page.int().min(1).default(1),
+  pageSize: postReferralScoringScoredBody.shape.pageSize.int().min(1).max(200).default(25),
+  amountOfDays: postReferralScoringScoredBody.shape.amountOfDays.default(30),
+});
 const outputSchema = postReferralScoringScoredResponse;
 
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "post-referral-scoring-scored",
   description:
-    "Post the Umbraco Engage Referral Scoring Scored resource. Calls POST /umbraco/engage/management/api/v1/referral-scoring/scored.",
+    "List referral URLs that have been assigned a referral score, paginated, over the last `amountOfDays` days. Despite the POST verb, this is read-only. Use `currentPage`/`totalPages`/`totalRowCount` to know when to stop paging. See post-referral-scoring-unscored for referral URLs not yet scored.",
   inputSchema: inputSchema.shape,
   outputSchema,
-  slices: ["create"],
-  annotations: { destructiveHint: false, idempotentHint: false },
+  slices: ["search"],
+  annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true },
   handler: async (params) => {
     return executeGetApiCall<ReturnType<ApiClient["postReferralScoringScored"]>, ApiClient>(
       (client) => client.postReferralScoringScored(params, CAPTURE_RAW_HTTP_RESPONSE),
