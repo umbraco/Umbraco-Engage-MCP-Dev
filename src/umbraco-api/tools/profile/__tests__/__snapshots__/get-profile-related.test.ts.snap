@@ -4,7 +4,7 @@ exports[`get-profile-related returns an empty list for a non-existent member id 
 {
   "content": [],
   "structuredContent": {
-    "items": [],
+    "relatedVisitorIds": [],
   },
 }
 `;

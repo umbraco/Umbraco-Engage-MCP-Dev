@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getProfileCustomerJourneyStepScoresRespon
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-profile-customer-journey-step-scores",
   description:
-    "List the Umbraco Engage Profile Customer Journey Step Scores resource. Calls GET /umbraco/engage/management/api/v1/profile/customer-journey-step-scores.",
+    "List a visitor's customer-journey-step scores. `visitorId` is required in practice (from get-profile-details or get-profile-related). `groupId`/`customerJourneyStepId` resolve via get-customer-journey-all/-details.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

@@ -5,6 +5,10 @@ import {
 } from "./setup.js";
 import tool from "../post/post-profile-export-csv.js";
 
+// `skip`/`take` in the tool's inputSchema trigger the SDK's
+// withStandardDecorators cursor-pagination wrapper, which strips them from
+// the exposed schema in favor of an opaque `cursor` param - omit it for
+// the first page (see get-data-cleanup-logs.test.ts for the same pattern).
 describe("post-profile-export-csv", () => {
   setupTestEnvironment();
 
@@ -21,7 +25,8 @@ describe("post-profile-export-csv", () => {
         isUnidentified: undefined,
         isIdentified: undefined,
         isHighPotential: undefined,
-        activeRange: undefined,
+        activeFrom: undefined,
+        activeTo: undefined,
         identifiedName: undefined,
       },
       context,

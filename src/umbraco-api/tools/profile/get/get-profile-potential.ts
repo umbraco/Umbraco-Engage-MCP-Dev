@@ -15,7 +15,7 @@ const outputSchema = getProfilePotentialResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-profile-potential",
   description:
-    "Get the Umbraco Engage Profile Potential resource. Calls GET /umbraco/engage/management/api/v1/profile/potential.",
+    "Get a visitor's `active` and `engaged` potential scores. `visitorId` is required in practice. The scale/units of these scores are not documented upstream.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

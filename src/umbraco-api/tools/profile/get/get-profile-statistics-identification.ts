@@ -15,7 +15,7 @@ const outputSchema = getProfileStatisticsIdentificationResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-profile-statistics-identification",
   description:
-    "Get the Umbraco Engage Profile Statistics Identification resource. Calls GET /umbraco/engage/management/api/v1/profile/statistics/identification.",
+    "Get visitor identification counts over the last `numberOfDays` days (default 30): `newlyIdentified`, `formerlyUnknown`, and `unknown` visitor counts.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

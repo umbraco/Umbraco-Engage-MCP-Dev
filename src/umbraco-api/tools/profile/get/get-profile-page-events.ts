@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getProfilePageEventsResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-profile-page-events",
   description:
-    "List the Umbraco Engage Profile Page Events resource. Calls GET /umbraco/engage/management/api/v1/profile/page-events.",
+    "List events (start/end/scroll-depth/goal-completion/out-click/video/form, etc.) recorded within a single pageview. `pageviewId` comes from get-profile-pageviews.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

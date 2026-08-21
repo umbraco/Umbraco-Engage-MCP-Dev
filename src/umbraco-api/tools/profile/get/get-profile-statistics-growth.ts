@@ -15,7 +15,7 @@ const outputSchema = getProfileStatisticsGrowthResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-profile-statistics-growth",
   description:
-    "Get the Umbraco Engage Profile Statistics Growth resource. Calls GET /umbraco/engage/management/api/v1/profile/statistics/growth.",
+    "Get monthly visitor-growth counts (identified vs. unknown visitors) over the last `numberOfMonths` months (default 12).",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

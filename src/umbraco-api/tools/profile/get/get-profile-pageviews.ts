@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getProfilePageviewsResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-profile-pageviews",
   description:
-    "List the Umbraco Engage Profile Pageviews resource. Calls GET /umbraco/engage/management/api/v1/profile/pageviews.",
+    "List the pageviews within a single browsing session. `sessionId` comes from get-profile-sessions. Each pageview's `id` is what get-profile-page-events expects as `pageviewId`. Response includes visitor IP address, country, and city - be mindful of this PII when relaying results.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

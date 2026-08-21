@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getProfileLastActiveSegmentResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-profile-last-active-segment",
   description:
-    "List the Umbraco Engage Profile Last Active Segment resource. Calls GET /umbraco/engage/management/api/v1/profile/last-active-segment.",
+    "List the segment `unique` guid(s) most recently active for a visitor. `visitorId` is required in practice. Resolve each guid to a segment's name via get-segments-all.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

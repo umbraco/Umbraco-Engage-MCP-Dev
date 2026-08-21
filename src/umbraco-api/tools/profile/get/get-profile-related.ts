@@ -10,13 +10,17 @@ import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbra
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
-const inputSchema = getProfileRelatedQueryParams;
-const outputSchema = z.object({ items: getProfileRelatedResponse });
+const inputSchema = getProfileRelatedQueryParams.extend({
+  memberId: getProfileRelatedQueryParams.shape.memberId.describe(
+    "An Umbraco member's guid - finds other visitor profiles linked to the same member (e.g. across devices/browsers).",
+  ),
+});
+const outputSchema = z.object({ relatedVisitorIds: getProfileRelatedResponse });
 
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-profile-related",
   description:
-    "List the Umbraco Engage Profile Related resource. Calls GET /umbraco/engage/management/api/v1/profile/related.",
+    "List numeric visitor ids related to the given member (e.g. other devices/browsers linked to the same member account). Pass each returned id as `visitorId` to other profile tools to inspect that visitor's own activity.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],
@@ -27,7 +31,7 @@ const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
     );
     // MCP structuredContent must be a JSON object — wrap array responses.
     if (!result.isError && Array.isArray(result.structuredContent)) {
-      return { ...result, structuredContent: { items: result.structuredContent } };
+      return { ...result, structuredContent: { relatedVisitorIds: result.structuredContent } };
     }
     return result;
   },

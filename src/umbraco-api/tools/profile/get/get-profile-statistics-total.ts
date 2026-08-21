@@ -16,7 +16,7 @@ const outputSchema = getProfileStatisticsTotalResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-profile-statistics-total",
   description:
-    "Get the Umbraco Engage Profile Statistics Total resource. Calls GET /umbraco/engage/management/api/v1/profile/statistics/total.",
+    "Get the total count of identified vs. unknown visitor profiles, site-wide.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

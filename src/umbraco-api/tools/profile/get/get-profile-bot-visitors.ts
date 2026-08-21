@@ -16,10 +16,10 @@ const outputSchema = getProfileBotVisitorsResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-profile-bot-visitors",
   description:
-    "Get the Umbraco Engage Profile Bot Visitors resource. Calls GET /umbraco/engage/management/api/v1/profile/bot-visitors.",
+    "List visitors detected as bots, site-wide (not scoped to a single visitor).",
   inputSchema: inputSchema.shape,
   outputSchema,
-  slices: ["read"],
+  slices: ["list"],
   annotations: { readOnlyHint: true },
   handler: async () => {
     return executeGetApiCall<ReturnType<ApiClient["getProfileBotVisitors"]>, ApiClient>(

@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getProfileGoalCompletionsResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-profile-goal-completions",
   description:
-    "List the Umbraco Engage Profile Goal Completions resource. Calls GET /umbraco/engage/management/api/v1/profile/goal-completions.",
+    "List a visitor's goal completions, with each goal's `unique` guid, completion count, and total value. `visitorId` is required in practice. Resolve `unique` to a goal's name via get-goal-details.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

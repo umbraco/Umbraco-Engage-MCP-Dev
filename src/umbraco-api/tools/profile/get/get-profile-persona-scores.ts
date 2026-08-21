@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getProfilePersonaScoresResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-profile-persona-scores",
   description:
-    "List the Umbraco Engage Profile Persona Scores resource. Calls GET /umbraco/engage/management/api/v1/profile/persona-scores.",
+    "List a visitor's persona scores. `visitorId` is required in practice. `groupId`/`personaId` resolve via get-persona-all/-details (`personaId` is the persona's sub-entity id within its group, `groupId` the group's own numeric id).",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

@@ -17,9 +17,9 @@ describe("get-profile-sessions", () => {
 
     const result = await tool.handler(
       {
-        VisitorId: TEST_NON_EXISTENT_VISITOR_ID,
-        PageIndex: TEST_PAGE_INDEX,
-        PageSize: TEST_PAGE_SIZE,
+        visitorId: TEST_NON_EXISTENT_VISITOR_ID,
+        pageIndex: TEST_PAGE_INDEX,
+        pageSize: TEST_PAGE_SIZE,
       },
       context,
     );

@@ -5,9 +5,10 @@ import {
 } from "./setup.js";
 import tool from "../get/get-profile-export.js";
 
-const TEST_SKIP = 0;
-const TEST_TAKE = 10;
-
+// `skip`/`take` in the tool's inputSchema trigger the SDK's
+// withStandardDecorators cursor-pagination wrapper, which strips them from
+// the exposed schema in favor of an opaque `cursor` param - omit it for
+// the first page (see get-data-cleanup-logs.test.ts for the same pattern).
 describe("get-profile-export", () => {
   setupTestEnvironment();
 
@@ -16,19 +17,17 @@ describe("get-profile-export", () => {
 
     const result = await tool.handler(
       {
-        Skip: TEST_SKIP,
-        Take: TEST_TAKE,
-        Order: undefined,
-        Ascending: undefined,
-        SegmentId: undefined,
-        MinimumGoalValue: undefined,
-        MinimumCompletedGoals: undefined,
-        IsUnidentified: undefined,
-        IsIdentified: undefined,
-        IsHighPotential: undefined,
-        "ActiveRange.From": undefined,
-        "ActiveRange.To": undefined,
-        IdentifiedName: undefined,
+        order: undefined,
+        ascending: undefined,
+        segmentId: undefined,
+        minimumGoalValue: undefined,
+        minimumCompletedGoals: undefined,
+        isUnidentified: undefined,
+        isIdentified: undefined,
+        isHighPotential: undefined,
+        activeFrom: undefined,
+        activeTo: undefined,
+        identifiedName: undefined,
       },
       context,
     );

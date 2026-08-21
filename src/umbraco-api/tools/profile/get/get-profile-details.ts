@@ -15,7 +15,7 @@ const outputSchema = getProfileDetailsResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-profile-details",
   description:
-    "Get the Umbraco Engage Profile Details resource. Calls GET /umbraco/engage/management/api/v1/profile/details.",
+    "Get a visitor's profile summary: activity window, totals (pageviews, sessions, goal completions/value), whether they've been personalized/A-B-tested, and linked Umbraco member accounts. `visitorId` is required in practice.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],
