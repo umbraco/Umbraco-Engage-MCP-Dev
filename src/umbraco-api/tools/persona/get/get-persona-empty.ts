@@ -16,10 +16,10 @@ const outputSchema = getPersonaEmptyResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-persona-empty",
   description:
-    "Get the Umbraco Engage Persona Empty resource. Calls GET /umbraco/engage/management/api/v1/persona/empty.",
+    "Get a blank persona group template with default field values (no personas, minimumParticipationScoreThreshold 25, minimumDeviationType 'Absolute', expirationType 'never', upperScoreLimit 10). Useful for inspecting the shape/defaults post-persona expects - not required to create a group, since post-persona applies the same defaults internally when fields are omitted.",
   inputSchema: inputSchema.shape,
   outputSchema,
-  slices: ["read"],
+  slices: ["other"],
   annotations: { readOnlyHint: true },
   handler: async () => {
     return executeGetApiCall<ReturnType<ApiClient["getPersonaEmpty"]>, ApiClient>(

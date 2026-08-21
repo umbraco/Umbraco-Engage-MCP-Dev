@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getPersonaAllResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-persona-all",
   description:
-    "List the Umbraco Engage Persona All resource. Calls GET /umbraco/engage/management/api/v1/persona/all.",
+    "List all persona groups (named containers for one or more individual personas), each with its full nested `personas` array. Each item's `unique` guid is what get-persona-details/delete-persona expect as `id`.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

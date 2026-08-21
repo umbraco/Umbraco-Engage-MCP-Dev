@@ -14,10 +14,10 @@ const inputSchema = postPersonaUnlockBody;
 const tool: ToolDefinition<typeof inputSchema.shape> = {
   name: "post-persona-unlock",
   description:
-    "Post the Umbraco Engage Persona Unlock resource. Calls POST /umbraco/engage/management/api/v1/persona/unlock.",
+    "Unlock a visitor's persona score assignment previously locked via post-persona-lock (`entityId` is the individual persona's sub-entity id from get-persona-details' `personas[N].id`, `visitorId` the visitor's profile id), letting automatic scoring resume updating it.",
   inputSchema: inputSchema.shape,
-  slices: ["create"],
-  annotations: { destructiveHint: false, idempotentHint: false },
+  slices: ["update"],
+  annotations: { destructiveHint: false, idempotentHint: true },
   handler: async (params) => {
     return executeVoidApiCall<ApiClient>(
       (client) => client.postPersonaUnlock(params, CAPTURE_RAW_HTTP_RESPONSE),

@@ -14,10 +14,10 @@ const inputSchema = postPersonaLockBody;
 const tool: ToolDefinition<typeof inputSchema.shape> = {
   name: "post-persona-lock",
   description:
-    "Post the Umbraco Engage Persona Lock resource. Calls POST /umbraco/engage/management/api/v1/persona/lock.",
+    "Lock a visitor's persona score assignment (`entityId` is the individual persona's sub-entity id from get-persona-details' `personas[N].id`, `visitorId` the visitor's profile id), pinning it so automatic scoring no longer updates it. Requires a real visitor with existing tracking history - a non-existent visitor/entity pair errors.",
   inputSchema: inputSchema.shape,
-  slices: ["create"],
-  annotations: { destructiveHint: false, idempotentHint: false },
+  slices: ["update"],
+  annotations: { destructiveHint: false, idempotentHint: true },
   handler: async (params) => {
     return executeVoidApiCall<ApiClient>(
       (client) => client.postPersonaLock(params, CAPTURE_RAW_HTTP_RESPONSE),
