@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getAnalyticsDistinctResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-analytics-distinct",
   description:
-    "List the Umbraco Engage Analytics Distinct resource. Calls GET /umbraco/engage/management/api/v1/analytics/distinct.",
+    "List the distinct values recorded for a given analytics dimension (e.g. distinct `pageUrl`s, `country`s, or `browser`s seen in tracked traffic). Can return a very large, unbounded list on a high-traffic site with a high-cardinality dimension - there is no pagination.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

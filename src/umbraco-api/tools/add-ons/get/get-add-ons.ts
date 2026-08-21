@@ -16,7 +16,7 @@ const outputSchema = getAddOnsResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-add-ons",
   description:
-    "Get the Umbraco Engage Add Ons resource. Calls GET /umbraco/engage/management/api/v1/add-ons.",
+    "Report whether the Umbraco Forms and Umbraco Commerce add-on integrations are currently enabled for this Engage installation.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],
