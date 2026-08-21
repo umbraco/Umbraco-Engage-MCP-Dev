@@ -1,4 +1,3 @@
-import { randomUUID } from "crypto";
 import {
   setupTestEnvironment,
   createMockRequestHandlerExtra,
@@ -32,33 +31,24 @@ describe("post-applied-personalization", () => {
 
   it("should create a new applied personalization", async () => {
     const context = createMockRequestHandlerExtra();
-    const unique = randomUUID();
 
     const result = await tool.handler(
       {
-        id: 0,
-        created: new Date().toISOString(),
-        unique,
-        segmentId: null,
-        segment: null,
-        type: "SinglePage",
-        umbracoSegmentAlias: null,
         name: null,
         description: null,
+        type: "SinglePage",
+        isActive: true,
         css: null,
         javascript: null,
-        started: null,
-        isActive: true,
-        createdByUmbracoUserName: null,
-        updatedByUmbracoUserName: null,
+        segmentId: null,
+        umbracoSegmentAlias: null,
         pages: [],
         contentTypes: [],
-        previewUrl: null,
       },
       context,
     );
 
-    createdUnique = unique;
+    createdUnique = (result.structuredContent as { unique?: string } | undefined)?.unique;
 
     expect(
       normalizeVolatileFields(

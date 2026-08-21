@@ -1,21 +1,25 @@
+import { z } from "zod";
 import {
   withStandardDecorators,
   executeGetApiCall,
   CAPTURE_RAW_HTTP_RESPONSE,
   type ToolDefinition,
 } from "@umbraco-cms/mcp-server-sdk";
-import { getAppliedPersonalizationSegmentQueryParams, getAppliedPersonalizationSegmentResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
+import { getAppliedPersonalizationSegmentResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
 import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbracoEngageManagementApi.js";
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
-const inputSchema = getAppliedPersonalizationSegmentQueryParams;
+// The generated schema marks `segment` optional, but a lookup with no
+// target segment is meaningless - required here so callers get a clear
+// schema error instead.
+const inputSchema = z.object({ segment: z.string() });
 const outputSchema = getAppliedPersonalizationSegmentResponse;
 
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-applied-personalization-segment",
   description:
-    "Get the Umbraco Engage Applied Personalization Segment resource. Calls GET /umbraco/engage/management/api/v1/applied-personalization/segment.",
+    "Get the applied personalization currently associated with a segment (a segment alias/name, not a guid). Returns a successful null result (not an error) if no personalization is applied to that segment - unlike get-applied-personalization-id, which errors for an unmatched id.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

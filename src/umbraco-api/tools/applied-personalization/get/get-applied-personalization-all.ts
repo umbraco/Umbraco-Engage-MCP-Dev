@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getAppliedPersonalizationAllResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-applied-personalization-all",
   description:
-    "List the Umbraco Engage Applied Personalization All resource. Calls GET /umbraco/engage/management/api/v1/applied-personalization/all.",
+    "List every applied personalization (rules that show different content/css/javascript to visitors matching a segment) across the whole site, unfiltered and unpaginated. Each item's `unique` guid is what get-applied-personalization-id/delete-applied-personalization expect as `id`.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],
