@@ -1,4 +1,3 @@
-import { randomUUID } from "node:crypto";
 import {
   setupTestEnvironment,
   createMockRequestHandlerExtra,
@@ -42,23 +41,15 @@ describe("post-customer-journey", () => {
 
     const result = await tool.handler(
       {
-        id: 0,
-        unique: randomUUID(),
         title: TEST_CUSTOMER_JOURNEY_TITLE,
         description: null,
         steps: [],
-        createdOn: null,
-        createdByUmbracoUserKey: null,
-        createdByUmbracoUserName: null,
-        updatedOn: null,
-        updatedByUmbracoUserKey: null,
-        updatedByUmbracoUserName: null,
-        minimumParticipationScoreThreshold: null,
+        minimumParticipationScoreThreshold: 25,
         minimumDeviationType: "Absolute",
-        minimumDeviation: null,
+        minimumDeviation: 0,
         expirationType: "never",
-        expiration: null,
-        upperScoreLimit: null,
+        expiration: 0,
+        upperScoreLimit: 10,
       },
       context,
     );

@@ -14,10 +14,10 @@ const inputSchema = postCustomerJourneyLockBody;
 const tool: ToolDefinition<typeof inputSchema.shape> = {
   name: "post-customer-journey-lock",
   description:
-    "Post the Umbraco Engage Customer Journey Lock resource. Calls POST /umbraco/engage/management/api/v1/customer-journey/lock.",
+    "Lock a visitor's customer-journey-step score assignment (`entityId` is the journey step's id, `visitorId` the visitor's profile id), pinning it so automatic scoring no longer updates it. Requires a real visitor with existing tracking history - a non-existent visitor/entity pair errors.",
   inputSchema: inputSchema.shape,
-  slices: ["create"],
-  annotations: { destructiveHint: false, idempotentHint: false },
+  slices: ["update"],
+  annotations: { destructiveHint: false, idempotentHint: true },
   handler: async (params) => {
     return executeVoidApiCall<ApiClient>(
       (client) => client.postCustomerJourneyLock(params, CAPTURE_RAW_HTTP_RESPONSE),

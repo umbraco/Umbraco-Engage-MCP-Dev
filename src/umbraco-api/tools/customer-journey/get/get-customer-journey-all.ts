@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getCustomerJourneyAllResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-customer-journey-all",
   description:
-    "List the Umbraco Engage Customer Journey All resource. Calls GET /umbraco/engage/management/api/v1/customer-journey/all.",
+    "List all configured customer journeys (named step sequences used to score visitor progression), each with its full steps array. Each item's `unique` guid is what get-customer-journey-details/delete-customer-journey expect as `id`.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],
