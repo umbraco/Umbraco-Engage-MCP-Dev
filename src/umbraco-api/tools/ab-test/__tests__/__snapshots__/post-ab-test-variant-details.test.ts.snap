@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`post-ab-test-variant-details computes variant details directly against the posted test payload 1`] = `
+exports[`post-ab-test-variant-details computes variant details from minimal, caller-supplied variant names 1`] = `
 {
   "content": [],
   "structuredContent": {
@@ -69,7 +69,7 @@ exports[`post-ab-test-variant-details computes variant details directly against 
         "label": "B",
         "mainGoalComparisons": [],
         "mainGoalWarning": false,
-        "name": "",
+        "name": "Variant B",
         "participantPortion": 0,
         "previewUrl": null,
         "redirectNodeKey": null,

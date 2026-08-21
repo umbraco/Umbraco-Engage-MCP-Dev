@@ -1,9 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { createMockRequestHandlerExtra } from "@umbraco-cms/mcp-server-sdk/testing";
-import type { z } from "zod";
-import { postAbTestBody } from "../../../../api/generated/umbracoEngageManagementApi.zod.js";
 import { ContentPageFixture } from "../../../../../testing/content-page-fixture.js";
-import getAbTestEmptyTool from "../../get/get-ab-test-empty.js";
 import postAbTestTool from "../../post/post-ab-test.js";
 import deleteAbTestTool from "../../delete/delete-ab-test.js";
 import postGoalTool from "../../../goal/post/post-goal.js";
@@ -13,26 +10,21 @@ import getGoalAllTypesTool from "../../../goal/get/get-goal-all-types.js";
 export const TEST_AB_TEST_NAME = "_Test AB Test";
 export const TEST_AB_TEST_GOAL_NAME = "_Test AB Test Goal";
 
-type AbTestBody = z.infer<typeof postAbTestBody>;
-type AbTestDraft = AbTestBody["test"];
-
 /**
  * Builds a real, genuinely persisted A/B test via the chain of dependencies
  * the Engage API requires:
  *   1. A real published Umbraco content page (via ContentPageFixture, over
- *      the chained CMS MCP server) - umbracoPageVariants needs a real page
- *      key, not a placeholder guid.
- *   2. A real goal (post-goal) - test.goalId needs a real, resolvable
- *      numeric id, not the goal's uuid `unique`.
- *   3. The server's own blank draft template (get-ab-test-empty), mutated
- *      minimally (goalId, name, umbracoPageVariants, and naming the second
- *      variant stub) and posted back (post-ab-test).
+ *      the chained CMS MCP server) - post-ab-test's `pageUnique` needs a
+ *      real page key, not a placeholder guid.
+ *   2. A real goal (post-goal) - post-ab-test's `goalId` needs a real,
+ *      resolvable numeric id, not the goal's uuid `unique`.
+ *   3. post-ab-test itself, which now builds the full server payload
+ *      internally from this minimal input.
  *
- * Empirically confirmed: starting from get-ab-test-empty's draft, the
- * fields that must change to flip validationResults.isValid from false to
- * true are goalId AND the embedded goal object (populated with a REAL,
- * fetched goal type id - not an all-zero placeholder), name,
- * umbracoPageVariants, and the second variant's name.
+ * Empirically confirmed: goalTypeId must be a REAL goal type's id, fetched
+ * from get-goal-all-types - an all-zero placeholder id persists the goal
+ * fine but fails post-ab-test's validation with "The selected goal should
+ * be active and valid".
  */
 export class AbTestBuilder {
   private name: string = TEST_AB_TEST_NAME;
@@ -55,8 +47,8 @@ export class AbTestBuilder {
   async create(): Promise<this> {
     const context = createMockRequestHandlerExtra();
 
-    // 1. Real published content page - umbracoPageVariants needs a real
-    // page key (create-document's returned id IS the content node's key).
+    // 1. Real published content page - post-ab-test's `pageUnique` needs a
+    // real page key (create-document's returned id IS the content node's key).
     await this.contentPage.create();
     const pageKey = this.contentPage.getKey();
 
@@ -110,8 +102,8 @@ export class AbTestBuilder {
       );
     }
 
-    // 3. Resolve the goal's real numeric id - post-ab-test's test.goalId
-    // needs this numeric id, not the goal's uuid `unique`.
+    // 3. Resolve the goal's real numeric id - post-ab-test's `goalId` needs
+    // this numeric id, not the goal's uuid `unique`.
     const goalDetails = await getGoalDetailsTool.handler({ id: goalUnique }, context);
     if (goalDetails.isError) {
       throw new Error(
@@ -119,65 +111,36 @@ export class AbTestBuilder {
       );
     }
     const goalNumericId = (goalDetails.structuredContent as { id: number }).id;
-    const goalCreatedByKey = randomUUID();
-    const goalCreatedAt = new Date().toISOString();
 
-    // 4. The server's own blank draft template. post-ab-test's body shape is
-    // identical to get-ab-test-empty's response shape (test/indication/
-    // variants/isInvertedGoal) - post the whole thing back, not just `test`.
-    const empty = await getAbTestEmptyTool.handler({ testType: "SinglePage" }, context);
-    if (empty.isError) {
-      throw new Error(
-        `Failed to fetch blank A/B test draft: ${JSON.stringify(empty.content)}`,
-      );
-    }
-    const body = empty.structuredContent as Required<AbTestBody>;
-    const draft = body.test;
-
-    // 5. Mutate the draft. NOTE: goalId alone is not enough - the server
-    // validates the EMBEDDED test.goal object (client-echoed, not
-    // server-looked-up by goalId), so it must be populated too, or
-    // validation fails with "The selected goal should be active and valid"
-    // even though goalId correctly points to a real, active goal - confirmed
-    // empirically. get-goal-details doesn't return created/createdBy, so
-    // those are supplied directly from what we know we just posted.
-    draft.goalId = goalNumericId;
-    draft.goal = {
-      id: goalNumericId,
-      key: goalUnique,
-      name: this.goalName,
-      value: 1,
-      goalTypeId: customGoalType.id,
-      goalTypeConfig: "{}",
-      isMain: false,
-      isInverted: false,
-      isActive: true,
-      isInvalid: false,
-      created: goalCreatedAt,
-      createdBy: goalCreatedByKey,
-      updated: null,
-      updatedBy: null,
-    };
-    draft.name = this.name;
-    draft.umbracoPageVariants = [
+    // 4. Persist - post-ab-test builds the full server payload internally.
+    const created = await postAbTestTool.handler(
       {
-        id: 0,
-        unique: pageKey,
-        nodeName: null,
-        culture: null,
-        abTestId: null,
-        variesBySegment: false,
+        name: this.name,
+        testType: "SinglePage",
+        goalId: goalNumericId,
+        goal: {
+          key: goalUnique,
+          name: this.goalName,
+          value: 1,
+          goalTypeId: customGoalType.id,
+          goalTypeConfig: "{}",
+          isMain: false,
+          isInverted: false,
+          isActive: true,
+          isInvalid: false,
+        },
+        pageUnique: pageKey,
+        secondVariantName: "Variant B",
+        participationPercentage: 1,
+        minimumDetectableEffect: 0.1,
+        estimatedDailyVisitors: 0,
+        baselineConversionRate: 0.05,
       },
-    ];
-    draft.variants = draft.variants.map((variant) =>
-      variant.isBenchmark ? variant : { ...variant, name: "Variant B" },
+      context,
     );
-
-    // 6. Persist.
-    const created = await postAbTestTool.handler(body, context);
     const structuredContent = created.structuredContent as
       | {
-          test: { test: AbTestDraft };
+          test: { test: { id: number; unique: string } };
           validationResults: { isValid: boolean; warnings: string[]; errors: string[] };
         }
       | undefined;

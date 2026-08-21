@@ -3,25 +3,15 @@ import {
   createMockRequestHandlerExtra,
   createSnapshotResult,
 } from "./setup.js";
-import getAbTestEmptyTool from "../get/get-ab-test-empty.js";
 import postAbTestRuntimeIndicationTool from "../post/post-ab-test-runtime-indication.js";
 import { normalizeVolatileFields } from "../../../../testing/normalize-volatile-fields.js";
 
 // Investigated (not added as a permanent test): feeding a real,
-// AbTestBuilder-created test's own object (fetched via get-ab-test) into
-// this tool instead of get-ab-test-empty's draft produces no meaningfully
-// different result - `requiredVisitorsTotal`/`requiredVisitorsPerVariant`
-// come out numerically IDENTICAL either way (60492/30246), since
-// AbTestBuilder doesn't override the draft's default
-// baselineConversionRate/minimumDetectableEffect, and this response schema
-// has no `previewUrl` field for the real page/variant to populate. The only
-// differences observed were the variant `name`/`segment` strings, which are
-// pure echoes of whatever was fed in as input (real or draft), not new
-// computed behavior. A permanent snapshot of the real-test variant would
-// therefore just be testing "the tool echoes back the name I gave it" again
-// under a different fixture, not a new code path.
-
-const TEST_TEST_TYPE = "SinglePage" as const;
+// AbTestBuilder-created test's own values (baselineConversionRate,
+// minimumDetectableEffect, etc., fetched via get-ab-test) into this tool
+// instead of the defaults produces no meaningfully different result beyond
+// the numbers you'd expect from those inputs changing - this tool is a pure
+// calculation with no reference to any real, persisted entity.
 
 // Recursively blanks any key literally named `unique` — the response nests
 // variant `unique` guids several levels deep, which vary per call. Kept
@@ -44,17 +34,18 @@ function blankNestedUnique(value: unknown): unknown {
 describe("post-ab-test-runtime-indication", () => {
   setupTestEnvironment();
 
-  it("computes a runtime indication directly against the posted test payload", async () => {
+  it("computes a runtime indication from minimal, caller-meaningful inputs", async () => {
     const context = createMockRequestHandlerExtra();
 
-    const empty = await getAbTestEmptyTool.handler(
-      { testType: TEST_TEST_TYPE },
-      context,
-    );
-    const body = (empty.structuredContent as { test: unknown }).test;
-
     const result = await postAbTestRuntimeIndicationTool.handler(
-      body as any,
+      {
+        testType: "SinglePage",
+        participationPercentage: 1,
+        minimumDetectableEffect: 0.1,
+        estimatedDailyVisitors: 0,
+        baselineConversionRate: 0.05,
+        variantCount: 2,
+      },
       context,
     );
 

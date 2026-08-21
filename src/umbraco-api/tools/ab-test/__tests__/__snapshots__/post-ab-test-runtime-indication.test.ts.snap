@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`post-ab-test-runtime-indication computes a runtime indication directly against the posted test payload 1`] = `
+exports[`post-ab-test-runtime-indication computes a runtime indication from minimal, caller-meaningful inputs 1`] = `
 {
   "content": [],
   "structuredContent": {
@@ -17,7 +17,7 @@ exports[`post-ab-test-runtime-indication computes a runtime indication directly 
         "isBenchmark": false,
         "isDisabled": false,
         "javascript": "",
-        "name": "",
+        "name": "Variant B",
         "redirectNodeKey": null,
         "segment": "",
         "totalPageviewsForVariant": 0,
