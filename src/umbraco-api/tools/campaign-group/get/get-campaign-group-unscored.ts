@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getCampaignGroupUnscoredResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-campaign-group-unscored",
   description:
-    "List the Umbraco Engage Campaign Group Unscored resource. Calls GET /umbraco/engage/management/api/v1/campaign-group/unscored.",
+    "List distinct UTM tag combinations (utmSource/utmMedium/utmCampaign/etc.) observed in real traffic that are not yet assigned to any campaign group - each item is a bare UTM tuple with no group/id attached. Use post-campaign-group to create a group and assign these combinations to it via that call's `campaigns` array.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

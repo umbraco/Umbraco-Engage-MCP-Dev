@@ -1,20 +1,22 @@
+import { z } from "zod";
 import {
   withStandardDecorators,
   executeVoidApiCall,
   CAPTURE_RAW_HTTP_RESPONSE,
   type ToolDefinition,
 } from "@umbraco-cms/mcp-server-sdk";
-import { deleteCampaignGroupQueryParams } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
 import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbracoEngageManagementApi.js";
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
-const inputSchema = deleteCampaignGroupQueryParams;
+// The generated schema marks `id` optional, but a delete with no target is
+// meaningless - required here so callers get a clear schema error instead.
+const inputSchema = z.object({ id: z.uuid() });
 
 const tool: ToolDefinition<typeof inputSchema.shape> = {
   name: "delete-campaign-group",
   description:
-    "Delete the Umbraco Engage Campaign Group resource. Calls DELETE /umbraco/engage/management/api/v1/campaign-group.",
+    "Delete a campaign group by its `id`, which is the group's `unique` guid, not the numeric `id` field on the entity itself. Idempotent - deleting a non-existent id succeeds rather than erroring.",
   inputSchema: inputSchema.shape,
   slices: ["delete"],
   annotations: { destructiveHint: true },

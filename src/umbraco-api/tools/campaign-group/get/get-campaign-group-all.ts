@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getCampaignGroupAllResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-campaign-group-all",
   description:
-    "List the Umbraco Engage Campaign Group All resource. Calls GET /umbraco/engage/management/api/v1/campaign-group/all.",
+    "List every campaign group, each with its full campaigns/persona-scoring/customer-journey-scoring associations. Unfiltered and unpaginated. Each item's `unique` guid is what get-campaign-group/delete-campaign-group expect as `id`. See get-campaign-group-unscored for UTM tag combinations seen in real traffic that aren't yet assigned to any campaign group.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

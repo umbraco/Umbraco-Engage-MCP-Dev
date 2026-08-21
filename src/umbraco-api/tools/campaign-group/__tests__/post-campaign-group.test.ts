@@ -1,4 +1,3 @@
-import { randomUUID } from "node:crypto";
 import {
   setupTestEnvironment,
   createMockRequestHandlerExtra,
@@ -25,13 +24,11 @@ describe("post-campaign-group", () => {
 
   it("creates a new campaign group", async () => {
     const context = createMockRequestHandlerExtra();
-    const TEST_UNIQUE = randomUUID();
 
     const result = await tool.handler(
       {
-        id: 0,
-        created: new Date().toISOString(),
-        unique: TEST_UNIQUE,
+        id: undefined,
+        unique: undefined,
         name: undefined,
         description: undefined,
         invalid: false,
@@ -43,7 +40,7 @@ describe("post-campaign-group", () => {
     );
 
     expect(result.isError).toBeFalsy();
-    createdId = (result.structuredContent as any)?.unique ?? TEST_UNIQUE;
+    createdId = (result.structuredContent as any)?.unique;
 
     const normalized = {
       ...result,
