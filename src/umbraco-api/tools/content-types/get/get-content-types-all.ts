@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getContentTypesAllResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-content-types-all",
   description:
-    "List the Umbraco Engage Content Types All resource. Calls GET /umbraco/engage/management/api/v1/content-types/all.",
+    "List the Umbraco document types tracked by Engage, each with its numeric `id`, `alias`, and `name`. Note: get-content-types-segmented-property identifies a document type by a different, guid-shaped `unique` value - not this tool's numeric `id`.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

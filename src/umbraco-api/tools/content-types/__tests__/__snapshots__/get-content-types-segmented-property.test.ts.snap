@@ -3,6 +3,8 @@
 exports[`get-content-types-segmented-property returns segmented property flag for an unknown unique 1`] = `
 {
   "content": [],
-  "structuredContent": false,
+  "structuredContent": {
+    "hasSegmentedProperty": false,
+  },
 }
 `;
