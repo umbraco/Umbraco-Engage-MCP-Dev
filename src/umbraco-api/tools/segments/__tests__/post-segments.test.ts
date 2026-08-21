@@ -26,13 +26,11 @@ describe("post-segments", () => {
 
   it("should create a segment", async () => {
     const context = createMockRequestHandlerExtra();
-    const unique = crypto.randomUUID();
 
     const result = await tool.handler(
       {
-        id: 0,
-        created: new Date().toISOString(),
-        unique,
+        id: undefined,
+        unique: undefined,
         name: "_Test Segment Create",
         description: null,
         endTime: null,
@@ -44,7 +42,7 @@ describe("post-segments", () => {
       context,
     );
 
-    createdUnique = unique;
+    createdUnique = (result.structuredContent as { unique?: string } | undefined)?.unique;
 
     // The response's top-level `id` is the real numeric internal id (not a
     // guid), so it isn't matched by `idToReplace`; omit it and instead let

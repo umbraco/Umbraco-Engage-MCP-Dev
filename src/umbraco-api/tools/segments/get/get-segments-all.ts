@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getSegmentsAllResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-segments-all",
   description:
-    "List the Umbraco Engage Segments All resource. Calls GET /umbraco/engage/management/api/v1/segments/all.",
+    "List all visitor segments, including each segment's numeric `id` (used by post-segments-update-priority) and `unique` guid (used by get-segments/delete-segments/post-segments' update path). Optionally filter by `isTemporary` or `amountOfDays`.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

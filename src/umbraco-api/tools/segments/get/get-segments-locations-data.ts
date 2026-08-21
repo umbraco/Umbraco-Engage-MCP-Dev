@@ -16,7 +16,7 @@ const outputSchema = getSegmentsLocationsDataResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-segments-locations-data",
   description:
-    "Get the Umbraco Engage Segments Locations Data resource. Calls GET /umbraco/engage/management/api/v1/segments/locations/data.",
+    "List all countries, provinces, cities, and counties seen across visitor traffic - the reference values available for building location-based segment targeting rules.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

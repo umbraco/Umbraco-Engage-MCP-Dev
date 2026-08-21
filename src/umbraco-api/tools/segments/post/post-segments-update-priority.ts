@@ -10,15 +10,19 @@ import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbra
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
-const inputSchema = z.object({ items: postSegmentsUpdatePriorityBody });
+const inputSchema = z.object({
+  items: postSegmentsUpdatePriorityBody.describe(
+    "Segments to reorder, each identified by its numeric `id` (from get-segments-all, not its `unique` guid) with the new `sortOrder` to apply.",
+  ),
+});
 
 const tool: ToolDefinition<typeof inputSchema.shape> = {
   name: "post-segments-update-priority",
   description:
-    "Post the Umbraco Engage Segments Update Priority resource. Calls POST /umbraco/engage/management/api/v1/segments/update-priority.",
+    "Reorder segments by updating their `sortOrder` values. Pass one or more {id, sortOrder} pairs; only the listed segments are changed.",
   inputSchema: inputSchema.shape,
-  slices: ["create"],
-  annotations: { destructiveHint: false, idempotentHint: false },
+  slices: ["update"],
+  annotations: { destructiveHint: false, idempotentHint: true },
   handler: async (params) => {
     return executeVoidApiCall<ApiClient>(
       (client) => client.postSegmentsUpdatePriority(params.items, CAPTURE_RAW_HTTP_RESPONSE),
