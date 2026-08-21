@@ -10,13 +10,17 @@ import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbra
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
-const inputSchema = getCampaignsQueryParams;
+const inputSchema = getCampaignsQueryParams.extend({
+  visitorId: getCampaignsQueryParams.shape.visitorId.describe(
+    "The numeric visitor id (same id used by get-profile-details) to scope results to one visitor's campaign touchpoints. Omitting it returns campaign touchpoints across the entire installation, unfiltered and unpaginated.",
+  ),
+});
 const outputSchema = z.object({ items: getCampaignsResponse });
 
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-campaigns",
   description:
-    "List the Umbraco Engage Campaigns resource. Calls GET /umbraco/engage/management/api/v1/campaigns.",
+    "List UTM campaign-attribution touchpoints (source/medium/campaign name + timestamp) recorded for visitors. Pass `visitorId` to scope to one visitor - omitting it returns every touchpoint across the whole installation.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

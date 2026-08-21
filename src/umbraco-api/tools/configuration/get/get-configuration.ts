@@ -16,7 +16,7 @@ const outputSchema = getConfigurationResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-configuration",
   description:
-    "Get the Umbraco Engage Configuration resource. Calls GET /umbraco/engage/management/api/v1/configuration.",
+    "Get Umbraco Engage's installation-wide configuration (analytics tracking, A/B testing, persona profiling, reporting schedule, cockpit auth, data retention, etc.). Read-only - there is no corresponding update tool; settings are changed via server configuration files, not this API.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],
