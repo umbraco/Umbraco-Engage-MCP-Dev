@@ -116,7 +116,18 @@ jobs:
         timeout-minutes: 6
 
       - name: Create API user
-        run: node scripts/create-api-user.mjs http://localhost:44449 admin@admin.com 1234567890
+        run: |
+          # serverStatus=Run can be reported moments before the backoffice
+          # login endpoint is actually ready (Umbraco does a final internal
+          # restart after unattended install) - retry through the brief 503 window.
+          for i in $(seq 1 10); do
+            if node scripts/create-api-user.mjs http://localhost:44449 admin@admin.com 1234567890; then
+              exit 0
+            fi
+            echo "Attempt $i/10 failed - waiting 5s before retry..."
+            sleep 5
+          done
+          exit 1
 
       - name: Run tests per collection
         run: |
