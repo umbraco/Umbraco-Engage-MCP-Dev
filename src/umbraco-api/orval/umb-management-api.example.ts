@@ -16,7 +16,7 @@
  */
 
 import { defineConfig } from "orval";
-import { orvalImportFixer } from "@umbraco-cms/mcp-server-sdk";
+import { orvalImportFixer } from "@umbraco-cms/mcp-server-sdk/orval";
 
 export const UmbManagementApiOrvalConfig = defineConfig({
   "umbraco-management-api": {

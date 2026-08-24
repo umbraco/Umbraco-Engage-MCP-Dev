@@ -10,7 +10,7 @@ import * as zod from 'zod';
 export const postAbTestProjectBody = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -21,25 +21,25 @@ export const postAbTestProjectBody = zod.object({
   "abTests": zod.array(zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "projectId": zod.number().nullish(),
   "goalId": zod.number().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
   "goal": zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "name": zod.string().nullish(),
   "value": zod.number(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string(),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
   "isActive": zod.boolean(),
   "isInvalid": zod.boolean(),
   "created": zod.iso.datetime({}),
-  "createdBy": zod.uuid(),
+  "createdBy": zod.guid(),
   "updated": zod.iso.datetime({}).nullish(),
-  "updatedBy": zod.uuid().nullish()
+  "updatedBy": zod.guid().nullish()
 }).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
@@ -51,18 +51,18 @@ export const postAbTestProjectBody = zod.object({
   "minimumDetectableEffect": zod.number().nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -70,7 +70,7 @@ export const postAbTestProjectBody = zod.object({
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.number().nullish(),
@@ -83,18 +83,18 @@ export const postAbTestProjectBody = zod.object({
 })),
   "winner": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -102,8 +102,8 @@ export const postAbTestProjectBody = zod.object({
 }).nullish(),
   "isCompleted": zod.boolean(),
   "completedOn": zod.iso.datetime({}).nullish(),
-  "completedByUmbracoUserKey": zod.uuid().nullish(),
-  "stoppedByUmbracoUserKey": zod.uuid().nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.number().nullish(),
   "baselineConversionRate": zod.number().nullish(),
   "viableVisitorThreshold": zod.number().nullish()
@@ -113,7 +113,7 @@ export const postAbTestProjectBody = zod.object({
 export const postAbTestProjectResponse = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -124,25 +124,25 @@ export const postAbTestProjectResponse = zod.object({
   "abTests": zod.array(zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "projectId": zod.number().nullish(),
   "goalId": zod.number().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
   "goal": zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "name": zod.string().nullish(),
   "value": zod.number(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string(),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
   "isActive": zod.boolean(),
   "isInvalid": zod.boolean(),
   "created": zod.iso.datetime({}),
-  "createdBy": zod.uuid(),
+  "createdBy": zod.guid(),
   "updated": zod.iso.datetime({}).nullish(),
-  "updatedBy": zod.uuid().nullish()
+  "updatedBy": zod.guid().nullish()
 }).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
@@ -154,18 +154,18 @@ export const postAbTestProjectResponse = zod.object({
   "minimumDetectableEffect": zod.number().nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -173,7 +173,7 @@ export const postAbTestProjectResponse = zod.object({
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.number().nullish(),
@@ -186,18 +186,18 @@ export const postAbTestProjectResponse = zod.object({
 })),
   "winner": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -205,8 +205,8 @@ export const postAbTestProjectResponse = zod.object({
 }).nullish(),
   "isCompleted": zod.boolean(),
   "completedOn": zod.iso.datetime({}).nullish(),
-  "completedByUmbracoUserKey": zod.uuid().nullish(),
-  "stoppedByUmbracoUserKey": zod.uuid().nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.number().nullish(),
   "baselineConversionRate": zod.number().nullish(),
   "viableVisitorThreshold": zod.number().nullish()
@@ -215,18 +215,18 @@ export const postAbTestProjectResponse = zod.object({
 
 
 export const deleteAbTestProjectQueryParams = zod.object({
-  "id": zod.uuid().optional()
+  "id": zod.guid().optional()
 })
 
 
 export const getAbTestProjectQueryParams = zod.object({
-  "id": zod.uuid().optional()
+  "id": zod.guid().optional()
 })
 
 export const getAbTestProjectResponse = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -237,25 +237,25 @@ export const getAbTestProjectResponse = zod.object({
   "abTests": zod.array(zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "projectId": zod.number().nullish(),
   "goalId": zod.number().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
   "goal": zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "name": zod.string().nullish(),
   "value": zod.number(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string(),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
   "isActive": zod.boolean(),
   "isInvalid": zod.boolean(),
   "created": zod.iso.datetime({}),
-  "createdBy": zod.uuid(),
+  "createdBy": zod.guid(),
   "updated": zod.iso.datetime({}).nullish(),
-  "updatedBy": zod.uuid().nullish()
+  "updatedBy": zod.guid().nullish()
 }).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
@@ -267,18 +267,18 @@ export const getAbTestProjectResponse = zod.object({
   "minimumDetectableEffect": zod.number().nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -286,7 +286,7 @@ export const getAbTestProjectResponse = zod.object({
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.number().nullish(),
@@ -299,18 +299,18 @@ export const getAbTestProjectResponse = zod.object({
 })),
   "winner": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -318,8 +318,8 @@ export const getAbTestProjectResponse = zod.object({
 }).nullish(),
   "isCompleted": zod.boolean(),
   "completedOn": zod.iso.datetime({}).nullish(),
-  "completedByUmbracoUserKey": zod.uuid().nullish(),
-  "stoppedByUmbracoUserKey": zod.uuid().nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.number().nullish(),
   "baselineConversionRate": zod.number().nullish(),
   "viableVisitorThreshold": zod.number().nullish()
@@ -330,7 +330,7 @@ export const getAbTestProjectResponse = zod.object({
 export const putAbTestProjectBody = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -341,25 +341,25 @@ export const putAbTestProjectBody = zod.object({
   "abTests": zod.array(zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "projectId": zod.number().nullish(),
   "goalId": zod.number().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
   "goal": zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "name": zod.string().nullish(),
   "value": zod.number(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string(),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
   "isActive": zod.boolean(),
   "isInvalid": zod.boolean(),
   "created": zod.iso.datetime({}),
-  "createdBy": zod.uuid(),
+  "createdBy": zod.guid(),
   "updated": zod.iso.datetime({}).nullish(),
-  "updatedBy": zod.uuid().nullish()
+  "updatedBy": zod.guid().nullish()
 }).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
@@ -371,18 +371,18 @@ export const putAbTestProjectBody = zod.object({
   "minimumDetectableEffect": zod.number().nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -390,7 +390,7 @@ export const putAbTestProjectBody = zod.object({
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.number().nullish(),
@@ -403,18 +403,18 @@ export const putAbTestProjectBody = zod.object({
 })),
   "winner": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -422,8 +422,8 @@ export const putAbTestProjectBody = zod.object({
 }).nullish(),
   "isCompleted": zod.boolean(),
   "completedOn": zod.iso.datetime({}).nullish(),
-  "completedByUmbracoUserKey": zod.uuid().nullish(),
-  "stoppedByUmbracoUserKey": zod.uuid().nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.number().nullish(),
   "baselineConversionRate": zod.number().nullish(),
   "viableVisitorThreshold": zod.number().nullish()
@@ -433,7 +433,7 @@ export const putAbTestProjectBody = zod.object({
 export const putAbTestProjectResponse = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -444,25 +444,25 @@ export const putAbTestProjectResponse = zod.object({
   "abTests": zod.array(zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "projectId": zod.number().nullish(),
   "goalId": zod.number().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
   "goal": zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "name": zod.string().nullish(),
   "value": zod.number(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string(),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
   "isActive": zod.boolean(),
   "isInvalid": zod.boolean(),
   "created": zod.iso.datetime({}),
-  "createdBy": zod.uuid(),
+  "createdBy": zod.guid(),
   "updated": zod.iso.datetime({}).nullish(),
-  "updatedBy": zod.uuid().nullish()
+  "updatedBy": zod.guid().nullish()
 }).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
@@ -474,18 +474,18 @@ export const putAbTestProjectResponse = zod.object({
   "minimumDetectableEffect": zod.number().nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -493,7 +493,7 @@ export const putAbTestProjectResponse = zod.object({
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.number().nullish(),
@@ -506,18 +506,18 @@ export const putAbTestProjectResponse = zod.object({
 })),
   "winner": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -525,8 +525,8 @@ export const putAbTestProjectResponse = zod.object({
 }).nullish(),
   "isCompleted": zod.boolean(),
   "completedOn": zod.iso.datetime({}).nullish(),
-  "completedByUmbracoUserKey": zod.uuid().nullish(),
-  "stoppedByUmbracoUserKey": zod.uuid().nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.number().nullish(),
   "baselineConversionRate": zod.number().nullish(),
   "viableVisitorThreshold": zod.number().nullish()
@@ -537,7 +537,7 @@ export const putAbTestProjectResponse = zod.object({
 export const getAbTestProjectAllResponseItem = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -548,25 +548,25 @@ export const getAbTestProjectAllResponseItem = zod.object({
   "abTests": zod.array(zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "projectId": zod.number().nullish(),
   "goalId": zod.number().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
   "goal": zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "name": zod.string().nullish(),
   "value": zod.number(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string(),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
   "isActive": zod.boolean(),
   "isInvalid": zod.boolean(),
   "created": zod.iso.datetime({}),
-  "createdBy": zod.uuid(),
+  "createdBy": zod.guid(),
   "updated": zod.iso.datetime({}).nullish(),
-  "updatedBy": zod.uuid().nullish()
+  "updatedBy": zod.guid().nullish()
 }).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
@@ -578,18 +578,18 @@ export const getAbTestProjectAllResponseItem = zod.object({
   "minimumDetectableEffect": zod.number().nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -597,7 +597,7 @@ export const getAbTestProjectAllResponseItem = zod.object({
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.number().nullish(),
@@ -610,18 +610,18 @@ export const getAbTestProjectAllResponseItem = zod.object({
 })),
   "winner": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -629,8 +629,8 @@ export const getAbTestProjectAllResponseItem = zod.object({
 }).nullish(),
   "isCompleted": zod.boolean(),
   "completedOn": zod.iso.datetime({}).nullish(),
-  "completedByUmbracoUserKey": zod.uuid().nullish(),
-  "stoppedByUmbracoUserKey": zod.uuid().nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.number().nullish(),
   "baselineConversionRate": zod.number().nullish(),
   "viableVisitorThreshold": zod.number().nullish()
@@ -640,28 +640,28 @@ export const getAbTestProjectAllResponse = zod.array(getAbTestProjectAllResponse
 
 
 export const getAbTestProjectDetailsQueryParams = zod.object({
-  "id": zod.uuid().optional()
+  "id": zod.guid().optional()
 })
 
 export const getAbTestProjectDetailsResponse = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updated": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish(),
   "invalid": zod.boolean(),
   "abTests": zod.array(zod.object({
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "created": zod.iso.datetime({}).nullish(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
   "startTime": zod.iso.datetime({}).nullish(),
@@ -690,18 +690,18 @@ export const getAbTestVariantQueryParams = zod.object({
 
 export const getAbTestVariantResponse = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -711,18 +711,18 @@ export const getAbTestVariantResponse = zod.object({
 
 export const postAbTestVariantBody = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -731,18 +731,18 @@ export const postAbTestVariantBody = zod.object({
 
 export const postAbTestVariantResponse = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -756,18 +756,18 @@ export const getAbTestVariantAllQueryParams = zod.object({
 
 export const getAbTestVariantAllResponseItem = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -782,18 +782,18 @@ export const postAbTestVariantCreateQueryParams = zod.object({
 
 export const postAbTestVariantCreateResponse = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -807,18 +807,18 @@ export const postAbTestVariantDisableQueryParams = zod.object({
 
 export const postAbTestVariantDisableResponse = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -832,18 +832,18 @@ export const getAbTestVariantSegmentQueryParams = zod.object({
 
 export const getAbTestVariantSegmentResponse = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -852,7 +852,7 @@ export const getAbTestVariantSegmentResponse = zod.object({
 
 
 export const deleteAbTestQueryParams = zod.object({
-  "unique": zod.uuid().optional()
+  "unique": zod.guid().optional()
 })
 
 export const deleteAbTestResponse = zod.object({
@@ -869,25 +869,25 @@ export const getAbTestQueryParams = zod.object({
 export const getAbTestResponse = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "projectId": zod.number().nullish(),
   "goalId": zod.number().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
   "goal": zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "name": zod.string().nullish(),
   "value": zod.number(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string(),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
   "isActive": zod.boolean(),
   "isInvalid": zod.boolean(),
   "created": zod.iso.datetime({}),
-  "createdBy": zod.uuid(),
+  "createdBy": zod.guid(),
   "updated": zod.iso.datetime({}).nullish(),
-  "updatedBy": zod.uuid().nullish()
+  "updatedBy": zod.guid().nullish()
 }).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
@@ -899,18 +899,18 @@ export const getAbTestResponse = zod.object({
   "minimumDetectableEffect": zod.number().nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -918,7 +918,7 @@ export const getAbTestResponse = zod.object({
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.number().nullish(),
@@ -931,18 +931,18 @@ export const getAbTestResponse = zod.object({
 })),
   "winner": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -950,8 +950,8 @@ export const getAbTestResponse = zod.object({
 }).nullish(),
   "isCompleted": zod.boolean(),
   "completedOn": zod.iso.datetime({}).nullish(),
-  "completedByUmbracoUserKey": zod.uuid().nullish(),
-  "stoppedByUmbracoUserKey": zod.uuid().nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.number().nullish(),
   "baselineConversionRate": zod.number().nullish(),
   "viableVisitorThreshold": zod.number().nullish()
@@ -962,25 +962,25 @@ export const postAbTestBody = zod.object({
   "test": zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "projectId": zod.number().nullish(),
   "goalId": zod.number().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
   "goal": zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "name": zod.string().nullish(),
   "value": zod.number(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string(),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
   "isActive": zod.boolean(),
   "isInvalid": zod.boolean(),
   "created": zod.iso.datetime({}),
-  "createdBy": zod.uuid(),
+  "createdBy": zod.guid(),
   "updated": zod.iso.datetime({}).nullish(),
-  "updatedBy": zod.uuid().nullish()
+  "updatedBy": zod.guid().nullish()
 }).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
@@ -992,18 +992,18 @@ export const postAbTestBody = zod.object({
   "minimumDetectableEffect": zod.number().nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -1011,7 +1011,7 @@ export const postAbTestBody = zod.object({
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.number().nullish(),
@@ -1024,18 +1024,18 @@ export const postAbTestBody = zod.object({
 })),
   "winner": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -1043,8 +1043,8 @@ export const postAbTestBody = zod.object({
 }).nullish(),
   "isCompleted": zod.boolean(),
   "completedOn": zod.iso.datetime({}).nullish(),
-  "completedByUmbracoUserKey": zod.uuid().nullish(),
-  "stoppedByUmbracoUserKey": zod.uuid().nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.number().nullish(),
   "baselineConversionRate": zod.number().nullish(),
   "viableVisitorThreshold": zod.number().nullish()
@@ -1064,16 +1064,16 @@ export const postAbTestBody = zod.object({
   "hurtingVariants": zod.array(zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -1106,16 +1106,16 @@ export const postAbTestBody = zod.object({
   "winningVariant": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -1143,16 +1143,16 @@ export const postAbTestBody = zod.object({
   "bestNonBenchmarkVariant": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -1180,16 +1180,16 @@ export const postAbTestBody = zod.object({
   "earliestReliableVariant": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -1228,16 +1228,16 @@ export const postAbTestBody = zod.object({
   "winner": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -1276,18 +1276,18 @@ export const postAbTestBody = zod.object({
 }).nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -1331,25 +1331,25 @@ export const postAbTestResponse = zod.object({
   "test": zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "projectId": zod.number().nullish(),
   "goalId": zod.number().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
   "goal": zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "name": zod.string().nullish(),
   "value": zod.number(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string(),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
   "isActive": zod.boolean(),
   "isInvalid": zod.boolean(),
   "created": zod.iso.datetime({}),
-  "createdBy": zod.uuid(),
+  "createdBy": zod.guid(),
   "updated": zod.iso.datetime({}).nullish(),
-  "updatedBy": zod.uuid().nullish()
+  "updatedBy": zod.guid().nullish()
 }).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
@@ -1361,18 +1361,18 @@ export const postAbTestResponse = zod.object({
   "minimumDetectableEffect": zod.number().nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -1380,7 +1380,7 @@ export const postAbTestResponse = zod.object({
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.number().nullish(),
@@ -1393,18 +1393,18 @@ export const postAbTestResponse = zod.object({
 })),
   "winner": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -1412,8 +1412,8 @@ export const postAbTestResponse = zod.object({
 }).nullish(),
   "isCompleted": zod.boolean(),
   "completedOn": zod.iso.datetime({}).nullish(),
-  "completedByUmbracoUserKey": zod.uuid().nullish(),
-  "stoppedByUmbracoUserKey": zod.uuid().nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.number().nullish(),
   "baselineConversionRate": zod.number().nullish(),
   "viableVisitorThreshold": zod.number().nullish()
@@ -1433,16 +1433,16 @@ export const postAbTestResponse = zod.object({
   "hurtingVariants": zod.array(zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -1475,16 +1475,16 @@ export const postAbTestResponse = zod.object({
   "winningVariant": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -1512,16 +1512,16 @@ export const postAbTestResponse = zod.object({
   "bestNonBenchmarkVariant": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -1549,16 +1549,16 @@ export const postAbTestResponse = zod.object({
   "earliestReliableVariant": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -1597,16 +1597,16 @@ export const postAbTestResponse = zod.object({
   "winner": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -1645,18 +1645,18 @@ export const postAbTestResponse = zod.object({
 }).nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -1705,25 +1705,25 @@ export const postAbTestResponse = zod.object({
 export const getAbTestAllResponseItem = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "projectId": zod.number().nullish(),
   "goalId": zod.number().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
   "goal": zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "name": zod.string().nullish(),
   "value": zod.number(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string(),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
   "isActive": zod.boolean(),
   "isInvalid": zod.boolean(),
   "created": zod.iso.datetime({}),
-  "createdBy": zod.uuid(),
+  "createdBy": zod.guid(),
   "updated": zod.iso.datetime({}).nullish(),
-  "updatedBy": zod.uuid().nullish()
+  "updatedBy": zod.guid().nullish()
 }).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
@@ -1735,18 +1735,18 @@ export const getAbTestAllResponseItem = zod.object({
   "minimumDetectableEffect": zod.number().nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -1754,7 +1754,7 @@ export const getAbTestAllResponseItem = zod.object({
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.number().nullish(),
@@ -1767,18 +1767,18 @@ export const getAbTestAllResponseItem = zod.object({
 })),
   "winner": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -1786,8 +1786,8 @@ export const getAbTestAllResponseItem = zod.object({
 }).nullish(),
   "isCompleted": zod.boolean(),
   "completedOn": zod.iso.datetime({}).nullish(),
-  "completedByUmbracoUserKey": zod.uuid().nullish(),
-  "stoppedByUmbracoUserKey": zod.uuid().nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.number().nullish(),
   "baselineConversionRate": zod.number().nullish(),
   "viableVisitorThreshold": zod.number().nullish()
@@ -1803,25 +1803,25 @@ export const getAbTestEmptyResponse = zod.object({
   "test": zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "projectId": zod.number().nullish(),
   "goalId": zod.number().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
   "goal": zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "name": zod.string().nullish(),
   "value": zod.number(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string(),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
   "isActive": zod.boolean(),
   "isInvalid": zod.boolean(),
   "created": zod.iso.datetime({}),
-  "createdBy": zod.uuid(),
+  "createdBy": zod.guid(),
   "updated": zod.iso.datetime({}).nullish(),
-  "updatedBy": zod.uuid().nullish()
+  "updatedBy": zod.guid().nullish()
 }).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
@@ -1833,18 +1833,18 @@ export const getAbTestEmptyResponse = zod.object({
   "minimumDetectableEffect": zod.number().nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -1852,7 +1852,7 @@ export const getAbTestEmptyResponse = zod.object({
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.number().nullish(),
@@ -1865,18 +1865,18 @@ export const getAbTestEmptyResponse = zod.object({
 })),
   "winner": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -1884,8 +1884,8 @@ export const getAbTestEmptyResponse = zod.object({
 }).nullish(),
   "isCompleted": zod.boolean(),
   "completedOn": zod.iso.datetime({}).nullish(),
-  "completedByUmbracoUserKey": zod.uuid().nullish(),
-  "stoppedByUmbracoUserKey": zod.uuid().nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.number().nullish(),
   "baselineConversionRate": zod.number().nullish(),
   "viableVisitorThreshold": zod.number().nullish()
@@ -1905,16 +1905,16 @@ export const getAbTestEmptyResponse = zod.object({
   "hurtingVariants": zod.array(zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -1947,16 +1947,16 @@ export const getAbTestEmptyResponse = zod.object({
   "winningVariant": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -1984,16 +1984,16 @@ export const getAbTestEmptyResponse = zod.object({
   "bestNonBenchmarkVariant": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -2021,16 +2021,16 @@ export const getAbTestEmptyResponse = zod.object({
   "earliestReliableVariant": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -2069,16 +2069,16 @@ export const getAbTestEmptyResponse = zod.object({
   "winner": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -2117,18 +2117,18 @@ export const getAbTestEmptyResponse = zod.object({
 }).nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -2169,16 +2169,16 @@ export const getAbTestEmptyResponse = zod.object({
 
 
 export const getAbTestPageQueryParams = zod.object({
-  "unique": zod.uuid().optional()
+  "unique": zod.guid().optional()
 })
 
 export const getAbTestPageResponseItem = zod.object({
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "created": zod.iso.datetime({}).nullish(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
   "startTime": zod.iso.datetime({}).nullish(),
@@ -2207,25 +2207,25 @@ export const getAbTestPreviewUrlResponse = zod.object({
 export const postAbTestRuntimeIndicationBody = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "projectId": zod.number().nullish(),
   "goalId": zod.number().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
   "goal": zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "name": zod.string().nullish(),
   "value": zod.number(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string(),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
   "isActive": zod.boolean(),
   "isInvalid": zod.boolean(),
   "created": zod.iso.datetime({}),
-  "createdBy": zod.uuid(),
+  "createdBy": zod.guid(),
   "updated": zod.iso.datetime({}).nullish(),
-  "updatedBy": zod.uuid().nullish()
+  "updatedBy": zod.guid().nullish()
 }).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
@@ -2237,18 +2237,18 @@ export const postAbTestRuntimeIndicationBody = zod.object({
   "minimumDetectableEffect": zod.number().nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -2256,7 +2256,7 @@ export const postAbTestRuntimeIndicationBody = zod.object({
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.number().nullish(),
@@ -2269,18 +2269,18 @@ export const postAbTestRuntimeIndicationBody = zod.object({
 })),
   "winner": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -2288,8 +2288,8 @@ export const postAbTestRuntimeIndicationBody = zod.object({
 }).nullish(),
   "isCompleted": zod.boolean(),
   "completedOn": zod.iso.datetime({}).nullish(),
-  "completedByUmbracoUserKey": zod.uuid().nullish(),
-  "stoppedByUmbracoUserKey": zod.uuid().nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.number().nullish(),
   "baselineConversionRate": zod.number().nullish(),
   "viableVisitorThreshold": zod.number().nullish()
@@ -2310,16 +2310,16 @@ export const postAbTestRuntimeIndicationResponse = zod.object({
   "hurtingVariants": zod.array(zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -2352,16 +2352,16 @@ export const postAbTestRuntimeIndicationResponse = zod.object({
   "winningVariant": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -2389,16 +2389,16 @@ export const postAbTestRuntimeIndicationResponse = zod.object({
   "bestNonBenchmarkVariant": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -2426,16 +2426,16 @@ export const postAbTestRuntimeIndicationResponse = zod.object({
   "earliestReliableVariant": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -2474,16 +2474,16 @@ export const postAbTestRuntimeIndicationResponse = zod.object({
   "winner": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -2523,7 +2523,7 @@ export const postAbTestRuntimeIndicationResponse = zod.object({
 
 
 export const postAbTestSegmentQueryParams = zod.object({
-  "unique": zod.uuid().optional(),
+  "unique": zod.guid().optional(),
   "culture": zod.string().optional(),
   "segment": zod.string().optional()
 })
@@ -2536,25 +2536,25 @@ export const postAbTestSegmentResponse = zod.object({
 export const postAbTestVariantDetailsBody = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "projectId": zod.number().nullish(),
   "goalId": zod.number().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
   "goal": zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "name": zod.string().nullish(),
   "value": zod.number(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string(),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
   "isActive": zod.boolean(),
   "isInvalid": zod.boolean(),
   "created": zod.iso.datetime({}),
-  "createdBy": zod.uuid(),
+  "createdBy": zod.guid(),
   "updated": zod.iso.datetime({}).nullish(),
-  "updatedBy": zod.uuid().nullish()
+  "updatedBy": zod.guid().nullish()
 }).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
@@ -2566,18 +2566,18 @@ export const postAbTestVariantDetailsBody = zod.object({
   "minimumDetectableEffect": zod.number().nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -2585,7 +2585,7 @@ export const postAbTestVariantDetailsBody = zod.object({
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.number().nullish(),
@@ -2598,18 +2598,18 @@ export const postAbTestVariantDetailsBody = zod.object({
 })),
   "winner": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -2617,8 +2617,8 @@ export const postAbTestVariantDetailsBody = zod.object({
 }).nullish(),
   "isCompleted": zod.boolean(),
   "completedOn": zod.iso.datetime({}).nullish(),
-  "completedByUmbracoUserKey": zod.uuid().nullish(),
-  "stoppedByUmbracoUserKey": zod.uuid().nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.number().nullish(),
   "baselineConversionRate": zod.number().nullish(),
   "viableVisitorThreshold": zod.number().nullish()
@@ -2626,18 +2626,18 @@ export const postAbTestVariantDetailsBody = zod.object({
 
 export const postAbTestVariantDetailsResponseItem = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -2677,32 +2677,32 @@ export const postAbTestVariantDetailsResponse = zod.array(postAbTestVariantDetai
 
 
 export const getAbTestViewModelQueryParams = zod.object({
-  "unique": zod.uuid().optional()
+  "unique": zod.guid().optional()
 })
 
 export const getAbTestViewModelResponse = zod.object({
   "test": zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "projectId": zod.number().nullish(),
   "goalId": zod.number().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
   "goal": zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "name": zod.string().nullish(),
   "value": zod.number(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string(),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
   "isActive": zod.boolean(),
   "isInvalid": zod.boolean(),
   "created": zod.iso.datetime({}),
-  "createdBy": zod.uuid(),
+  "createdBy": zod.guid(),
   "updated": zod.iso.datetime({}).nullish(),
-  "updatedBy": zod.uuid().nullish()
+  "updatedBy": zod.guid().nullish()
 }).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
@@ -2714,18 +2714,18 @@ export const getAbTestViewModelResponse = zod.object({
   "minimumDetectableEffect": zod.number().nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -2733,7 +2733,7 @@ export const getAbTestViewModelResponse = zod.object({
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.number().nullish(),
@@ -2746,18 +2746,18 @@ export const getAbTestViewModelResponse = zod.object({
 })),
   "winner": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -2765,8 +2765,8 @@ export const getAbTestViewModelResponse = zod.object({
 }).nullish(),
   "isCompleted": zod.boolean(),
   "completedOn": zod.iso.datetime({}).nullish(),
-  "completedByUmbracoUserKey": zod.uuid().nullish(),
-  "stoppedByUmbracoUserKey": zod.uuid().nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.number().nullish(),
   "baselineConversionRate": zod.number().nullish(),
   "viableVisitorThreshold": zod.number().nullish()
@@ -2786,16 +2786,16 @@ export const getAbTestViewModelResponse = zod.object({
   "hurtingVariants": zod.array(zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -2828,16 +2828,16 @@ export const getAbTestViewModelResponse = zod.object({
   "winningVariant": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -2865,16 +2865,16 @@ export const getAbTestViewModelResponse = zod.object({
   "bestNonBenchmarkVariant": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -2902,16 +2902,16 @@ export const getAbTestViewModelResponse = zod.object({
   "earliestReliableVariant": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -2950,16 +2950,16 @@ export const getAbTestViewModelResponse = zod.object({
   "winner": zod.object({
   "abTestVariant": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.number(),
@@ -2998,18 +2998,18 @@ export const getAbTestViewModelResponse = zod.object({
 }).nullish(),
   "variants": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "abTestId": zod.number(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "redirectNodeKey": zod.uuid().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
   "css": zod.string().nullish(),
   "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({}),
-  "createdByUmbracoUserKey": zod.uuid(),
+  "createdByUmbracoUserKey": zod.guid(),
   "isBenchmark": zod.boolean(),
   "disabled": zod.iso.datetime({}).nullish(),
-  "disabledByUmbracoUserKey": zod.uuid().nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.number(),
@@ -3104,7 +3104,7 @@ export const postAnnotationsBody = zod.object({
   "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
   "invalid": zod.boolean(),
   "pageVariants": zod.array(zod.object({
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "culture": zod.string().nullish()
 }))
 })
@@ -3118,7 +3118,7 @@ export const postAnnotationsResponse = zod.object({
   "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
   "invalid": zod.boolean(),
   "pageVariants": zod.array(zod.object({
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "culture": zod.string().nullish()
 }))
 })
@@ -3138,7 +3138,7 @@ export const getAnnotationsAllResponseItem = zod.object({
   "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
   "invalid": zod.boolean(),
   "pageVariants": zod.array(zod.object({
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "culture": zod.string().nullish()
 }))
 })
@@ -3154,7 +3154,7 @@ export const getAnnotationsEmptyResponse = zod.object({
   "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
   "invalid": zod.boolean(),
   "pageVariants": zod.array(zod.object({
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "culture": zod.string().nullish()
 }))
 })
@@ -3174,7 +3174,7 @@ export const getAnnotationsGlobalResponseItem = zod.object({
   "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
   "invalid": zod.boolean(),
   "pageVariants": zod.array(zod.object({
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "culture": zod.string().nullish()
 }))
 })
@@ -3184,7 +3184,7 @@ export const getAnnotationsGlobalResponse = zod.array(getAnnotationsGlobalRespon
 export const getAnnotationsPageQueryCultureDefault = "";
 
 export const getAnnotationsPageQueryParams = zod.object({
-  "unique": zod.uuid().optional(),
+  "unique": zod.guid().optional(),
   "from": zod.iso.datetime({}).optional(),
   "to": zod.iso.datetime({}).optional(),
   "culture": zod.string().optional()
@@ -3199,7 +3199,7 @@ export const getAnnotationsPageResponseItem = zod.object({
   "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
   "invalid": zod.boolean(),
   "pageVariants": zod.array(zod.object({
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "culture": zod.string().nullish()
 }))
 })
@@ -3207,19 +3207,19 @@ export const getAnnotationsPageResponse = zod.array(getAnnotationsPageResponseIt
 
 
 export const deleteAppliedPersonalizationQueryParams = zod.object({
-  "id": zod.uuid().optional()
+  "id": zod.guid().optional()
 })
 
 
 export const postAppliedPersonalizationBody = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "segmentId": zod.number().nullish(),
   "segment": zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "endTime": zod.iso.datetime({}).nullish(),
@@ -3227,7 +3227,7 @@ export const postAppliedPersonalizationBody = zod.object({
   "sortOrder": zod.number(),
   "rules": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "segmentId": zod.number(),
   "type": zod.string().nullish(),
   "config": zod.unknown().nullish(),
@@ -3248,13 +3248,13 @@ export const postAppliedPersonalizationBody = zod.object({
   "updatedByUmbracoUserName": zod.string().nullish(),
   "pages": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeId": zod.number(),
   "culture": zod.string().nullish()
 })),
   "contentTypes": zod.array(zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "contentTypeId": zod.number(),
   "culture": zod.string().nullish()
 })),
@@ -3264,12 +3264,12 @@ export const postAppliedPersonalizationBody = zod.object({
 export const postAppliedPersonalizationResponse = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "segmentId": zod.number().nullish(),
   "segment": zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "endTime": zod.iso.datetime({}).nullish(),
@@ -3277,7 +3277,7 @@ export const postAppliedPersonalizationResponse = zod.object({
   "sortOrder": zod.number(),
   "rules": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "segmentId": zod.number(),
   "type": zod.string().nullish(),
   "config": zod.unknown().nullish(),
@@ -3298,13 +3298,13 @@ export const postAppliedPersonalizationResponse = zod.object({
   "updatedByUmbracoUserName": zod.string().nullish(),
   "pages": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeId": zod.number(),
   "culture": zod.string().nullish()
 })),
   "contentTypes": zod.array(zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "contentTypeId": zod.number(),
   "culture": zod.string().nullish()
 })),
@@ -3315,12 +3315,12 @@ export const postAppliedPersonalizationResponse = zod.object({
 export const getAppliedPersonalizationAllResponseItem = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "segmentId": zod.number().nullish(),
   "segment": zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "endTime": zod.iso.datetime({}).nullish(),
@@ -3328,7 +3328,7 @@ export const getAppliedPersonalizationAllResponseItem = zod.object({
   "sortOrder": zod.number(),
   "rules": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "segmentId": zod.number(),
   "type": zod.string().nullish(),
   "config": zod.unknown().nullish(),
@@ -3349,13 +3349,13 @@ export const getAppliedPersonalizationAllResponseItem = zod.object({
   "updatedByUmbracoUserName": zod.string().nullish(),
   "pages": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeId": zod.number(),
   "culture": zod.string().nullish()
 })),
   "contentTypes": zod.array(zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "contentTypeId": zod.number(),
   "culture": zod.string().nullish()
 })),
@@ -3365,18 +3365,18 @@ export const getAppliedPersonalizationAllResponse = zod.array(getAppliedPersonal
 
 
 export const getAppliedPersonalizationIdQueryParams = zod.object({
-  "id": zod.uuid().optional()
+  "id": zod.guid().optional()
 })
 
 export const getAppliedPersonalizationIdResponse = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "segmentId": zod.number().nullish(),
   "segment": zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "endTime": zod.iso.datetime({}).nullish(),
@@ -3384,7 +3384,7 @@ export const getAppliedPersonalizationIdResponse = zod.object({
   "sortOrder": zod.number(),
   "rules": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "segmentId": zod.number(),
   "type": zod.string().nullish(),
   "config": zod.unknown().nullish(),
@@ -3405,13 +3405,13 @@ export const getAppliedPersonalizationIdResponse = zod.object({
   "updatedByUmbracoUserName": zod.string().nullish(),
   "pages": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeId": zod.number(),
   "culture": zod.string().nullish()
 })),
   "contentTypes": zod.array(zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "contentTypeId": zod.number(),
   "culture": zod.string().nullish()
 })),
@@ -3420,7 +3420,7 @@ export const getAppliedPersonalizationIdResponse = zod.object({
 
 
 export const postAppliedPersonalizationSegmentQueryParams = zod.object({
-  "unique": zod.uuid().optional(),
+  "unique": zod.guid().optional(),
   "segment": zod.string().optional(),
   "culture": zod.string().optional()
 })
@@ -3437,12 +3437,12 @@ export const getAppliedPersonalizationSegmentQueryParams = zod.object({
 export const getAppliedPersonalizationSegmentResponse = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "segmentId": zod.number().nullish(),
   "segment": zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "endTime": zod.iso.datetime({}).nullish(),
@@ -3450,7 +3450,7 @@ export const getAppliedPersonalizationSegmentResponse = zod.object({
   "sortOrder": zod.number(),
   "rules": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "segmentId": zod.number(),
   "type": zod.string().nullish(),
   "config": zod.unknown().nullish(),
@@ -3471,13 +3471,13 @@ export const getAppliedPersonalizationSegmentResponse = zod.object({
   "updatedByUmbracoUserName": zod.string().nullish(),
   "pages": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeId": zod.number(),
   "culture": zod.string().nullish()
 })),
   "contentTypes": zod.array(zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "contentTypeId": zod.number(),
   "culture": zod.string().nullish()
 })),
@@ -3486,25 +3486,25 @@ export const getAppliedPersonalizationSegmentResponse = zod.object({
 
 
 export const deleteCampaignGroupQueryParams = zod.object({
-  "id": zod.uuid().optional()
+  "id": zod.guid().optional()
 })
 
 
 export const getCampaignGroupQueryParams = zod.object({
-  "id": zod.uuid().optional()
+  "id": zod.guid().optional()
 })
 
 export const getCampaignGroupResponse = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "invalid": zod.boolean(),
   "campaigns": zod.array(zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid().nullish(),
+  "unique": zod.guid().nullish(),
   "campaignGroupId": zod.number(),
   "utmSource": zod.string().nullish(),
   "utmMedium": zod.string().nullish(),
@@ -3517,7 +3517,7 @@ export const getCampaignGroupResponse = zod.object({
 })),
   "customerJourneyScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
   "groupId": zod.number(),
@@ -3525,7 +3525,7 @@ export const getCampaignGroupResponse = zod.object({
 })),
   "personaScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
   "groupId": zod.number(),
@@ -3537,14 +3537,14 @@ export const getCampaignGroupResponse = zod.object({
 export const postCampaignGroupBody = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "invalid": zod.boolean(),
   "campaigns": zod.array(zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid().nullish(),
+  "unique": zod.guid().nullish(),
   "campaignGroupId": zod.number(),
   "utmSource": zod.string().nullish(),
   "utmMedium": zod.string().nullish(),
@@ -3557,7 +3557,7 @@ export const postCampaignGroupBody = zod.object({
 })),
   "customerJourneyScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
   "groupId": zod.number(),
@@ -3565,7 +3565,7 @@ export const postCampaignGroupBody = zod.object({
 })),
   "personaScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
   "groupId": zod.number(),
@@ -3576,14 +3576,14 @@ export const postCampaignGroupBody = zod.object({
 export const postCampaignGroupResponse = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "invalid": zod.boolean(),
   "campaigns": zod.array(zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid().nullish(),
+  "unique": zod.guid().nullish(),
   "campaignGroupId": zod.number(),
   "utmSource": zod.string().nullish(),
   "utmMedium": zod.string().nullish(),
@@ -3596,7 +3596,7 @@ export const postCampaignGroupResponse = zod.object({
 })),
   "customerJourneyScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
   "groupId": zod.number(),
@@ -3604,7 +3604,7 @@ export const postCampaignGroupResponse = zod.object({
 })),
   "personaScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
   "groupId": zod.number(),
@@ -3616,14 +3616,14 @@ export const postCampaignGroupResponse = zod.object({
 export const getCampaignGroupAllResponseItem = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "invalid": zod.boolean(),
   "campaigns": zod.array(zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid().nullish(),
+  "unique": zod.guid().nullish(),
   "campaignGroupId": zod.number(),
   "utmSource": zod.string().nullish(),
   "utmMedium": zod.string().nullish(),
@@ -3636,7 +3636,7 @@ export const getCampaignGroupAllResponseItem = zod.object({
 })),
   "customerJourneyScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
   "groupId": zod.number(),
@@ -3644,7 +3644,7 @@ export const getCampaignGroupAllResponseItem = zod.object({
 })),
   "personaScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
   "groupId": zod.number(),
@@ -3688,7 +3688,7 @@ export const getCampaignsResponse = zod.array(getCampaignsResponseItem)
 
 
 export const getCockpitGetUmbracoPageInfoQueryParams = zod.object({
-  "pageId": zod.uuid().optional(),
+  "pageId": zod.guid().optional(),
   "culture": zod.string().optional()
 })
 
@@ -3940,10 +3940,10 @@ export const getConfigurationResponse = zod.object({
 })
 })]),
   "backoffice": zod.object({
-  "personaGroupColorPicker": zod.uuid(),
-  "personaGroupMediaPicker": zod.uuid(),
-  "customerJourneyColorPicker": zod.uuid(),
-  "customerJourneyIconPicker": zod.uuid()
+  "personaGroupColorPicker": zod.guid(),
+  "personaGroupMediaPicker": zod.guid(),
+  "customerJourneyColorPicker": zod.guid(),
+  "customerJourneyIconPicker": zod.guid()
 }),
   "cockpit": zod.union([zod.object({
   "enableInjection": zod.boolean(),
@@ -3977,20 +3977,20 @@ export const getConfigurationResponse = zod.object({
 
 
 export const getContentScoringAllQueryParams = zod.object({
-  "unique": zod.uuid().optional()
+  "unique": zod.guid().optional()
 })
 
 export const getContentScoringAllResponse = zod.object({
   "items": zod.array(zod.object({
   "id": zod.number(),
   "entityId": zod.number(),
-  "documentUnique": zod.uuid(),
+  "documentUnique": zod.guid(),
   "culture": zod.string().nullish(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
   "type": zod.enum(['None', 'Persona', 'Journey'])
 })),
-  "unique": zod.uuid()
+  "unique": zod.guid()
 })
 
 
@@ -4013,7 +4013,7 @@ export const deleteContentScoringPersonaQueryParams = zod.object({
 export const postContentScoringSaveBodyItem = zod.object({
   "id": zod.number(),
   "entityId": zod.number(),
-  "documentUnique": zod.uuid(),
+  "documentUnique": zod.guid(),
   "culture": zod.string().nullish(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
@@ -4031,7 +4031,7 @@ export const getContentTypesAllResponse = zod.array(getContentTypesAllResponseIt
 
 
 export const getContentTypesSegmentedPropertyQueryParams = zod.object({
-  "unique": zod.uuid().optional()
+  "unique": zod.guid().optional()
 })
 
 export const getContentTypesSegmentedPropertyResponse = zod.boolean()
@@ -4046,7 +4046,7 @@ export const getCulturesResponse = zod.array(getCulturesResponseItem)
 
 
 export const deleteCustomerJourneyQueryParams = zod.object({
-  "id": zod.uuid().optional()
+  "id": zod.guid().optional()
 })
 
 export const deleteCustomerJourneyResponse = zod.object({
@@ -4058,29 +4058,29 @@ export const deleteCustomerJourneyResponse = zod.object({
 
 export const postCustomerJourneyBody = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "steps": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "icon": zod.string().nullish(),
   "iconUrl": zod.string().nullish(),
   "color": zod.string().nullish(),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish()
 })),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish(),
   "minimumParticipationScoreThreshold": zod.number().nullish(),
   "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
@@ -4093,29 +4093,29 @@ export const postCustomerJourneyBody = zod.object({
 export const postCustomerJourneyResponse = zod.object({
   "journey": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "steps": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "icon": zod.string().nullish(),
   "iconUrl": zod.string().nullish(),
   "color": zod.string().nullish(),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish()
 })),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish(),
   "minimumParticipationScoreThreshold": zod.number().nullish(),
   "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
@@ -4134,29 +4134,29 @@ export const postCustomerJourneyResponse = zod.object({
 
 export const getCustomerJourneyAllResponseItem = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "steps": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "icon": zod.string().nullish(),
   "iconUrl": zod.string().nullish(),
   "color": zod.string().nullish(),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish()
 })),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish(),
   "minimumParticipationScoreThreshold": zod.number().nullish(),
   "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
@@ -4169,34 +4169,34 @@ export const getCustomerJourneyAllResponse = zod.array(getCustomerJourneyAllResp
 
 
 export const getCustomerJourneyDetailsQueryParams = zod.object({
-  "id": zod.uuid().optional()
+  "id": zod.guid().optional()
 })
 
 export const getCustomerJourneyDetailsResponse = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "steps": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "icon": zod.string().nullish(),
   "iconUrl": zod.string().nullish(),
   "color": zod.string().nullish(),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish()
 })),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish(),
   "minimumParticipationScoreThreshold": zod.number().nullish(),
   "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
@@ -4209,29 +4209,29 @@ export const getCustomerJourneyDetailsResponse = zod.object({
 
 export const getCustomerJourneyEmptyResponse = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "steps": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "icon": zod.string().nullish(),
   "iconUrl": zod.string().nullish(),
   "color": zod.string().nullish(),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish()
 })),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish(),
   "minimumParticipationScoreThreshold": zod.number().nullish(),
   "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
@@ -4278,7 +4278,7 @@ export const getDataCleanupLogsQueryParams = zod.object({
 
 export const getDataCleanupLogsResponse = zod.object({
   "items": zod.array(zod.object({
-  "runId": zod.uuid(),
+  "runId": zod.guid(),
   "executor": zod.string().nullish(),
   "tableName": zod.string().nullish(),
   "started": zod.iso.datetime({}),
@@ -4301,7 +4301,7 @@ export const getDataCleanupRunsQueryParams = zod.object({
 
 export const getDataCleanupRunsResponse = zod.object({
   "items": zod.array(zod.object({
-  "runId": zod.uuid(),
+  "runId": zod.guid(),
   "started": zod.iso.datetime({}),
   "finished": zod.iso.datetime({}),
   "totalDurationMs": zod.number(),
@@ -4351,7 +4351,7 @@ export const getPermissionsDocumentTypeResponse = zod.object({
   "allowScorePersonalization": zod.boolean(),
   "allowApplyPersonalization": zod.boolean(),
   "updated": zod.iso.datetime({}),
-  "updatedByUmbracoUserKey": zod.uuid(),
+  "updatedByUmbracoUserKey": zod.guid(),
   "updatedByUmbracoUser": zod.string().nullish()
 })
 
@@ -4365,7 +4365,7 @@ export const postPermissionsDocumentTypeBodyItem = zod.object({
   "allowScorePersonalization": zod.boolean(),
   "allowApplyPersonalization": zod.boolean(),
   "updated": zod.iso.datetime({}),
-  "updatedByUmbracoUserKey": zod.uuid(),
+  "updatedByUmbracoUserKey": zod.guid(),
   "updatedByUmbracoUser": zod.string().nullish()
 })
 export const postPermissionsDocumentTypeBody = zod.array(postPermissionsDocumentTypeBodyItem)
@@ -4380,7 +4380,7 @@ export const getPermissionsDocumentTypeAllResponseItem = zod.object({
   "allowScorePersonalization": zod.boolean(),
   "allowApplyPersonalization": zod.boolean(),
   "updated": zod.iso.datetime({}),
-  "updatedByUmbracoUserKey": zod.uuid(),
+  "updatedByUmbracoUserKey": zod.guid(),
   "updatedByUmbracoUser": zod.string().nullish()
 })
 export const getPermissionsDocumentTypeAllResponse = zod.array(getPermissionsDocumentTypeAllResponseItem)
@@ -4392,10 +4392,10 @@ export const getPermissionsDocumentTypeAllResponse = zod.array(getPermissionsDoc
 
 export const postGoalBody = zod.object({
   "id": zod.number().nullish(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().min(1),
   "value": zod.number(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string().min(1),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
@@ -4404,7 +4404,7 @@ export const postGoalBody = zod.object({
   "isImplicitScoringEnabled": zod.boolean(),
   "implicitPersonaScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeId": zod.number(),
   "culture": zod.string().nullish(),
   "created": zod.iso.datetime({}),
@@ -4417,7 +4417,7 @@ export const postGoalBody = zod.object({
 })),
   "implicitCustomerJourneyStepScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeId": zod.number(),
   "culture": zod.string().nullish(),
   "created": zod.iso.datetime({}),
@@ -4430,7 +4430,7 @@ export const postGoalBody = zod.object({
 }))
 })
 
-export const postGoalResponse = zod.uuid()
+export const postGoalResponse = zod.guid()
 
 
 export const postGoalAllBody = zod.object({
@@ -4448,7 +4448,7 @@ export const postGoalAllResponse = zod.object({
   "itemsPerPage": zod.number(),
   "rows": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "typeText": zod.string().nullish(),
   "completionCount": zod.number(),
@@ -4464,31 +4464,31 @@ export const postGoalAllResponse = zod.object({
 
 export const getGoalAllTypesResponseItem = zod.union([zod.object({
   "configurationEditorAlias": zod.string(),
-  "id": zod.uuid(),
+  "id": zod.guid(),
   "name": zod.string()
 }),zod.object({
   "configurationEditorAlias": zod.string(),
-  "id": zod.uuid(),
+  "id": zod.guid(),
   "name": zod.string()
 }),zod.object({
   "configurationEditorAlias": zod.string(),
-  "id": zod.uuid(),
+  "id": zod.guid(),
   "name": zod.string()
 })])
 export const getGoalAllTypesResponse = zod.array(getGoalAllTypesResponseItem)
 
 
 export const getGoalDetailsQueryParams = zod.object({
-  "id": zod.uuid().optional()
+  "id": zod.guid().optional()
 })
 
 export const getGoalDetailsResponse = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string(),
   "value": zod.number(),
   "isImplicitScoringEnabled": zod.boolean(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string(),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
@@ -4496,7 +4496,7 @@ export const getGoalDetailsResponse = zod.object({
   "isInvalid": zod.boolean(),
   "implicitPersonaScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeId": zod.number(),
   "culture": zod.string().nullish(),
   "created": zod.iso.datetime({}),
@@ -4509,7 +4509,7 @@ export const getGoalDetailsResponse = zod.object({
 })).nullish(),
   "implicitCustomerJourneyStepScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "nodeId": zod.number(),
   "culture": zod.string().nullish(),
   "created": zod.iso.datetime({}),
@@ -4525,38 +4525,38 @@ export const getGoalDetailsResponse = zod.object({
 
 export const getGoalsAllResponseItem = zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "name": zod.string().nullish(),
   "value": zod.number(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string(),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
   "isActive": zod.boolean(),
   "isInvalid": zod.boolean(),
   "created": zod.iso.datetime({}),
-  "createdBy": zod.uuid(),
+  "createdBy": zod.guid(),
   "updated": zod.iso.datetime({}).nullish(),
-  "updatedBy": zod.uuid().nullish()
+  "updatedBy": zod.guid().nullish()
 })
 export const getGoalsAllResponse = zod.array(getGoalsAllResponseItem)
 
 
 export const getGoalsMainResponseItem = zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "name": zod.string().nullish(),
   "value": zod.number(),
-  "goalTypeId": zod.uuid(),
+  "goalTypeId": zod.guid(),
   "goalTypeConfig": zod.string(),
   "isMain": zod.boolean(),
   "isInverted": zod.boolean(),
   "isActive": zod.boolean(),
   "isInvalid": zod.boolean(),
   "created": zod.iso.datetime({}),
-  "createdBy": zod.uuid(),
+  "createdBy": zod.guid(),
   "updated": zod.iso.datetime({}).nullish(),
-  "updatedBy": zod.uuid().nullish()
+  "updatedBy": zod.guid().nullish()
 })
 export const getGoalsMainResponse = zod.array(getGoalsMainResponseItem)
 
@@ -4565,7 +4565,7 @@ export const postHeatmapsGenerateScrollHeatmapBody = zod.object({
   "from": zod.iso.datetime({}).nullish(),
   "to": zod.iso.datetime({}).nullish(),
   "deviceTypes": zod.array(zod.number()).nullish(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "culture": zod.string().nullish(),
   "segment": zod.string().nullish(),
   "borderLines": zod.array(zod.number()).nullish()
@@ -4584,7 +4584,7 @@ export const postHeatmapsGenerateScrollHeatmapResponse = zod.object({
 
 
 export const getHeatmapsVariantsQueryParams = zod.object({
-  "unique": zod.uuid().optional(),
+  "unique": zod.guid().optional(),
   "culture": zod.string().optional()
 })
 
@@ -4621,7 +4621,7 @@ export const getPackageResponse = zod.object({
 
 export const postUmbracoEngagePagedataCollectQueryParams = zod.object({
   "version": zod.number().optional(),
-  "pageviewGuid": zod.uuid().optional()
+  "pageviewGuid": zod.guid().optional()
 })
 
 
@@ -4636,7 +4636,7 @@ export const postUmbracoEngagePagedataCollectEventBody = zod.object({
 
 
 export const deletePersonaQueryParams = zod.object({
-  "id": zod.uuid().optional()
+  "id": zod.guid().optional()
 })
 
 export const deletePersonaResponse = zod.object({
@@ -4648,29 +4648,29 @@ export const deletePersonaResponse = zod.object({
 
 export const postPersonaBody = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "personas": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "icon": zod.string().nullish(),
   "iconUrl": zod.string().nullish(),
   "color": zod.string().nullish(),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish()
 })),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish(),
   "minimumParticipationScoreThreshold": zod.number().nullish(),
   "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
@@ -4683,29 +4683,29 @@ export const postPersonaBody = zod.object({
 export const postPersonaResponse = zod.object({
   "persona": zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "personas": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "icon": zod.string().nullish(),
   "iconUrl": zod.string().nullish(),
   "color": zod.string().nullish(),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish()
 })),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish(),
   "minimumParticipationScoreThreshold": zod.number().nullish(),
   "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
@@ -4724,29 +4724,29 @@ export const postPersonaResponse = zod.object({
 
 export const getPersonaAllResponseItem = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "personas": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "icon": zod.string().nullish(),
   "iconUrl": zod.string().nullish(),
   "color": zod.string().nullish(),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish()
 })),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish(),
   "minimumParticipationScoreThreshold": zod.number().nullish(),
   "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
@@ -4759,34 +4759,34 @@ export const getPersonaAllResponse = zod.array(getPersonaAllResponseItem)
 
 
 export const getPersonaDetailsQueryParams = zod.object({
-  "id": zod.uuid().optional()
+  "id": zod.guid().optional()
 })
 
 export const getPersonaDetailsResponse = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "personas": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "icon": zod.string().nullish(),
   "iconUrl": zod.string().nullish(),
   "color": zod.string().nullish(),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish()
 })),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish(),
   "minimumParticipationScoreThreshold": zod.number().nullish(),
   "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
@@ -4799,29 +4799,29 @@ export const getPersonaDetailsResponse = zod.object({
 
 export const getPersonaEmptyResponse = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "personas": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
   "icon": zod.string().nullish(),
   "iconUrl": zod.string().nullish(),
   "color": zod.string().nullish(),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish()
 })),
   "createdOn": zod.iso.datetime({}).nullish(),
-  "createdByUmbracoUserKey": zod.uuid().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "updatedOn": zod.iso.datetime({}).nullish(),
-  "updatedByUmbracoUserKey": zod.uuid().nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish(),
   "minimumParticipationScoreThreshold": zod.number().nullish(),
   "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
@@ -4866,7 +4866,7 @@ export const getProfileDetailsQueryParams = zod.object({
 })
 
 export const getProfileDetailsResponse = zod.object({
-  "visitorExternalId": zod.uuid(),
+  "visitorExternalId": zod.guid(),
   "visitorId": zod.number(),
   "identifiedOn": zod.iso.datetime({}).nullish(),
   "firstActiveOn": zod.iso.datetime({}),
@@ -4882,7 +4882,7 @@ export const getProfileDetailsResponse = zod.object({
   "members": zod.array(zod.object({
   "id": zod.string(),
   "name": zod.string(),
-  "unique": zod.uuid().nullish(),
+  "unique": zod.guid().nullish(),
   "registrationDate": zod.iso.datetime({}).nullish(),
   "lastLoginDate": zod.iso.datetime({}).nullish(),
   "properties": zod.record(zod.string(), zod.unknown().nullable()).nullish()
@@ -4895,7 +4895,7 @@ export const getProfileExportQueryParams = zod.object({
   "Take": zod.number().optional(),
   "Order": zod.string().optional(),
   "Ascending": zod.boolean().optional(),
-  "SegmentId": zod.uuid().optional(),
+  "SegmentId": zod.guid().optional(),
   "MinimumGoalValue": zod.number().optional(),
   "MinimumCompletedGoals": zod.number().optional(),
   "IsUnidentified": zod.boolean().optional(),
@@ -4927,7 +4927,7 @@ export const postProfileExportCsvBody = zod.object({
   "take": zod.number(),
   "order": zod.string().nullish(),
   "ascending": zod.boolean().nullish(),
-  "segmentId": zod.uuid().nullish(),
+  "segmentId": zod.guid().nullish(),
   "minimumGoalValue": zod.number().nullish(),
   "minimumCompletedGoals": zod.number().nullish(),
   "isUnidentified": zod.boolean().nullish(),
@@ -4948,7 +4948,7 @@ export const getProfileGoalCompletionsQueryParams = zod.object({
 })
 
 export const getProfileGoalCompletionsResponseItem = zod.object({
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "goalId": zod.number(),
   "completionCount": zod.number(),
   "totalValue": zod.number()
@@ -4960,7 +4960,7 @@ export const getProfileLastActiveSegmentQueryParams = zod.object({
   "visitorId": zod.number().optional()
 })
 
-export const getProfileLastActiveSegmentResponseItem = zod.uuid()
+export const getProfileLastActiveSegmentResponseItem = zod.guid()
 export const getProfileLastActiveSegmentResponse = zod.array(getProfileLastActiveSegmentResponseItem)
 
 
@@ -4969,7 +4969,7 @@ export const postProfileOverviewBody = zod.object({
   "take": zod.number(),
   "order": zod.string().nullish(),
   "ascending": zod.boolean().nullish(),
-  "segmentId": zod.uuid().nullish(),
+  "segmentId": zod.guid().nullish(),
   "minimumGoalValue": zod.number().nullish(),
   "minimumCompletedGoals": zod.number().nullish(),
   "isUnidentified": zod.boolean().nullish(),
@@ -4984,7 +4984,7 @@ export const postProfileOverviewBody = zod.object({
 
 export const postProfileOverviewResponse = zod.object({
   "results": zod.array(zod.object({
-  "visitorExternalId": zod.uuid(),
+  "visitorExternalId": zod.guid(),
   "visitorId": zod.number(),
   "identifiedOn": zod.iso.datetime({}).nullish(),
   "firstActiveOn": zod.iso.datetime({}),
@@ -5000,7 +5000,7 @@ export const postProfileOverviewResponse = zod.object({
   "members": zod.array(zod.object({
   "id": zod.string(),
   "name": zod.string(),
-  "unique": zod.uuid().nullish(),
+  "unique": zod.guid().nullish(),
   "registrationDate": zod.iso.datetime({}).nullish(),
   "lastLoginDate": zod.iso.datetime({}).nullish(),
   "properties": zod.record(zod.string(), zod.unknown().nullable()).nullish()
@@ -5081,7 +5081,7 @@ export const getProfilePotentialResponse = zod.object({
 
 
 export const getProfileRelatedQueryParams = zod.object({
-  "memberId": zod.uuid().optional()
+  "memberId": zod.guid().optional()
 })
 
 export const getProfileRelatedResponseItem = zod.number()
@@ -5160,24 +5160,24 @@ export const getProfileStatisticsTotalResponse = zod.object({
 
 
 export const deleteReferralGroupQueryParams = zod.object({
-  "id": zod.uuid().optional()
+  "id": zod.guid().optional()
 })
 
 
 export const getReferralGroupQueryParams = zod.object({
-  "id": zod.uuid().optional()
+  "id": zod.guid().optional()
 })
 
 export const getReferralGroupResponse = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "invalid": zod.boolean(),
   "pages": zod.array(zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "pageId": zod.number(),
   "referralGroupId": zod.number(),
   "domainOnly": zod.boolean(),
@@ -5185,7 +5185,7 @@ export const getReferralGroupResponse = zod.object({
 })),
   "customerJourneyScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
   "groupId": zod.number(),
@@ -5193,7 +5193,7 @@ export const getReferralGroupResponse = zod.object({
 })),
   "personaScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
   "groupId": zod.number(),
@@ -5205,13 +5205,13 @@ export const getReferralGroupResponse = zod.object({
 export const postReferralGroupBody = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "invalid": zod.boolean(),
   "pages": zod.array(zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "pageId": zod.number(),
   "referralGroupId": zod.number(),
   "domainOnly": zod.boolean(),
@@ -5219,7 +5219,7 @@ export const postReferralGroupBody = zod.object({
 })),
   "customerJourneyScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
   "groupId": zod.number(),
@@ -5227,7 +5227,7 @@ export const postReferralGroupBody = zod.object({
 })),
   "personaScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
   "groupId": zod.number(),
@@ -5238,13 +5238,13 @@ export const postReferralGroupBody = zod.object({
 export const postReferralGroupResponse = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "invalid": zod.boolean(),
   "pages": zod.array(zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "pageId": zod.number(),
   "referralGroupId": zod.number(),
   "domainOnly": zod.boolean(),
@@ -5252,7 +5252,7 @@ export const postReferralGroupResponse = zod.object({
 })),
   "customerJourneyScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
   "groupId": zod.number(),
@@ -5260,7 +5260,7 @@ export const postReferralGroupResponse = zod.object({
 })),
   "personaScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
   "groupId": zod.number(),
@@ -5272,13 +5272,13 @@ export const postReferralGroupResponse = zod.object({
 export const getReferralGroupAllResponseItem = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "invalid": zod.boolean(),
   "pages": zod.array(zod.object({
   "id": zod.number(),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "pageId": zod.number(),
   "referralGroupId": zod.number(),
   "domainOnly": zod.boolean(),
@@ -5286,7 +5286,7 @@ export const getReferralGroupAllResponseItem = zod.object({
 })),
   "customerJourneyScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
   "groupId": zod.number(),
@@ -5294,7 +5294,7 @@ export const getReferralGroupAllResponseItem = zod.object({
 })),
   "personaScoring": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "score": zod.number(),
   "isLocked": zod.boolean(),
   "groupId": zod.number(),
@@ -5433,18 +5433,18 @@ export const getSearchTermsResponse = zod.array(getSearchTermsResponseItem)
 
 
 export const deleteSegmentsQueryParams = zod.object({
-  "id": zod.uuid().optional()
+  "id": zod.guid().optional()
 })
 
 
 export const getSegmentsQueryParams = zod.object({
-  "id": zod.uuid().optional()
+  "id": zod.guid().optional()
 })
 
 export const getSegmentsResponse = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "endTime": zod.iso.datetime({}).nullish(),
@@ -5452,7 +5452,7 @@ export const getSegmentsResponse = zod.object({
   "sortOrder": zod.number(),
   "rules": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "segmentId": zod.number(),
   "type": zod.string().nullish(),
   "config": zod.unknown().nullish(),
@@ -5466,7 +5466,7 @@ export const getSegmentsResponse = zod.object({
 export const postSegmentsBody = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "endTime": zod.iso.datetime({}).nullish(),
@@ -5474,7 +5474,7 @@ export const postSegmentsBody = zod.object({
   "sortOrder": zod.number(),
   "rules": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "segmentId": zod.number(),
   "type": zod.string().nullish(),
   "config": zod.unknown().nullish(),
@@ -5487,7 +5487,7 @@ export const postSegmentsBody = zod.object({
 export const postSegmentsResponse = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "endTime": zod.iso.datetime({}).nullish(),
@@ -5495,7 +5495,7 @@ export const postSegmentsResponse = zod.object({
   "sortOrder": zod.number(),
   "rules": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "segmentId": zod.number(),
   "type": zod.string().nullish(),
   "config": zod.unknown().nullish(),
@@ -5514,7 +5514,7 @@ export const getSegmentsAllQueryParams = zod.object({
 export const getSegmentsAllResponseItem = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "endTime": zod.iso.datetime({}).nullish(),
@@ -5522,7 +5522,7 @@ export const getSegmentsAllResponseItem = zod.object({
   "sortOrder": zod.number(),
   "rules": zod.array(zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
+  "unique": zod.guid(),
   "segmentId": zod.number(),
   "type": zod.string().nullish(),
   "config": zod.unknown().nullish(),
@@ -5536,7 +5536,7 @@ export const getSegmentsAllResponse = zod.array(getSegmentsAllResponseItem)
 
 export const deleteSegmentsDeleteSegmentContentQueryParams = zod.object({
   "segment": zod.string().optional(),
-  "contentId": zod.uuid().optional()
+  "contentId": zod.guid().optional()
 })
 
 export const deleteSegmentsDeleteSegmentContentResponse = zod.boolean()
@@ -5585,18 +5585,18 @@ export const getSuspiciousActivityOverviewResponse = zod.object({
 
 
 export const deleteTrafficFilterQueryParams = zod.object({
-  "key": zod.uuid().optional()
+  "key": zod.guid().optional()
 })
 
 
 export const getTrafficFilterQueryParams = zod.object({
-  "key": zod.uuid().optional()
+  "key": zod.guid().optional()
 })
 
 export const getTrafficFilterResponse = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "name": zod.string(),
   "description": zod.string(),
@@ -5612,7 +5612,7 @@ export const getTrafficFilterResponse = zod.object({
 export const postTrafficFilterBody = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "name": zod.string(),
   "description": zod.string(),
@@ -5624,13 +5624,13 @@ export const postTrafficFilterBody = zod.object({
   "isActive": zod.boolean()
 })
 
-export const postTrafficFilterResponse = zod.uuid()
+export const postTrafficFilterResponse = zod.guid()
 
 
 export const getTrafficFilterAllResponseItem = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "name": zod.string(),
   "description": zod.string(),
@@ -5647,7 +5647,7 @@ export const getTrafficFilterAllResponse = zod.array(getTrafficFilterAllResponse
 export const getTrafficFilterEmptyResponse = zod.object({
   "id": zod.number(),
   "created": zod.iso.datetime({}),
-  "key": zod.uuid(),
+  "key": zod.guid(),
   "createdByUmbracoUserName": zod.string().nullish(),
   "name": zod.string(),
   "description": zod.string(),
@@ -5661,13 +5661,13 @@ export const getTrafficFilterEmptyResponse = zod.object({
 
 
 export const getPermissionsUserGroupQueryParams = zod.object({
-  "userGroupKey": zod.uuid().optional()
+  "userGroupKey": zod.guid().optional()
 })
 
 export const getPermissionsUserGroupResponse = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
-  "userGroupKey": zod.uuid(),
+  "unique": zod.guid(),
+  "userGroupKey": zod.guid(),
   "userGroupName": zod.string().nullish(),
   "userGroupAlias": zod.string().nullish(),
   "userGroupIconUrl": zod.string().nullish(),
@@ -5678,15 +5678,15 @@ export const getPermissionsUserGroupResponse = zod.object({
   "accessToProfiles": zod.boolean(),
   "accessToReporting": zod.boolean(),
   "updated": zod.iso.datetime({}),
-  "updatedByUmbracoUserKey": zod.uuid(),
+  "updatedByUmbracoUserKey": zod.guid(),
   "updatedByUmbracoUser": zod.string().nullish()
 })
 
 
 export const postPermissionsUserGroupBody = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
-  "userGroupKey": zod.uuid(),
+  "unique": zod.guid(),
+  "userGroupKey": zod.guid(),
   "userGroupName": zod.string().nullish(),
   "userGroupAlias": zod.string().nullish(),
   "userGroupIconUrl": zod.string().nullish(),
@@ -5697,15 +5697,15 @@ export const postPermissionsUserGroupBody = zod.object({
   "accessToProfiles": zod.boolean(),
   "accessToReporting": zod.boolean(),
   "updated": zod.iso.datetime({}),
-  "updatedByUmbracoUserKey": zod.uuid(),
+  "updatedByUmbracoUserKey": zod.guid(),
   "updatedByUmbracoUser": zod.string().nullish()
 })
 
 
 export const getPermissionsUserGroupAllResponseItem = zod.object({
   "id": zod.number(),
-  "unique": zod.uuid(),
-  "userGroupKey": zod.uuid(),
+  "unique": zod.guid(),
+  "userGroupKey": zod.guid(),
   "userGroupName": zod.string().nullish(),
   "userGroupAlias": zod.string().nullish(),
   "userGroupIconUrl": zod.string().nullish(),
@@ -5716,7 +5716,7 @@ export const getPermissionsUserGroupAllResponseItem = zod.object({
   "accessToProfiles": zod.boolean(),
   "accessToReporting": zod.boolean(),
   "updated": zod.iso.datetime({}),
-  "updatedByUmbracoUserKey": zod.uuid(),
+  "updatedByUmbracoUserKey": zod.guid(),
   "updatedByUmbracoUser": zod.string().nullish()
 })
 export const getPermissionsUserGroupAllResponse = zod.array(getPermissionsUserGroupAllResponseItem)
