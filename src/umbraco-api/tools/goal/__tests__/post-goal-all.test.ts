@@ -1,7 +1,6 @@
 import { jest } from "@jest/globals";
-import { setupTestEnvironment, createMockRequestHandlerExtra } from "./setup.js";
+import { setupTestEnvironment, createMockRequestHandlerExtra, GoalBuilder } from "./setup.js";
 import { deleteTestGoals } from "./helpers/sql-cleanup.js";
-import postGoalTool from "../post/post-goal.js";
 import tool from "../post/post-goal-all.js";
 
 jest.setTimeout(30000);
@@ -26,27 +25,8 @@ describe("post-goal-all", () => {
   beforeAll(async () => {
     deleteTestGoals();
 
-    const context = createMockRequestHandlerExtra();
     for (const goal of TEST_GOALS) {
-      const result = await postGoalTool.handler(
-        {
-          name: goal.name,
-          value: goal.value,
-          goalTypeId: "00000000-0000-0000-0000-000000000000",
-          goalTypeConfig: "{}",
-          isMain: false,
-          isInverted: false,
-          isActive: true,
-          isInvalid: false,
-          isImplicitScoringEnabled: false,
-          implicitPersonaScoring: [],
-          implicitCustomerJourneyStepScoring: [],
-        },
-        context,
-      );
-      if (result.isError) {
-        throw new Error(`Failed to create test goal "${goal.name}": ${JSON.stringify(result.content)}`);
-      }
+      await new GoalBuilder().withName(goal.name).withValue(goal.value).create();
     }
   });
 
