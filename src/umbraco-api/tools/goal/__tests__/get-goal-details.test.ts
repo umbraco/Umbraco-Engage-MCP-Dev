@@ -1,43 +1,39 @@
-import { setupTestEnvironment, createMockRequestHandlerExtra } from "./setup.js";
-import postGoalTool from "../post/post-goal.js";
+import {
+  setupTestEnvironment,
+  createMockRequestHandlerExtra,
+  GoalBuilder,
+  GoalTestHelper,
+  TEST_GOAL_TYPE_ID,
+} from "./setup.js";
 import tool from "../get/get-goal-details.js";
 
 const TEST_GOAL_NAME = "_Test Goal Details";
-const TEST_GOAL_TYPE_ID = "00000000-0000-0000-0000-000000000000";
 const TEST_GOAL_VALUE = 1;
 const TEST_NON_EXISTENT_ID = "00000000-0000-0000-0000-000000000000";
 
 describe("get-goal-details", () => {
   setupTestEnvironment();
 
-  // There is no delete-goal endpoint in this collection, so this permanently
-  // adds a row (same accepted limitation as post-goal.test.ts). The numeric
-  // `id` field returned is an auto-increment that grows across runs, so it
-  // can't be part of a stable snapshot — assert the deterministic fields
-  // (the ones we set on creation) instead.
+  // There is no delete-goal endpoint in this collection - GoalBuilder.delete()
+  // sweeps _Test/_Probe-prefixed rows via direct SQL (see
+  // helpers/sql-cleanup.ts), so this no longer permanently leaks a row.
+  afterEach(async () => {
+    await GoalTestHelper.cleanup();
+  });
+
+  // The numeric `id` field returned is an auto-increment that grows across
+  // runs, so it can't be part of a stable snapshot — assert the
+  // deterministic fields (the ones we set on creation) instead.
   it(
     "returns details for an existing goal",
     async () => {
       const context = createMockRequestHandlerExtra();
 
-      const created = await postGoalTool.handler(
-        {
-          name: TEST_GOAL_NAME,
-          value: TEST_GOAL_VALUE,
-          goalTypeId: TEST_GOAL_TYPE_ID,
-          goalTypeConfig: "{}",
-          isMain: false,
-          isInverted: false,
-          isActive: true,
-          isInvalid: false,
-          isImplicitScoringEnabled: false,
-          implicitPersonaScoring: [],
-          implicitCustomerJourneyStepScoring: [],
-        },
-        context,
-      );
-      expect(created.isError).toBeFalsy();
-      const uniqueId = (created.structuredContent as { unique: string }).unique;
+      const builder = await new GoalBuilder()
+        .withName(TEST_GOAL_NAME)
+        .withValue(TEST_GOAL_VALUE)
+        .create();
+      const uniqueId = builder.getId();
 
       const result = await tool.handler({ id: uniqueId }, context);
 
