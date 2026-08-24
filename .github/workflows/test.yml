@@ -184,6 +184,11 @@ jobs:
           done
           exit $FAILED
 
+      - name: TEMP - Run eval tests
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: npm run test:evals
+
       - name: Upload snapshots on failure
         if: failure()
         uses: actions/upload-artifact@v7
