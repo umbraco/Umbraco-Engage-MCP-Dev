@@ -1,5 +1,5 @@
 import { defineConfig } from "orval";
-import { orvalImportFixer } from "@umbraco-cms/mcp-server-sdk";
+import { orvalImportFixer, relaxUuidToGuid } from "@umbraco-cms/mcp-server-sdk/orval";
 
 /**
  * Orval Configuration
@@ -50,6 +50,14 @@ export default defineConfig({
       client: "zod",
       mode: "single",
       clean: false,
+    },
+    hooks: {
+      // Umbraco returns GUIDs that aren't RFC 4122 compliant (e.g. sequential
+      // version ids like `0000003f-0000-0000-0000-000000000000`). Zod's
+      // uuid() rejects these; guid() validates the 8-4-4-4-12 hex shape
+      // without the RFC 4122 constraint. Only relaxes output-schema usage -
+      // hand-written tool input schemas should keep using uuid() directly.
+      afterAllFilesWrite: relaxUuidToGuid,
     },
   },
 });

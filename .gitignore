@@ -14,6 +14,9 @@ demo-site/
 # Dependencies
 node_modules/
 
+# Written by jest-failure-reporter.ts on any test failure; auto-deleted on a clean run
+test-failures.log
+
 # OS
 .DS_Store
 Thumbs.db

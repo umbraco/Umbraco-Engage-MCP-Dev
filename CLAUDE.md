@@ -1,10 +1,10 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with the MCP server template.
+This file provides guidance to Claude Code (claude.ai/code) when working on the Umbraco Engage MCP server.
 
-## Template Overview
+## Overview
 
-Starter kit for creating new Umbraco MCP server projects. Copy this folder to start a new project. Not published to npm.
+An MCP server for [Umbraco Engage](https://umbraco.com/products/umbraco-engage/), built from the `@umbraco-cms/mcp-template` starter kit.
 
 ## Commands
 
@@ -131,7 +131,7 @@ Custom fields defined in `config/server-config.ts`.
 
 ## PR / CI Workflow
 
-Always work via a branch + PR — never push directly to `main`. Create a branch, push it, open a PR, and let `.github/workflows/test.yml` run before merging.
+`dev` is the base branch — always work via a branch off `dev` + PR into `dev`, never push directly to `dev`. Create a branch, push it, open a PR, and let `.github/workflows/test.yml` run before merging. (`main` stays at GitHub's default and receives periodic release merges from `dev`, mirroring `umbraco-mcp-dev-cms`'s `v17/dev` model.)
 
 Whenever you open a new PR or push updates to an existing one, do NOT consider the task done at push time. Watch the CI checks and fix any failures automatically:
 
