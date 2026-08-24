@@ -25,3 +25,6 @@ Thumbs.db
 .claude/settings.local.json
 .claude/kanban-state.json
 .claude/scheduled_tasks.lock
+
+# Worktree directories
+.claude/worktrees/
