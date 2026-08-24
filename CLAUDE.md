@@ -1,10 +1,10 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with the MCP server template.
+This file provides guidance to Claude Code (claude.ai/code) when working on the Umbraco Engage MCP server.
 
-## Template Overview
+## Overview
 
-Starter kit for creating new Umbraco MCP server projects. Copy this folder to start a new project. Not published to npm.
+An MCP server for [Umbraco Engage](https://umbraco.com/products/umbraco-engage/), built from the `@umbraco-cms/mcp-template` starter kit.
 
 ## Commands
 
