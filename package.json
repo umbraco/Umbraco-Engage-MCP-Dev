@@ -2,7 +2,7 @@
   "name": "umbraco-engage-editor-mcp",
   "version": "1.0.0-alpha.1",
   "type": "module",
-  "description": "MCP server for umbraco-engage-editor-mcp",
+  "description": "MCP server for Umbraco Engage — A/B testing, personalization, personas, segments, campaigns, and analytics tools for AI agents.",
   "main": "dist/index.js",
   "exports": {
     ".": "./dist/index.js",
@@ -47,7 +47,7 @@
     "MCP",
     "Model Context Protocol"
   ],
-  "author": "",
+  "author": "Umbraco",
   "license": "MIT",
   "dependencies": {
     "@anthropic-ai/claude-agent-sdk": "0.2.39",
