@@ -1,5 +1,7 @@
 # Umbraco Engage MCP
 
+[![Test](https://github.com/umbraco/Umbraco-Engage-MCP-Dev/actions/workflows/test.yml/badge.svg)](https://github.com/umbraco/Umbraco-Engage-MCP-Dev/actions/workflows/test.yml)
+
 An MCP (Model Context Protocol) server for [Umbraco Engage](https://umbraco.com/products/umbraco-engage/) that enables AI-powered marketing, analytics, and personalization workflows. It provides comprehensive access to the Umbraco Engage Management API, allowing your AI agent to run A/B tests, query analytics, manage personas and segments, configure campaigns and goals, inspect visitor profiles, and more — all through natural conversation.
 
 ## Intro
