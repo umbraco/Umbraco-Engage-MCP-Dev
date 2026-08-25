@@ -81,8 +81,7 @@ Modes are named groups that enable related collections together. Set `UMBRACO_TO
 | `campaigns` | `campaigns`, `campaign-group`, `goal`, `goals`, `annotations` |
 | `scoring` | `content-scoring`, `referral-scoring`, `referral-group` |
 | `profiles` | `profile` |
-| `cockpit` | `cockpit`, `cockpit-auth` |
-| `administration` | `configuration`, `main-switch`, `package`, `add-ons`, `cultures`, `content-types`, `document-type-permissions`, `user-group-permissions`, `data-cleanup`, `data-generation`, `traffic-filter`, `suspicious-activity` |
+| `administration` | `configuration`, `main-switch`, `package`, `add-ons`, `cultures`, `content-types`, `document-type-permissions`, `user-group-permissions`, `data-cleanup`, `traffic-filter`, `suspicious-activity` |
 
 ### Collections
 
@@ -97,15 +96,12 @@ Modes are named groups that enable related collections together. Set `UMBRACO_TO
 | `applied-personalization` | 6 | Apply personalization to content and segments |
 | `campaign-group` | 6 | Campaign groups, scored / unscored, visitors |
 | `campaigns` | 1 | Campaign overview |
-| `cockpit` | 2 | Engage Cockpit page info and cookie management |
-| `cockpit-auth` | 2 | Cockpit auth domains and token generation |
 | `configuration` | 1 | Engage configuration |
 | `content-scoring` | 6 | Content scoring + customer journey / persona import/export |
 | `content-types` | 2 | Content type metadata for segmented properties |
 | `cultures` | 1 | Cultures supported by Engage |
 | `customer-journey` | 7 | Customer journey CRUD, lock/unlock |
 | `data-cleanup` | 3 | Data cleanup runs and logs |
-| `data-generation` | 1 | Data generation logs |
 | `document-type-permissions` | 3 | Document-type-level Engage permissions |
 | `goal` | 4 | Goal types and goal details |
 | `goals` | 2 | Goal listing (main and all) |
