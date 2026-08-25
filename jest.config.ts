@@ -21,11 +21,15 @@ const config: JestConfigWithTsJest = {
   },
   testMatch: ["**/__tests__/**/*.test.ts"],
   setupFiles: ["<rootDir>/jest.setup.ts"],
-  setupFilesAfterEnv: ["<rootDir>/src/mocks/jest-setup.ts"],
-  testPathIgnorePatterns: ["/node_modules/"],
+  setupFilesAfterEnv: [
+    "<rootDir>/jest.setup-after-env.ts",
+    "<rootDir>/src/mocks/jest-setup.ts",
+  ],
+  testPathIgnorePatterns: ["/node_modules/", "\\.claude/worktrees/", "tests/evals/"],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
   collectCoverageFrom: ["src/**/*.ts", "!src/**/*.d.ts"],
   coverageDirectory: "coverage",
+  workerIdleMemoryLimit: "512MB",
 };
 
 export default config;

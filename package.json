@@ -17,7 +17,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "build": "tsup --config tsup.config.ts",
-    "postbuild": "umbraco-mcp-generate-types",
+    "postbuild": "umbraco-mcp-generate-types --registry-name EngageTools",
     "compile": "tsc --noEmit",
     "watch": "tsup --config tsup.config.ts --watch",
     "generate": "orval --config orval.config.ts",
