@@ -7,6 +7,7 @@ import {
 import postAbTestSegmentTool from "../post/post-ab-test-segment.js";
 import getAbTestTool from "../get/get-ab-test.js";
 import { AbTestBuilder } from "./helpers/ab-test-builder.js";
+import { SegmentContentPageFixture } from "./helpers/segment-content-page-fixture.js";
 import { disconnectChainedCms } from "../../../../testing/content-page-fixture.js";
 
 // The AbTestBuilder chain (content page + goal + ab-test, each a real
@@ -69,11 +70,28 @@ describe("post-ab-test-segment", () => {
     //   3. the same, with `culture` omitted entirely
     // Verified empirically: all three still 400 with the exact same generic
     // `{ status: 400, detail: "Bad Request" }` body as a wholly non-existent
-    // unique - this is real behavior, not a fixture gap. The most likely
-    // cause (unconfirmed, since it can't be tested via this MCP's tools
-    // alone): the endpoint requires the ab-test to be "Running", and
-    // AbTestBuilder's tests are always created in "Draft" status - there is
-    // no post-ab-test-start tool in this collection to move it out of Draft.
+    // unique.
+    //
+    // Root cause CONFIRMED (not a fixture gap, not an ab-test status issue -
+    // see next paragraph) by decompiling the real Engage server
+    // (Umbraco.Engage.Web.dll, Umbraco.Engage.Web.Api.Controllers.AbTest.
+    // CreateSegmentAbTestController -> Umbraco.Engage.Web.UmbracoSegments.
+    // UmbracoSegmentService.CreateSegment): the endpoint resolves `unique` as
+    // a Document id, then 400s unless that document's content type has
+    // segment variation enabled AND has at least one property that varies by
+    // segment. ContentPageFixture's document type (used by AbTestBuilder)
+    // has neither - see the "returns created: true..." test below for the
+    // real success path via SegmentContentPageFixture.
+    //
+    // Ruled out empirically: the ab-test's own Draft/Running status is NOT
+    // the cause. There is no stored `status` column on the AbTest table at
+    // all - it's computed from startTime/endTime/isCompleted - and postAbTest
+    // is create-only (it always inserts a new row; it does not upsert an
+    // existing one by id/unique, confirmed by the returned id/unique/goalId
+    // differing from the input on every call). A test created directly with
+    // startTime already set (so it computes as "Running" from the moment it
+    // exists) still 400s identically against its own real server-assigned
+    // segment.
     const abTestUniqueResult = await postAbTestSegmentTool.handler(
       {
         unique: builder.getUnique(),
@@ -111,5 +129,26 @@ describe("post-ab-test-segment", () => {
     expect(pageKeyNoCultureResult.isError).toBe(true);
 
     expect(createSnapshotResult(abTestUniqueResult)).toMatchSnapshot();
+  });
+
+  it("returns created: true for a real, published content page whose document type varies by segment", async () => {
+    const context = createMockRequestHandlerExtra();
+    const fixture = await new SegmentContentPageFixture().create();
+
+    try {
+      const result = await postAbTestSegmentTool.handler(
+        {
+          unique: fixture.getPageKey(),
+          culture: undefined,
+          segment: TEST_SEGMENT,
+        },
+        context,
+      );
+
+      expect(result.isError).toBeFalsy();
+      expect(result.structuredContent).toEqual({ created: true });
+    } finally {
+      await fixture.delete();
+    }
   });
 });
