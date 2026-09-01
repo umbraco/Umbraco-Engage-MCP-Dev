@@ -3,6 +3,7 @@ import {
   withStandardDecorators,
   executeGetApiCall,
   CAPTURE_RAW_HTTP_RESPONSE,
+  ToolValidationError,
   type ToolDefinition,
 } from "@umbraco-cms/mcp-server-sdk";
 import { z } from "zod";
@@ -36,7 +37,23 @@ const inputSchema = z.object({
   }).describe(
     "Must describe the SAME real, active goal as `goalId` - the server validates this object independently of a live lookup by `goalId`, so a mismatched goal here produces \"The selected goal should be active and valid\" even when `goalId` is correct.",
   ),
-  pageUnique: z.uuid().describe("The `unique` guid of the real, published Umbraco content page this test targets."),
+  pageUnique: z
+    .uuid()
+    .describe(
+      "The `unique` guid of the real, published Umbraco content page this test targets. For testType 'SplitUrl' this is specifically the benchmark 'Original' variant's page - the second variant redirects to `secondVariantPageUnique` instead.",
+    ),
+  secondVariantPageUnique: z
+    .uuid()
+    .nullish()
+    .describe(
+      "Required when testType is 'SplitUrl', and must differ from `pageUnique`: the real, published content page's unique guid the second (named) variant redirects visitors to. Must be omitted for SinglePage/MultiPage/ContentType tests, which show both variants on the same page(s) rather than redirecting to different URLs. Confirmed via decompiling the real Engage server (AbTestValidator.Validate -> requires UmbracoPageVariants.Count >= 2 for SplitUrl; AbTestSaveHandler.SetVariantNamesToNodeSegments -> matches each variant's redirectNodeKey to one of those pages) - a SplitUrl test built with only `pageUnique` fails validation with 'At least two pages should be configured', and even if that were bypassed, would have no variant actually pinned to a page to redirect to.",
+    ),
+  projectId: z
+    .number()
+    .nullish()
+    .describe(
+      "The numeric `id` (NOT `unique`) of an existing A/B test project to group this test under - from post-ab-test-project's or get-ab-test-project-all's own `id` field. Previously always sent as null: the test still saved and remained retrievable via get-ab-test-all/get-ab-test, but never appeared when browsing via get-ab-test-project/get-ab-test-project-details for any project (confirmed empirically - a project's `abTests`/counts are populated strictly by matching `projectId`), which is the likely cause of testers reporting created tests as 'invisible'.",
+    ),
   secondVariantName: z.string().default("Variant B"),
   participationPercentage: z.number().default(1),
   minimumDetectableEffect: z.number().default(0.1),
@@ -45,14 +62,18 @@ const inputSchema = z.object({
 });
 const outputSchema = postAbTestResponse;
 
-function buildVariant(isBenchmark: boolean, name: string): FullBody["test"]["variants"][number] {
+function buildVariant(
+  isBenchmark: boolean,
+  name: string,
+  redirectNodeKey: string | null,
+): FullBody["test"]["variants"][number] {
   return {
     id: 0,
     unique: randomUUID(),
     abTestId: 0,
     name,
     description: null,
-    redirectNodeKey: null,
+    redirectNodeKey,
     css: null,
     javascript: null,
     created: new Date().toISOString(),
@@ -70,19 +91,44 @@ function buildVariant(isBenchmark: boolean, name: string): FullBody["test"]["var
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "post-ab-test",
   description:
-    "Create a new A/B test in Draft status against a real content page, comparing an implicit 'Original' benchmark variant to one named second variant. `goalId` and `goal` are both required and must describe the SAME real, active goal (see their own descriptions for why): a real goal with a mismatched/invalid `goal` object fails gracefully with validationResults.isValid=false, but a `goalId` that doesn't correspond to ANY real goal fails as a raw 500 error (a database foreign-key violation, not a clean validation message) - always resolve `goalId` from a real goal (e.g. via get-goal-details) first. The created test starts in Draft status - no tool in this collection can move it to Running.",
+    "Create a new A/B test in Draft status against a real content page, comparing an implicit 'Original' benchmark variant to one named second variant. `goalId` and `goal` are both required and must describe the SAME real, active goal (see their own descriptions for why): a real goal with a mismatched/invalid `goal` object fails gracefully with validationResults.isValid=false, but a `goalId` that doesn't correspond to ANY real goal fails as a raw 500 error (a database foreign-key violation, not a clean validation message) - always resolve `goalId` from a real goal (e.g. via get-goal-details) first. Pass `projectId` to group the test under an existing A/B test project (see `projectId`'s own description) - omitting it creates a real, valid test that will not appear when browsing by project. testType 'SplitUrl' additionally requires `secondVariantPageUnique` (see its own description) to give the second variant its own redirect page - passing it for any other testType, or omitting it for SplitUrl, is rejected with a validation error before any API call is made. The created test starts in Draft status - no tool in this collection can move it to Running.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["create"],
   annotations: { destructiveHint: false, idempotentHint: false },
   handler: async (params) => {
+    const isSplitUrl = params.testType === "SplitUrl";
+    if (isSplitUrl && !params.secondVariantPageUnique) {
+      throw new ToolValidationError({
+        title: "secondVariantPageUnique is required for testType SplitUrl",
+        status: 400,
+        detail:
+          "testType 'SplitUrl' requires `secondVariantPageUnique` to give the second variant its own redirect page - the real server requires at least two pages configured for a SplitUrl test.",
+      });
+    }
+    if (!isSplitUrl && params.secondVariantPageUnique) {
+      throw new ToolValidationError({
+        title: "secondVariantPageUnique is only valid for testType SplitUrl",
+        status: 400,
+        detail: `secondVariantPageUnique was provided but testType is '${params.testType}', which shows both variants on the same page(s) rather than redirecting - remove secondVariantPageUnique or set testType to 'SplitUrl'.`,
+      });
+    }
+    if (isSplitUrl && params.secondVariantPageUnique === params.pageUnique) {
+      throw new ToolValidationError({
+        title: "secondVariantPageUnique must differ from pageUnique",
+        status: 400,
+        detail:
+          "A SplitUrl test's two variants must redirect to two different pages - pageUnique and secondVariantPageUnique were the same guid.",
+      });
+    }
+
     const now = new Date().toISOString();
     const body: FullBody = {
       test: {
         id: 0,
         unique: randomUUID(),
         created: now,
-        projectId: null,
+        projectId: params.projectId ?? null,
         goalId: params.goalId,
         status: "Draft",
         goal: {
@@ -110,19 +156,42 @@ const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
         participationPercentage: params.participationPercentage,
         minimumDetectableEffect: params.minimumDetectableEffect,
         variants: [
-          buildVariant(true, "Original"),
-          buildVariant(false, params.secondVariantName),
+          buildVariant(true, "Original", isSplitUrl ? params.pageUnique : null),
+          buildVariant(
+            false,
+            params.secondVariantName,
+            isSplitUrl ? (params.secondVariantPageUnique as string) : null,
+          ),
         ],
-        umbracoPageVariants: [
-          {
-            id: 0,
-            unique: params.pageUnique,
-            nodeName: null,
-            culture: null,
-            abTestId: null,
-            variesBySegment: false,
-          },
-        ],
+        umbracoPageVariants: isSplitUrl
+          ? [
+              {
+                id: 0,
+                unique: params.pageUnique,
+                nodeName: null,
+                culture: null,
+                abTestId: null,
+                variesBySegment: false,
+              },
+              {
+                id: 0,
+                unique: params.secondVariantPageUnique as string,
+                nodeName: null,
+                culture: null,
+                abTestId: null,
+                variesBySegment: false,
+              },
+            ]
+          : [
+              {
+                id: 0,
+                unique: params.pageUnique,
+                nodeName: null,
+                culture: null,
+                abTestId: null,
+                variesBySegment: false,
+              },
+            ],
         contentTypes: [],
         winner: null,
         isCompleted: false,
