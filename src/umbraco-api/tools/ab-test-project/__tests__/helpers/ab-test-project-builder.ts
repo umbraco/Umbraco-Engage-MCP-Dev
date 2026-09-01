@@ -25,6 +25,7 @@ export class AbTestProjectBuilder {
   };
 
   private createdId?: string;
+  private createdNumericId?: number;
 
   withName(name: string): this {
     this.model.name = name;
@@ -61,6 +62,7 @@ export class AbTestProjectBuilder {
     // post-ab-test-project honors whatever `unique` is supplied in the
     // request body rather than generating/overriding it server-side.
     this.createdId = response.data?.unique ?? validated.unique;
+    this.createdNumericId = response.data?.id;
     return this;
   }
 
@@ -84,5 +86,13 @@ export class AbTestProjectBuilder {
       throw new Error("A/B test project not created yet. Call create() first.");
     }
     return this.createdId;
+  }
+
+  /** The project's numeric `id` - what post-ab-test's `projectId` field actually expects (NOT `unique`/getId()). */
+  getNumericId(): number {
+    if (this.createdNumericId === undefined) {
+      throw new Error("A/B test project not created yet. Call create() first.");
+    }
+    return this.createdNumericId;
   }
 }

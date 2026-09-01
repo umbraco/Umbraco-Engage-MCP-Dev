@@ -25,6 +25,19 @@ const inputSchema = z.object({
 });
 const outputSchema = postAbTestSegmentResponse;
 
+// TODO(umbraco-mcp-dev-cms#429): `create-document-type` hardcodes
+// `variesBySegment: false` on the document type AND every property, with no
+// schema field to override it - so a caller can never produce a
+// segment-varying content type through that tool alone. The workaround this
+// tool's description below tells callers to use (create, then a follow-up
+// `update-document-type` call with `variesBySegment: true`) is CONFIRMED
+// working end-to-end - see SegmentContentPageFixture in this collection's
+// __tests__/helpers/, which uses exactly that workaround to build a real
+// success-path test for this tool. Once umbraco-mcp-dev-cms#429 is fixed
+// upstream (create-document-type exposes variesBySegment directly), simplify
+// both this description and SegmentContentPageFixture to drop the
+// follow-up update-document-type step.
+// https://github.com/umbraco/Umbraco-CMS-MCP-Dev/issues/429
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "post-ab-test-segment",
   description:

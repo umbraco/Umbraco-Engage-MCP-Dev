@@ -121,6 +121,8 @@ export class AbTestFixture {
           isInvalid: false,
         },
         pageUnique: pageKey,
+        secondVariantPageUnique: undefined,
+        projectId: undefined,
         secondVariantName: "Variant B",
         participationPercentage: 1,
         minimumDetectableEffect: 0.1,
