@@ -53,8 +53,8 @@
     "@anthropic-ai/claude-agent-sdk": "0.2.39",
     "@cloudflare/workers-oauth-provider": "^0.2.3",
     "@modelcontextprotocol/sdk": "^1.29.0",
-    "@umbraco-cms/mcp-hosted": "1.0.0-beta.36",
-    "@umbraco-cms/mcp-server-sdk": "1.0.0-beta.36",
+    "@umbraco-cms/mcp-hosted": "1.0.0-beta.38",
+    "@umbraco-cms/mcp-server-sdk": "1.0.0-beta.38",
     "agents": "^0.6.0",
     "dotenv": "^16.5.0",
     "uuid": "^11.1.0",
@@ -63,6 +63,7 @@
   },
   "devDependencies": {
     "@jest/types": "^29.6.3",
+    "@playwright/test": "^1.61.1",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.14.1",
     "@types/uuid": "^10.0.0",
@@ -74,9 +75,8 @@
     "ts-jest": "^29.3.2",
     "ts-node": "^10.9.2",
     "tsup": "^8.4.0",
-    "undici": "^7.0.0",
-    "@playwright/test": "^1.61.1",
     "typescript": "^5.8.3",
+    "undici": "^7.0.0",
     "wrangler": "^4.69.0"
   }
 }
