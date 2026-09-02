@@ -20,6 +20,8 @@ import {
   createCollectionConfigLoader,
   shouldIncludeTool,
   handleCliCommands,
+  jsonSchemaObjectToZodObject,
+  useDraft202012ToolSchemas,
   type CollectionConfiguration,
 } from "@umbraco-cms/mcp-server-sdk";
 
@@ -222,19 +224,20 @@ async function main() {
       const proxiedTools = await discoverProxiedTools(mcpClientManager);
 
       for (const pt of proxiedTools) {
-        // Register proxied tool with forwarding handler
-        // Note: We don't pass inputSchema since validation happens on the chained server
-        // and the MCP SDK expects Zod schemas, not raw JSON Schema objects
+        // Convert the chained server's JSON Schema inputSchema into a real
+        // Zod schema so the calling client learns the tool's actual
+        // parameters instead of an empty object.
         server.registerTool(
           pt.prefixedName,
           {
             description: `[Proxied from ${pt.serverName}] ${pt.originalTool.description || "No description"}`,
+            inputSchema: jsonSchemaObjectToZodObject(pt.originalTool.inputSchema),
           },
-          async (args: Record<string, unknown>): Promise<CallToolResult> => {
+          (async (args: Record<string, unknown>): Promise<CallToolResult> => {
             const { serverName, toolName } = parseProxiedToolName(pt.prefixedName);
             const result = await mcpClientManager.callTool(serverName, toolName, args);
             return result as CallToolResult;
-          }
+          }) as any,
         );
       }
 
@@ -246,6 +249,12 @@ async function main() {
       // Continue without proxied tools - local tools still work
     }
   }
+
+  // Called once, after every registerTool call above (main collections at
+  // module load, chained tools just above) has completed - McpServer only
+  // advertises the "tools" capability required to override ListTools at
+  // all once at least one tool has actually been registered.
+  useDraft202012ToolSchemas(server);
 
   const transport = new StdioServerTransport();
   await server.connect(transport);
