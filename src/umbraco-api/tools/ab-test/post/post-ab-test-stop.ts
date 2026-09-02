@@ -32,7 +32,7 @@ const inputSchema = z.object({
   pageUnique: z
     .uuid()
     .describe(
-      "The SAME real page unique originally passed to post-ab-test's own `pageUnique` when this test was created. Required (even though this tool otherwise only changes endTime/isCompleted) because get-ab-test-view-model cannot reliably read this test's existing page configuration back - see post-ab-test-start's `pageUnique` description for the full, decompiled explanation. Blindly resubmitting the broken empty read-back would wipe the test's real page configuration, so this tool asks you to resupply it instead.",
+      "The SAME real page unique originally passed to post-ab-test's own `pageUnique` when this test was created. Required (even though this tool otherwise only changes endTime/isCompleted) because this test's existing page configuration cannot be read back reliably - resubmitting it without this would wipe the test's real page configuration, so this tool asks you to resupply it instead.",
     ),
   secondVariantPageUnique: z
     .uuid()

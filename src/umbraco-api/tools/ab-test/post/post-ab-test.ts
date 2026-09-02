@@ -46,13 +46,13 @@ const inputSchema = z.object({
     .uuid()
     .nullish()
     .describe(
-      "Required when testType is 'SplitUrl', and must differ from `pageUnique`: the real, published content page's unique guid the second (named) variant redirects visitors to. Must be omitted for SinglePage/MultiPage/ContentType tests, which show both variants on the same page(s) rather than redirecting to different URLs. Confirmed via decompiling the real Engage server (AbTestValidator.Validate -> requires UmbracoPageVariants.Count >= 2 for SplitUrl; AbTestSaveHandler.SetVariantNamesToNodeSegments -> matches each variant's redirectNodeKey to one of those pages) - a SplitUrl test built with only `pageUnique` fails validation with 'At least two pages should be configured', and even if that were bypassed, would have no variant actually pinned to a page to redirect to.",
+      "Required when testType is 'SplitUrl', and must differ from `pageUnique`: the real, published content page's unique guid the second (named) variant redirects visitors to. Must be omitted for SinglePage/MultiPage/ContentType tests, which show both variants on the same page(s) rather than redirecting to different URLs. A SplitUrl test needs two distinct pages, one per variant - omitting this produces the validation error 'At least two pages should be configured', and would otherwise leave the second variant with no page to redirect to.",
     ),
   projectId: z
     .number()
     .nullish()
     .describe(
-      "The numeric `id` (NOT `unique`) of an existing A/B test project to group this test under - from post-ab-test-project's or get-ab-test-project-all's own `id` field. Previously always sent as null: the test still saved and remained retrievable via get-ab-test-all/get-ab-test, but never appeared when browsing via get-ab-test-project/get-ab-test-project-details for any project (confirmed empirically - a project's `abTests`/counts are populated strictly by matching `projectId`), which is the likely cause of testers reporting created tests as 'invisible'.",
+      "The numeric `id` (NOT `unique`) of an existing A/B test project to group this test under - from post-ab-test-project's or get-ab-test-project-all's own `id` field. Omitting it creates a real, valid test that is retrievable via get-ab-test-all/get-ab-test but will not appear when browsing via get-ab-test-project/get-ab-test-project-details for any project, since a project's `abTests`/counts are populated strictly by matching `projectId`.",
     ),
   secondVariantName: z.string().default("Variant B"),
   participationPercentage: z.number().default(1),
