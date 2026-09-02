@@ -3,12 +3,12 @@ import {
   withStandardDecorators,
   executeGetApiCall,
   CAPTURE_RAW_HTTP_RESPONSE,
-  ToolValidationError,
   type ToolDefinition,
 } from "@umbraco-cms/mcp-server-sdk";
 import { z } from "zod";
 import { postAbTestBody, postAbTestResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
 import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbracoEngageManagementApi.js";
+import { buildUmbracoPageVariants } from "./build-umbraco-page-variants.js";
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 type FullBody = z.infer<typeof postAbTestBody>;
@@ -98,29 +98,11 @@ const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   annotations: { destructiveHint: false, idempotentHint: false },
   handler: async (params) => {
     const isSplitUrl = params.testType === "SplitUrl";
-    if (isSplitUrl && !params.secondVariantPageUnique) {
-      throw new ToolValidationError({
-        title: "secondVariantPageUnique is required for testType SplitUrl",
-        status: 400,
-        detail:
-          "testType 'SplitUrl' requires `secondVariantPageUnique` to give the second variant its own redirect page - the real server requires at least two pages configured for a SplitUrl test.",
-      });
-    }
-    if (!isSplitUrl && params.secondVariantPageUnique) {
-      throw new ToolValidationError({
-        title: "secondVariantPageUnique is only valid for testType SplitUrl",
-        status: 400,
-        detail: `secondVariantPageUnique was provided but testType is '${params.testType}', which shows both variants on the same page(s) rather than redirecting - remove secondVariantPageUnique or set testType to 'SplitUrl'.`,
-      });
-    }
-    if (isSplitUrl && params.secondVariantPageUnique === params.pageUnique) {
-      throw new ToolValidationError({
-        title: "secondVariantPageUnique must differ from pageUnique",
-        status: 400,
-        detail:
-          "A SplitUrl test's two variants must redirect to two different pages - pageUnique and secondVariantPageUnique were the same guid.",
-      });
-    }
+    const umbracoPageVariants = buildUmbracoPageVariants(
+      params.testType,
+      params.pageUnique,
+      params.secondVariantPageUnique,
+    );
 
     const now = new Date().toISOString();
     const body: FullBody = {
@@ -163,35 +145,7 @@ const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
             isSplitUrl ? (params.secondVariantPageUnique as string) : null,
           ),
         ],
-        umbracoPageVariants: isSplitUrl
-          ? [
-              {
-                id: 0,
-                unique: params.pageUnique,
-                nodeName: null,
-                culture: null,
-                abTestId: null,
-                variesBySegment: false,
-              },
-              {
-                id: 0,
-                unique: params.secondVariantPageUnique as string,
-                nodeName: null,
-                culture: null,
-                abTestId: null,
-                variesBySegment: false,
-              },
-            ]
-          : [
-              {
-                id: 0,
-                unique: params.pageUnique,
-                nodeName: null,
-                culture: null,
-                abTestId: null,
-                variesBySegment: false,
-              },
-            ],
+        umbracoPageVariants,
         contentTypes: [],
         winner: null,
         isCompleted: false,
