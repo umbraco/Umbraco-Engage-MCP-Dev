@@ -15,7 +15,7 @@
  * - orvalImportFixer: Hook to fix ESM imports in generated code
  */
 
-import { defineConfig } from "orval";
+import { defineConfig, type HookFunction } from "orval";
 import { orvalImportFixer } from "@umbraco-cms/mcp-server-sdk/orval";
 
 export const UmbManagementApiOrvalConfig = defineConfig({
@@ -23,7 +23,7 @@ export const UmbManagementApiOrvalConfig = defineConfig({
     input: {
       // Update this URL to your Umbraco instance
       target: "http://localhost:44391/umbraco/swagger/management/swagger.json",
-      validation: false,
+      unsafeDisableValidation: true,
       // Optional: filter out specific endpoints
       // filters: {
       //   mode: "exclude",
@@ -46,7 +46,7 @@ export const UmbManagementApiOrvalConfig = defineConfig({
     },
     hooks: {
       // Fix ESM imports in generated files
-      afterAllFilesWrite: orvalImportFixer,
+      afterAllFilesWrite: orvalImportFixer as HookFunction,
     },
   },
 
@@ -54,7 +54,7 @@ export const UmbManagementApiOrvalConfig = defineConfig({
   // "umbraco-management-api-zod": {
   //   input: {
   //     target: "http://localhost:44391/umbraco/swagger/management/swagger.json",
-  //     validation: false,
+  //     unsafeDisableValidation: true,
   //   },
   //   output: {
   //     mode: "split",
