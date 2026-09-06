@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`post-ab-test-segment still returns the same generic 400 error for a real test's own unique, its real page key, and its real server-assigned segment value 1`] = `
 {

@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`post-ab-test-runtime-indication computes a runtime indication from minimal, caller-meaningful inputs 1`] = `
 {

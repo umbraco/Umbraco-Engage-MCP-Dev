@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`post-ab-test-variant-disable really disables a real, persisted variant — isDisabled flips to true afterwards 1`] = `
 {

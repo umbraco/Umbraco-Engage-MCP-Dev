@@ -176,7 +176,7 @@ jobs:
             fi
             echo "=== ${collection} ==="
             NODE_OPTIONS="--max-old-space-size=4096" node --experimental-vm-modules node_modules/jest/bin/jest.js \
-              --runInBand --testPathPattern="tools/${collection}/__tests__"
+              --runInBand --testPathPatterns="tools/${collection}/__tests__"
             if [ $? -ne 0 ]; then
               echo "*** FAILED: ${collection} ***"
               FAILED=1

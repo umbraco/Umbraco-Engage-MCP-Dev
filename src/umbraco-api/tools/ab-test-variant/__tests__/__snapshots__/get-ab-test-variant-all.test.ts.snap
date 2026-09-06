@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`get-ab-test-variant-all lists the real, persisted variant under its real parent abTestId 1`] = `
 {
