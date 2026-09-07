@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-traffic-filter-empty returns a blank traffic filter template with default field values 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "condition": "List",
+    "created": "NORMALIZED_DATE",
+    "createdByUmbracoUserName": "MCP API User",
+    "description": "",
+    "id": 0,
+    "isActive": true,
+    "key": "00000000-0000-0000-0000-000000000000",
+    "mode": "Block",
+    "name": "",
+    "type": "IpAddress",
+    "value": null,
+    "values": [],
+  },
+}
+`;

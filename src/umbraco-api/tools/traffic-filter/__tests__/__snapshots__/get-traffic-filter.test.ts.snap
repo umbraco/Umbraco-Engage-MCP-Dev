@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`get-traffic-filter gets a real, persisted traffic filter by its key 1`] = `
+{
+  "content": [],
+  "structuredContent": {
+    "condition": "Contains",
+    "created": "NORMALIZED_DATE",
+    "createdByUmbracoUserName": "NORMALIZED_USER",
+    "description": "test",
+    "id": "00000000-0000-0000-0000-000000000000",
+    "isActive": true,
+    "key": "00000000-0000-0000-0000-000000000000",
+    "mode": "Block",
+    "name": "_Test Traffic Filter",
+    "type": "UserAgent",
+    "value": "_TestAgent",
+    "values": [
+      "_TestAgent",
+    ],
+  },
+}
+`;

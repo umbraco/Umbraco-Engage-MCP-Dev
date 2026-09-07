@@ -1,33 +1,43 @@
 import { setupTestEnvironment, createMockRequestHandlerExtra, createSnapshotResult } from "./setup.js";
 import { PersonaBuilder } from "./helpers/persona-builder.js";
+import { normalizeVolatileFields } from "../../../../testing/normalize-volatile-fields.js";
 import tool from "../get/get-persona-all.js";
 
 describe("get-persona-all", () => {
   setupTestEnvironment();
-  it("returns all personas", async () => {
-    const result = await tool.handler({}, createMockRequestHandlerExtra());
-    expect(createSnapshotResult(result)).toMatchSnapshot();
+
+  let builder: PersonaBuilder | undefined;
+
+  afterEach(async () => {
+    if (builder) await builder.delete();
+    builder = undefined;
   });
 
-  // The test above only proves the endpoint returns a well-shaped response -
-  // it never proves the listing genuinely reflects real database state.
-  describe("with a real persona", () => {
-    let builder: PersonaBuilder | undefined;
+  it("finds a real, persisted persona in the full list", async () => {
+    builder = await new PersonaBuilder().create();
+    const context = createMockRequestHandlerExtra();
 
-    afterEach(async () => {
-      if (builder) await builder.delete();
-      builder = undefined;
-    });
+    const result = await tool.handler({}, context);
 
-    it("finds a real, persisted persona in the full list", async () => {
-      builder = await new PersonaBuilder().create();
-      const context = createMockRequestHandlerExtra();
+    expect(result.isError).toBeFalsy();
+    const items = (result.structuredContent as { items: { unique: string }[] }).items;
+    const found = items.filter((item) => item.unique === builder!.getUnique());
+    expect(found).toHaveLength(1);
 
-      const result = await tool.handler({}, context);
-
-      expect(result.isError).toBeFalsy();
-      const items = (result.structuredContent as { items: { unique: string }[] }).items;
-      expect(items.some((item) => item.unique === builder!.getUnique())).toBe(true);
-    });
+    const singleItemResult = { ...result, structuredContent: { items: found } };
+    const snapshot = normalizeVolatileFields(createSnapshotResult(singleItemResult)) as {
+      structuredContent?: { items: { unique: string }[] };
+    };
+    // `unique` is a fresh random guid every run (PersonaBuilder generates one
+    // per create()) - not covered by normalizeVolatileFields/
+    // createSnapshotResult (which only blanks a field literally named `id`),
+    // so blank it manually, same as applied-personalization's equivalent test.
+    if (snapshot.structuredContent) {
+      snapshot.structuredContent.items = snapshot.structuredContent.items.map((item) => ({
+        ...item,
+        unique: "00000000-0000-0000-0000-000000000000",
+      }));
+    }
+    expect(snapshot).toMatchSnapshot();
   });
 });

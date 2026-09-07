@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`get-ab-test-project-all returns all A/B test projects 1`] = `
+exports[`get-ab-test-project-all finds this fixture's own project in the full list 1`] = `
 {
   "content": [],
   "structuredContent": {
