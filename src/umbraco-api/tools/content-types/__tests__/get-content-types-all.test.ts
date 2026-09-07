@@ -4,7 +4,11 @@ import {
   createSnapshotResult,
 } from "./setup.js";
 import getContentTypesAllTool from "../get/get-content-types-all.js";
-import { DocumentTypeFixture, disconnectChainedCms } from "./helpers/document-type-fixture.js";
+import {
+  DocumentTypeFixture,
+  disconnectChainedCms,
+  TEST_CONTENT_TYPE_ALIAS,
+} from "./helpers/document-type-fixture.js";
 
 describe("get-content-types-all", () => {
   setupTestEnvironment();
@@ -20,9 +24,21 @@ describe("get-content-types-all", () => {
     await disconnectChainedCms();
   }, 30_000);
 
-  it("returns all Engage content types", async () => {
+  // The full list is real, unbounded, shared instance state - other
+  // collections' fixtures (and any leftover manual testing) can leave other
+  // content types in it. Filter down to just this fixture's own alias so the
+  // snapshot only covers what this test controls, matching the same fix
+  // already applied to get-ab-test-all.
+  it("finds this fixture's own content type in the full list", async () => {
     const context = createMockRequestHandlerExtra();
     const result = await getContentTypesAllTool.handler({}, context);
-    expect(createSnapshotResult(result)).toMatchSnapshot();
+
+    expect(result.isError).toBeFalsy();
+    const items = (result.structuredContent as { items: { alias: string }[] }).items;
+    const found = items.filter((item) => item.alias === TEST_CONTENT_TYPE_ALIAS);
+    expect(found).toHaveLength(1);
+
+    const singleItemResult = { ...result, structuredContent: { items: found } };
+    expect(createSnapshotResult(singleItemResult)).toMatchSnapshot();
   });
 });

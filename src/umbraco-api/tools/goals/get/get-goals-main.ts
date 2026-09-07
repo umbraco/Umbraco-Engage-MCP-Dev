@@ -16,7 +16,7 @@ const outputSchema = z.object({ items: getGoalsMainResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-goals-main",
   description:
-    "List goals from the 'main' goals endpoint - a separate collection from the `goal` (singular) tools despite covering similar data. The precise distinction from get-goals-all is not documented upstream and unconfirmed by testing; each returned item still carries its own `isMain` flag.",
+    "List goals flagged as 'main' (isMain: true) - a separate collection from the `goal` (singular) tools despite covering similar data. Confirmed empirically: unlike get-goals-all, this filters server-side to isMain:true goals only.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

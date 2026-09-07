@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`get-content-types-all returns all Engage content types 1`] = `
+exports[`get-content-types-all finds this fixture's own content type in the full list 1`] = `
 {
   "content": [],
   "structuredContent": {
