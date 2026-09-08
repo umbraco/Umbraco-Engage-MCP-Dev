@@ -20,6 +20,8 @@ import {
   createCollectionConfigLoader,
   shouldIncludeTool,
   handleCliCommands,
+  jsonSchemaObjectToZodObject,
+  useDraft202012ToolSchemas,
   type CollectionConfiguration,
 } from "@umbraco-cms/mcp-server-sdk";
 
@@ -38,15 +40,12 @@ import annotationsCollection from "./umbraco-api/tools/annotations/index.js";
 import appliedPersonalizationCollection from "./umbraco-api/tools/applied-personalization/index.js";
 import campaignGroupCollection from "./umbraco-api/tools/campaign-group/index.js";
 import campaignsCollection from "./umbraco-api/tools/campaigns/index.js";
-import cockpitCollection from "./umbraco-api/tools/cockpit/index.js";
-import cockpitAuthCollection from "./umbraco-api/tools/cockpit-auth/index.js";
 import configurationCollection from "./umbraco-api/tools/configuration/index.js";
 import contentScoringCollection from "./umbraco-api/tools/content-scoring/index.js";
 import contentTypesCollection from "./umbraco-api/tools/content-types/index.js";
 import culturesCollection from "./umbraco-api/tools/cultures/index.js";
 import customerJourneyCollection from "./umbraco-api/tools/customer-journey/index.js";
 import dataCleanupCollection from "./umbraco-api/tools/data-cleanup/index.js";
-import dataGenerationCollection from "./umbraco-api/tools/data-generation/index.js";
 import documentTypePermissionsCollection from "./umbraco-api/tools/document-type-permissions/index.js";
 import goalCollection from "./umbraco-api/tools/goal/index.js";
 import goalsCollection from "./umbraco-api/tools/goals/index.js";
@@ -146,15 +145,12 @@ const collections = [
   appliedPersonalizationCollection,
   campaignGroupCollection,
   campaignsCollection,
-  cockpitCollection,
-  cockpitAuthCollection,
   configurationCollection,
   contentScoringCollection,
   contentTypesCollection,
   culturesCollection,
   customerJourneyCollection,
   dataCleanupCollection,
-  dataGenerationCollection,
   documentTypePermissionsCollection,
   goalCollection,
   goalsCollection,
@@ -228,19 +224,20 @@ async function main() {
       const proxiedTools = await discoverProxiedTools(mcpClientManager);
 
       for (const pt of proxiedTools) {
-        // Register proxied tool with forwarding handler
-        // Note: We don't pass inputSchema since validation happens on the chained server
-        // and the MCP SDK expects Zod schemas, not raw JSON Schema objects
+        // Convert the chained server's JSON Schema inputSchema into a real
+        // Zod schema so the calling client learns the tool's actual
+        // parameters instead of an empty object.
         server.registerTool(
           pt.prefixedName,
           {
             description: `[Proxied from ${pt.serverName}] ${pt.originalTool.description || "No description"}`,
+            inputSchema: jsonSchemaObjectToZodObject(pt.originalTool.inputSchema),
           },
-          async (args: Record<string, unknown>): Promise<CallToolResult> => {
+          (async (args: Record<string, unknown>): Promise<CallToolResult> => {
             const { serverName, toolName } = parseProxiedToolName(pt.prefixedName);
             const result = await mcpClientManager.callTool(serverName, toolName, args);
             return result as CallToolResult;
-          }
+          }) as any,
         );
       }
 
@@ -252,6 +249,12 @@ async function main() {
       // Continue without proxied tools - local tools still work
     }
   }
+
+  // Called once, after every registerTool call above (main collections at
+  // module load, chained tools just above) has completed - McpServer only
+  // advertises the "tools" capability required to override ListTools at
+  // all once at least one tool has actually been registered.
+  useDraft202012ToolSchemas(server);
 
   const transport = new StdioServerTransport();
   await server.connect(transport);

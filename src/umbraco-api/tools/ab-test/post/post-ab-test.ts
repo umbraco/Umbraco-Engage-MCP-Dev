@@ -8,6 +8,7 @@ import {
 import { z } from "zod";
 import { postAbTestBody, postAbTestResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
 import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbracoEngageManagementApi.js";
+import { buildUmbracoPageVariants } from "./build-umbraco-page-variants.js";
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 type FullBody = z.infer<typeof postAbTestBody>;
@@ -36,7 +37,23 @@ const inputSchema = z.object({
   }).describe(
     "Must describe the SAME real, active goal as `goalId` - the server validates this object independently of a live lookup by `goalId`, so a mismatched goal here produces \"The selected goal should be active and valid\" even when `goalId` is correct.",
   ),
-  pageUnique: z.uuid().describe("The `unique` guid of the real, published Umbraco content page this test targets."),
+  pageUnique: z
+    .uuid()
+    .describe(
+      "The `unique` guid of the real, published Umbraco content page this test targets. For testType 'SplitUrl' this is specifically the benchmark 'Original' variant's page - the second variant redirects to `secondVariantPageUnique` instead.",
+    ),
+  secondVariantPageUnique: z
+    .uuid()
+    .nullish()
+    .describe(
+      "Required when testType is 'SplitUrl', and must differ from `pageUnique`: the real, published content page's unique guid the second (named) variant redirects visitors to. Must be omitted for SinglePage/MultiPage/ContentType tests, which show both variants on the same page(s) rather than redirecting to different URLs. A SplitUrl test needs two distinct pages, one per variant - omitting this produces the validation error 'At least two pages should be configured', and would otherwise leave the second variant with no page to redirect to.",
+    ),
+  projectId: z
+    .number()
+    .nullish()
+    .describe(
+      "The numeric `id` (NOT `unique`) of an existing A/B test project to group this test under - from post-ab-test-project's or get-ab-test-project-all's own `id` field. Omitting it creates a real, valid test that is retrievable via get-ab-test-all/get-ab-test but will not appear when browsing via get-ab-test-project/get-ab-test-project-details for any project, since a project's `abTests`/counts are populated strictly by matching `projectId`.",
+    ),
   secondVariantName: z.string().default("Variant B"),
   participationPercentage: z.number().default(1),
   minimumDetectableEffect: z.number().default(0.1),
@@ -45,14 +62,18 @@ const inputSchema = z.object({
 });
 const outputSchema = postAbTestResponse;
 
-function buildVariant(isBenchmark: boolean, name: string): FullBody["test"]["variants"][number] {
+function buildVariant(
+  isBenchmark: boolean,
+  name: string,
+  redirectNodeKey: string | null,
+): FullBody["test"]["variants"][number] {
   return {
     id: 0,
     unique: randomUUID(),
     abTestId: 0,
     name,
     description: null,
-    redirectNodeKey: null,
+    redirectNodeKey,
     css: null,
     javascript: null,
     created: new Date().toISOString(),
@@ -70,19 +91,26 @@ function buildVariant(isBenchmark: boolean, name: string): FullBody["test"]["var
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "post-ab-test",
   description:
-    "Create a new A/B test in Draft status against a real content page, comparing an implicit 'Original' benchmark variant to one named second variant. `goalId` and `goal` are both required and must describe the SAME real, active goal (see their own descriptions for why): a real goal with a mismatched/invalid `goal` object fails gracefully with validationResults.isValid=false, but a `goalId` that doesn't correspond to ANY real goal fails as a raw 500 error (a database foreign-key violation, not a clean validation message) - always resolve `goalId` from a real goal (e.g. via get-goal-details) first. The created test starts in Draft status - no tool in this collection can move it to Running.",
+    "Create a new A/B test in Draft status against a real content page, comparing an implicit 'Original' benchmark variant to one named second variant. `goalId` and `goal` are both required and must describe the SAME real, active goal (see their own descriptions for why): a real goal with a mismatched/invalid `goal` object fails gracefully with validationResults.isValid=false, but a `goalId` that doesn't correspond to ANY real goal fails as a raw 500 error (a database foreign-key violation, not a clean validation message) - always resolve `goalId` from a real goal (e.g. via get-goal-details) first. Pass `projectId` to group the test under an existing A/B test project (see `projectId`'s own description) - omitting it creates a real, valid test that will not appear when browsing by project. testType 'SplitUrl' additionally requires `secondVariantPageUnique` (see its own description) to give the second variant its own redirect page - passing it for any other testType, or omitting it for SplitUrl, is rejected with a validation error before any API call is made. The created test always starts in Draft status - this tool has no `startTime`/status field to set directly (Draft/Running/etc. is computed from timestamps, not settable at creation). Use post-ab-test-start afterwards to start or schedule it, and post-ab-test-stop to stop it.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["create"],
   annotations: { destructiveHint: false, idempotentHint: false },
   handler: async (params) => {
+    const isSplitUrl = params.testType === "SplitUrl";
+    const umbracoPageVariants = buildUmbracoPageVariants(
+      params.testType,
+      params.pageUnique,
+      params.secondVariantPageUnique,
+    );
+
     const now = new Date().toISOString();
     const body: FullBody = {
       test: {
         id: 0,
         unique: randomUUID(),
         created: now,
-        projectId: null,
+        projectId: params.projectId ?? null,
         goalId: params.goalId,
         status: "Draft",
         goal: {
@@ -110,19 +138,14 @@ const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
         participationPercentage: params.participationPercentage,
         minimumDetectableEffect: params.minimumDetectableEffect,
         variants: [
-          buildVariant(true, "Original"),
-          buildVariant(false, params.secondVariantName),
+          buildVariant(true, "Original", isSplitUrl ? params.pageUnique : null),
+          buildVariant(
+            false,
+            params.secondVariantName,
+            isSplitUrl ? (params.secondVariantPageUnique as string) : null,
+          ),
         ],
-        umbracoPageVariants: [
-          {
-            id: 0,
-            unique: params.pageUnique,
-            nodeName: null,
-            culture: null,
-            abTestId: null,
-            variesBySegment: false,
-          },
-        ],
+        umbracoPageVariants,
         contentTypes: [],
         winner: null,
         isCompleted: false,

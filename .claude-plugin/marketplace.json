@@ -1,0 +1,37 @@
+{
+  "name": "umb-engage-mcp-plugins",
+  "owner": {
+    "name": "Umbraco Community",
+    "email": "pjw@umbraco.com"
+  },
+  "metadata": {
+    "description": "Claude Code plugins for the Umbraco Engage MCP Server - CLI operation, MCP client setup, and reference recipes for building A/B tests, personalization, and goals",
+    "version": "1.0.0-alpha.1",
+    "homepage": "https://github.com/umbraco/Umbraco-Engage-MCP-Dev"
+  },
+  "plugins": [
+    {
+      "name": "umb-engage-mcp",
+      "source": "./plugins-server",
+      "description": "Skills for CLI operation of the Umbraco Engage MCP server, MCP client setup, and content-structure recipes (A/B tests, personalization, goals)",
+      "version": "1.0.0-alpha.1",
+      "category": "operations",
+      "author": {
+        "name": "Phil W",
+        "email": "pjw@umbraco.com",
+        "url": "https://github.com/hifi-phil"
+      },
+      "homepage": "https://github.com/umbraco/Umbraco-Engage-MCP-Dev/tree/main/plugins-server",
+      "keywords": [
+        "mcp",
+        "umbraco",
+        "engage",
+        "model-context-protocol",
+        "ab-testing",
+        "personalization",
+        "cli",
+        "configuration"
+      ]
+    }
+  ]
+}

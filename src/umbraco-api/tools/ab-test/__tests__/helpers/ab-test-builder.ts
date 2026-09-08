@@ -29,6 +29,9 @@ export class AbTestBuilder {
   private name: string = TEST_AB_TEST_NAME;
   private goalName: string = TEST_AB_TEST_GOAL_NAME;
   private contentPage = new ContentPageFixture();
+  private projectId?: number;
+  private testType: "SinglePage" | "MultiPage" | "ContentType" | "SplitUrl" = "SinglePage";
+  private secondPage?: ContentPageFixture;
 
   private createdId?: number;
   private createdUnique?: string;
@@ -43,6 +46,18 @@ export class AbTestBuilder {
     return this;
   }
 
+  withProjectId(projectId: number): this {
+    this.projectId = projectId;
+    return this;
+  }
+
+  /** Builds a SplitUrl test instead: creates a second real published page for the second variant to redirect to. */
+  withSplitUrl(): this {
+    this.testType = "SplitUrl";
+    this.secondPage = new ContentPageFixture();
+    return this;
+  }
+
   async create(): Promise<this> {
     const context = createMockRequestHandlerExtra();
 
@@ -50,6 +65,9 @@ export class AbTestBuilder {
     // real page key (create-document's returned id IS the content node's key).
     await this.contentPage.create();
     const pageKey = this.contentPage.getKey();
+    if (this.secondPage) {
+      await this.secondPage.create();
+    }
 
     // 2. Real goal (no delete-goal endpoint exists in this collection - see
     // delete() below for the accepted-orphan tradeoff, same as goal's own tests).
@@ -113,7 +131,7 @@ export class AbTestBuilder {
     const created = await postAbTestTool.handler(
       {
         name: this.name,
-        testType: "SinglePage",
+        testType: this.testType,
         goalId: goalNumericId,
         goal: {
           key: goalUnique,
@@ -127,6 +145,8 @@ export class AbTestBuilder {
           isInvalid: false,
         },
         pageUnique: pageKey,
+        secondVariantPageUnique: this.secondPage?.getKey(),
+        projectId: this.projectId,
         secondVariantName: "Variant B",
         participationPercentage: 1,
         minimumDetectableEffect: 0.1,
@@ -175,6 +195,14 @@ export class AbTestBuilder {
     return this.contentPage.getKey();
   }
 
+  /** The second variant's real page (SplitUrl tests only - see withSplitUrl()). */
+  getSecondVariantPageKey(): string {
+    if (!this.secondPage) {
+      throw new Error("Not a SplitUrl test - call withSplitUrl() first.");
+    }
+    return this.secondPage.getKey();
+  }
+
   async delete(): Promise<void> {
     if (this.createdUnique) {
       const context = createMockRequestHandlerExtra();
@@ -192,5 +220,8 @@ export class AbTestBuilder {
     // goal/__tests__/get-goal-details.test.ts) - it's left as an orphan.
 
     await this.contentPage.delete();
+    if (this.secondPage) {
+      await this.secondPage.delete();
+    }
   }
 }

@@ -1,10 +1,30 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`get-persona-all returns all personas 1`] = `
+exports[`get-persona-all finds a real, persisted persona in the full list 1`] = `
 {
   "content": [],
   "structuredContent": {
-    "items": [],
+    "items": [
+      {
+        "createdByUmbracoUserKey": "00000000-0000-0000-0000-000000000000",
+        "createdByUmbracoUserName": "NORMALIZED_USER",
+        "createdOn": "NORMALIZED_DATE",
+        "description": "",
+        "expiration": 0,
+        "expirationType": "never",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "minimumDeviation": 0,
+        "minimumDeviationType": "Absolute",
+        "minimumParticipationScoreThreshold": 25,
+        "personas": [],
+        "title": "_Test Persona",
+        "unique": "00000000-0000-0000-0000-000000000000",
+        "updatedByUmbracoUserKey": null,
+        "updatedByUmbracoUserName": null,
+        "updatedOn": "NORMALIZED_DATE",
+        "upperScoreLimit": 10,
+      },
+    ],
   },
 }
 `;

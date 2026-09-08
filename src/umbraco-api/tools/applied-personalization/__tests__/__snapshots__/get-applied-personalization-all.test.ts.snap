@@ -1,10 +1,31 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`get-applied-personalization-all returns all applied personalizations 1`] = `
+exports[`get-applied-personalization-all finds a real, persisted applied personalization in the full list 1`] = `
 {
   "content": [],
   "structuredContent": {
-    "items": [],
+    "items": [
+      {
+        "contentTypes": [],
+        "created": "NORMALIZED_DATE",
+        "createdByUmbracoUserName": "NORMALIZED_USER",
+        "css": "",
+        "description": "",
+        "id": "00000000-0000-0000-0000-000000000000",
+        "isActive": true,
+        "javascript": "",
+        "name": "_Test Applied Personalization",
+        "pages": [],
+        "previewUrl": null,
+        "segment": null,
+        "segmentId": 0,
+        "started": null,
+        "type": "SinglePage",
+        "umbracoSegmentAlias": "NORMALIZED_SEGMENT_ALIAS",
+        "unique": "00000000-0000-0000-0000-000000000000",
+        "updatedByUmbracoUserName": null,
+      },
+    ],
   },
 }
 `;

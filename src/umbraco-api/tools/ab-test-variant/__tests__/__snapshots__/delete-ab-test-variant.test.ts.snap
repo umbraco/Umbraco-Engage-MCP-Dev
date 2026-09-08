@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`delete-ab-test-variant returns success rather than throwing for a non-existent variantId 1`] = `
 {

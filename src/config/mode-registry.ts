@@ -68,7 +68,6 @@ export const toolModes: ToolModeDefinition[] = [
       'document-type-permissions',
       'user-group-permissions',
       'data-cleanup',
-      'data-generation',
       'traffic-filter',
       'suspicious-activity'
     ]
@@ -78,12 +77,6 @@ export const toolModes: ToolModeDefinition[] = [
     displayName: 'Profiles',
     description: 'Visitor profiles',
     collections: ['profile']
-  },
-  {
-    name: 'cockpit',
-    displayName: 'Cockpit',
-    description: 'Engage Cockpit and its authentication',
-    collections: ['cockpit', 'cockpit-auth']
   },
 ];
 

@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`get-reporting-goal-personalization-performance-by-segment-id returns goal personalization performance for segmentId=0 1`] = `
 {

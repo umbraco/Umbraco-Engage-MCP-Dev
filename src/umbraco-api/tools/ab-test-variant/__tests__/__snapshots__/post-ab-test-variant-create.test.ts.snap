@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`post-ab-test-variant-create creates a real, additional variant against a real, persisted parent A/B test 1`] = `
 {

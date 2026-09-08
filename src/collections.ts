@@ -29,15 +29,12 @@ import annotationsCollection from "./umbraco-api/tools/annotations/index.js";
 import appliedPersonalizationCollection from "./umbraco-api/tools/applied-personalization/index.js";
 import campaignGroupCollection from "./umbraco-api/tools/campaign-group/index.js";
 import campaignsCollection from "./umbraco-api/tools/campaigns/index.js";
-import cockpitCollection from "./umbraco-api/tools/cockpit/index.js";
-import cockpitAuthCollection from "./umbraco-api/tools/cockpit-auth/index.js";
 import configurationCollection from "./umbraco-api/tools/configuration/index.js";
 import contentScoringCollection from "./umbraco-api/tools/content-scoring/index.js";
 import contentTypesCollection from "./umbraco-api/tools/content-types/index.js";
 import culturesCollection from "./umbraco-api/tools/cultures/index.js";
 import customerJourneyCollection from "./umbraco-api/tools/customer-journey/index.js";
 import dataCleanupCollection from "./umbraco-api/tools/data-cleanup/index.js";
-import dataGenerationCollection from "./umbraco-api/tools/data-generation/index.js";
 import documentTypePermissionsCollection from "./umbraco-api/tools/document-type-permissions/index.js";
 import goalCollection from "./umbraco-api/tools/goal/index.js";
 import goalsCollection from "./umbraco-api/tools/goals/index.js";
@@ -66,15 +63,12 @@ export const collections = [
   appliedPersonalizationCollection,
   campaignGroupCollection,
   campaignsCollection,
-  cockpitCollection,
-  cockpitAuthCollection,
   configurationCollection,
   contentScoringCollection,
   contentTypesCollection,
   culturesCollection,
   customerJourneyCollection,
   dataCleanupCollection,
-  dataGenerationCollection,
   documentTypePermissionsCollection,
   goalCollection,
   goalsCollection,

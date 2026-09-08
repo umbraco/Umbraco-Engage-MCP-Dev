@@ -1,0 +1,5 @@
+{
+  "name": "umb-engage-mcp",
+  "version": "1.0.0-alpha.1",
+  "description": "Skills for using the Umbraco Engage MCP server - CLI operation, MCP client setup, and content-structure recipes for A/B tests, personalization, and goals"
+}

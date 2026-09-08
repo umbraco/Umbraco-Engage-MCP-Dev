@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`post-heatmaps-generate-scroll-heatmap returns an empty heatmap for an unknown page 1`] = `
 {
