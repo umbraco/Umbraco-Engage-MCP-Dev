@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`get-ab-test-variant returns an empty body rather than throwing for a non-existent id 1`] = `
 {
