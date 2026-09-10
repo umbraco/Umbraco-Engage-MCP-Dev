@@ -5,6 +5,18 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [17.0.0-beta.1] - 2026-09-10
+
+### Changed
+
+- Realigned the package version scheme with the Umbraco CMS major version it targets
+  (CMS 17.x), moving from `1.0.0-alpha.x` to `17.0.0-beta.x`.
+- Enabled the public npm beta release stage in the Azure Pipelines build; the package
+  now also publishes to the public npm registry under the `beta` dist-tag, in addition
+  to the existing MyGet prerelease feed.
+- Security rollup: bumped `qs` (6.15.3 → 6.16.0), `fast-uri` (3.1.5 → 3.1.7), and `hono`
+  (4.13.3 → 4.13.7) to address upstream advisories.
+
 ## [1.0.0-alpha.2] - 2026-09-08
 
 ### Added
