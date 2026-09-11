@@ -27,7 +27,7 @@ Add the server to your MCP client configuration (Claude Desktop, Cursor, VS Code
   "mcpServers": {
     "umbraco-engage": {
       "command": "npx",
-      "args": ["umbraco-engage-editor-mcp"],
+      "args": ["@umbraco-engage/mcp-dev"],
       "env": {
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",
         "UMBRACO_CLIENT_ID": "your-api-user-id",
