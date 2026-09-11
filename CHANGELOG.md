@@ -5,6 +5,17 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [17.0.0-beta.2] - 2026-09-11
+
+### Fixed
+
+- The `17.0.0-beta.1` npm publish failed with `403 Forbidden`: the CI npm credentials are
+  scoped to the `@umbraco-engage`/`@umbraco-cms` npm orgs and reject unscoped package names.
+  Renamed the package from `umbraco-engage-editor-mcp` to `@umbraco-engage/mcp-dev` (matching
+  the existing `@umbraco-engage/backoffice` and `@umbraco-cms/mcp-dev` scoping convention) so
+  the publish is authorized. The CLI binary is now `umbraco-engage-mcp-dev`; the MCP server's
+  own protocol-level `name` (used in tool-call prefixes) is unchanged.
+
 ## [17.0.0-beta.1] - 2026-09-10
 
 ### Changed

@@ -1,11 +1,11 @@
 ---
 name: umb-engage-mcp-setup
-description: Guide for installing and configuring the Umbraco Engage MCP server (umbraco-engage-editor-mcp) as a live MCP connection in an AI client. Use when the user wants to set up, connect, install, or troubleshoot the Engage MCP server itself (as opposed to running it standalone via the CLI).
+description: Guide for installing and configuring the Umbraco Engage MCP server (@umbraco-engage/mcp-dev) as a live MCP connection in an AI client. Use when the user wants to set up, connect, install, or troubleshoot the Engage MCP server itself (as opposed to running it standalone via the CLI).
 ---
 
 # Umbraco Engage MCP Server — Setup Guide
 
-This covers running `umbraco-engage-editor-mcp` as a live MCP server connected to an AI client (Claude Desktop, Claude Code, Cursor, VS Code, etc). For debugging the package directly on the command line (`--list-tools`, `--call`, `--debug-config`), see the `umb-engage-dev-cli` skill instead — the same env vars apply either way. For end-to-end examples of building A/B tests and personalization once connected, see `umb-engage-content-recipes`.
+This covers running `@umbraco-engage/mcp-dev` as a live MCP server connected to an AI client (Claude Desktop, Claude Code, Cursor, VS Code, etc). For debugging the package directly on the command line (`--list-tools`, `--call`, `--debug-config`), see the `umb-engage-dev-cli` skill instead — the same env vars apply either way. For end-to-end examples of building A/B tests and personalization once connected, see `umb-engage-content-recipes`.
 
 [Umbraco Engage](https://umbraco.com/products/umbraco-engage/) is a marketing/analytics/personalization add-on for Umbraco CMS. This MCP server talks to Engage's own Management API, and by default also chains to the [Umbraco CMS MCP server](https://www.npmjs.com/package/@umbraco-cms/mcp-dev), proxying its tools with a `cms:` prefix — so a single connection gives an agent both Engage and CMS capabilities.
 
@@ -24,7 +24,7 @@ When the client is a coding agent working against a project (Claude Code, Cursor
   "mcpServers": {
     "umbraco-engage": {
       "command": "npx",
-      "args": ["umbraco-engage-editor-mcp"],
+      "args": ["@umbraco-engage/mcp-dev"],
       "env": {
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",
         "UMBRACO_CLIENT_ID": "your-api-user-id",
