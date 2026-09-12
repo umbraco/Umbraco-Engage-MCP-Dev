@@ -133,7 +133,7 @@ stages:
           displayName: Authenticate with npm
           inputs:
             workingFile: $(Pipeline.Workspace)/npm-package/.npmrc
-            customEndpoint: "NPM - Umbraco Backoffice"
+            customEndpoint: "NPM - Umbraco Engage"
         - script: |
             # Setup temp npm project to load in defaults from the local .npmrc
             npm init -y
