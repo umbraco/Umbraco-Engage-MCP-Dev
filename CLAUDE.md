@@ -187,7 +187,7 @@ This script was copied from `umbraco-mcp-dev-cms/scripts/`. **Check the hardcode
 `npm run build` runs `umbraco-mcp-generate-types` as a `postbuild` step. This walks the compiled `dist/collections.js`, runs every tool's input/output Zod schema through codegen, and writes a typed registry to `dist/tool-types.d.ts`. The `./tool-types` subpath in `package.json#exports` makes this importable by anyone who depends on this package and wants to chain to it with type safety:
 
 ```ts
-import type { EngageTools } from "umbraco-engage-editor-mcp/tool-types";
+import type { EngageTools } from "@umbraco-engage/mcp-dev/tool-types";
 ```
 
 If your MCP is private/internal and no other MCP will chain to it, you can remove the `postbuild` script and the `./tool-types` export — neither is required for the server to run.

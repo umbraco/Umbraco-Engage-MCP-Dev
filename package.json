@@ -1,6 +1,6 @@
 {
-  "name": "umbraco-engage-editor-mcp",
-  "version": "17.0.0-beta.1",
+  "name": "@umbraco-engage/mcp-dev",
+  "version": "17.0.0-beta.2",
   "type": "module",
   "description": "MCP server for Umbraco Engage — A/B testing, personalization, personas, segments, campaigns, and analytics tools for AI agents.",
   "main": "dist/index.js",
@@ -12,7 +12,7 @@
     }
   },
   "bin": {
-    "umbraco-engage-editor-mcp": "./dist/index.js"
+    "umbraco-engage-mcp-dev": "./dist/index.js"
   },
   "scripts": {
     "clean": "rimraf dist",

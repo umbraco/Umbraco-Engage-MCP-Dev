@@ -6,7 +6,7 @@
  *
  * @example
  * ```typescript
- * import { collections, allModes, allModeNames, allSliceNames } from "umbraco-engage-editor-mcp/collections";
+ * import { collections, allModes, allModeNames, allSliceNames } from "@umbraco-engage/mcp-dev/collections";
  *
  * manager.registerServer({
  *   transport: "in-process",
