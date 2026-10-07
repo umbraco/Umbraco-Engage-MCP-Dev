@@ -83,8 +83,6 @@ stages:
         sbom_ecosystem: npm
         sbom_path: .
         sbom_version_from: package.json # v<major> of package.json, e.g. 17.0.0-beta.2 -> v17
-        sbom_dt_base_url: DT_BASE_URL
-        sbom_dt_api_key: DT_API_KEY
 
 - stage: Deploy_Prerelease
   displayName: Prerelease (MyGet)
