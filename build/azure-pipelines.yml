@@ -7,12 +7,22 @@ trigger:
     - v*/dev
     - feature/*
 
+resources:
+  repositories:
+  - repository: build
+    type: github
+    name: Umbraco/Umbraco.Build
+    endpoint: github.com_umbraco
+
 pool:
   vmImage: 'ubuntu-latest'
 
 variables:
   - name: nodeVersion
     value: '22.x'
+  # Dependency-Track product name
+  - name: productName
+    value: 'Umbraco.Engage.Mcp-Dev'
   - name: myGetRegistry
     value: 'https://www.myget.org/F/umbracoprereleases/npm/'
   # npm-type service connection in ADO holding the MyGet API key.
@@ -58,11 +68,30 @@ stages:
         targetPath: '$(Build.ArtifactStagingDirectory)'
         artifact: 'npm-package'
 
+# Runs in parallel with the build and gates both release stages: a failed SBOM (e.g. a license policy
+# violation) must stop a publish. main only, so the release stages' own main condition still holds.
+- stage: GenerateSBOM
+  displayName: Generate SBOM
+  dependsOn: []
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+  jobs:
+  - job: GenerateSBOM
+    displayName: Generate SBOM
+    steps:
+    - template: devops/templates/generate-sbom-template.yml@build
+      parameters:
+        sbom_ecosystem: npm
+        sbom_path: .
+        sbom_version_from: package.json # v<major> of package.json, e.g. 17.0.0-beta.2 -> v17
+        sbom_dt_base_url: DT_BASE_URL
+        sbom_dt_api_key: DT_API_KEY
+
 - stage: Deploy_Prerelease
   displayName: Prerelease (MyGet)
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
   dependsOn:
     - BuildAndTest
+    - GenerateSBOM
   jobs:
     - job: Publish
       displayName: Push to MyGet
@@ -115,6 +144,7 @@ stages:
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
   dependsOn:
     - BuildAndTest
+    - GenerateSBOM
   jobs:
     - job: Publish
       displayName: Push to NPM
