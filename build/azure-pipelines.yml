@@ -14,6 +14,12 @@ resources:
     name: Umbraco/Umbraco.Build
     endpoint: github.com_umbraco
 
+parameters:
+  - name: sbom_generate
+    displayName: Generate SBOM
+    type: boolean
+    default: false
+
 pool:
   vmImage: 'ubuntu-latest'
 
@@ -69,11 +75,12 @@ stages:
         artifact: 'npm-package'
 
 # Runs in parallel with the build and gates both release stages: a failed SBOM (e.g. a license policy
-# violation) must stop a publish. main only, so the release stages' own main condition still holds.
+# violation) must stop a publish. Runs on main, or on any branch when sbom_generate is set (a forced run
+# is not flagged isLatest in Dependency-Track).
 - stage: GenerateSBOM
   displayName: Generate SBOM
   dependsOn: []
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+  condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq('${{ parameters.sbom_generate }}', 'true'))
   jobs:
   - job: GenerateSBOM
     displayName: Generate SBOM
@@ -83,6 +90,7 @@ stages:
         sbom_ecosystem: npm
         sbom_path: .
         sbom_version_from: package.json # v<major> of package.json, e.g. 17.0.0-beta.2 -> v17
+        sbom_forced_generate: ${{ parameters.sbom_generate }}
 
 - stage: Deploy_Prerelease
   displayName: Prerelease (MyGet)
