@@ -3,6 +3,7 @@ import {
   setupTestEnvironment,
   createMockRequestHandlerExtra,
   createSnapshotResult,
+  getResultText,
 } from "./setup.js";
 import postAbTestVariantCreateTool from "../post/post-ab-test-variant-create.js";
 import deleteAbTestVariantTool from "../delete/delete-ab-test-variant.js";
@@ -55,7 +56,7 @@ describe("post-ab-test-variant-create", () => {
     // variant row for the given testId and the database rejects it with a
     // FOREIGN KEY constraint violation (HTTP 500), surfaced as an error.
     expect(result.isError).toBe(true);
-    expect(String(result.structuredContent)).toContain("FOREIGN KEY constraint");
+    expect(getResultText(result)).toContain("FOREIGN KEY constraint");
   });
 
   it("creates a real, additional variant against a real, persisted parent A/B test", async () => {
