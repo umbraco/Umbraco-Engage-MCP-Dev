@@ -3,6 +3,7 @@ import {
   setupTestEnvironment,
   createMockRequestHandlerExtra,
   createSnapshotResult,
+  validateErrorResult,
 } from "./setup.js";
 import getAbTestTool from "../get/get-ab-test.js";
 import { AbTestBuilder } from "./helpers/ab-test-builder.js";
@@ -45,8 +46,7 @@ describe("get-ab-test", () => {
     );
 
     expect(result.isError).toBe(true);
-    const structuredContent = result.structuredContent as { status?: number };
-    expect(structuredContent?.status).toBe(404);
+    expect(validateErrorResult(result).status).toBe(404);
   });
 
   it("returns the real, persisted A/B test for a real id", async () => {

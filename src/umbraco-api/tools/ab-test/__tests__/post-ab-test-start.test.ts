@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 import {
   setupTestEnvironment,
   createMockRequestHandlerExtra,
+  getResultText,
 } from "./setup.js";
 import postAbTestStartTool from "../post/post-ab-test-start.js";
 import postAbTestStopTool from "../post/post-ab-test-stop.js";
@@ -100,7 +101,7 @@ describe("post-ab-test-start", () => {
     );
 
     expect(result.isError).toBe(true);
-    expect(JSON.stringify(result.structuredContent)).toContain(
+    expect(getResultText(result)).toContain(
       "Cannot restart an already-stopped test",
     );
 
@@ -145,7 +146,7 @@ describe("post-ab-test-start", () => {
     );
 
     expect(result.isError).toBe(true);
-    expect(JSON.stringify(result.structuredContent)).toContain(
+    expect(getResultText(result)).toContain(
       "only valid for testType SplitUrl",
     );
 

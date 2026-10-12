@@ -2,11 +2,12 @@
 
 exports[`post-ab-test-segment still returns the same generic 400 error for a real test's own unique, its real page key, and its real server-assigned segment value 1`] = `
 {
-  "content": [],
+  "content": [
+    {
+      "text": "{"status":400,"detail":"Bad Request"}",
+      "type": "text",
+    },
+  ],
   "isError": true,
-  "structuredContent": {
-    "detail": "Bad Request",
-    "status": 400,
-  },
 }
 `;

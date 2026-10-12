@@ -3,6 +3,7 @@ import {
   setupTestEnvironment,
   createMockRequestHandlerExtra,
   createSnapshotResult,
+  validateErrorResult,
 } from "./setup.js";
 import postAbTestVariantDisableTool from "../post/post-ab-test-variant-disable.js";
 import getAbTestVariantTool from "../get/get-ab-test-variant.js";
@@ -43,7 +44,7 @@ describe("post-ab-test-variant-disable", () => {
     // resource (which return HTTP 200 with an empty body for a
     // non-existent id), disable returns a genuine HTTP 404.
     expect(result.isError).toBe(true);
-    expect(result.structuredContent).toEqual({
+    expect(validateErrorResult(result)).toEqual({
       status: 404,
       detail: "Not Found",
     });

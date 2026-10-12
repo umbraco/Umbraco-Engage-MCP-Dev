@@ -1,6 +1,7 @@
 import {
   setupTestEnvironment,
   createMockRequestHandlerExtra,
+  validateErrorResult,
   GoalBuilder,
   GoalTestHelper,
   TEST_GOAL_TYPE_ID,
@@ -68,6 +69,6 @@ describe("get-goal-details", () => {
     const result = await tool.handler({ id: TEST_NON_EXISTENT_ID }, context);
 
     expect(result.isError).toBe(true);
-    expect((result.structuredContent as { status: number }).status).toBe(404);
+    expect(validateErrorResult(result).status).toBe(404);
   });
 });
