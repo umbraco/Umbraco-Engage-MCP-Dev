@@ -4,7 +4,7 @@ exports[`get-content-scoring-all returns a 400 error when unique is omitted desp
 {
   "content": [
     {
-      "text": "{"status":400,"detail":"Bad Request"}",
+      "text": "{"status":400,"title":"Bad Request"}",
       "type": "text",
     },
   ],
