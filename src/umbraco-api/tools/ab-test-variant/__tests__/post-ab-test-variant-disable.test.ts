@@ -46,7 +46,7 @@ describe("post-ab-test-variant-disable", () => {
     expect(result.isError).toBe(true);
     expect(validateErrorResult(result)).toEqual({
       status: 404,
-      detail: "Not Found",
+      title: "Not Found",
     });
   });
 
