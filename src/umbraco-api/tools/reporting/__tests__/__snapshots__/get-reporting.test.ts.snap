@@ -4,7 +4,7 @@ exports[`get-reporting returns a 400 error when segmentId is omitted despite bei
 {
   "content": [
     {
-      "text": "{"status":400,"detail":"Bad Request"}",
+      "text": "{"status":400,"title":"Bad Request"}",
       "type": "text",
     },
   ],
