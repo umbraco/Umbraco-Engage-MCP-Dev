@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 import {
   setupTestEnvironment,
   createMockRequestHandlerExtra,
+  getResultText,
 } from "./setup.js";
 import postAbTestStartTool from "../post/post-ab-test-start.js";
 import postAbTestStopTool from "../post/post-ab-test-stop.js";
@@ -94,7 +95,7 @@ describe("post-ab-test-stop", () => {
     );
 
     expect(result.isError).toBe(true);
-    expect(JSON.stringify(result.structuredContent)).toContain(
+    expect(getResultText(result)).toContain(
       "Cannot stop a test that was never started",
     );
 
@@ -122,7 +123,7 @@ describe("post-ab-test-stop", () => {
     );
 
     expect(result.isError).toBe(true);
-    expect(JSON.stringify(result.structuredContent)).toContain(
+    expect(getResultText(result)).toContain(
       "only valid for testType SplitUrl",
     );
 

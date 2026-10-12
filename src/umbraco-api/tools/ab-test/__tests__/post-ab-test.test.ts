@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto";
 import {
   setupTestEnvironment,
   createMockRequestHandlerExtra,
+  getResultText,
 } from "./setup.js";
 import postAbTestTool from "../post/post-ab-test.js";
 import getAbTestViewModelTool from "../get/get-ab-test-view-model.js";
@@ -56,7 +57,7 @@ describe("post-ab-test", () => {
     );
 
     expect(result.isError).toBe(true);
-    expect(String(result.structuredContent)).toContain("FOREIGN KEY constraint");
+    expect(getResultText(result)).toContain("FOREIGN KEY constraint");
   });
 
   it("creates a real, persisted A/B test from minimal caller-supplied fields", async () => {
@@ -159,7 +160,7 @@ describe("post-ab-test", () => {
     );
 
     expect(result.isError).toBe(true);
-    expect(JSON.stringify(result.structuredContent)).toContain(
+    expect(getResultText(result)).toContain(
       "secondVariantPageUnique is required",
     );
   });
@@ -179,7 +180,7 @@ describe("post-ab-test", () => {
     );
 
     expect(result.isError).toBe(true);
-    expect(JSON.stringify(result.structuredContent)).toContain(
+    expect(getResultText(result)).toContain(
       "only valid for testType SplitUrl",
     );
   });
@@ -199,7 +200,7 @@ describe("post-ab-test", () => {
     );
 
     expect(result.isError).toBe(true);
-    expect(JSON.stringify(result.structuredContent)).toContain(
+    expect(getResultText(result)).toContain(
       "must differ from pageUnique",
     );
   });
