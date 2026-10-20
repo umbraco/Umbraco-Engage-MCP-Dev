@@ -3,6 +3,7 @@ import {
   setupTestEnvironment,
   createMockRequestHandlerExtra,
   createSnapshotResult,
+  validateErrorResult,
 } from "./setup.js";
 import getAbTestViewModelTool from "../get/get-ab-test-view-model.js";
 import { AbTestBuilder } from "./helpers/ab-test-builder.js";
@@ -45,8 +46,7 @@ describe("get-ab-test-view-model", () => {
     );
 
     expect(result.isError).toBe(true);
-    const structuredContent = result.structuredContent as { status?: number };
-    expect(structuredContent?.status).toBe(404);
+    expect(validateErrorResult(result).status).toBe(404);
   });
 
   it("returns the real, persisted A/B test's view model for a real unique", async () => {

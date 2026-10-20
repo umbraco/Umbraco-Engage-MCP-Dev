@@ -2,11 +2,12 @@
 
 exports[`get-heatmaps-variants returns heatmap variants for an unknown page 1`] = `
 {
-  "content": [],
+  "content": [
+    {
+      "text": "{"status":404,"title":"Not Found"}",
+      "type": "text",
+    },
+  ],
   "isError": true,
-  "structuredContent": {
-    "detail": "Not Found",
-    "status": 404,
-  },
 }
 `;

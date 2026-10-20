@@ -1,4 +1,8 @@
-import { setupTestEnvironment, createMockRequestHandlerExtra } from "./setup.js";
+import {
+  setupTestEnvironment,
+  createMockRequestHandlerExtra,
+  getResultText,
+} from "./setup.js";
 import tool from "../post/post-ab-test-variant.js";
 
 const TEST_NON_EXISTENT_AB_TEST_ID = 999999999;
@@ -33,6 +37,6 @@ describe("post-ab-test-variant", () => {
     );
 
     expect(result.isError).toBe(true);
-    expect(String(result.structuredContent)).toContain("FOREIGN KEY constraint");
+    expect(getResultText(result)).toContain("FOREIGN KEY constraint");
   });
 });
