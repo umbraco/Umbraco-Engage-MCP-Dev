@@ -36,7 +36,7 @@ DB_NAME="umbraco-mcp-engage-$DIR_SLUG"
 git -C "$PROJECT_DIR" fetch origin 2>/dev/null || true
 
 BASE_BRANCH=""
-for candidate in dev main master; do
+for candidate in v18/dev v18/main; do
   if git -C "$PROJECT_DIR" rev-parse --verify "origin/$candidate" >/dev/null 2>&1; then
     BASE_BRANCH="origin/$candidate"
     break
@@ -44,7 +44,7 @@ for candidate in dev main master; do
 done
 
 if [ -z "$BASE_BRANCH" ]; then
-  echo "Error: could not find base branch (dev, main, or master)" >&2
+  echo "Error: could not find base branch (v18/dev or v18/main)" >&2
   exit 1
 fi
 
