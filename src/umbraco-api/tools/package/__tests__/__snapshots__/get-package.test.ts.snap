@@ -17,7 +17,7 @@ exports[`get-package returns Umbraco Engage package information 1`] = `
     "licenseStatus": "Valid",
     "monthlyPageviewLimit": 2147483647,
     "tierName": "Unknown",
-    "version": "17.2.1+cb3108d",
+    "version": "18.2.0+1aa412a",
     "whitelistedDomainRegexes": [
       "^localhost$",
       "^.*\\.local$",

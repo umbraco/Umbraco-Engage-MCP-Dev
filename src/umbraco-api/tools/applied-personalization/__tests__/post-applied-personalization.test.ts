@@ -40,7 +40,7 @@ describe("post-applied-personalization", () => {
         isActive: true,
         css: null,
         javascript: null,
-        segmentId: null,
+        segmentKey: null,
         umbracoSegmentAlias: null,
         pages: [],
         contentTypes: [],

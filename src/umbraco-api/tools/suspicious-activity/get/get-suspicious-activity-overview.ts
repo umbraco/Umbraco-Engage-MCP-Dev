@@ -15,7 +15,7 @@ const outputSchema = getSuspiciousActivityOverviewResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-suspicious-activity-overview",
   description:
-    "List visitors flagged with unusually high pageview counts (possible bots/scrapers), with their IP address and user agent. Supports `skip`/`take` pagination; use the response's `totalResults` to know when to stop paging.",
+    "List visitors flagged with unusually high pageview counts (possible bots/scrapers), with their IP address and user agent. Each visitor carries a `visitorType` (Person or NonPerson); pass `filter` ('All' by default, 'Person' or 'NonPerson') to narrow the list. Supports `skip`/`take` pagination; use the response's `totalResults` to know when to stop paging.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["list"],

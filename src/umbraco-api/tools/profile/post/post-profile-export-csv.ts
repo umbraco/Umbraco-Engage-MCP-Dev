@@ -9,7 +9,10 @@ import { postProfileExportCsvBody } from "../../../api/generated/umbracoEngageMa
 import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbracoEngageManagementApi.js";
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
-type FullBody = z.infer<typeof postProfileExportCsvBody>;
+// Engage 18's spec makes the request body nullable, so orval generates
+// `union([null, object])`; the tools always send the object member.
+const requestBody = postProfileExportCsvBody.options[1];
+type FullBody = z.infer<typeof requestBody>;
 
 // `skip`/`take` default sensibly instead of being required with no
 // guidance - withStandardDecorators also auto-converts them to cursor-based
@@ -18,19 +21,19 @@ type FullBody = z.infer<typeof postProfileExportCsvBody>;
 // `activeRange.from`/`activeRange.to` are flattened to top-level
 // `activeFrom`/`activeTo` rather than a nested object.
 const inputSchema = z.object({
-  skip: postProfileExportCsvBody.shape.skip.default(0),
-  take: postProfileExportCsvBody.shape.take.default(25),
-  order: postProfileExportCsvBody.shape.order,
-  ascending: postProfileExportCsvBody.shape.ascending,
-  segmentId: postProfileExportCsvBody.shape.segmentId.describe("A segment's `unique` guid (from get-segments-all)."),
-  minimumGoalValue: postProfileExportCsvBody.shape.minimumGoalValue,
-  minimumCompletedGoals: postProfileExportCsvBody.shape.minimumCompletedGoals,
-  isUnidentified: postProfileExportCsvBody.shape.isUnidentified,
-  isIdentified: postProfileExportCsvBody.shape.isIdentified,
-  isHighPotential: postProfileExportCsvBody.shape.isHighPotential,
+  skip: requestBody.shape.skip.default(0),
+  take: requestBody.shape.take.default(25),
+  order: requestBody.shape.order,
+  ascending: requestBody.shape.ascending,
+  segmentId: requestBody.shape.segmentId.describe("A segment's `unique` guid (from get-segments-all)."),
+  minimumGoalValue: requestBody.shape.minimumGoalValue,
+  minimumCompletedGoals: requestBody.shape.minimumCompletedGoals,
+  isUnidentified: requestBody.shape.isUnidentified,
+  isIdentified: requestBody.shape.isIdentified,
+  isHighPotential: requestBody.shape.isHighPotential,
   activeFrom: z.iso.datetime().nullish(),
   activeTo: z.iso.datetime().nullish(),
-  identifiedName: postProfileExportCsvBody.shape.identifiedName,
+  identifiedName: requestBody.shape.identifiedName,
 });
 // The generated schema declares this as a File, but the real response is
 // plain CSV text placed directly in structuredContent (confirmed

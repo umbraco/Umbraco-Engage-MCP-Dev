@@ -1,6 +1,6 @@
 {
   "apiName": "Umbraco Engage Management API",
-  "swaggerUrl": "https://localhost:{port}/umbraco/swagger/engage-management/swagger.json",
+  "swaggerUrl": "https://localhost:44448/umbraco/openapi/engage-management.json",
   "baseUrl": "https://localhost:{port}",
   "collections": [
     "a/b-test",

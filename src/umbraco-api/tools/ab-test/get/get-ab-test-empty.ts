@@ -4,12 +4,24 @@ import {
   CAPTURE_RAW_HTTP_RESPONSE,
   type ToolDefinition,
 } from "@umbraco-cms/mcp-server-sdk";
-import { getAbTestEmptyQueryParams, getAbTestEmptyResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
+import { z } from "zod";
+import { getAbTestEmptyResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
 import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbracoEngageManagementApi.js";
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
 
-const inputSchema = getAbTestEmptyQueryParams;
+// Hand-written rather than getAbTestEmptyQueryParams: Engage 18's spec marks
+// testType as a nullable enum, which orval turns into a union with
+// literal(null) that the generated client's own params type rejects.
+const inputSchema = z.object({
+  testType: z.enum(["SinglePage", "MultiPage", "ContentType", "SplitUrl"]).optional(),
+  nodeKey: z
+    .uuid()
+    .optional()
+    .describe(
+      "Optional key of the content page the test will target. Engage 18 accepts it to tailor the template to that page (its `cultureSharedSegmentedProperties`); for a page without segmented properties the template is the same as without it.",
+    ),
+});
 const outputSchema = getAbTestEmptyResponse;
 
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {

@@ -101,7 +101,7 @@ console.log(matchingOutput);
 const blockedOutput = runSql(`
   SELECT g.id, g.name FROM ${GOAL_TABLE} g
   WHERE (${likeClause("g.name")})
-    AND EXISTS (SELECT 1 FROM ${AB_TEST_TABLE} t WHERE t.goalId = g.id)
+    AND EXISTS (SELECT 1 FROM ${AB_TEST_TABLE} t WHERE t.goalKey = g.[key])
 `);
 console.log("Matching goals still referenced by a real A/B test (will be SKIPPED - deleting these would fail on a foreign key anyway):");
 console.log(blockedOutput);
@@ -114,7 +114,7 @@ if (!EXECUTE) {
 const deleteResult = runSql(`
   DELETE FROM ${GOAL_TABLE}
   WHERE (${likeClause("name")})
-    AND NOT EXISTS (SELECT 1 FROM ${AB_TEST_TABLE} t WHERE t.goalId = ${GOAL_TABLE}.id);
+    AND NOT EXISTS (SELECT 1 FROM ${AB_TEST_TABLE} t WHERE t.goalKey = ${GOAL_TABLE}.[key]);
   SELECT @@ROWCOUNT AS deletedCount;
 `);
 console.log("Delete result:");

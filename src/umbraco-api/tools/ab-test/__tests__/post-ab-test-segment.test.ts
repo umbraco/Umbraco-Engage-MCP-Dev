@@ -55,7 +55,7 @@ describe("post-ab-test-segment", () => {
     expect(result.isError).toBe(true);
   });
 
-  it("still returns the same generic 400 error for a real test's own unique, its real page key, and its real server-assigned segment value", async () => {
+  it("returns a 400 error for a real test's own unique, its real page key, and its real server-assigned segment value", async () => {
     const context = createMockRequestHandlerExtra();
     builder = await new AbTestBuilder().create();
 
@@ -68,9 +68,10 @@ describe("post-ab-test-segment", () => {
     //      (fetched via get-ab-test, e.g. "engage_ab-testing_93" - not an
     //      arbitrary made-up one)
     //   3. the same, with `culture` omitted entirely
-    // Verified empirically: all three still 400 with the exact same generic
-    // `{ status: 400, detail: "Bad Request" }` body as a wholly non-existent
-    // unique.
+    // Verified empirically: all three still 400. On Engage 17 every case
+    // returned the same generic `{ status: 400, title: "Bad Request" }`; Engage
+    // 18 says why for the test's own unique ("Content not found" - it isn't
+    // a document id).
     //
     // Root cause CONFIRMED (not a fixture gap, not an ab-test status issue -
     // see next paragraph) by decompiling the real Engage server
@@ -146,7 +147,8 @@ describe("post-ab-test-segment", () => {
       );
 
       expect(result.isError).toBeFalsy();
-      expect(result.structuredContent).toEqual({ created: true });
+      // Engage 18 also reports the page's culture-shared segmented properties.
+      expect(result.structuredContent).toEqual({ created: true, cultureSharedSegmentedProperties: [] });
     } finally {
       await fixture.delete();
     }

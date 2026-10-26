@@ -23,6 +23,7 @@ exports[`get-ab-test-variant-segment returns the real, persisted variant for its
     "isDisabled": false,
     "javascript": "",
     "name": "",
+    "previewSegment": "engage_ab-testing_NORMALIZED_ID",
     "redirectNodeKey": null,
     "segment": "engage_ab-testing_NORMALIZED_ID",
     "totalPageviewsForVariant": 0,

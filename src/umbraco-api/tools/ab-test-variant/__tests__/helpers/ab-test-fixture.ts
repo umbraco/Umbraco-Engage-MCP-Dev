@@ -3,7 +3,6 @@ import { ContentPageFixture } from "../../../../../testing/content-page-fixture.
 import postAbTestTool from "../../../ab-test/post/post-ab-test.js";
 import deleteAbTestTool from "../../../ab-test/delete/delete-ab-test.js";
 import postGoalTool from "../../../goal/post/post-goal.js";
-import getGoalDetailsTool from "../../../goal/get/get-goal-details.js";
 import getGoalAllTypesTool from "../../../goal/get/get-goal-all-types.js";
 
 export const TEST_AB_TEST_VARIANT_FIXTURE_NAME = "_Test AB Test Variant Fixture Parent";
@@ -33,9 +32,8 @@ export const TEST_AB_TEST_VARIANT_FIXTURE_GOAL_NAME = "_Test AB Test Variant Fix
  *      "CustomGoal"`) - an all-zero placeholder guid persists the goal fine
  *      but fails `post-ab-test`'s validation ("The selected goal should be
  *      active and valid").
- *   2. `post-ab-test`'s `goalId` and `goal` inputs must describe the SAME
- *      real goal - the server validates the embedded, client-echoed `goal`
- *      object, not a live lookup by `goalId` alone.
+ *   2. `post-ab-test`'s `goalKey` must be the real goal's `unique` guid
+ *      (on Engage 18 the test references its goal by key, not numeric id).
  */
 export class AbTestFixture {
   private name: string = TEST_AB_TEST_VARIANT_FIXTURE_NAME;
@@ -91,38 +89,15 @@ export class AbTestFixture {
     }
     const goalUnique = (goalResult.structuredContent as { unique: string }).unique;
 
-    // 3. Resolve the goal's real numeric id - post-ab-test's `goalId` needs
-    // this numeric id, not the goal's uuid `unique`.
-    const goalDetails = await getGoalDetailsTool.handler({ id: goalUnique }, context);
-    if (goalDetails.isError) {
-      throw new Error(
-        `Failed to resolve goal details for A/B test variant fixture: ${JSON.stringify(
-          goalDetails.content,
-        )}`,
-      );
-    }
-    const goalNumericId = (goalDetails.structuredContent as { id: number }).id;
-
-    // 4. Persist - post-ab-test builds the full server payload internally.
+    // 3. Persist - post-ab-test builds the full server payload internally.
     const created = await postAbTestTool.handler(
       {
         name: this.name,
         testType: "SinglePage",
-        goalId: goalNumericId,
-        goal: {
-          key: goalUnique,
-          name: this.goalName,
-          value: 1,
-          goalTypeId: customGoalType.id,
-          goalTypeConfig: "{}",
-          isMain: false,
-          isInverted: false,
-          isActive: true,
-          isInvalid: false,
-        },
+        goalKey: goalUnique,
         pageUnique: pageKey,
         secondVariantPageUnique: undefined,
-        projectId: undefined,
+        projectKey: undefined,
         secondVariantName: "Variant B",
         participationPercentage: 1,
         minimumDetectableEffect: 0.1,
