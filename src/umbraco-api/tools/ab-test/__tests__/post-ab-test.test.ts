@@ -10,7 +10,10 @@ import getAbTestViewModelTool from "../get/get-ab-test-view-model.js";
 import getAbTestProjectTool from "../../ab-test-project/get/get-ab-test-project.js";
 import { AbTestBuilder } from "./helpers/ab-test-builder.js";
 import { AbTestProjectBuilder } from "../../ab-test-project/__tests__/helpers/ab-test-project-builder.js";
-import { disconnectChainedCms } from "../../../../testing/content-page-fixture.js";
+import {
+  ContentPageFixture,
+  disconnectChainedCms,
+} from "../../../../testing/content-page-fixture.js";
 
 jest.setTimeout(60000);
 
@@ -21,32 +24,22 @@ describe("post-ab-test", () => {
     await disconnectChainedCms();
   }, 30000);
 
-  it("returns a raw 500 error for a genuinely non-existent goalId", async () => {
+  it("returns a validation failure (not a 500) for a non-existent goalKey", async () => {
     const context = createMockRequestHandlerExtra();
+    const page = await new ContentPageFixture().create();
 
-    // Verified empirically: a `goalId` that doesn't correspond to ANY real
-    // goal row (as opposed to a real goal row with mismatched/invalid
-    // characteristics - see the next test) trips the database's foreign key
-    // constraint on insert, surfacing as a raw, unhandled 500 with a full
-    // C# stack trace rather than a graceful validationResults.isValid=false.
+    // On Engage 17 an unknown numeric goalId tripped a database foreign-key
+    // constraint and surfaced as a raw 500. Engage 18 references the goal by
+    // key and validates it up front: the save returns HTTP 200 with
+    // validationResults.isValid=false and nothing is persisted.
     const result = await postAbTestTool.handler(
       {
         name: "_Test AB Test Invalid Goal",
         testType: "SinglePage",
-        goalId: 999999,
-        goal: {
-          key: randomUUID(),
-          value: 1,
-          goalTypeId: "00000000-0000-0000-0000-000000000000",
-          goalTypeConfig: "{}",
-          isMain: false,
-          isInverted: false,
-          isActive: true,
-          isInvalid: false,
-        },
-        pageUnique: randomUUID(),
+        goalKey: randomUUID(),
+        pageUnique: page.getKey(),
         secondVariantPageUnique: undefined,
-        projectId: undefined,
+        projectKey: undefined,
         secondVariantName: "Variant B",
         participationPercentage: 1,
         minimumDetectableEffect: 0.1,
@@ -56,8 +49,14 @@ describe("post-ab-test", () => {
       context,
     );
 
-    expect(result.isError).toBe(true);
-    expect(getResultText(result)).toContain("FOREIGN KEY constraint");
+    expect(result.isError).toBeFalsy();
+    const validation = (
+      result.structuredContent as { validationResults: { isValid: boolean; errors: string[] } }
+    ).validationResults;
+    expect(validation.isValid).toBe(false);
+    expect(validation.errors).toContain("The selected goal should be active and valid");
+
+    await page.delete();
   });
 
   it("creates a real, persisted A/B test from minimal caller-supplied fields", async () => {
@@ -73,11 +72,11 @@ describe("post-ab-test", () => {
     await builder.delete();
   });
 
-  it("without projectId, a real created test never appears under any A/B test project", async () => {
+  it("without projectKey, a real created test never appears under any A/B test project", async () => {
     // Confirmed empirically (Umbraco.Engage.Infrastructure.AbTesting.Project's
     // AbTestProjectMapper/AbTestProjectRepository): a project's `abTests` are
-    // populated strictly from tests whose `projectId` FK matches - `test`
-    // and `project` are otherwise unrelated rows. Omitting `projectId` (the
+    // populated strictly from tests whose project FK matches - `test`
+    // and `project` are otherwise unrelated rows. Omitting `projectKey` (the
     // old, only behavior of this tool) produces a real, valid, persisted
     // test that get-ab-test-project will never surface for any project.
     const context = createMockRequestHandlerExtra();
@@ -101,14 +100,14 @@ describe("post-ab-test", () => {
     await project.delete();
   });
 
-  it("with projectId, the created test appears under that A/B test project", async () => {
+  it("with projectKey, the created test appears under that A/B test project", async () => {
     const context = createMockRequestHandlerExtra();
     const project = await new AbTestProjectBuilder()
       .withUnique(randomUUID())
       .withName("_Test AB Test Project - assigned check")
       .create();
     const testBuilder = await new AbTestBuilder()
-      .withProjectId(project.getNumericId())
+      .withProjectKey(project.getId())
       .create();
 
     const result = await getAbTestProjectTool.handler(
@@ -128,17 +127,7 @@ describe("post-ab-test", () => {
   const minimalSplitUrlParams = {
     name: "_Test AB Test SplitUrl Validation",
     testType: "SplitUrl" as const,
-    goalId: 1,
-    goal: {
-      key: randomUUID(),
-      value: 1,
-      goalTypeId: "00000000-0000-0000-0000-000000000000",
-      goalTypeConfig: "{}",
-      isMain: false,
-      isInverted: false,
-      isActive: true,
-      isInvalid: false,
-    },
+    goalKey: randomUUID(),
     secondVariantName: "Variant B",
     participationPercentage: 1,
     minimumDetectableEffect: 0.1,
@@ -154,7 +143,7 @@ describe("post-ab-test", () => {
         ...minimalSplitUrlParams,
         pageUnique: randomUUID(),
         secondVariantPageUnique: undefined,
-        projectId: undefined,
+        projectKey: undefined,
       },
       context,
     );
@@ -174,7 +163,7 @@ describe("post-ab-test", () => {
         testType: "SinglePage",
         pageUnique: randomUUID(),
         secondVariantPageUnique: randomUUID(),
-        projectId: undefined,
+        projectKey: undefined,
       },
       context,
     );
@@ -194,7 +183,7 @@ describe("post-ab-test", () => {
         ...minimalSplitUrlParams,
         pageUnique: samePage,
         secondVariantPageUnique: samePage,
-        projectId: undefined,
+        projectKey: undefined,
       },
       context,
     );

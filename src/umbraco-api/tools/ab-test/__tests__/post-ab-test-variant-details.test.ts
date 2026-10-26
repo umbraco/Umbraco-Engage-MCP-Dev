@@ -9,9 +9,7 @@ import { normalizeVolatileFields } from "../../../../testing/normalize-volatile-
 // Investigated (not added as a permanent test): feeding a real,
 // AbTestBuilder-created test's own variant names through this tool instead
 // of the defaults produces echoed-back differences only (goalValue, real
-// name/id/unique/segment) - no NEW computed behavior, and `previewUrl` stays
-// `null` regardless (matches get-ab-test-preview-url's own finding that a
-// Draft-status test can't generate a preview).
+// name/id/unique/segment) - no NEW computed behavior.
 
 // Recursively blanks any key literally named `unique` — the response nests
 // variant `unique` guids several levels deep, which vary per call. Kept
