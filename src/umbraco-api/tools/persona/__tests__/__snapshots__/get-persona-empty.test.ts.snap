@@ -11,7 +11,7 @@ exports[`get-persona-empty should return a blank draft persona template 1`] = `
     "expiration": null,
     "expirationType": "never",
     "id": 0,
-    "minimumDeviation": 0,
+    "minimumDeviation": 1,
     "minimumDeviationType": "Absolute",
     "minimumParticipationScoreThreshold": 25,
     "personas": [],

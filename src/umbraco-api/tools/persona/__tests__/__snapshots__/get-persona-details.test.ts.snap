@@ -11,7 +11,7 @@ exports[`get-persona-details should return details for an existing persona 1`] =
     "expiration": 0,
     "expirationType": "never",
     "id": 0,
-    "minimumDeviation": 0,
+    "minimumDeviation": 1,
     "minimumDeviationType": "Absolute",
     "minimumParticipationScoreThreshold": 25,
     "personas": [],
