@@ -178,7 +178,7 @@ Integration tests and the `.mcp.json` server both require an API user in Umbraco
 NODE_TLS_REJECT_UNAUTHORIZED=0 node scripts/create-api-user.mjs https://localhost:44448 admin@admin.com 1234567890
 ```
 
-This script was copied from `umbraco-mcp-dev-cms/scripts/`. **Check the hardcoded Swagger OAuth `redirect_uri` before reusing it against a different Umbraco version** — it must match the `umbraco-swagger` OpenIddict client's registered redirect URI for your installed CMS version (query `SELECT ClientId, RedirectUris FROM umbracoOpenIddictApplications` in the demo-site's DB to confirm; this changed from `/umbraco/openapi/oauth2-redirect.html` to `/umbraco/swagger/oauth2-redirect.html` between versions).
+This script was copied from `umbraco-mcp-dev-cms/scripts/`. **Check the hardcoded Swagger OAuth `redirect_uri` before reusing it against a different Umbraco version** — it must match the `umbraco-swagger` OpenIddict client's registered redirect URI for your installed CMS version (query `SELECT ClientId, RedirectUris FROM umbracoOpenIddictApplications` in the demo-site's DB to confirm): `/umbraco/openapi/oauth2-redirect.html` on Umbraco 18 (this line), `/umbraco/swagger/oauth2-redirect.html` on Umbraco 17 (`main`/`dev`).
 
 **Fallback: manually via the Umbraco backoffice UI** (Settings > Users > Create > API User) if the script's OAuth flow doesn't match your version — grant the user appropriate permissions for the APIs being tested, then set the same Client ID/Secret above.
 
