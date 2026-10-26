@@ -9,7 +9,10 @@ import { postProfileOverviewBody, postProfileOverviewResponse } from "../../../a
 import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbracoEngageManagementApi.js";
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
-type FullBody = z.infer<typeof postProfileOverviewBody>;
+// Engage 18's spec makes the request body nullable, so orval generates
+// `union([null, object])`; the tools always send the object member.
+const requestBody = postProfileOverviewBody.options[1];
+type FullBody = z.infer<typeof requestBody>;
 
 // `skip`/`take` default sensibly instead of being required with no
 // guidance - withStandardDecorators also auto-converts them to cursor-based
@@ -18,19 +21,19 @@ type FullBody = z.infer<typeof postProfileOverviewBody>;
 // `activeRange.from`/`activeRange.to` are flattened to top-level
 // `activeFrom`/`activeTo` rather than a nested object.
 const inputSchema = z.object({
-  skip: postProfileOverviewBody.shape.skip.default(0),
-  take: postProfileOverviewBody.shape.take.default(25),
-  order: postProfileOverviewBody.shape.order,
-  ascending: postProfileOverviewBody.shape.ascending,
-  segmentId: postProfileOverviewBody.shape.segmentId.describe("A segment's `unique` guid (from get-segments-all)."),
-  minimumGoalValue: postProfileOverviewBody.shape.minimumGoalValue,
-  minimumCompletedGoals: postProfileOverviewBody.shape.minimumCompletedGoals,
-  isUnidentified: postProfileOverviewBody.shape.isUnidentified,
-  isIdentified: postProfileOverviewBody.shape.isIdentified,
-  isHighPotential: postProfileOverviewBody.shape.isHighPotential,
+  skip: requestBody.shape.skip.default(0),
+  take: requestBody.shape.take.default(25),
+  order: requestBody.shape.order,
+  ascending: requestBody.shape.ascending,
+  segmentId: requestBody.shape.segmentId.describe("A segment's `unique` guid (from get-segments-all)."),
+  minimumGoalValue: requestBody.shape.minimumGoalValue,
+  minimumCompletedGoals: requestBody.shape.minimumCompletedGoals,
+  isUnidentified: requestBody.shape.isUnidentified,
+  isIdentified: requestBody.shape.isIdentified,
+  isHighPotential: requestBody.shape.isHighPotential,
   activeFrom: z.iso.datetime().nullish(),
   activeTo: z.iso.datetime().nullish(),
-  identifiedName: postProfileOverviewBody.shape.identifiedName,
+  identifiedName: requestBody.shape.identifiedName,
 });
 const outputSchema = postProfileOverviewResponse;
 
