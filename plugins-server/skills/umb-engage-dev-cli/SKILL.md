@@ -17,7 +17,7 @@ ls dist/index.js .env 2>/dev/null
 ```
 
 - If `dist/index.js` exists (working in this repo): use `node dist/index.js`
-- Otherwise (using the published package): use `npx @umbraco-engage/mcp-dev@latest`
+- Otherwise (using the published package): use `npx @umbraco-engage/mcp-dev@lts-17-beta` for Umbraco 17 (`@latest`/`@beta` are the Umbraco 18 line)
 
 All examples below use `<cli>` as a placeholder — substitute the correct command.
 

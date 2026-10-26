@@ -133,6 +133,8 @@ Custom fields defined in `config/server-config.ts`.
 
 `dev` is the base branch — always work via a branch off `dev` + PR into `dev`, never push directly to `dev`. Create a branch, push it, open a PR, and let `.github/workflows/test.yml` run before merging. (`main` stays at GitHub's default and receives periodic release merges from `dev`, mirroring `umbraco-mcp-dev-cms`'s `v17/dev` model.)
 
+This is the Umbraco 17 line. The Umbraco 18 line lives on `v18/main` (releases) and `v18/dev` (integration) and never merges into `main`/`dev` - the reverse of the CMS, Forms and Automate MCPs, whose `main`/`dev` carry the newest major. Releases from `main` publish under the `lts-17`, `lts-17-beta`, `lts-17-alpha` and `lts-17-rc` npm dist-tags and are never marked latest on GitHub; `latest`/`beta`/`alpha`/`rc` belong to `v18/main`. `.github/dependabot.yml` is read only from `main`, so it also carries the `v18/dev` entries.
+
 Whenever you open a new PR or push updates to an existing one, do NOT consider the task done at push time. Watch the CI checks and fix any failures automatically:
 
 1. Open / update the PR.
