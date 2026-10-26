@@ -3,14 +3,16 @@ const GUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
 // as `engage_ab-testing_<numeric variant id>` — the trailing number is the
 // same per-run-random variant id already blanked elsewhere in the tree, just
 // embedded inside a string instead of its own field.
+// Engage 18 also returns the same value as the variant's `previewSegment`.
 const AUTO_SEGMENT_REGEX = /^engage_ab-testing_\d+$/;
 
 /**
  * Recursively blanks the identifier-shaped fields that are real but
  * per-run-random on a freshly built AbTestBuilder test — its own numeric
- * `id`, guid `unique`/`key`, foreign-key `*Id` fields (goalId, abTestId,
- * goalTypeId, projectId, ...), and `createdBy`/`updatedBy`/`disabledBy...`
- * guids on the embedded goal/variants.
+ * `id`, guid `unique`/`key`, foreign-key `*Id` fields (abTestId, ...),
+ * Engage 18's guid `*Key` references (goalKey, projectKey, nodeKey,
+ * contentTypeKey, ...), and `createdBy`/`updatedBy`/`disabledBy...` guids on
+ * the variants.
  *
  * The SDK's own `createSnapshotResult` only normalizes a shallow top-level
  * `id` plus a fixed date-field list, and `normalizeVolatileFields` only
@@ -36,6 +38,7 @@ export function normalizeAbTestIdentifiers(value: unknown): unknown {
         key === "unique" ||
         key === "key" ||
         key.endsWith("Id") ||
+        key.endsWith("Key") ||
         key.startsWith("createdBy") ||
         key.startsWith("updatedBy") ||
         key.startsWith("disabledBy");
@@ -47,7 +50,11 @@ export function normalizeAbTestIdentifiers(value: unknown): unknown {
         } else {
           out[key] = val;
         }
-      } else if (key === "segment" && typeof val === "string" && AUTO_SEGMENT_REGEX.test(val)) {
+      } else if (
+        (key === "segment" || key === "previewSegment") &&
+        typeof val === "string" &&
+        AUTO_SEGMENT_REGEX.test(val)
+      ) {
         out[key] = "engage_ab-testing_NORMALIZED_ID";
       } else if (
         key === "variantStatus" &&

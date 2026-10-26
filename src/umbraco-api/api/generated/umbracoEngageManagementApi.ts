@@ -6,37 +6,14 @@
  * OpenAPI spec version: Latest
  */
 import { customInstance } from '../client.js';
+export type AbTestCompletionActionModel = typeof AbTestCompletionActionModel[keyof typeof AbTestCompletionActionModel];
 
-// https://stackoverflow.com/questions/49579094/typescript-conditional-types-filter-out-readonly-properties-pick-only-requir/49579497#49579497
-type IfEquals<X, Y, A = X, B = never> = (<T>() => T extends X ? 1 : 2) extends <
-T,
->() => T extends Y ? 1 : 2
-? A
-: B;
 
-type WritableKeys<T> = {
-[P in keyof T]-?: IfEquals<
-  { [Q in P]: T[P] },
-  { -readonly [Q in P]: T[P] },
-  P
->;
-}[keyof T];
-
-type UnionToIntersection<U> =
-  (U extends any ? (k: U)=>void : never) extends ((k: infer I)=>void) ? I : never;
-type DistributeReadOnlyOverUnions<T> = T extends any ? NonReadonly<T> : never;
-
-type Writable<T> = Pick<T, WritableKeys<T>>;
-type NonReadonly<T> = [T] extends [UnionToIntersection<T>] ? {
-  [P in keyof Writable<T>]: T[P] extends object
-    ? NonReadonly<NonNullable<T[P]>>
-    : T[P];
-} : DistributeReadOnlyOverUnions<T>;
-
-export interface ABTestingConfigurationModel {
-  RequiredVisitorPercentageBeforeShowingAdvice: number;
-  MinimumPercentageMacroGoalWarning: number;
-}
+export const AbTestCompletionActionModel = {
+  Nothing: 'Nothing',
+  Publish: 'Publish',
+  Draft: 'Draft',
+} as const;
 
 export interface AbTestContentTypeDtoModel {
   contentTypeId: number;
@@ -57,26 +34,6 @@ export const AbTestStatusModel = {
   Completed: 'Completed',
   Draft: 'Draft',
 } as const;
-
-export interface GoalDtoModel {
-  id: number;
-  key: string;
-  /** @nullable */
-  name?: string | null;
-  value: number;
-  goalTypeId: string;
-  goalTypeConfig: string;
-  isMain: boolean;
-  isInverted: boolean;
-  isActive: boolean;
-  isInvalid: boolean;
-  created: string;
-  createdBy: string;
-  /** @nullable */
-  updated?: string | null;
-  /** @nullable */
-  updatedBy?: string | null;
-}
 
 export type AbTestTypeModel = typeof AbTestTypeModel[keyof typeof AbTestTypeModel];
 
@@ -112,6 +69,8 @@ export interface AbTestVariantDtoModel {
   isDisabled: boolean;
   /** @nullable */
   segment?: string | null;
+  /** @nullable */
+  previewSegment?: string | null;
   totalPageviewsForVariant: number;
   totalVisitorsForVariant: number;
 }
@@ -119,6 +78,7 @@ export interface AbTestVariantDtoModel {
 export interface AbTestUmbracoPageVariantDtoModel {
   id: number;
   unique: string;
+  nodeKey: string;
   /** @nullable */
   nodeName?: string | null;
   /** @nullable */
@@ -126,25 +86,23 @@ export interface AbTestUmbracoPageVariantDtoModel {
   /** @nullable */
   abTestId?: number | null;
   variesBySegment: boolean;
+  contentTypeKey: string;
 }
 
 export interface AbTestDtoModel {
-  id: number;
-  created: string;
   unique: string;
   /** @nullable */
-  projectId?: number | null;
+  projectKey?: string | null;
   /** @nullable */
-  goalId?: number | null;
-  status: AbTestStatusModel;
-  goal?: GoalDtoModel | null;
+  goalKey?: string | null;
+  status?: null | AbTestStatusModel;
   /** @nullable */
   name?: string | null;
   /** @nullable */
   description?: string | null;
   /** @nullable */
   createdByUmbracoUserName?: string | null;
-  testType: AbTestTypeModel;
+  testType?: null | AbTestTypeModel;
   /** @nullable */
   startTime?: string | null;
   /** @nullable */
@@ -156,7 +114,7 @@ export interface AbTestDtoModel {
   variants: AbTestVariantDtoModel[];
   umbracoPageVariants: AbTestUmbracoPageVariantDtoModel[];
   contentTypes: AbTestContentTypeDtoModel[];
-  winner?: AbTestVariantDtoModel | null;
+  winner?: null | AbTestVariantDtoModel;
   isCompleted: boolean;
   /** @nullable */
   completedOn?: string | null;
@@ -170,6 +128,11 @@ export interface AbTestDtoModel {
   baselineConversionRate?: number | null;
   /** @nullable */
   viableVisitorThreshold?: number | null;
+  /** @nullable */
+  previewNodeKey?: string | null;
+  onCompleteAction: AbTestCompletionActionModel;
+  id: number;
+  created: string;
 }
 
 export interface AbTestVariantModel {
@@ -195,7 +158,10 @@ export interface AbTestVariantModel {
   isBenchmark: boolean;
   totalPageviewsForVariant: number;
   totalVisitorsForVariant: number;
-  readonly segment: string;
+  /** @nullable */
+  segment: string | null;
+  /** @nullable */
+  previewSegment: string | null;
 }
 
 export interface AbTestVariantMainGoalComparisonModel {
@@ -205,21 +171,22 @@ export interface AbTestVariantMainGoalComparisonModel {
   benchmarkMainGoalCompletions: number;
   isInvertedGoal: boolean;
   hurtingThreshold: number;
-  readonly mainGoalDifference: number;
-  readonly warning: boolean;
+  mainGoalDifference: number;
+  warning: boolean;
   /** @nullable */
-  readonly mainGoalRatio?: number | null;
-  readonly isHurting: boolean;
+  mainGoalRatio?: number | null;
+  isHurting: boolean;
 }
 
 export interface AbTestVariantInfoModel {
   abTestVariant: AbTestVariantModel;
-  readonly visitors: number;
-  readonly goalCompletions: number;
-  readonly benchmarkVisitors: number;
-  readonly benchmarkGoalCompletions: number;
-  readonly conversionRate: number;
-  readonly mainGoalComparisons: readonly AbTestVariantMainGoalComparisonModel[];
+  visitors: number;
+  goalCompletions: number;
+  benchmarkVisitors: number;
+  benchmarkGoalCompletions: number;
+  conversionRate: number;
+  /** @nullable */
+  mainGoalComparisons: AbTestVariantMainGoalComparisonModel[] | null;
 }
 
 export interface AbTestVariantRuntimePrognosisModel {
@@ -233,8 +200,8 @@ export interface AbTestVariantRuntimePrognosisModel {
   estimatedRuntimeInDays?: number | null;
   isHurtingMainConversion: boolean;
   /** @nullable */
-  readonly remainingVisitors?: number | null;
-  readonly isReliable: boolean;
+  remainingVisitors?: number | null;
+  isReliable: boolean;
 }
 
 export type AbTestVariantStatusModel = typeof AbTestVariantStatusModel[keyof typeof AbTestVariantStatusModel];
@@ -255,50 +222,70 @@ export type AbTestIndicationModelVariantStatus = {[key: string]: AbTestVariantSt
 
 export interface AbTestIndicationModel {
   /** @nullable */
-  readonly estimatedRuntimeInDays?: number | null;
+  estimatedRuntimeInDays?: number | null;
   /** @nullable */
-  readonly estimatedRequiredRuntimeRemainingInDays?: number | null;
-  readonly currentRuntimeInDays: number;
-  readonly mde: number;
-  readonly benchmarkConversionRate: number;
-  readonly targetConversionRate: number;
-  readonly variantCount: number;
+  estimatedRequiredRuntimeRemainingInDays?: number | null;
+  currentRuntimeInDays: number;
+  mde: number;
+  benchmarkConversionRate: number;
+  targetConversionRate: number;
+  variantCount: number;
   /** @nullable */
-  readonly requiredVisitorsTotal?: number | null;
+  requiredVisitorsTotal?: number | null;
   /** @nullable */
-  readonly requiredVisitorsPerVariant?: number | null;
-  readonly expectedDailyVisitors: number;
+  requiredVisitorsPerVariant?: number | null;
+  expectedDailyVisitors: number;
   status: AbTestStatusModel;
-  readonly hurtingVariants: readonly AbTestVariantInfoModel[];
-  readonly currentVisitorsPerVariant: number;
-  readonly currentVisitors: number;
-  readonly reliableVariants: number;
-  readonly isInvertedGoal: boolean;
-  readonly originalVariantIsWinning: boolean;
-  readonly winningVariant?: AbTestVariantInfoModel | null;
-  readonly bestNonBenchmarkVariant?: AbTestVariantInfoModel | null;
-  readonly earliestReliableVariant?: AbTestVariantInfoModel | null;
-  readonly bestPrognosis: AbTestVariantRuntimePrognosisModel;
-  readonly winner?: AbTestVariantInfoModel | null;
-  readonly winningVariantConversionChange: number;
-  readonly bestNonWinningVariantConversionChange: number;
-  readonly winnerConversionChange: number;
+  hurtingVariants: AbTestVariantInfoModel[];
+  currentVisitorsPerVariant: number;
+  currentVisitors: number;
+  reliableVariants: number;
+  isInvertedGoal: boolean;
+  originalVariantIsWinning: boolean;
+  winningVariant?: null | AbTestVariantInfoModel;
+  bestNonBenchmarkVariant?: null | AbTestVariantInfoModel;
+  earliestReliableVariant?: null | AbTestVariantInfoModel;
+  bestPrognosis: AbTestVariantRuntimePrognosisModel;
+  winner?: null | AbTestVariantInfoModel;
+  winningVariantConversionChange: number;
+  bestNonWinningVariantConversionChange: number;
+  winnerConversionChange: number;
   /** @nullable */
-  readonly stoppedOn?: string | null;
+  stoppedOn?: string | null;
   /** @nullable */
-  readonly startTime?: string | null;
+  startTime?: string | null;
   /** @nullable */
-  readonly completedOn?: string | null;
-  readonly hasSelectedWinner: boolean;
+  completedOn?: string | null;
+  hasSelectedWinner: boolean;
   /** @nullable */
-  readonly completedByUsername?: string | null;
+  completedByUsername?: string | null;
   /** @nullable */
-  readonly stoppedByUsername?: string | null;
-  readonly hasSurpassedViableVisitorThreshold: boolean;
-  readonly variantStatus: AbTestIndicationModelVariantStatus;
+  stoppedByUsername?: string | null;
+  hasSurpassedViableVisitorThreshold: boolean;
+  variantStatus: AbTestIndicationModelVariantStatus;
 }
 
 export interface AbTestDetailVariantInfoModel {
+  /** @nullable */
+  label?: string | null;
+  currentTotalParticipantCount: number;
+  currentTotalPageviewCount: number;
+  /** @nullable */
+  requiredTotalVisitorCount?: number | null;
+  goalCompletions: number;
+  goalValue: number;
+  difference: number;
+  participantPortion: number;
+  visitorsPortion: number;
+  conversionRate: number;
+  conversionRateImprovement: number;
+  conversionRateImprovementRelative: number;
+  mainGoalComparisons: AbTestVariantMainGoalComparisonModel[];
+  mainGoalWarning: boolean;
+  goalWarning: boolean;
+  status: AbTestVariantStatusModel;
+  isWinner: boolean;
+  isLeading: boolean;
   id: number;
   unique: string;
   abTestId: number;
@@ -322,43 +309,28 @@ export interface AbTestDetailVariantInfoModel {
   isDisabled: boolean;
   /** @nullable */
   segment?: string | null;
+  /** @nullable */
+  previewSegment?: string | null;
   totalPageviewsForVariant: number;
   totalVisitorsForVariant: number;
-  /** @nullable */
-  label?: string | null;
-  currentTotalParticipantCount: number;
-  currentTotalPageviewCount: number;
-  /** @nullable */
-  requiredTotalVisitorCount?: number | null;
-  goalCompletions: number;
-  goalValue: number;
-  difference: number;
-  participantPortion: number;
-  visitorsPortion: number;
-  conversionRate: number;
-  conversionRateImprovement: number;
-  conversionRateImprovementRelative: number;
-  mainGoalComparisons: AbTestVariantMainGoalComparisonModel[];
-  mainGoalWarning: boolean;
-  goalWarning: boolean;
-  status: AbTestVariantStatusModel;
-  /** @nullable */
-  previewUrl?: string | null;
-  isWinner: boolean;
-  isLeading: boolean;
 }
 
 export interface AbTestDetailModel {
   test: AbTestDtoModel;
-  indication?: AbTestIndicationModel | null;
+  indication?: null | AbTestIndicationModel;
   /** @nullable */
   variants?: AbTestDetailVariantInfoModel[] | null;
   isInvertedGoal: boolean;
+  /** @nullable */
+  cultureSharedSegmentedProperties?: string[] | null;
+}
+
+export interface ABTestingConfigurationModel {
+  requiredVisitorPercentageBeforeShowingAdvice: number;
+  minimumPercentageMacroGoalWarning: number;
 }
 
 export interface AbTestProjectDtoModel {
-  id: number;
-  created: string;
   unique: string;
   /** @nullable */
   name?: string | null;
@@ -371,127 +343,313 @@ export interface AbTestProjectDtoModel {
   invalid: boolean;
   archived: boolean;
   abTests: AbTestDtoModel[];
+  id: number;
+  created: string;
 }
 
-export interface AbTestingConfigurationDtoModel {
-  readonly requiredVisitorPercentageBeforeShowingAdvice: number;
-  readonly minimumPercentageMacroGoalWarning: number;
+export type AnalyticsCompareQueryResultModelDimensionsItem = typeof AnalyticsCompareQueryResultModelDimensionsItem[keyof typeof AnalyticsCompareQueryResultModelDimensionsItem];
+
+
+export const AnalyticsCompareQueryResultModelDimensionsItem = {
+  UNDEFINED: 'UNDEFINED',
+  usertype: 'usertype',
+  referralPath: 'referralPath',
+  fullReferrer: 'fullReferrer',
+  campaign: 'campaign',
+  source: 'source',
+  medium: 'medium',
+  sourceMedium: 'sourceMedium',
+  browser: 'browser',
+  browserVersion: 'browserVersion',
+  operatingSystem: 'operatingSystem',
+  operatingSystemVersion: 'operatingSystemVersion',
+  deviceCategory: 'deviceCategory',
+  country: 'country',
+  city: 'city',
+  hostname: 'hostname',
+  pageUrl: 'pageUrl',
+  pageId: 'pageId',
+  NodeId: 'NodeId',
+  NodeCulture: 'NodeCulture',
+  NodeSegment: 'NodeSegment',
+  NodeContentType: 'NodeContentType',
+  pagePath: 'pagePath',
+  eventCategory: 'eventCategory',
+  eventAction: 'eventAction',
+  eventLabel: 'eventLabel',
+  date: 'date',
+  year: 'year',
+  month: 'month',
+  week: 'week',
+  day: 'day',
+  hour: 'hour',
+  minute: 'minute',
+  nthMonth: 'nthMonth',
+  nthWeek: 'nthWeek',
+  nthDay: 'nthDay',
+  nthMinute: 'nthMinute',
+  nthHour: 'nthHour',
+  abTest: 'abTest',
+  abTestVariant: 'abTestVariant',
+  goal: 'goal',
+  goalId: 'goalId',
+  goalType: 'goalType',
+  isMainGoal: 'isMainGoal',
+  visitorType: 'visitorType',
+  bot: 'bot',
+  botId: 'botId',
+  botVersion: 'botVersion',
+  botVersionId: 'botVersionId',
+  referralHostname: 'referralHostname',
+  referralIsInternalPage: 'referralIsInternalPage',
+  referralPathAndQuery: 'referralPathAndQuery',
+  browserId: 'browserId',
+  datetime: 'datetime',
+  pageviewSegmentId: 'pageviewSegmentId',
+  pageviewSegmentName: 'pageviewSegmentName',
+  pageviewAppliedSegmentId: 'pageviewAppliedSegmentId',
+  pageviewAppliedSegmentName: 'pageviewAppliedSegmentName',
+  pageviewAppliedPersonalizationId: 'pageviewAppliedPersonalizationId',
+  pageviewAppliedPersonalizationName: 'pageviewAppliedPersonalizationName',
+  videoName: 'videoName',
+  videoUrl: 'videoUrl',
+  videoEventType: 'videoEventType',
+  videoEventTypeName: 'videoEventTypeName',
+  umbracoFormsName: 'umbracoFormsName',
+  umbracoFormsId: 'umbracoFormsId',
+  umbracoFormsFieldName: 'umbracoFormsFieldName',
+  umbracoFormsFieldId: 'umbracoFormsFieldId',
+  umbracoFormsFieldError: 'umbracoFormsFieldError',
+  cityId: 'cityId',
+  countryId: 'countryId',
+  province: 'province',
+  provinceId: 'provinceId',
+  county: 'county',
+  countyId: 'countyId',
+  sourcePlatform: 'sourcePlatform',
+  creativeFormat: 'creativeFormat',
+  marketingTactic: 'marketingTactic',
+  segmentId: 'segmentId',
+  segmentName: 'segmentName',
+  searchTerm: 'searchTerm',
+  users: 'users',
+  newVisitors: 'newVisitors',
+  percentNewSessions: 'percentNewSessions',
+  sessions: 'sessions',
+  bounceRate: 'bounceRate',
+  sessionDuration: 'sessionDuration',
+  avgSessionDuration: 'avgSessionDuration',
+  goalCompletionsAll: 'goalCompletionsAll',
+  goalValueAll: 'goalValueAll',
+  pageviews: 'pageviews',
+  pageviewsWithSubpages: 'pageviewsWithSubpages',
+  pageviewsPerSession: 'pageviewsPerSession',
+  uniquePageviews: 'uniquePageviews',
+  avgTimeOnPage: 'avgTimeOnPage',
+  totalEvents: 'totalEvents',
+  eventValue: 'eventValue',
+  avgEventValue: 'avgEventValue',
+  abTestVariantVisitors: 'abTestVariantVisitors',
+  abTestVariantCompletionsAll: 'abTestVariantCompletionsAll',
+  videoPlays: 'videoPlays',
+  videoPlaytime: 'videoPlaytime',
+  avgVideoPlaytime: 'avgVideoPlaytime',
+  avgRelativeVideoPlaytime: 'avgRelativeVideoPlaytime',
+  videoEvents: 'videoEvents',
+  umbracoFormsViews: 'umbracoFormsViews',
+  umbracoFormsSubmissions: 'umbracoFormsSubmissions',
+  umbracoFormsStarts: 'umbracoFormsStarts',
+  umbracoFormsAbandons: 'umbracoFormsAbandons',
+  umbracoFormsErrors: 'umbracoFormsErrors',
+  umbracoFormsFieldFocusses: 'umbracoFormsFieldFocusses',
+  umbracoFormsFieldAbandons: 'umbracoFormsFieldAbandons',
+  umbracoFormsFieldErrors: 'umbracoFormsFieldErrors',
+  avgEngagedTimeOnPage: 'avgEngagedTimeOnPage',
+  pageviewsBot: 'pageviewsBot',
+  pageSessions: 'pageSessions',
+  pageVisitors: 'pageVisitors',
+  pageSessionsWithSubpages: 'pageSessionsWithSubpages',
+  pageVisitorsWithSubpages: 'pageVisitorsWithSubpages',
+  activeSegmentPageviews: 'activeSegmentPageviews',
+  inactiveSegmentPageviews: 'inactiveSegmentPageviews',
+  activeSegmentSessions: 'activeSegmentSessions',
+  inactiveSegmentSessions: 'inactiveSegmentSessions',
+  activeSegmentProfiles: 'activeSegmentProfiles',
+  inactiveSegmentProfiles: 'inactiveSegmentProfiles',
+  activePersonalizedSegmentPageviews: 'activePersonalizedSegmentPageviews',
+  inactivePersonalizedSegmentPageviews: 'inactivePersonalizedSegmentPageviews',
+  activePersonalizedSegmentSessions: 'activePersonalizedSegmentSessions',
+  inactivePersonalizedSegmentSessions: 'inactivePersonalizedSegmentSessions',
+  activePersonalizedSegmentProfiles: 'activePersonalizedSegmentProfiles',
+  inactivePersonalizedSegmentProfiles: 'inactivePersonalizedSegmentProfiles',
+  searchVolume: 'searchVolume',
+  searchVolumeWithSubpages: 'searchVolumeWithSubpages',
+  visitors: 'visitors',
+  campaignEntries: 'campaignEntries',
+  campaignVisitors: 'campaignVisitors',
+  campaignGoals: 'campaignGoals',
+  campaignGoalValue: 'campaignGoalValue',
+  campaignFormSubmissions: 'campaignFormSubmissions',
+  campaignCommerceOrders: 'campaignCommerceOrders',
+  entrySessions: 'entrySessions',
+} as const;
+
+export type AnalyticsCompareQueryResultModelMetricsItem = typeof AnalyticsCompareQueryResultModelMetricsItem[keyof typeof AnalyticsCompareQueryResultModelMetricsItem];
+
+
+export const AnalyticsCompareQueryResultModelMetricsItem = {
+  UNDEFINED: 'UNDEFINED',
+  users: 'users',
+  newVisitors: 'newVisitors',
+  percentNewSessions: 'percentNewSessions',
+  sessions: 'sessions',
+  bounceRate: 'bounceRate',
+  sessionDuration: 'sessionDuration',
+  avgSessionDuration: 'avgSessionDuration',
+  goalCompletionsAll: 'goalCompletionsAll',
+  goalValueAll: 'goalValueAll',
+  pageviews: 'pageviews',
+  pageviewsWithSubpages: 'pageviewsWithSubpages',
+  pageviewsPerSession: 'pageviewsPerSession',
+  uniquePageviews: 'uniquePageviews',
+  avgTimeOnPage: 'avgTimeOnPage',
+  totalEvents: 'totalEvents',
+  eventValue: 'eventValue',
+  avgEventValue: 'avgEventValue',
+  abTestVariantVisitors: 'abTestVariantVisitors',
+  abTestVariantCompletionsAll: 'abTestVariantCompletionsAll',
+  videoPlays: 'videoPlays',
+  videoPlaytime: 'videoPlaytime',
+  avgVideoPlaytime: 'avgVideoPlaytime',
+  avgRelativeVideoPlaytime: 'avgRelativeVideoPlaytime',
+  videoEvents: 'videoEvents',
+  umbracoFormsViews: 'umbracoFormsViews',
+  umbracoFormsSubmissions: 'umbracoFormsSubmissions',
+  umbracoFormsStarts: 'umbracoFormsStarts',
+  umbracoFormsAbandons: 'umbracoFormsAbandons',
+  umbracoFormsErrors: 'umbracoFormsErrors',
+  umbracoFormsFieldFocusses: 'umbracoFormsFieldFocusses',
+  umbracoFormsFieldAbandons: 'umbracoFormsFieldAbandons',
+  umbracoFormsFieldErrors: 'umbracoFormsFieldErrors',
+  avgEngagedTimeOnPage: 'avgEngagedTimeOnPage',
+  pageviewsBot: 'pageviewsBot',
+  pageSessions: 'pageSessions',
+  pageVisitors: 'pageVisitors',
+  pageSessionsWithSubpages: 'pageSessionsWithSubpages',
+  pageVisitorsWithSubpages: 'pageVisitorsWithSubpages',
+  activeSegmentPageviews: 'activeSegmentPageviews',
+  inactiveSegmentPageviews: 'inactiveSegmentPageviews',
+  activeSegmentSessions: 'activeSegmentSessions',
+  inactiveSegmentSessions: 'inactiveSegmentSessions',
+  activeSegmentProfiles: 'activeSegmentProfiles',
+  inactiveSegmentProfiles: 'inactiveSegmentProfiles',
+  activePersonalizedSegmentPageviews: 'activePersonalizedSegmentPageviews',
+  inactivePersonalizedSegmentPageviews: 'inactivePersonalizedSegmentPageviews',
+  activePersonalizedSegmentSessions: 'activePersonalizedSegmentSessions',
+  inactivePersonalizedSegmentSessions: 'inactivePersonalizedSegmentSessions',
+  activePersonalizedSegmentProfiles: 'activePersonalizedSegmentProfiles',
+  inactivePersonalizedSegmentProfiles: 'inactivePersonalizedSegmentProfiles',
+  searchVolume: 'searchVolume',
+  searchVolumeWithSubpages: 'searchVolumeWithSubpages',
+  visitors: 'visitors',
+  campaignEntries: 'campaignEntries',
+  campaignVisitors: 'campaignVisitors',
+  campaignGoals: 'campaignGoals',
+  campaignGoalValue: 'campaignGoalValue',
+  campaignFormSubmissions: 'campaignFormSubmissions',
+  campaignCommerceOrders: 'campaignCommerceOrders',
+  entrySessions: 'entrySessions',
+} as const;
+
+export type AnalyticsCompareQueryResultModelRowsItem = {
+  dimensions: unknown[];
+  primary: number[];
+  secondary: number[];
+};
+
+export interface AnalyticsCompareQueryResultModel {
+  dimensions: AnalyticsCompareQueryResultModelDimensionsItem[];
+  metrics: AnalyticsCompareQueryResultModelMetricsItem[];
+  rows: AnalyticsCompareQueryResultModelRowsItem[];
+  /** @nullable */
+  primaryMetricTotals?: number[] | null;
+  /** @nullable */
+  secondaryMetricTotals?: number[] | null;
+  /** @nullable */
+  totalRows?: number | null;
+  currentPage: number;
+  rowsPerPage: number;
+  reportsExist: boolean;
 }
 
 export interface AnalyticsVisitorCookieConfigurationModel {
-  ExpirationInDays: number;
-  CookieName: string;
-  LegacyCookieName: string;
-  IncludeSubdomains: boolean;
-}
-
-export interface AnalyticsVisitorCookieConfigurationDtoModel {
-  readonly expirationInDays: number;
-  readonly cookieName: string;
-  readonly legacyCookieName: string;
-  readonly includeSubdomains: boolean;
+  expirationInDays: number;
+  /** @nullable */
+  cookieName: string | null;
+  /** @nullable */
+  legacyCookieName: string | null;
+  includeSubdomains: boolean;
 }
 
 export interface AnalyticsInternalSiteSearchConfigurationModel {
-  AutomaticSearchTracking: boolean;
-  SearchTermParameters: string;
+  automaticSearchTracking: boolean;
   /** @nullable */
-  SearchBoxParameters?: string | null;
+  searchTermParameters: string[] | null;
   /** @nullable */
-  CategoryParameters?: string | null;
+  searchBoxParameters: string[] | null;
+  /** @nullable */
+  categoryParameters: string[] | null;
 }
 
 export interface AnalyticsDataCollectionConfigurationModel {
-  AnonymizeIPAddress: boolean;
-  FlushRateInRecords: number;
-  FlushIntervalInSeconds: number;
-  RegexTimeoutInMilliseconds: number;
-  InternalSiteSearch: AnalyticsInternalSiteSearchConfigurationModel;
-}
-
-export interface InternalSiteSearchConfigurationDtoModel {
-  readonly automaticSearchTracking: boolean;
-  readonly searchTermParameters: readonly string[];
-  readonly searchBoxParameters: readonly string[];
-  readonly categoryParameters: readonly string[];
-}
-
-export interface AnalyticsDataCollectionConfigurationDtoModel {
-  readonly anonymizeIPAddress: boolean;
-  readonly flushRateInRecords: number;
-  readonly flushIntervalInSeconds: number;
-  readonly regexTimeoutInMilliseconds: number;
-  readonly internalSiteSearch: AnalyticsInternalSiteSearchConfigurationModel | InternalSiteSearchConfigurationDtoModel;
+  anonymizeIPAddress: boolean;
+  requireAnalyticsPermissionForMemberTracking: boolean;
+  flushRateInRecords: number;
+  flushIntervalInSeconds: number;
+  regexTimeoutInMilliseconds: number;
+  internalSiteSearch: AnalyticsInternalSiteSearchConfigurationModel;
 }
 
 export interface AnalyticsDataStorageConfigurationModel {
-  AnonymizeAnalyticsDataAfterDays: number;
-  DeleteAnalyticsDataAfterDays: number;
+  anonymizeAnalyticsDataAfterDays: number;
+  deleteAnalyticsDataAfterDays: number;
   deleteControlGroupDataAfterDays: number;
-  DeleteRawDataAfterDays: number;
-}
-
-export interface AnalyticsDataStorageConfigurationDtoModel {
-  readonly anonymizeAnalyticsDataAfterDays: number;
-  readonly deleteAnalyticsDataAfterDays: number;
-  readonly deleteControlGroupDataAfterDays: number;
-  readonly deleteRawDataAfterDays: number;
+  deleteRawDataAfterDays: number;
 }
 
 export interface AnalyticsDataProcessingConfigurationModel {
-  IntervalInSeconds: number;
-  SessionLengthInMinutes: number;
-  IsProcessingServer: boolean;
-}
-
-export interface AnalyticsDataProcessingConfigurationDtoModel {
-  readonly intervalInSeconds: number;
-  readonly sessionLengthInMinutes: number;
-  readonly isProcessingServer: boolean;
+  intervalInSeconds: number;
+  sessionLengthInMinutes: number;
+  isProcessingServer: boolean;
 }
 
 export interface AnalyticsDataCleanupConfigurationModel {
-  Enabled: boolean;
-  FirstRunTime: string;
-  StartupDelay: string;
-  Interval: string;
-  CommandTimeout: number;
-  /** @deprecated */
-  StartAfterSeconds: number;
-  /** @deprecated */
-  IntervalInSeconds: number;
-  /** @deprecated */
-  NumberOfRows: number;
-}
-
-export interface AnalyticsDataCleanupConfigurationDtoModel {
-  readonly enabled: boolean;
-  readonly firstRunTime: string;
-  readonly startupDelay: string;
-  readonly interval: string;
-  readonly commandTimeout: number;
-  /** @deprecated */
-  readonly startAfterSeconds: number;
-  /** @deprecated */
-  readonly intervalInSeconds: number;
-  /** @deprecated */
-  readonly numberOfRows: number;
-}
-
-export interface AnalyticsConfigurationDtoModel {
-  readonly visitorCookie: AnalyticsVisitorCookieConfigurationModel | AnalyticsVisitorCookieConfigurationDtoModel;
-  readonly dataCollection: AnalyticsDataCollectionConfigurationModel | AnalyticsDataCollectionConfigurationDtoModel;
-  readonly dataStorage: AnalyticsDataStorageConfigurationModel | AnalyticsDataStorageConfigurationDtoModel;
-  readonly dataProcessing: AnalyticsDataProcessingConfigurationModel | AnalyticsDataProcessingConfigurationDtoModel;
-  readonly dataCleanup: AnalyticsDataCleanupConfigurationModel | AnalyticsDataCleanupConfigurationDtoModel;
+  enabled: boolean;
+  /** @nullable */
+  firstRunTime: string | null;
+  /** @pattern ^-?(\d+\.)?\d{2}:\d{2}:\d{2}(\.\d{1,7})?$ */
+  startupDelay: string;
+  /** @pattern ^-?(\d+\.)?\d{2}:\d{2}:\d{2}(\.\d{1,7})?$ */
+  interval: string;
+  commandTimeout: number;
+  startAfterSeconds: number;
+  intervalInSeconds: number;
+  numberOfRows: number;
 }
 
 export interface AnalyticsConfigurationModel {
-  VisitorCookie: AnalyticsVisitorCookieConfigurationModel;
-  DataCollection: AnalyticsDataCollectionConfigurationModel;
-  DataStorage: AnalyticsDataStorageConfigurationModel;
-  DataProcessing: AnalyticsDataProcessingConfigurationModel;
-  DataCleanup: AnalyticsDataCleanupConfigurationModel;
+  visitorCookie: AnalyticsVisitorCookieConfigurationModel;
+  dataCollection: AnalyticsDataCollectionConfigurationModel;
+  dataStorage: AnalyticsDataStorageConfigurationModel;
+  dataProcessing: AnalyticsDataProcessingConfigurationModel;
+  dataCleanup: AnalyticsDataCleanupConfigurationModel;
+}
+
+export interface AnalyticsQueryComparisonModel {
+  /** @nullable */
+  startDate: string | null;
+  /** @nullable */
+  endDate: string | null;
 }
 
 export type MetricModel = typeof MetricModel[keyof typeof MetricModel];
@@ -558,6 +716,7 @@ export const MetricModel = {
   campaignGoalValue: 'campaignGoalValue',
   campaignFormSubmissions: 'campaignFormSubmissions',
   campaignCommerceOrders: 'campaignCommerceOrders',
+  entrySessions: 'entrySessions',
 } as const;
 
 export type DimensionModel = typeof DimensionModel[keyof typeof DimensionModel];
@@ -791,21 +950,38 @@ export const ColumnModel = {
   campaignGoalValue: 'campaignGoalValue',
   campaignFormSubmissions: 'campaignFormSubmissions',
   campaignCommerceOrders: 'campaignCommerceOrders',
+  entrySessions: 'entrySessions',
 } as const;
 
+export interface AnalyticsQueryPagingModel {
+  page: number;
+  pageSize: number;
+  includeTotals: boolean;
+}
+
 export interface AnalyticsQueryGetModel {
-  startDate: string;
-  endDate: string;
+  /** @nullable */
+  filter?: string | null;
+  /** @nullable */
+  startDate: string | null;
+  /** @nullable */
+  endDate: string | null;
   metrics: MetricModel[];
   dimensions: DimensionModel[];
   realtime: boolean;
-  sort: ColumnModel;
+  sort?: null | ColumnModel;
   ascending: boolean;
   page: number;
   pageSize: number;
-  includeSubpages: boolean;
+  paging?: null | AnalyticsQueryPagingModel;
   /** @nullable */
-  filter?: string | null;
+  search?: string | null;
+  /** @nullable */
+  includeTotals?: boolean | null;
+  /** @nullable */
+  includeTotalRows?: boolean | null;
+  comparison?: null | AnalyticsQueryComparisonModel;
+  includeSubpages: boolean;
 }
 
 export interface AnalyticsQueryResultModel {
@@ -815,8 +991,10 @@ export interface AnalyticsQueryResultModel {
   rowsPerPage: number;
   totalRows: number;
   totalPages: number;
-  readonly fromRow: number;
-  readonly toRow: number;
+  /** @nullable */
+  metricTotals?: number[] | null;
+  fromRow: number;
+  toRow: number;
   reportsExist: boolean;
 }
 
@@ -840,14 +1018,14 @@ export interface AnnotationPageVariantModel {
 }
 
 export interface AnnotationModel {
-  id: number;
-  created: string;
   timestamp: string;
   description: string;
   createdByUserName: string;
   visibility: AnnotationVisibilityModel;
   invalid: boolean;
   pageVariants: AnnotationPageVariantModel[];
+  id: number;
+  created: string;
 }
 
 export interface AppliedPersonalizationContentTypeDtoModel {
@@ -855,34 +1033,9 @@ export interface AppliedPersonalizationContentTypeDtoModel {
   key: string;
   contentTypeId: number;
   /** @nullable */
+  contentTypeUnique?: string | null;
+  /** @nullable */
   culture?: string | null;
-}
-
-export interface SegmentRuleDtoModel {
-  id: number;
-  unique: string;
-  segmentId: number;
-  /** @nullable */
-  type?: string | null;
-  config?: unknown | null;
-  isNegation: boolean;
-  created: string;
-}
-
-export interface SegmentDtoModel {
-  id: number;
-  created: string;
-  unique: string;
-  /** @nullable */
-  name?: string | null;
-  /** @nullable */
-  description?: string | null;
-  /** @nullable */
-  endTime?: string | null;
-  isTemporary: boolean;
-  sortOrder: number;
-  rules: SegmentRuleDtoModel[];
-  controlGroupSize: number;
 }
 
 export type AppliedPersonalizationTypeModel = typeof AppliedPersonalizationTypeModel[keyof typeof AppliedPersonalizationTypeModel];
@@ -899,17 +1052,16 @@ export interface AppliedPersonalizationUmbracoPageVariantDtoModel {
   unique: string;
   nodeId: number;
   /** @nullable */
+  nodeKey?: string | null;
+  /** @nullable */
   culture?: string | null;
 }
 
 export interface AppliedPersonalizationDtoModel {
-  id: number;
-  created: string;
   unique: string;
   /** @nullable */
-  segmentId?: number | null;
-  segment?: SegmentDtoModel | null;
-  type: AppliedPersonalizationTypeModel;
+  segmentKey?: string | null;
+  type?: null | AppliedPersonalizationTypeModel;
   /** @nullable */
   umbracoSegmentAlias?: string | null;
   /** @nullable */
@@ -930,24 +1082,28 @@ export interface AppliedPersonalizationDtoModel {
   pages: AppliedPersonalizationUmbracoPageVariantDtoModel[];
   contentTypes: AppliedPersonalizationContentTypeDtoModel[];
   /** @nullable */
-  previewUrl?: string | null;
+  previewSegment?: string | null;
+  /** @nullable */
+  previewNodeKey?: string | null;
+  id: number;
+  created: string;
 }
 
-export interface BackofficeConfigurationDtoModel {
-  readonly personaGroupColorPicker: string;
-  readonly personaGroupMediaPicker: string;
-  readonly customerJourneyColorPicker: string;
-  readonly customerJourneyIconPicker: string;
+export interface BackOfficeConfigurationModel {
+  personaGroupColorPicker: string;
+  personaGroupMediaPicker: string;
+  customerJourneyColorPicker: string;
+  customerJourneyIconPicker: string;
 }
 
 export interface BrowserSegmentRuleConfigModel {
   Browsers: string[];
 }
 
-export type CampaignParameterTypeModel = typeof CampaignParameterTypeModel[keyof typeof CampaignParameterTypeModel];
+export type CampaignConfigParameterModelType = typeof CampaignConfigParameterModelType[keyof typeof CampaignConfigParameterModelType];
 
 
-export const CampaignParameterTypeModel = {
+export const CampaignConfigParameterModelType = {
   Empty: 'Empty',
   NotEmpty: 'NotEmpty',
   ExactMatch: 'ExactMatch',
@@ -956,25 +1112,153 @@ export const CampaignParameterTypeModel = {
 } as const;
 
 export interface CampaignConfigParameterModel {
-  type: CampaignParameterTypeModel;
+  type: CampaignConfigParameterModelType;
   input: string[];
 }
 
+export type CampaignConfigParametersModelSourceType = typeof CampaignConfigParametersModelSourceType[keyof typeof CampaignConfigParametersModelSourceType];
+
+
+export const CampaignConfigParametersModelSourceType = {
+  Empty: 'Empty',
+  NotEmpty: 'NotEmpty',
+  ExactMatch: 'ExactMatch',
+  Contains: 'Contains',
+  RegexMatch: 'RegexMatch',
+} as const;
+
+export type CampaignConfigParametersModelSource = {
+  type: CampaignConfigParametersModelSourceType;
+  input: string[];
+};
+
+export type CampaignConfigParametersModelMediumType = typeof CampaignConfigParametersModelMediumType[keyof typeof CampaignConfigParametersModelMediumType];
+
+
+export const CampaignConfigParametersModelMediumType = {
+  Empty: 'Empty',
+  NotEmpty: 'NotEmpty',
+  ExactMatch: 'ExactMatch',
+  Contains: 'Contains',
+  RegexMatch: 'RegexMatch',
+} as const;
+
+export type CampaignConfigParametersModelMedium = {
+  type: CampaignConfigParametersModelMediumType;
+  input: string[];
+};
+
+export type CampaignConfigParametersModelCampaignType = typeof CampaignConfigParametersModelCampaignType[keyof typeof CampaignConfigParametersModelCampaignType];
+
+
+export const CampaignConfigParametersModelCampaignType = {
+  Empty: 'Empty',
+  NotEmpty: 'NotEmpty',
+  ExactMatch: 'ExactMatch',
+  Contains: 'Contains',
+  RegexMatch: 'RegexMatch',
+} as const;
+
+export type CampaignConfigParametersModelCampaign = {
+  type: CampaignConfigParametersModelCampaignType;
+  input: string[];
+};
+
+export type CampaignConfigParametersModelTermType = typeof CampaignConfigParametersModelTermType[keyof typeof CampaignConfigParametersModelTermType];
+
+
+export const CampaignConfigParametersModelTermType = {
+  Empty: 'Empty',
+  NotEmpty: 'NotEmpty',
+  ExactMatch: 'ExactMatch',
+  Contains: 'Contains',
+  RegexMatch: 'RegexMatch',
+} as const;
+
+export type CampaignConfigParametersModelTerm = {
+  type: CampaignConfigParametersModelTermType;
+  input: string[];
+};
+
+export type CampaignConfigParametersModelContentType = typeof CampaignConfigParametersModelContentType[keyof typeof CampaignConfigParametersModelContentType];
+
+
+export const CampaignConfigParametersModelContentType = {
+  Empty: 'Empty',
+  NotEmpty: 'NotEmpty',
+  ExactMatch: 'ExactMatch',
+  Contains: 'Contains',
+  RegexMatch: 'RegexMatch',
+} as const;
+
+export type CampaignConfigParametersModelContent = {
+  type: CampaignConfigParametersModelContentType;
+  input: string[];
+};
+
+export type CampaignConfigParametersModelSourcePlatformType = typeof CampaignConfigParametersModelSourcePlatformType[keyof typeof CampaignConfigParametersModelSourcePlatformType];
+
+
+export const CampaignConfigParametersModelSourcePlatformType = {
+  Empty: 'Empty',
+  NotEmpty: 'NotEmpty',
+  ExactMatch: 'ExactMatch',
+  Contains: 'Contains',
+  RegexMatch: 'RegexMatch',
+} as const;
+
+export type CampaignConfigParametersModelSourcePlatform = {
+  type: CampaignConfigParametersModelSourcePlatformType;
+  input: string[];
+};
+
+export type CampaignConfigParametersModelCreativeFormatType = typeof CampaignConfigParametersModelCreativeFormatType[keyof typeof CampaignConfigParametersModelCreativeFormatType];
+
+
+export const CampaignConfigParametersModelCreativeFormatType = {
+  Empty: 'Empty',
+  NotEmpty: 'NotEmpty',
+  ExactMatch: 'ExactMatch',
+  Contains: 'Contains',
+  RegexMatch: 'RegexMatch',
+} as const;
+
+export type CampaignConfigParametersModelCreativeFormat = {
+  type: CampaignConfigParametersModelCreativeFormatType;
+  input: string[];
+};
+
+export type CampaignConfigParametersModelMarketingTacticType = typeof CampaignConfigParametersModelMarketingTacticType[keyof typeof CampaignConfigParametersModelMarketingTacticType];
+
+
+export const CampaignConfigParametersModelMarketingTacticType = {
+  Empty: 'Empty',
+  NotEmpty: 'NotEmpty',
+  ExactMatch: 'ExactMatch',
+  Contains: 'Contains',
+  RegexMatch: 'RegexMatch',
+} as const;
+
+export type CampaignConfigParametersModelMarketingTactic = {
+  type: CampaignConfigParametersModelMarketingTacticType;
+  input: string[];
+};
+
 export interface CampaignConfigParametersModel {
-  source?: CampaignConfigParameterModel | null;
-  medium?: CampaignConfigParameterModel | null;
-  campaign?: CampaignConfigParameterModel | null;
-  term?: CampaignConfigParameterModel | null;
-  content?: CampaignConfigParameterModel | null;
-  sourcePlatform?: CampaignConfigParameterModel | null;
-  creativeFormat?: CampaignConfigParameterModel | null;
-  marketingTactic?: CampaignConfigParameterModel | null;
+  source?: CampaignConfigParametersModelSource;
+  medium?: CampaignConfigParametersModelMedium;
+  campaign?: CampaignConfigParametersModelCampaign;
+  term?: CampaignConfigParametersModelTerm;
+  content?: CampaignConfigParametersModelContent;
+  sourcePlatform?: CampaignConfigParametersModelSourcePlatform;
+  creativeFormat?: CampaignConfigParametersModelCreativeFormat;
+  marketingTactic?: CampaignConfigParametersModelMarketingTactic;
 }
 
-export type CampaignRangeTypeModel = typeof CampaignRangeTypeModel[keyof typeof CampaignRangeTypeModel];
+export type CampaignConfigSettingRangeModelType = typeof CampaignConfigSettingRangeModelType[keyof typeof CampaignConfigSettingRangeModelType];
 
 
-export const CampaignRangeTypeModel = {
+export const CampaignConfigSettingRangeModelType = {
   Now: 'Now',
   Sessions: 'Sessions',
   Days: 'Days',
@@ -983,18 +1267,33 @@ export const CampaignRangeTypeModel = {
 } as const;
 
 export interface CampaignConfigSettingRangeModel {
-  type: CampaignRangeTypeModel;
+  type: CampaignConfigSettingRangeModelType;
   /** @nullable */
   maximum?: number | null;
 }
 
+export type CampaignConfigSettingsModelRangeType = typeof CampaignConfigSettingsModelRangeType[keyof typeof CampaignConfigSettingsModelRangeType];
+
+
+export const CampaignConfigSettingsModelRangeType = {
+  Now: 'Now',
+  Sessions: 'Sessions',
+  Days: 'Days',
+  Any: 'Any',
+  CurrentPage: 'CurrentPage',
+} as const;
+
+export type CampaignConfigSettingsModelRange = {
+  type: CampaignConfigSettingsModelRangeType;
+  /** @nullable */
+  maximum?: number | null;
+};
+
 export interface CampaignConfigSettingsModel {
-  range: CampaignConfigSettingRangeModel;
+  range: CampaignConfigSettingsModelRange;
 }
 
 export interface CampaignDtoModel {
-  id: number;
-  created: string;
   /** @nullable */
   unique?: string | null;
   campaignGroupId: number;
@@ -1014,29 +1313,29 @@ export interface CampaignDtoModel {
   utmCreativeFormat?: string | null;
   /** @nullable */
   utmMarketingTactic?: string | null;
+  id: number;
+  created: string;
 }
 
 export interface CampaignGroupCustomerJourneyScoringDtoModel {
+  groupId: number;
+  customerJourneyStepId: number;
   id: number;
   unique: string;
   score: number;
   isLocked: boolean;
-  groupId: number;
-  customerJourneyStepId: number;
 }
 
 export interface CampaignGroupPersonaScoringDtoModel {
+  groupId: number;
+  personaId: number;
   id: number;
   unique: string;
   score: number;
   isLocked: boolean;
-  groupId: number;
-  personaId: number;
 }
 
 export interface CampaignGroupDtoModel {
-  id: number;
-  created: string;
   unique: string;
   /** @nullable */
   name?: string | null;
@@ -1046,12 +1345,31 @@ export interface CampaignGroupDtoModel {
   campaigns: CampaignDtoModel[];
   customerJourneyScoring: CampaignGroupCustomerJourneyScoringDtoModel[];
   personaScoring: CampaignGroupPersonaScoringDtoModel[];
+  id: number;
+  created: string;
 }
 
-export interface CampaignSegmentRuleConfigModel {
-  parameters: CampaignConfigParametersModel;
-  settings: CampaignConfigSettingsModel;
-}
+export type CampaignParameterTypeModel = typeof CampaignParameterTypeModel[keyof typeof CampaignParameterTypeModel];
+
+
+export const CampaignParameterTypeModel = {
+  Empty: 'Empty',
+  NotEmpty: 'NotEmpty',
+  ExactMatch: 'ExactMatch',
+  Contains: 'Contains',
+  RegexMatch: 'RegexMatch',
+} as const;
+
+export type CampaignRangeTypeModel = typeof CampaignRangeTypeModel[keyof typeof CampaignRangeTypeModel];
+
+
+export const CampaignRangeTypeModel = {
+  Now: 'Now',
+  Sessions: 'Sessions',
+  Days: 'Days',
+  Any: 'Any',
+  CurrentPage: 'CurrentPage',
+} as const;
 
 export interface CampaignsByVisitorDtoModel {
   timestamp: string;
@@ -1061,6 +1379,171 @@ export interface CampaignsByVisitorDtoModel {
   utmSource?: string | null;
   /** @nullable */
   utmMedium?: string | null;
+}
+
+export type CampaignSegmentRuleConfigModelParametersSourceType = typeof CampaignSegmentRuleConfigModelParametersSourceType[keyof typeof CampaignSegmentRuleConfigModelParametersSourceType];
+
+
+export const CampaignSegmentRuleConfigModelParametersSourceType = {
+  Empty: 'Empty',
+  NotEmpty: 'NotEmpty',
+  ExactMatch: 'ExactMatch',
+  Contains: 'Contains',
+  RegexMatch: 'RegexMatch',
+} as const;
+
+export type CampaignSegmentRuleConfigModelParametersSource = {
+  type: CampaignSegmentRuleConfigModelParametersSourceType;
+  input: string[];
+};
+
+export type CampaignSegmentRuleConfigModelParametersMediumType = typeof CampaignSegmentRuleConfigModelParametersMediumType[keyof typeof CampaignSegmentRuleConfigModelParametersMediumType];
+
+
+export const CampaignSegmentRuleConfigModelParametersMediumType = {
+  Empty: 'Empty',
+  NotEmpty: 'NotEmpty',
+  ExactMatch: 'ExactMatch',
+  Contains: 'Contains',
+  RegexMatch: 'RegexMatch',
+} as const;
+
+export type CampaignSegmentRuleConfigModelParametersMedium = {
+  type: CampaignSegmentRuleConfigModelParametersMediumType;
+  input: string[];
+};
+
+export type CampaignSegmentRuleConfigModelParametersCampaignType = typeof CampaignSegmentRuleConfigModelParametersCampaignType[keyof typeof CampaignSegmentRuleConfigModelParametersCampaignType];
+
+
+export const CampaignSegmentRuleConfigModelParametersCampaignType = {
+  Empty: 'Empty',
+  NotEmpty: 'NotEmpty',
+  ExactMatch: 'ExactMatch',
+  Contains: 'Contains',
+  RegexMatch: 'RegexMatch',
+} as const;
+
+export type CampaignSegmentRuleConfigModelParametersCampaign = {
+  type: CampaignSegmentRuleConfigModelParametersCampaignType;
+  input: string[];
+};
+
+export type CampaignSegmentRuleConfigModelParametersTermType = typeof CampaignSegmentRuleConfigModelParametersTermType[keyof typeof CampaignSegmentRuleConfigModelParametersTermType];
+
+
+export const CampaignSegmentRuleConfigModelParametersTermType = {
+  Empty: 'Empty',
+  NotEmpty: 'NotEmpty',
+  ExactMatch: 'ExactMatch',
+  Contains: 'Contains',
+  RegexMatch: 'RegexMatch',
+} as const;
+
+export type CampaignSegmentRuleConfigModelParametersTerm = {
+  type: CampaignSegmentRuleConfigModelParametersTermType;
+  input: string[];
+};
+
+export type CampaignSegmentRuleConfigModelParametersContentType = typeof CampaignSegmentRuleConfigModelParametersContentType[keyof typeof CampaignSegmentRuleConfigModelParametersContentType];
+
+
+export const CampaignSegmentRuleConfigModelParametersContentType = {
+  Empty: 'Empty',
+  NotEmpty: 'NotEmpty',
+  ExactMatch: 'ExactMatch',
+  Contains: 'Contains',
+  RegexMatch: 'RegexMatch',
+} as const;
+
+export type CampaignSegmentRuleConfigModelParametersContent = {
+  type: CampaignSegmentRuleConfigModelParametersContentType;
+  input: string[];
+};
+
+export type CampaignSegmentRuleConfigModelParametersSourcePlatformType = typeof CampaignSegmentRuleConfigModelParametersSourcePlatformType[keyof typeof CampaignSegmentRuleConfigModelParametersSourcePlatformType];
+
+
+export const CampaignSegmentRuleConfigModelParametersSourcePlatformType = {
+  Empty: 'Empty',
+  NotEmpty: 'NotEmpty',
+  ExactMatch: 'ExactMatch',
+  Contains: 'Contains',
+  RegexMatch: 'RegexMatch',
+} as const;
+
+export type CampaignSegmentRuleConfigModelParametersSourcePlatform = {
+  type: CampaignSegmentRuleConfigModelParametersSourcePlatformType;
+  input: string[];
+};
+
+export type CampaignSegmentRuleConfigModelParametersCreativeFormatType = typeof CampaignSegmentRuleConfigModelParametersCreativeFormatType[keyof typeof CampaignSegmentRuleConfigModelParametersCreativeFormatType];
+
+
+export const CampaignSegmentRuleConfigModelParametersCreativeFormatType = {
+  Empty: 'Empty',
+  NotEmpty: 'NotEmpty',
+  ExactMatch: 'ExactMatch',
+  Contains: 'Contains',
+  RegexMatch: 'RegexMatch',
+} as const;
+
+export type CampaignSegmentRuleConfigModelParametersCreativeFormat = {
+  type: CampaignSegmentRuleConfigModelParametersCreativeFormatType;
+  input: string[];
+};
+
+export type CampaignSegmentRuleConfigModelParametersMarketingTacticType = typeof CampaignSegmentRuleConfigModelParametersMarketingTacticType[keyof typeof CampaignSegmentRuleConfigModelParametersMarketingTacticType];
+
+
+export const CampaignSegmentRuleConfigModelParametersMarketingTacticType = {
+  Empty: 'Empty',
+  NotEmpty: 'NotEmpty',
+  ExactMatch: 'ExactMatch',
+  Contains: 'Contains',
+  RegexMatch: 'RegexMatch',
+} as const;
+
+export type CampaignSegmentRuleConfigModelParametersMarketingTactic = {
+  type: CampaignSegmentRuleConfigModelParametersMarketingTacticType;
+  input: string[];
+};
+
+export type CampaignSegmentRuleConfigModelParameters = {
+  source?: CampaignSegmentRuleConfigModelParametersSource;
+  medium?: CampaignSegmentRuleConfigModelParametersMedium;
+  campaign?: CampaignSegmentRuleConfigModelParametersCampaign;
+  term?: CampaignSegmentRuleConfigModelParametersTerm;
+  content?: CampaignSegmentRuleConfigModelParametersContent;
+  sourcePlatform?: CampaignSegmentRuleConfigModelParametersSourcePlatform;
+  creativeFormat?: CampaignSegmentRuleConfigModelParametersCreativeFormat;
+  marketingTactic?: CampaignSegmentRuleConfigModelParametersMarketingTactic;
+};
+
+export type CampaignSegmentRuleConfigModelSettingsRangeType = typeof CampaignSegmentRuleConfigModelSettingsRangeType[keyof typeof CampaignSegmentRuleConfigModelSettingsRangeType];
+
+
+export const CampaignSegmentRuleConfigModelSettingsRangeType = {
+  Now: 'Now',
+  Sessions: 'Sessions',
+  Days: 'Days',
+  Any: 'Any',
+  CurrentPage: 'CurrentPage',
+} as const;
+
+export type CampaignSegmentRuleConfigModelSettingsRange = {
+  type: CampaignSegmentRuleConfigModelSettingsRangeType;
+  /** @nullable */
+  maximum?: number | null;
+};
+
+export type CampaignSegmentRuleConfigModelSettings = {
+  range: CampaignSegmentRuleConfigModelSettingsRange;
+};
+
+export interface CampaignSegmentRuleConfigModel {
+  parameters: CampaignSegmentRuleConfigModelParameters;
+  settings: CampaignSegmentRuleConfigModelSettings;
 }
 
 export interface ClientSideEventModel {
@@ -1073,17 +1556,7 @@ export interface ClientSideEventModel {
   /** @nullable */
   value?: number | null;
   nonInteraction: boolean;
-  timestamp: string;
-}
-
-export interface CockpitAuthConfigurationDtoModel {
-  readonly tokenLifetimeSeconds: number;
-  readonly sessionLifetimeMinutes: number;
-  readonly requireHttps: boolean;
-  readonly cleanupIntervalMinutes: number;
-  readonly tokenRetentionBufferMinutes: number;
-  readonly sessionRetentionBufferMinutes: number;
-  readonly sessionCookieSameSite: string;
+  timestamp: unknown;
 }
 
 export interface CockpitAuthConfigurationModel {
@@ -1093,12 +1566,8 @@ export interface CockpitAuthConfigurationModel {
   cleanupIntervalMinutes: number;
   tokenRetentionBufferMinutes: number;
   sessionRetentionBufferMinutes: number;
-  sessionCookieSameSite: string;
-}
-
-export interface CockpitConfigurationDtoModel {
-  readonly enableInjection: boolean;
-  readonly authentication: CockpitAuthConfigurationDtoModel;
+  /** @nullable */
+  sessionCookieSameSite: string | null;
 }
 
 export interface CockpitConfigurationModel {
@@ -1107,130 +1576,90 @@ export interface CockpitConfigurationModel {
 }
 
 export interface SuspiciousActivityConfigurationModel {
-  PageviewThreshold: number;
+  pageviewThreshold: number;
 }
 
 export interface SettingsConfigurationModel {
-  DatabaseConnectionStringName: string;
-  Enabled: boolean;
-  UseLegacySegmentNames: boolean;
-  SuspiciousActivity: SuspiciousActivityConfigurationModel;
-}
-
-export interface SuspiciousActivityConfigurationDtoModel {
-  readonly pageviewThreshold: number;
-}
-
-export interface SettingsConfigurationDtoModel {
-  readonly databaseConnectionStringName: string;
+  /** @nullable */
+  databaseConnectionStringName: string | null;
   enabled: boolean;
-  readonly useLegacySegmentNames: boolean;
-  readonly suspiciousActivity: SuspiciousActivityConfigurationDtoModel;
+  useLegacySegmentNames: boolean;
+  suspiciousActivity: SuspiciousActivityConfigurationModel;
 }
 
 export interface ProfilesPotentialConfigurationModel {
-  ActiveThresholdInDays: number;
-  EngagedThresholdInSeconds: number;
-  EngagedThresholdNumberOfSessions: number;
+  activeThresholdInDays: number;
+  engagedThresholdInSeconds: number;
+  engagedThresholdNumberOfSessions: number;
 }
 
 export interface ProfilesIdentificationConfigurationModel {
-  Name: string;
-  Abbreviation: string;
+  /** @nullable */
+  name: string | null;
+  /** @nullable */
+  abbreviation: string | null;
 }
 
 export interface ProfilesConfigurationModel {
-  Potential: ProfilesPotentialConfigurationModel;
-  Identification: ProfilesIdentificationConfigurationModel;
-}
-
-export interface ProfilesPotentialConfigurationDtoModel {
-  readonly activeThresholdInDays: number;
-  readonly engagedThresholdInSeconds: number;
-  readonly engagedThresholdNumberOfSessions: number;
-}
-
-export interface ProfilesIdentificationConfigurationDtoModel {
-  readonly name: string;
-  readonly abbreviation: string;
-}
-
-export interface ProfilesConfigurationDtoModel {
-  readonly potential: ProfilesPotentialConfigurationModel | ProfilesPotentialConfigurationDtoModel;
-  readonly identification: ProfilesIdentificationConfigurationModel | ProfilesIdentificationConfigurationDtoModel;
+  potential: ProfilesPotentialConfigurationModel;
+  identification: ProfilesIdentificationConfigurationModel;
 }
 
 export interface TimeZoneInfo {
-  readonly id: string;
-  readonly hasIanaId: boolean;
-  readonly displayName: string;
-  readonly standardName: string;
-  readonly daylightName: string;
-  readonly baseUtcOffset: string;
-  readonly supportsDaylightSavingTime: boolean;
+  /** @nullable */
+  id: string | null;
+  hasIanaId: boolean;
+  /** @nullable */
+  displayName: string | null;
+  /** @nullable */
+  standardName: string | null;
+  /** @nullable */
+  daylightName: string | null;
+  /** @pattern ^-?(\d+\.)?\d{2}:\d{2}:\d{2}(\.\d{1,7})?$ */
+  baseUtcOffset: string;
+  supportsDaylightSavingTime: boolean;
 }
 
 export interface ReportingConfigurationModel {
   dataGenerationEnabled: boolean;
-  dataGenerationTime: string;
+  /**
+     * @nullable
+     * @pattern ^-?(\d+\.)?\d{2}:\d{2}:\d{2}(\.\d{1,7})?$
+     */
+  dataGenerationTime?: string | null;
   /** @nullable */
   timezone?: string | null;
-  readonly reportingTimeZone: TimeZoneInfo;
-}
-
-export interface ReportingConfigurationDtoModel {
-  readonly dataGenerationEnabled: boolean;
-  /** @nullable */
-  readonly dataGenerationTime?: string | null;
-  /** @nullable */
-  readonly timezone?: string | null;
-  readonly reportingTimeZone: TimeZoneInfo;
+  reportingTimeZone: TimeZoneInfo;
 }
 
 export interface DeliveryApiSegmentationConfigurationModel {
-  ContentByQuery: boolean;
-  ContentById: boolean;
-  ContentByIds: boolean;
-  ContentByPath: boolean;
-  readonly anySegmentationEnabled: boolean;
+  contentByQuery: boolean;
+  contentById: boolean;
+  contentByIds: boolean;
+  contentByPath: boolean;
+  anySegmentationEnabled: boolean;
 }
 
 export interface DeliveryApiConfigurationModel {
-  DisableVisitorCookie: boolean;
-  Segmentation: DeliveryApiSegmentationConfigurationModel;
-}
-
-export interface DeliveryApiSegmentationConfigurationDtoModel {
-  readonly contentByQuery: boolean;
-  readonly contentById: boolean;
-  readonly contentByIds: boolean;
-  readonly contentByPath: boolean;
-  readonly anySegmentationEnabled: boolean;
-}
-
-export interface DeliveryApiConfigurationDtoModel {
-  readonly disableVisitorCookie: boolean;
-  readonly segmentation: DeliveryApiSegmentationConfigurationDtoModel;
+  disableVisitorCookie: boolean;
+  segmentation: DeliveryApiSegmentationConfigurationModel;
 }
 
 export interface SegmentationConfigurationModel {
-  excludedPropertyAliases: string[];
-}
-
-export interface SegmentationConfigurationDtoModel {
-  readonly excludedPropertyAliases: readonly string[];
+  /** @nullable */
+  excludedPropertyAliases: string[] | null;
 }
 
 export interface ConfigurationDtoModel {
-  readonly settings: SettingsConfigurationModel | SettingsConfigurationDtoModel;
-  readonly analytics: AnalyticsConfigurationModel | AnalyticsConfigurationDtoModel;
-  readonly abTesting: ABTestingConfigurationModel | AbTestingConfigurationDtoModel;
-  readonly profiles: ProfilesConfigurationModel | ProfilesConfigurationDtoModel;
-  readonly reporting: ReportingConfigurationModel | ReportingConfigurationDtoModel;
-  readonly deliveryApi: DeliveryApiConfigurationModel | DeliveryApiConfigurationDtoModel;
-  readonly backoffice: BackofficeConfigurationDtoModel;
-  readonly cockpit: CockpitConfigurationModel | CockpitConfigurationDtoModel;
-  readonly segmentation: SegmentationConfigurationModel | SegmentationConfigurationDtoModel;
+  settings: SettingsConfigurationModel;
+  analytics: AnalyticsConfigurationModel;
+  abTesting: ABTestingConfigurationModel;
+  profiles: ProfilesConfigurationModel;
+  reporting: ReportingConfigurationModel;
+  deliveryApi: DeliveryApiConfigurationModel;
+  backoffice: BackOfficeConfigurationModel;
+  cockpit: CockpitConfigurationModel;
+  segmentation: SegmentationConfigurationModel;
 }
 
 export type ContentScoringEntityTypeModel = typeof ContentScoringEntityTypeModel[keyof typeof ContentScoringEntityTypeModel];
@@ -1260,16 +1689,12 @@ export interface ContentScoringResultModel {
 
 export interface CreateAppliedPersonalizationSegmentResponseModel {
   created: boolean;
+  cultureSharedSegmentedProperties: string[];
 }
 
 export interface CreateSegmentAbTestResponseModel {
   created: boolean;
-}
-
-export interface CustomGoalTypeModel {
-  readonly configurationEditorAlias: string;
-  readonly id: string;
-  readonly name: string;
+  cultureSharedSegmentedProperties: string[];
 }
 
 export interface CustomerJourneyStepDtoModel {
@@ -1338,10 +1763,10 @@ export interface CustomerJourneyDtoModel {
   updatedByUmbracoUserName?: string | null;
   /** @nullable */
   minimumParticipationScoreThreshold?: number | null;
-  minimumDeviationType: MinimumDeviationTypeModel;
+  minimumDeviationType?: null | MinimumDeviationTypeModel;
   /** @nullable */
   minimumDeviation?: number | null;
-  expirationType: ExpirationTypeModel;
+  expirationType?: null | ExpirationTypeModel;
   /** @nullable */
   expiration?: number | null;
   /** @nullable */
@@ -1366,6 +1791,9 @@ export const PersonalizationScoreTypeModel = {
 } as const;
 
 export interface CustomerJourneyStepScoreModel {
+  customerJourneyStepId: number;
+  scoreType: PersonalizationScoreTypeModel;
+  entityId: number;
   id: number;
   unique: string;
   nodeId: number;
@@ -1376,9 +1804,6 @@ export interface CustomerJourneyStepScoreModel {
   updated?: string | null;
   score: number;
   isLocked: boolean;
-  customerJourneyStepId: number;
-  scoreType: PersonalizationScoreTypeModel;
-  readonly entityId: number;
 }
 
 export interface DataCleanupLastRunDtoModel {
@@ -1390,11 +1815,20 @@ export interface DataCleanupLastRunDtoModel {
   failed: boolean;
   /** @nullable */
   errorMessage?: string | null;
-  anonymizedVisitors: number;
-  deletedPageviews: number;
-  deletedVisitors: number;
+  /** @nullable */
+  anonymizedVisitors?: number | null;
+  /** @nullable */
+  deletedPageviews?: number | null;
+  /** @nullable */
+  deletedVisitors?: number | null;
+  /** @nullable */
+  deletedControlGroups?: number | null;
+  /** @nullable */
+  deletedRawRecords?: number | null;
   anonymizeAfterDays: number;
   deleteAfterDays: number;
+  deleteControlGroupDataAfterDays: number;
+  deleteRawDataAfterDays: number;
   databaseSchemaComplete: boolean;
 }
 
@@ -1516,6 +1950,28 @@ export interface EnabledAddonsModel {
   umbracoCommerce: boolean;
 }
 
+export interface EntityItemResponseModel {
+  name: string;
+  unique: string;
+  /** @nullable */
+  description?: string | null;
+}
+
+export interface StringSegment {
+  /** @nullable */
+  buffer?: string | null;
+  offset: number;
+  length: number;
+  /** @nullable */
+  value?: string | null;
+  hasValue: boolean;
+}
+
+export interface EntityTagHeaderValue {
+  tag: StringSegment;
+  isWeak: boolean;
+}
+
 export interface ExportProfileDtoModel {
   /** @nullable */
   type?: string | null;
@@ -1534,10 +1990,24 @@ export interface ExportProfileDtoModel {
   memberEmail?: string | null;
 }
 
+export type Stream = Blob;
+
+export interface FileStreamResult {
+  fileStream: Stream;
+  /** @nullable */
+  contentType: string | null;
+  /** @nullable */
+  fileDownloadName: string | null;
+  /** @nullable */
+  lastModified?: string | null;
+  entityTag?: null | EntityTagHeaderValue;
+  enableRangeProcessing: boolean;
+}
+
 /**
  * @nullable
  */
-export type ProfileMemberDtoModelProperties = {[key: string]: unknown | null} | null;
+export type ProfileMemberDtoModelProperties = null | { [key: string]: unknown };
 
 export interface ProfileMemberDtoModel {
   id: string;
@@ -1575,16 +2045,32 @@ export interface FindProfileResponseModel {
   totalResults: number;
 }
 
-export type FrequencyTypeModel = typeof FrequencyTypeModel[keyof typeof FrequencyTypeModel];
+export type FrequencyConfigModelType = typeof FrequencyConfigModelType[keyof typeof FrequencyConfigModelType];
 
 
-export const FrequencyTypeModel = {
+export const FrequencyConfigModelType = {
   Never: 'Never',
   AtLeastOnceAny: 'AtLeastOnceAny',
   VariableAny: 'VariableAny',
   AtLeastOnceAll: 'AtLeastOnceAll',
   VariableAll: 'VariableAll',
 } as const;
+
+export type FrequencyConfigModelOperator = typeof FrequencyConfigModelOperator[keyof typeof FrequencyConfigModelOperator];
+
+
+export const FrequencyConfigModelOperator = {
+  Equals: 'Equals',
+  GreaterThan: 'GreaterThan',
+  LessThan: 'LessThan',
+} as const;
+
+export interface FrequencyConfigModel {
+  type: FrequencyConfigModelType;
+  operator: FrequencyConfigModelOperator;
+  /** @nullable */
+  completions?: number | null;
+}
 
 export type FrequencyOperatorModel = typeof FrequencyOperatorModel[keyof typeof FrequencyOperatorModel];
 
@@ -1595,12 +2081,16 @@ export const FrequencyOperatorModel = {
   LessThan: 'LessThan',
 } as const;
 
-export interface FrequencyConfigModel {
-  type: FrequencyTypeModel;
-  operator: FrequencyOperatorModel;
-  /** @nullable */
-  completions?: number | null;
-}
+export type FrequencyTypeModel = typeof FrequencyTypeModel[keyof typeof FrequencyTypeModel];
+
+
+export const FrequencyTypeModel = {
+  Never: 'Never',
+  AtLeastOnceAny: 'AtLeastOnceAny',
+  VariableAny: 'VariableAny',
+  AtLeastOnceAll: 'AtLeastOnceAll',
+  VariableAll: 'VariableAll',
+} as const;
 
 export interface GenerateTokenResponseModel {
   token: string;
@@ -1626,12 +2116,35 @@ export interface GetProfileOverviewRequestModel {
   isIdentified?: boolean | null;
   /** @nullable */
   isHighPotential?: boolean | null;
-  activeRange?: DateRangeModel | null;
+  activeRange?: null | DateRangeModel;
   /** @nullable */
   identifiedName?: string | null;
 }
 
+export interface GoalDtoModel {
+  id: number;
+  key: string;
+  /** @nullable */
+  name?: string | null;
+  value: number;
+  goalTypeId: string;
+  goalTypeConfig: string;
+  isMain: boolean;
+  isInverted: boolean;
+  isActive: boolean;
+  isInvalid: boolean;
+  created: string;
+  createdBy: string;
+  /** @nullable */
+  updated?: string | null;
+  /** @nullable */
+  updatedBy?: string | null;
+}
+
 export interface PersonaScoreModel {
+  personaId: number;
+  scoreType: PersonalizationScoreTypeModel;
+  entityId: number;
   id: number;
   unique: string;
   nodeId: number;
@@ -1642,27 +2155,32 @@ export interface PersonaScoreModel {
   updated?: string | null;
   score: number;
   isLocked: boolean;
-  personaId: number;
-  scoreType: PersonalizationScoreTypeModel;
-  readonly entityId: number;
 }
 
 export interface GoalModel {
   id: number;
   unique: string;
-  name: string;
+  /** @nullable */
+  name: string | null;
   value: number;
-  isImplicitScoringEnabled: boolean;
   goalTypeId: string;
-  goalTypeConfig: string;
+  /** @nullable */
+  goalTypeConfig: string | null;
   isMain: boolean;
   isInverted: boolean;
   isActive: boolean;
   isInvalid: boolean;
+  isImplicitScoringEnabled: boolean;
   /** @nullable */
   implicitPersonaScoring?: PersonaScoreModel[] | null;
   /** @nullable */
   implicitCustomerJourneyStepScoring?: CustomerJourneyStepScoreModel[] | null;
+  created: string;
+  createdByUmbracoUserKey: string;
+  /** @nullable */
+  updated?: string | null;
+  /** @nullable */
+  updatedByUmbracoUserKey?: string | null;
 }
 
 export interface GoalPersonalizationPerformanceDtoModel {
@@ -1678,26 +2196,53 @@ export interface GoalPersonalizationPerformanceDtoModel {
   personalizedGroupGoalValue: number;
 }
 
-export type RangeTypeModel = typeof RangeTypeModel[keyof typeof RangeTypeModel];
+export type GoalSegmentRuleConfigModelFrequencyType = typeof GoalSegmentRuleConfigModelFrequencyType[keyof typeof GoalSegmentRuleConfigModelFrequencyType];
 
 
-export const RangeTypeModel = {
+export const GoalSegmentRuleConfigModelFrequencyType = {
+  Never: 'Never',
+  AtLeastOnceAny: 'AtLeastOnceAny',
+  VariableAny: 'VariableAny',
+  AtLeastOnceAll: 'AtLeastOnceAll',
+  VariableAll: 'VariableAll',
+} as const;
+
+export type GoalSegmentRuleConfigModelFrequencyOperator = typeof GoalSegmentRuleConfigModelFrequencyOperator[keyof typeof GoalSegmentRuleConfigModelFrequencyOperator];
+
+
+export const GoalSegmentRuleConfigModelFrequencyOperator = {
+  Equals: 'Equals',
+  GreaterThan: 'GreaterThan',
+  LessThan: 'LessThan',
+} as const;
+
+export type GoalSegmentRuleConfigModelFrequency = {
+  type: GoalSegmentRuleConfigModelFrequencyType;
+  operator: GoalSegmentRuleConfigModelFrequencyOperator;
+  /** @nullable */
+  completions?: number | null;
+};
+
+export type GoalSegmentRuleConfigModelRangeType = typeof GoalSegmentRuleConfigModelRangeType[keyof typeof GoalSegmentRuleConfigModelRangeType];
+
+
+export const GoalSegmentRuleConfigModelRangeType = {
   Now: 'Now',
   Sessions: 'Sessions',
   Days: 'Days',
   Any: 'Any',
 } as const;
 
-export interface RangeConfigModel {
-  type: RangeTypeModel;
+export type GoalSegmentRuleConfigModelRange = {
+  type: GoalSegmentRuleConfigModelRangeType;
   /** @nullable */
   maximum?: number | null;
-}
+};
 
 export interface GoalSegmentRuleConfigModel {
-  frequency: FrequencyConfigModel;
+  frequency: GoalSegmentRuleConfigModelFrequency;
   goals: number[];
-  range: RangeConfigModel;
+  range: GoalSegmentRuleConfigModelRange;
 }
 
 export interface GoalSummaryModel {
@@ -1712,6 +2257,14 @@ export interface GoalSummaryModel {
   isActive: boolean;
   isInverted: boolean;
   isImplicitScoringEnabled: boolean;
+}
+
+export interface GoalTypeModel {
+  /** @nullable */
+  configurationEditorAlias: string | null;
+  id: string;
+  /** @nullable */
+  name: string | null;
 }
 
 export interface HeatmapLineModel {
@@ -1733,7 +2286,7 @@ export interface HeatmapPageVariantModel {
   /** @nullable */
   name?: string | null;
   /** @nullable */
-  queryString?: string | null;
+  segment?: string | null;
 }
 
 export interface HeatmapSettingsRequestModel {
@@ -1750,23 +2303,6 @@ export interface HeatmapSettingsRequestModel {
   segment?: string | null;
   /** @nullable */
   borderLines?: number[] | null;
-}
-
-export interface ReferralPageDtoModel {
-  id: number;
-  /** @nullable */
-  referralGroupId?: number | null;
-  /** @nullable */
-  url?: string | null;
-  referrals: number;
-}
-
-export interface IPageReferralPageDtoModel {
-  readonly currentPage: number;
-  readonly totalPages: number;
-  readonly totalRowCount: number;
-  readonly itemsPerPage: number;
-  readonly rows: readonly ReferralPageDtoModel[];
 }
 
 export type LicenseStatusModel = typeof LicenseStatusModel[keyof typeof LicenseStatusModel];
@@ -1827,44 +2363,56 @@ export interface NewProfileSummaryDtoModel {
   unknown: number;
 }
 
-export type OperatorModel = typeof OperatorModel[keyof typeof OperatorModel];
+export type NumberOfSessionsRuleConfigModelOperator = typeof NumberOfSessionsRuleConfigModelOperator[keyof typeof NumberOfSessionsRuleConfigModelOperator];
 
 
-export const OperatorModel = {
+export const NumberOfSessionsRuleConfigModelOperator = {
   eq: 'eq',
   gt: 'gt',
   lt: 'lt',
 } as const;
 
 export interface NumberOfSessionsRuleConfigModel {
-  operator: OperatorModel;
+  operator: NumberOfSessionsRuleConfigModelOperator;
   sessions: number;
 }
 
 export interface PackageStatusResultModel {
-  readonly tierName: string;
-  readonly domains: readonly string[];
-  readonly featureAnalyticsEnabled: boolean;
-  readonly featureAbTestingEnabled: boolean;
-  readonly featurePersonalizationEnabled: boolean;
   /** @nullable */
-  readonly expirationDate?: string | null;
-  readonly isPackageEnabled: boolean;
-  readonly isTrialMode: boolean;
+  tierName: string | null;
+  /** @nullable */
+  domains: string[] | null;
+  featureAnalyticsEnabled: boolean;
+  featureAbTestingEnabled: boolean;
+  featurePersonalizationEnabled: boolean;
+  /** @nullable */
+  expirationDate?: string | null;
+  isPackageEnabled: boolean;
+  isTrialMode: boolean;
   licenseStatus: LicenseStatusModel;
-  readonly expiresSoon: boolean;
-  readonly isNearLimit: boolean;
-  readonly monthlyPageviewLimit: number;
-  readonly currentPageviewsThisMonth: number;
+  expiresSoon: boolean;
+  isNearLimit: boolean;
+  monthlyPageviewLimit: number;
+  currentPageviewsThisMonth: number;
   /** @nullable */
-  readonly version?: string | null;
-  readonly whitelistedDomainRegexes: readonly string[];
+  version?: string | null;
+  /** @nullable */
+  whitelistedDomainRegexes: string[] | null;
 }
 
-export interface PageEventGoalTypeModel {
-  readonly configurationEditorAlias: string;
-  readonly id: string;
-  readonly name: string;
+export interface PagedModelOfDataCleanupLogDto {
+  items: DataCleanupLogDtoModel[];
+  total: number;
+}
+
+export interface PagedModelOfDataCleanupRunDto {
+  items: DataCleanupRunDtoModel[];
+  total: number;
+}
+
+export interface PagedModelOfDataGenerationLogDto {
+  items: DataGenerationLogDtoModel[];
+  total: number;
 }
 
 export interface PageEventModel {
@@ -1876,10 +2424,62 @@ export interface PageEventModel {
   label?: string | null;
 }
 
+export type PageEventSegmentRuleConfigModelFrequencyType = typeof PageEventSegmentRuleConfigModelFrequencyType[keyof typeof PageEventSegmentRuleConfigModelFrequencyType];
+
+
+export const PageEventSegmentRuleConfigModelFrequencyType = {
+  Never: 'Never',
+  AtLeastOnceAny: 'AtLeastOnceAny',
+  VariableAny: 'VariableAny',
+  AtLeastOnceAll: 'AtLeastOnceAll',
+  VariableAll: 'VariableAll',
+} as const;
+
+export type PageEventSegmentRuleConfigModelFrequencyOperator = typeof PageEventSegmentRuleConfigModelFrequencyOperator[keyof typeof PageEventSegmentRuleConfigModelFrequencyOperator];
+
+
+export const PageEventSegmentRuleConfigModelFrequencyOperator = {
+  Equals: 'Equals',
+  GreaterThan: 'GreaterThan',
+  LessThan: 'LessThan',
+} as const;
+
+export type PageEventSegmentRuleConfigModelFrequency = {
+  type: PageEventSegmentRuleConfigModelFrequencyType;
+  operator: PageEventSegmentRuleConfigModelFrequencyOperator;
+  /** @nullable */
+  completions?: number | null;
+};
+
+export type PageEventSegmentRuleConfigModelRangeType = typeof PageEventSegmentRuleConfigModelRangeType[keyof typeof PageEventSegmentRuleConfigModelRangeType];
+
+
+export const PageEventSegmentRuleConfigModelRangeType = {
+  Now: 'Now',
+  Sessions: 'Sessions',
+  Days: 'Days',
+  Any: 'Any',
+} as const;
+
+export type PageEventSegmentRuleConfigModelRange = {
+  type: PageEventSegmentRuleConfigModelRangeType;
+  /** @nullable */
+  maximum?: number | null;
+};
+
+export type PageEventSegmentRuleConfigModelEventsItem = {
+  /** @nullable */
+  category?: string | null;
+  /** @nullable */
+  action?: string | null;
+  /** @nullable */
+  label?: string | null;
+};
+
 export interface PageEventSegmentRuleConfigModel {
-  frequency: FrequencyConfigModel;
-  range: RangeConfigModel;
-  events: PageEventModel[];
+  frequency: PageEventSegmentRuleConfigModelFrequency;
+  range: PageEventSegmentRuleConfigModelRange;
+  events: PageEventSegmentRuleConfigModelEventsItem[];
 }
 
 export interface PageGoalSummaryModel {
@@ -1888,23 +2488,26 @@ export interface PageGoalSummaryModel {
   totalRowCount: number;
   itemsPerPage: number;
   rows: GoalSummaryModel[];
-  readonly fromRow: number;
-  readonly toRow: number;
+  fromRow: number;
+  toRow: number;
 }
 
-export interface PagedModelDataCleanupLogDtoModel {
-  items: DataCleanupLogDtoModel[];
-  total: number;
+export interface ReferralPageDtoModel {
+  id: number;
+  /** @nullable */
+  referralGroupId?: number | null;
+  /** @nullable */
+  url?: string | null;
+  referrals: number;
 }
 
-export interface PagedModelDataCleanupRunDtoModel {
-  items: DataCleanupRunDtoModel[];
-  total: number;
-}
-
-export interface PagedModelDataGenerationLogDtoModel {
-  items: DataGenerationLogDtoModel[];
-  total: number;
+export interface PageReferralPageDtoModel {
+  currentPage: number;
+  totalPages: number;
+  totalRowCount: number;
+  itemsPerPage: number;
+  /** @nullable */
+  rows: ReferralPageDtoModel[] | null;
 }
 
 export type PageviewEventTypeModel = typeof PageviewEventTypeModel[keyof typeof PageviewEventTypeModel];
@@ -1921,12 +2524,6 @@ export const PageviewEventTypeModel = {
   Video: 'Video',
   UmbracoForms: 'UmbracoForms',
 } as const;
-
-export interface PageviewGoalTypeModel {
-  readonly configurationEditorAlias: string;
-  readonly id: string;
-  readonly name: string;
-}
 
 export interface PersonaDtoModel {
   id: number;
@@ -1955,10 +2552,6 @@ export interface PersonaDtoModel {
   updatedByUmbracoUserName?: string | null;
 }
 
-export interface PersonaSegmentRuleConfigModel {
-  Personas: number[];
-}
-
 export interface PersonasDtoModel {
   id: number;
   unique: string;
@@ -1981,21 +2574,26 @@ export interface PersonasDtoModel {
   updatedByUmbracoUserName?: string | null;
   /** @nullable */
   minimumParticipationScoreThreshold?: number | null;
-  minimumDeviationType: MinimumDeviationTypeModel;
+  minimumDeviationType?: null | MinimumDeviationTypeModel;
   /** @nullable */
   minimumDeviation?: number | null;
-  expirationType: ExpirationTypeModel;
+  expirationType?: null | ExpirationTypeModel;
   /** @nullable */
   expiration?: number | null;
   /** @nullable */
   upperScoreLimit?: number | null;
 }
 
-export interface PreviewUrlResponseModel {
+export interface PersonaSegmentRuleConfigModel {
+  Personas: number[];
+}
+
+export interface PreviewableSegmentDtoModel {
+  alias: string;
   /** @nullable */
-  errorMessage?: string | null;
+  name?: string | null;
   /** @nullable */
-  previewUrl?: string | null;
+  cultures?: string[] | null;
 }
 
 export interface ProblemDetails {
@@ -2009,15 +2607,14 @@ export interface ProblemDetails {
   detail?: string | null;
   /** @nullable */
   instance?: string | null;
-  [key: string]: unknown;
 }
 
 export interface ProfileCustomerJourneyStepScoreDtoModel {
+  customerJourneyStepId: number;
   groupId: number;
   score: number;
   isActive: boolean;
   isLocked: boolean;
-  customerJourneyStepId: number;
 }
 
 export interface ProfileGoalCompletionsDtoModel {
@@ -2093,11 +2690,11 @@ export interface ProfilePageviewEventDtoModel {
 }
 
 export interface ProfilePersonaScoreDtoModel {
+  personaId: number;
   groupId: number;
   score: number;
   isActive: boolean;
   isLocked: boolean;
-  personaId: number;
 }
 
 export interface ProfilePotentialDtoModel {
@@ -2154,7 +2751,7 @@ export interface ProjectAbTestModel {
   createdByUmbracoUserKey?: string | null;
   /** @nullable */
   createdByUmbracoUserName?: string | null;
-  testType: AbTestTypeModel;
+  testType?: null | AbTestTypeModel;
   /** @nullable */
   startTime?: string | null;
   status: AbTestStatusModel;
@@ -2190,17 +2787,43 @@ export interface ProjectModel {
   invalid: boolean;
   abTests: ProjectAbTestModel[];
   amountOfActiveTests: number;
-  readonly amountOfTests: number;
+  amountOfTests: number;
   archived: boolean;
 }
 
+export type RangeConfigModelType = typeof RangeConfigModelType[keyof typeof RangeConfigModelType];
+
+
+export const RangeConfigModelType = {
+  Now: 'Now',
+  Sessions: 'Sessions',
+  Days: 'Days',
+  Any: 'Any',
+} as const;
+
+export interface RangeConfigModel {
+  type: RangeConfigModelType;
+  /** @nullable */
+  maximum?: number | null;
+}
+
+export type RangeTypeModel = typeof RangeTypeModel[keyof typeof RangeTypeModel];
+
+
+export const RangeTypeModel = {
+  Now: 'Now',
+  Sessions: 'Sessions',
+  Days: 'Days',
+  Any: 'Any',
+} as const;
+
 export interface ReferralGroupCustomerJourneyScoringDtoModel {
+  groupId: number;
+  customerJourneyStepId: number;
   id: number;
   unique: string;
   score: number;
   isLocked: boolean;
-  groupId: number;
-  customerJourneyStepId: number;
 }
 
 export interface ReferralGroupPageDtoModel {
@@ -2214,17 +2837,15 @@ export interface ReferralGroupPageDtoModel {
 }
 
 export interface ReferralGroupPersonaScoringDtoModel {
+  groupId: number;
+  personaId: number;
   id: number;
   unique: string;
   score: number;
   isLocked: boolean;
-  groupId: number;
-  personaId: number;
 }
 
 export interface ReferralGroupDtoModel {
-  id: number;
-  created: string;
   unique: string;
   /** @nullable */
   name?: string | null;
@@ -2234,6 +2855,8 @@ export interface ReferralGroupDtoModel {
   pages: ReferralGroupPageDtoModel[];
   customerJourneyScoring: ReferralGroupCustomerJourneyScoringDtoModel[];
   personaScoring: ReferralGroupPersonaScoringDtoModel[];
+  id: number;
+  created: string;
 }
 
 export interface ReferralPageFiltersModel {
@@ -2251,9 +2874,11 @@ export interface ReportingStatusModel {
 }
 
 export interface ValidationResultsModel {
-  readonly isValid: boolean;
-  readonly warnings: readonly string[];
-  readonly errors: readonly string[];
+  isValid: boolean;
+  /** @nullable */
+  warnings: string[] | null;
+  /** @nullable */
+  errors: string[] | null;
 }
 
 export interface SaveAbTestResponseModel {
@@ -2262,7 +2887,7 @@ export interface SaveAbTestResponseModel {
 }
 
 export interface SaveCustomerJourneyResponseModel {
-  journey: CustomerJourneyDtoModel | null;
+  journey: null | CustomerJourneyDtoModel;
   validationResults: ValidationResultsModel;
 }
 
@@ -2270,29 +2895,68 @@ export interface SaveGoalRequestModel {
   /** @nullable */
   id?: number | null;
   unique: string;
-  /** @minLength 1 */
-  name: string;
-  value: number;
-  goalTypeId: string;
-  /** @minLength 1 */
-  goalTypeConfig: string;
-  isMain: boolean;
-  isInverted: boolean;
-  isActive: boolean;
-  isInvalid: boolean;
-  isImplicitScoringEnabled: boolean;
+  /** @nullable */
+  name: string | null;
+  /** @nullable */
+  value: number | null;
+  /** @nullable */
+  goalTypeId: string | null;
+  /** @nullable */
+  goalTypeConfig: string | null;
+  /** @nullable */
+  isMain: boolean | null;
+  /** @nullable */
+  isInverted: boolean | null;
+  /** @nullable */
+  isActive: boolean | null;
+  /** @nullable */
+  isInvalid: boolean | null;
+  /** @nullable */
+  isImplicitScoringEnabled: boolean | null;
   implicitPersonaScoring: PersonaScoreModel[];
   implicitCustomerJourneyStepScoring: CustomerJourneyStepScoreModel[];
 }
 
 export interface SavePersonaResponseModel {
-  persona: PersonasDtoModel | null;
+  persona: null | PersonasDtoModel;
   validationResults: ValidationResultsModel;
 }
 
 export interface SearchTermByVisitorDtoModel {
   query: string;
   timestamp: string;
+}
+
+export interface SegmentRuleDtoModel {
+  id: number;
+  unique: string;
+  segmentId: number;
+  /** @nullable */
+  type?: string | null;
+  config?: unknown;
+  isNegation: boolean;
+  created: string;
+}
+
+export interface SegmentDtoModel {
+  unique: string;
+  /** @nullable */
+  name?: string | null;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  endTime?: string | null;
+  isTemporary: boolean;
+  sortOrder: number;
+  rules: SegmentRuleDtoModel[];
+  controlGroupSize: number;
+  id: number;
+  created: string;
+}
+
+export interface SegmentedPropertyResponseModel {
+  hasSegmentedProperty: boolean;
+  cultureSharedSegmentedProperties: string[];
 }
 
 export interface SegmentPriorityUpdateModel {
@@ -2314,9 +2978,24 @@ export interface SessionsResponseModel {
   totalResults: number;
 }
 
+export type VisitorTypeModel = typeof VisitorTypeModel[keyof typeof VisitorTypeModel];
+
+
+export const VisitorTypeModel = {
+  Person: 'Person',
+  Bot: 'Bot',
+  Monitor: 'Monitor',
+  Spam: 'Spam',
+} as const;
+
+export interface SetVisitorTypeRequestModel {
+  visitorType?: null | VisitorTypeModel;
+}
+
 export interface SuspiciousVisitorDtoModel {
   visitorId: number;
   totalPageviews: number;
+  visitorType: VisitorTypeModel;
   /** @nullable */
   ipAddress?: string | null;
   /** @nullable */
@@ -2327,6 +3006,15 @@ export interface SuspiciousActivityResponseModel {
   results: SuspiciousVisitorDtoModel[];
   totalResults: number;
 }
+
+export type SuspiciousActivityVisitorTypeFilterModel = typeof SuspiciousActivityVisitorTypeFilterModel[keyof typeof SuspiciousActivityVisitorTypeFilterModel];
+
+
+export const SuspiciousActivityVisitorTypeFilterModel = {
+  All: 'All',
+  Person: 'Person',
+  NonPerson: 'NonPerson',
+} as const;
 
 export interface TableFilterModel {
   page: number;
@@ -2346,8 +3034,15 @@ export interface TimeOfDayRangeModel {
   to?: number | null;
 }
 
+export type TimeOfDaySegmentRuleConfigModelTimeRangesItem = {
+  /** @nullable */
+  from?: number | null;
+  /** @nullable */
+  to?: number | null;
+};
+
 export interface TimeOfDaySegmentRuleConfigModel {
-  TimeRanges: TimeOfDayRangeModel[];
+  TimeRanges: TimeOfDaySegmentRuleConfigModelTimeRangesItem[];
 }
 
 export type TrafficFilterModeModel = typeof TrafficFilterModeModel[keyof typeof TrafficFilterModeModel];
@@ -2360,8 +3055,6 @@ export const TrafficFilterModeModel = {
 } as const;
 
 export interface TrafficFilterModel {
-  id: number;
-  created: string;
   key: string;
   /** @nullable */
   createdByUmbracoUserName?: string | null;
@@ -2374,6 +3067,8 @@ export interface TrafficFilterModel {
   value?: string | null;
   values: string[];
   isActive: boolean;
+  id: number;
+  created: string;
 }
 
 export interface UmbracoPageInfoDtoModel {
@@ -2386,7 +3081,7 @@ export interface UmbracoPageInfoDtoModel {
   id: number;
   /** @nullable */
   url?: string | null;
-  editor?: EditorInfoDtoModel | null;
+  editor?: null | EditorInfoDtoModel;
 }
 
 export interface UmsContentTypeModel {
@@ -2446,217 +3141,92 @@ export interface UserGroupPermissionDtoModel {
   updatedByUmbracoUser?: string | null;
 }
 
+export type VisitedPagesSegmentRuleConfigModelRangeType = typeof VisitedPagesSegmentRuleConfigModelRangeType[keyof typeof VisitedPagesSegmentRuleConfigModelRangeType];
+
+
+export const VisitedPagesSegmentRuleConfigModelRangeType = {
+  Now: 'Now',
+  Sessions: 'Sessions',
+  Days: 'Days',
+  Any: 'Any',
+} as const;
+
+export type VisitedPagesSegmentRuleConfigModelRange = {
+  type: VisitedPagesSegmentRuleConfigModelRangeType;
+  /** @nullable */
+  maximum?: number | null;
+};
+
 export interface VisitedPagesSegmentRuleConfigModel {
   visitedPages: string[];
-  range: RangeConfigModel;
+  range: VisitedPagesSegmentRuleConfigModelRange;
   allPages: boolean;
 }
 
-export type DeleteAbTestProjectParams = {
+export type GetPermissionsUserGroupParams = {
+userGroupKey?: string;
+};
+
+export type GetTrafficFilterParams = {
+key?: string;
+};
+
+export type DeleteTrafficFilterParams = {
+key?: string;
+};
+
+export type GetSuspiciousActivityOverviewParams = {
+skip?: number;
+take?: number;
+filter?: SuspiciousActivityVisitorTypeFilterModel;
+};
+
+export type DeleteSegmentsParams = {
 id?: string;
 };
 
-export type GetAbTestProjectParams = {
+export type GetSegmentsParams = {
 id?: string;
 };
 
-export type GetAbTestProjectDetailsParams = {
-id?: string;
-};
-
-export type DeleteAbTestVariantParams = {
-variantId?: number;
-};
-
-export type GetAbTestVariantParams = {
-id?: number;
-};
-
-export type GetAbTestVariantAllParams = {
-abTestId?: number;
-};
-
-export type PostAbTestVariantCreateParams = {
-testId?: number;
-};
-
-export type PostAbTestVariantDisableParams = {
-variantId?: number;
-};
-
-export type GetAbTestVariantSegmentParams = {
-segment?: string;
-};
-
-export type DeleteAbTestParams = {
-unique?: string;
-};
-
-export type GetAbTestParams = {
-id?: number;
-};
-
-export type GetAbTestEmptyParams = {
-testType?: AbTestTypeModel;
-};
-
-export type GetAbTestPageParams = {
-unique?: string;
-};
-
-export type GetAbTestPreviewUrlParams = {
-abTestId?: number;
-variantId?: number;
-};
-
-export type PostAbTestSegmentParams = {
-unique?: string;
-culture?: string;
-segment?: string;
-};
-
-export type GetAbTestViewModelParams = {
-unique?: string;
-};
-
-export type GetAnalyticsDistinctParams = {
-dimension?: DimensionModel;
-};
-
-export type DeleteAnnotationsParams = {
-id?: number;
-};
-
-export type GetAnnotationsAllParams = {
-from?: string;
-to?: string;
-};
-
-export type GetAnnotationsGlobalParams = {
-from?: string;
-to?: string;
-};
-
-export type GetAnnotationsPageParams = {
-unique?: string;
-from?: string;
-to?: string;
-culture?: string;
-};
-
-export type DeleteAppliedPersonalizationParams = {
-id?: string;
-};
-
-export type GetAppliedPersonalizationIdParams = {
-id?: string;
-};
-
-export type PostAppliedPersonalizationSegmentParams = {
-unique?: string;
-segment?: string;
-culture?: string;
-};
-
-export type GetAppliedPersonalizationSegmentParams = {
-segment?: string;
-};
-
-export type DeleteCampaignGroupParams = {
-id?: string;
-};
-
-export type GetCampaignGroupParams = {
-id?: string;
-};
-
-export type GetCampaignGroupVisitorsParams = {
+export type GetSegmentsAllParams = {
+isTemporary?: boolean;
 amountOfDays?: number;
 };
 
-export type GetCampaignGroupVisitors200One = {[key: string]: number};
+export type GetSegmentsPreviewableSegmentsParams = {
+id?: string;
+};
 
-export type GetCampaignGroupVisitors200Two = {[key: string]: number};
+export type GetSegmentsItemParams = {
+id?: string[];
+};
 
-export type GetCampaignGroupVisitors200Three = {[key: string]: number};
-
-export type GetCampaignsParams = {
+export type GetSearchTermsParams = {
 visitorId?: number;
 };
 
-export type GetCockpitGetUmbracoPageInfoParams = {
-pageId?: string;
-culture?: string;
+export type GetReportingParams = {
+segmentId?: number;
 };
 
-export type GetContentScoringAllParams = {
-unique?: string;
-};
-
-export type DeleteContentScoringJourneyParams = {
-id?: number;
-};
-
-export type DeleteContentScoringPersonaParams = {
-id?: number;
-};
-
-export type GetContentTypesSegmentedPropertyParams = {
-unique?: string;
-};
-
-export type GetCulturesParams = {
-id?: number;
-};
-
-export type DeleteCustomerJourneyParams = {
+export type DeleteReferralGroupParams = {
 id?: string;
 };
 
-export type GetCustomerJourneyDetailsParams = {
+export type GetReferralGroupParams = {
 id?: string;
 };
 
-export type GetDataCleanupLogsParams = {
-skip?: number;
-take?: number;
+export type GetReferralGroupVisitorsParams = {
+amountOfDays?: number;
 };
 
-export type GetDataCleanupRunsParams = {
-skip?: number;
-take?: number;
-};
+export type GetReferralGroupVisitors200One = {[key: string]: number};
 
-export type GetDataGenerationLogsParams = {
-skip?: number;
-take?: number;
-};
+export type GetReferralGroupVisitors200Two = {[key: string]: number};
 
-export type GetPermissionsDocumentTypeParams = {
-contentTypeId?: number;
-};
-
-export type GetGoalDetailsParams = {
-id?: string;
-};
-
-export type GetHeatmapsVariantsParams = {
-unique?: string;
-culture?: string;
-};
-
-export type PostUmbracoEngagePagedataCollectParams = {
-version?: number;
-pageviewGuid?: string;
-};
-
-export type DeletePersonaParams = {
-id?: string;
-};
-
-export type GetPersonaDetailsParams = {
-id?: string;
-};
+export type GetReferralGroupVisitors200Three = {[key: string]: number};
 
 export type GetProfileBotVisitors200One = {[key: string]: string};
 
@@ -2670,6 +3240,10 @@ visitorId?: number;
 
 export type GetProfileDetailsParams = {
 visitorId?: number;
+};
+
+export type GetProfilePageEventsParams = {
+pageviewId?: number;
 };
 
 export type GetProfileExportParams = {
@@ -2692,12 +3266,16 @@ export type GetProfileGoalCompletionsParams = {
 visitorId?: number;
 };
 
-export type GetProfileLastActiveSegmentParams = {
-visitorId?: number;
+export type GetProfileStatisticsGrowthParams = {
+numberOfMonths?: number;
 };
 
-export type GetProfilePageEventsParams = {
-pageviewId?: number;
+export type GetProfileStatisticsIdentificationParams = {
+numberOfDays?: number;
+};
+
+export type GetProfileLastActiveSegmentParams = {
+visitorId?: number;
 };
 
 export type GetProfilePageviewsParams = {
@@ -2722,919 +3300,234 @@ PageIndex?: number;
 PageSize?: number;
 };
 
-export type GetProfileStatisticsGrowthParams = {
-numberOfMonths?: number;
-};
-
-export type GetProfileStatisticsIdentificationParams = {
-numberOfDays?: number;
-};
-
-export type DeleteReferralGroupParams = {
+export type DeletePersonaParams = {
 id?: string;
 };
 
-export type GetReferralGroupParams = {
+export type GetPersonaDetailsParams = {
 id?: string;
 };
 
-export type GetReferralGroupVisitorsParams = {
-amountOfDays?: number;
+export type PostUmbracoEngagePagedataCollectParams = {
+version?: number;
+pageviewGuid?: string;
 };
 
-export type GetReferralGroupVisitors200One = {[key: string]: number};
-
-export type GetReferralGroupVisitors200Two = {[key: string]: number};
-
-export type GetReferralGroupVisitors200Three = {[key: string]: number};
-
-export type GetReportingParams = {
-segmentId?: number;
+export type GetHeatmapsVariantsParams = {
+unique?: string;
+culture?: string;
 };
 
-export type GetSearchTermsParams = {
-visitorId?: number;
+export type GetGoalsItemParams = {
+id?: string[];
 };
 
-export type DeleteSegmentsParams = {
+export type GetGoalDetailsParams = {
 id?: string;
 };
 
-export type GetSegmentsParams = {
-id?: string;
+export type GetPermissionsDocumentTypeParams = {
+contentTypeId?: number;
 };
 
-export type GetSegmentsAllParams = {
-isTemporary?: boolean;
-amountOfDays?: number;
-};
-
-export type DeleteSegmentsDeleteSegmentContentParams = {
-segment?: string;
-contentId?: string;
-};
-
-export type GetSuspiciousActivityOverviewParams = {
+export type GetDataGenerationLogsParams = {
 skip?: number;
 take?: number;
 };
 
-export type DeleteTrafficFilterParams = {
-key?: string;
+export type GetDataCleanupLogsParams = {
+skip?: number;
+take?: number;
 };
 
-export type GetTrafficFilterParams = {
-key?: string;
+export type GetDataCleanupRunsParams = {
+skip?: number;
+take?: number;
 };
 
-export type GetPermissionsUserGroupParams = {
-userGroupKey?: string;
+export type DeleteCustomerJourneyParams = {
+id?: string;
+};
+
+export type GetCustomerJourneyDetailsParams = {
+id?: string;
+};
+
+export type GetCulturesParams = {
+id?: number;
+};
+
+export type GetContentTypesSegmentedPropertyParams = {
+unique?: string;
+};
+
+export type DeleteContentScoringJourneyParams = {
+id?: number;
+};
+
+export type DeleteContentScoringPersonaParams = {
+id?: number;
+};
+
+export type GetContentScoringAllParams = {
+unique?: string;
+};
+
+export type GetCockpitGetUmbracoPageInfoParams = {
+pageId?: string;
+culture?: string;
+};
+
+export type GetCampaignsParams = {
+visitorId?: number;
+};
+
+export type DeleteCampaignGroupParams = {
+id?: string;
+};
+
+export type GetCampaignGroupParams = {
+id?: string;
+};
+
+export type GetCampaignGroupVisitorsParams = {
+amountOfDays?: number;
+};
+
+export type GetCampaignGroupVisitors200One = {[key: string]: number};
+
+export type GetCampaignGroupVisitors200Two = {[key: string]: number};
+
+export type GetCampaignGroupVisitors200Three = {[key: string]: number};
+
+export type PostAppliedPersonalizationSegmentParams = {
+unique?: string;
+segment?: string;
+culture?: string;
+};
+
+export type GetAppliedPersonalizationSegmentParams = {
+segment?: string;
+};
+
+export type DeleteAppliedPersonalizationParams = {
+id?: string;
+};
+
+export type GetAppliedPersonalizationIdParams = {
+id?: string;
+};
+
+export type DeleteAnnotationsParams = {
+id?: number;
+};
+
+export type GetAnnotationsAllParams = {
+from?: string;
+to?: string;
+};
+
+export type GetAnnotationsGlobalParams = {
+from?: string;
+to?: string;
+};
+
+export type GetAnnotationsPageParams = {
+unique?: string;
+from?: string;
+to?: string;
+culture?: string;
+};
+
+export type GetAnalyticsDistinctParams = {
+dimension?: DimensionModel;
+};
+
+export type PostAbTestVariantCreateParams = {
+testId?: number;
+};
+
+export type DeleteAbTestVariantParams = {
+variantId?: number;
+};
+
+export type GetAbTestVariantParams = {
+id?: number;
+};
+
+export type PostAbTestVariantDisableParams = {
+variantId?: number;
+};
+
+export type GetAbTestVariantAllParams = {
+abTestId?: number;
+};
+
+export type GetAbTestVariantSegmentParams = {
+segment?: string;
+};
+
+export type DeleteAbTestProjectParams = {
+id?: string;
+};
+
+export type GetAbTestProjectParams = {
+id?: string;
+};
+
+export type GetAbTestProjectDetailsParams = {
+id?: string;
+};
+
+export type GetAbTestProjectItemParams = {
+id?: string[];
+};
+
+export type GetAbTestEmptyParams = {
+testType?: AbTestTypeModel;
+nodeKey?: string;
+};
+
+export type PostAbTestSegmentParams = {
+unique?: string;
+culture?: string;
+segment?: string;
+};
+
+export type DeleteAbTestParams = {
+unique?: string;
+};
+
+export type GetAbTestParams = {
+id?: number;
+};
+
+export type GetAbTestPageParams = {
+unique?: string;
+};
+
+export type GetAbTestViewModelParams = {
+unique?: string;
 };
 
 type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
   export const getUmbracoEngageManagementAPI = () => {
-const postAbTestProject = (
-    abTestProjectDtoModel?: AbTestProjectDtoModel,
- options?: SecondParameter<typeof customInstance<AbTestProjectDtoModel>>,) => {
-      return customInstance<AbTestProjectDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test-project`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: abTestProjectDtoModel
-    },
-      options);
-    }
-
-const deleteAbTestProject = (
-    params?: DeleteAbTestProjectParams,
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/ab-test-project`, method: 'DELETE',
-        params
-    },
-      options);
-    }
-
-const getAbTestProject = (
-    params?: GetAbTestProjectParams,
- options?: SecondParameter<typeof customInstance<AbTestProjectDtoModel>>,) => {
-      return customInstance<AbTestProjectDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test-project`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const putAbTestProject = (
-    abTestProjectDtoModel?: AbTestProjectDtoModel,
- options?: SecondParameter<typeof customInstance<AbTestProjectDtoModel>>,) => {
-      return customInstance<AbTestProjectDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test-project`, method: 'PUT',
-      headers: {'Content-Type': 'application/json', },
-      data: abTestProjectDtoModel
-    },
-      options);
-    }
-
-const getAbTestProjectAll = (
-
- options?: SecondParameter<typeof customInstance<AbTestProjectDtoModel[]>>,) => {
-      return customInstance<AbTestProjectDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/ab-test-project/all`, method: 'GET'
-    },
-      options);
-    }
-
-const getAbTestProjectDetails = (
-    params?: GetAbTestProjectDetailsParams,
- options?: SecondParameter<typeof customInstance<ProjectModel>>,) => {
-      return customInstance<ProjectModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test-project/details`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const deleteAbTestVariant = (
-    params?: DeleteAbTestVariantParams,
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/ab-test-variant`, method: 'DELETE',
-        params
-    },
-      options);
-    }
-
-const getAbTestVariant = (
-    params?: GetAbTestVariantParams,
- options?: SecondParameter<typeof customInstance<AbTestVariantDtoModel>>,) => {
-      return customInstance<AbTestVariantDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test-variant`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const postAbTestVariant = (
-    abTestVariantDtoModel?: AbTestVariantDtoModel,
- options?: SecondParameter<typeof customInstance<AbTestVariantDtoModel>>,) => {
-      return customInstance<AbTestVariantDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test-variant`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: abTestVariantDtoModel
-    },
-      options);
-    }
-
-const getAbTestVariantAll = (
-    params?: GetAbTestVariantAllParams,
- options?: SecondParameter<typeof customInstance<AbTestVariantDtoModel[]>>,) => {
-      return customInstance<AbTestVariantDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/ab-test-variant/all`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const postAbTestVariantCreate = (
-    params?: PostAbTestVariantCreateParams,
- options?: SecondParameter<typeof customInstance<AbTestVariantDtoModel>>,) => {
-      return customInstance<AbTestVariantDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test-variant/create`, method: 'POST',
-        params
-    },
-      options);
-    }
-
-const postAbTestVariantDisable = (
-    params?: PostAbTestVariantDisableParams,
- options?: SecondParameter<typeof customInstance<AbTestVariantDtoModel>>,) => {
-      return customInstance<AbTestVariantDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test-variant/disable`, method: 'POST',
-        params
-    },
-      options);
-    }
-
-const getAbTestVariantSegment = (
-    params?: GetAbTestVariantSegmentParams,
- options?: SecondParameter<typeof customInstance<AbTestVariantDtoModel>>,) => {
-      return customInstance<AbTestVariantDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test-variant/segment`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const deleteAbTest = (
-    params?: DeleteAbTestParams,
- options?: SecondParameter<typeof customInstance<ValidationResultsModel>>,) => {
-      return customInstance<ValidationResultsModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test`, method: 'DELETE',
-        params
-    },
-      options);
-    }
-
-const getAbTest = (
-    params?: GetAbTestParams,
- options?: SecondParameter<typeof customInstance<AbTestDtoModel>>,) => {
-      return customInstance<AbTestDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const postAbTest = (
-    abTestDetailModel?: NonReadonly<AbTestDetailModel>,
- options?: SecondParameter<typeof customInstance<SaveAbTestResponseModel>>,) => {
-      return customInstance<SaveAbTestResponseModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: abTestDetailModel
-    },
-      options);
-    }
-
-const getAbTestAll = (
-
- options?: SecondParameter<typeof customInstance<AbTestDtoModel[]>>,) => {
-      return customInstance<AbTestDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/ab-test/all`, method: 'GET'
-    },
-      options);
-    }
-
-const getAbTestEmpty = (
-    params?: GetAbTestEmptyParams,
- options?: SecondParameter<typeof customInstance<AbTestDetailModel>>,) => {
-      return customInstance<AbTestDetailModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test/empty`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const getAbTestPage = (
-    params?: GetAbTestPageParams,
- options?: SecondParameter<typeof customInstance<ProjectAbTestModel[]>>,) => {
-      return customInstance<ProjectAbTestModel[]>(
-      {url: `/umbraco/engage/management/api/v1/ab-test/page`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const getAbTestPreviewUrl = (
-    params?: GetAbTestPreviewUrlParams,
- options?: SecondParameter<typeof customInstance<PreviewUrlResponseModel>>,) => {
-      return customInstance<PreviewUrlResponseModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test/preview-url`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const postAbTestRuntimeIndication = (
-    abTestDtoModel?: AbTestDtoModel,
- options?: SecondParameter<typeof customInstance<AbTestIndicationModel>>,) => {
-      return customInstance<AbTestIndicationModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test/runtime-indication`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: abTestDtoModel
-    },
-      options);
-    }
-
-const postAbTestSegment = (
-    params?: PostAbTestSegmentParams,
- options?: SecondParameter<typeof customInstance<CreateSegmentAbTestResponseModel>>,) => {
-      return customInstance<CreateSegmentAbTestResponseModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test/segment`, method: 'POST',
-        params
-    },
-      options);
-    }
-
-const postAbTestVariantDetails = (
-    abTestDtoModel?: AbTestDtoModel,
- options?: SecondParameter<typeof customInstance<AbTestDetailVariantInfoModel[]>>,) => {
-      return customInstance<AbTestDetailVariantInfoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/ab-test/variant-details`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: abTestDtoModel
-    },
-      options);
-    }
-
-const getAbTestViewModel = (
-    params?: GetAbTestViewModelParams,
- options?: SecondParameter<typeof customInstance<AbTestDetailModel>>,) => {
-      return customInstance<AbTestDetailModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test/view-model`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const getAddOns = (
-
- options?: SecondParameter<typeof customInstance<EnabledAddonsModel>>,) => {
-      return customInstance<EnabledAddonsModel>(
-      {url: `/umbraco/engage/management/api/v1/add-ons`, method: 'GET'
-    },
-      options);
-    }
-
-const getAnalyticsDistinct = (
-    params?: GetAnalyticsDistinctParams,
- options?: SecondParameter<typeof customInstance<string[]>>,) => {
-      return customInstance<string[]>(
-      {url: `/umbraco/engage/management/api/v1/analytics/distinct`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const postAnalyticsQuery = (
-    analyticsQueryGetModel?: AnalyticsQueryGetModel,
- options?: SecondParameter<typeof customInstance<AnalyticsQueryResultModel>>,) => {
-      return customInstance<AnalyticsQueryResultModel>(
-      {url: `/umbraco/engage/management/api/v1/analytics/query`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: analyticsQueryGetModel
-    },
-      options);
-    }
-
-const deleteAnnotations = (
-    params?: DeleteAnnotationsParams,
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/annotations`, method: 'DELETE',
-        params
-    },
-      options);
-    }
-
-const postAnnotations = (
-    annotationModel?: AnnotationModel,
- options?: SecondParameter<typeof customInstance<AnnotationModel>>,) => {
-      return customInstance<AnnotationModel>(
-      {url: `/umbraco/engage/management/api/v1/annotations`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: annotationModel
-    },
-      options);
-    }
-
-const getAnnotationsAll = (
-    params?: GetAnnotationsAllParams,
- options?: SecondParameter<typeof customInstance<AnnotationModel[]>>,) => {
-      return customInstance<AnnotationModel[]>(
-      {url: `/umbraco/engage/management/api/v1/annotations/all`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const getAnnotationsEmpty = (
-
- options?: SecondParameter<typeof customInstance<AnnotationModel>>,) => {
-      return customInstance<AnnotationModel>(
-      {url: `/umbraco/engage/management/api/v1/annotations/empty`, method: 'GET'
-    },
-      options);
-    }
-
-const getAnnotationsGlobal = (
-    params?: GetAnnotationsGlobalParams,
- options?: SecondParameter<typeof customInstance<AnnotationModel[]>>,) => {
-      return customInstance<AnnotationModel[]>(
-      {url: `/umbraco/engage/management/api/v1/annotations/global`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const getAnnotationsPage = (
-    params?: GetAnnotationsPageParams,
- options?: SecondParameter<typeof customInstance<AnnotationModel[]>>,) => {
-      return customInstance<AnnotationModel[]>(
-      {url: `/umbraco/engage/management/api/v1/annotations/page`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const deleteAppliedPersonalization = (
-    params?: DeleteAppliedPersonalizationParams,
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/applied-personalization`, method: 'DELETE',
-        params
-    },
-      options);
-    }
-
-const postAppliedPersonalization = (
-    appliedPersonalizationDtoModel?: AppliedPersonalizationDtoModel,
- options?: SecondParameter<typeof customInstance<AppliedPersonalizationDtoModel>>,) => {
-      return customInstance<AppliedPersonalizationDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/applied-personalization`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: appliedPersonalizationDtoModel
-    },
-      options);
-    }
-
-const getAppliedPersonalizationAll = (
-
- options?: SecondParameter<typeof customInstance<AppliedPersonalizationDtoModel[]>>,) => {
-      return customInstance<AppliedPersonalizationDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/applied-personalization/all`, method: 'GET'
-    },
-      options);
-    }
-
-const getAppliedPersonalizationId = (
-    params?: GetAppliedPersonalizationIdParams,
- options?: SecondParameter<typeof customInstance<AppliedPersonalizationDtoModel>>,) => {
-      return customInstance<AppliedPersonalizationDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/applied-personalization/id`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const postAppliedPersonalizationSegment = (
-    params?: PostAppliedPersonalizationSegmentParams,
- options?: SecondParameter<typeof customInstance<CreateAppliedPersonalizationSegmentResponseModel>>,) => {
-      return customInstance<CreateAppliedPersonalizationSegmentResponseModel>(
-      {url: `/umbraco/engage/management/api/v1/applied-personalization/segment`, method: 'POST',
-        params
-    },
-      options);
-    }
-
-const getAppliedPersonalizationSegment = (
-    params?: GetAppliedPersonalizationSegmentParams,
- options?: SecondParameter<typeof customInstance<AppliedPersonalizationDtoModel>>,) => {
-      return customInstance<AppliedPersonalizationDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/applied-personalization/segment`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const deleteCampaignGroup = (
-    params?: DeleteCampaignGroupParams,
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/campaign-group`, method: 'DELETE',
-        params
-    },
-      options);
-    }
-
-const getCampaignGroup = (
-    params?: GetCampaignGroupParams,
- options?: SecondParameter<typeof customInstance<CampaignGroupDtoModel>>,) => {
-      return customInstance<CampaignGroupDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/campaign-group`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const postCampaignGroup = (
-    campaignGroupDtoModel?: CampaignGroupDtoModel,
- options?: SecondParameter<typeof customInstance<CampaignGroupDtoModel>>,) => {
-      return customInstance<CampaignGroupDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/campaign-group`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: campaignGroupDtoModel
-    },
-      options);
-    }
-
-const getCampaignGroupAll = (
-
- options?: SecondParameter<typeof customInstance<CampaignGroupDtoModel[]>>,) => {
-      return customInstance<CampaignGroupDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/campaign-group/all`, method: 'GET'
-    },
-      options);
-    }
-
-const getCampaignGroupUnscored = (
-
- options?: SecondParameter<typeof customInstance<UnscoredCampaignDtoModel[]>>,) => {
-      return customInstance<UnscoredCampaignDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/campaign-group/unscored`, method: 'GET'
-    },
-      options);
-    }
-
-const getCampaignGroupVisitors = (
-    params?: GetCampaignGroupVisitorsParams,
- options?: SecondParameter<typeof customInstance<GetCampaignGroupVisitors200One | GetCampaignGroupVisitors200Two | GetCampaignGroupVisitors200Three>>,) => {
-      return customInstance<GetCampaignGroupVisitors200One | GetCampaignGroupVisitors200Two | GetCampaignGroupVisitors200Three>(
-      {url: `/umbraco/engage/management/api/v1/campaign-group/visitors`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const getCampaigns = (
-    params?: GetCampaignsParams,
- options?: SecondParameter<typeof customInstance<CampaignsByVisitorDtoModel[]>>,) => {
-      return customInstance<CampaignsByVisitorDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/campaigns`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const postCockpitDeleteCookie = (
+const postPreviewEnd = (
 
  options?: SecondParameter<typeof customInstance<void>>,) => {
       return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/cockpit/delete-cookie`, method: 'POST'
+      {url: `/umbraco/engage/management/api/v1/preview/end`, method: 'POST'
     },
       options);
     }
 
-const getCockpitGetUmbracoPageInfo = (
-    params?: GetCockpitGetUmbracoPageInfoParams,
- options?: SecondParameter<typeof customInstance<UmbracoPageInfoDtoModel>>,) => {
-      return customInstance<UmbracoPageInfoDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/cockpit/get-umbraco-page-info`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const getCockpitAuthDomains = (
-
- options?: SecondParameter<typeof customInstance<DomainsResponseModel>>,) => {
-      return customInstance<DomainsResponseModel>(
-      {url: `/umbraco/engage/management/api/v1/cockpit-auth/domains`, method: 'GET'
-    },
-      options);
-    }
-
-const postCockpitAuthGenerateToken = (
-
- options?: SecondParameter<typeof customInstance<GenerateTokenResponseModel>>,) => {
-      return customInstance<GenerateTokenResponseModel>(
-      {url: `/umbraco/engage/management/api/v1/cockpit-auth/generate-token`, method: 'POST'
-    },
-      options);
-    }
-
-const getConfiguration = (
-
- options?: SecondParameter<typeof customInstance<ConfigurationDtoModel>>,) => {
-      return customInstance<ConfigurationDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/configuration`, method: 'GET'
-    },
-      options);
-    }
-
-const getContentScoringAll = (
-    params?: GetContentScoringAllParams,
- options?: SecondParameter<typeof customInstance<ContentScoringResultModel>>,) => {
-      return customInstance<ContentScoringResultModel>(
-      {url: `/umbraco/engage/management/api/v1/content-scoring/all`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const getContentScoringExportCustomerJourney = (
-
- options?: SecondParameter<typeof customInstance<Blob>>,) => {
-      return customInstance<Blob>(
-      {url: `/umbraco/engage/management/api/v1/content-scoring/export/customer-journey`, method: 'GET'
-    },
-      { responseType: 'blob',  ...options});
-    }
-
-const getContentScoringExportPersona = (
-
- options?: SecondParameter<typeof customInstance<Blob>>,) => {
-      return customInstance<Blob>(
-      {url: `/umbraco/engage/management/api/v1/content-scoring/export/persona`, method: 'GET'
-    },
-      { responseType: 'blob',  ...options});
-    }
-
-const deleteContentScoringJourney = (
-    params?: DeleteContentScoringJourneyParams,
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/content-scoring/journey`, method: 'DELETE',
-        params
-    },
-      options);
-    }
-
-const deleteContentScoringPersona = (
-    params?: DeleteContentScoringPersonaParams,
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/content-scoring/persona`, method: 'DELETE',
-        params
-    },
-      options);
-    }
-
-const postContentScoringSave = (
-    contentScoringEntityDtoModel?: ContentScoringEntityDtoModel[],
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/content-scoring/save`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: contentScoringEntityDtoModel
-    },
-      options);
-    }
-
-const getContentTypesAll = (
-
- options?: SecondParameter<typeof customInstance<UmsContentTypeModel[]>>,) => {
-      return customInstance<UmsContentTypeModel[]>(
-      {url: `/umbraco/engage/management/api/v1/content-types/all`, method: 'GET'
-    },
-      options);
-    }
-
-const getContentTypesSegmentedProperty = (
-    params?: GetContentTypesSegmentedPropertyParams,
- options?: SecondParameter<typeof customInstance<boolean>>,) => {
-      return customInstance<boolean>(
-      {url: `/umbraco/engage/management/api/v1/content-types/segmented-property`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const getCultures = (
-    params?: GetCulturesParams,
- options?: SecondParameter<typeof customInstance<string[]>>,) => {
-      return customInstance<string[]>(
-      {url: `/umbraco/engage/management/api/v1/cultures`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const deleteCustomerJourney = (
-    params?: DeleteCustomerJourneyParams,
- options?: SecondParameter<typeof customInstance<ValidationResultsModel>>,) => {
-      return customInstance<ValidationResultsModel>(
-      {url: `/umbraco/engage/management/api/v1/customer-journey`, method: 'DELETE',
-        params
-    },
-      options);
-    }
-
-const postCustomerJourney = (
-    customerJourneyDtoModel?: CustomerJourneyDtoModel,
- options?: SecondParameter<typeof customInstance<SaveCustomerJourneyResponseModel>>,) => {
-      return customInstance<SaveCustomerJourneyResponseModel>(
-      {url: `/umbraco/engage/management/api/v1/customer-journey`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: customerJourneyDtoModel
-    },
-      options);
-    }
-
-const getCustomerJourneyAll = (
-
- options?: SecondParameter<typeof customInstance<CustomerJourneyDtoModel[]>>,) => {
-      return customInstance<CustomerJourneyDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/customer-journey/all`, method: 'GET'
-    },
-      options);
-    }
-
-const getCustomerJourneyDetails = (
-    params?: GetCustomerJourneyDetailsParams,
- options?: SecondParameter<typeof customInstance<CustomerJourneyDtoModel>>,) => {
-      return customInstance<CustomerJourneyDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/customer-journey/details`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const getCustomerJourneyEmpty = (
-
- options?: SecondParameter<typeof customInstance<CustomerJourneyDtoModel>>,) => {
-      return customInstance<CustomerJourneyDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/customer-journey/empty`, method: 'GET'
-    },
-      options);
-    }
-
-const postCustomerJourneyLock = (
-    modifyExplicitScoreRequestModel?: ModifyExplicitScoreRequestModel,
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/customer-journey/lock`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: modifyExplicitScoreRequestModel
-    },
-      options);
-    }
-
-const postCustomerJourneyUnlock = (
-    modifyExplicitScoreRequestModel?: ModifyExplicitScoreRequestModel,
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/customer-journey/unlock`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: modifyExplicitScoreRequestModel
-    },
-      options);
-    }
-
-const getDataCleanupLastRun = (
-
- options?: SecondParameter<typeof customInstance<DataCleanupLastRunDtoModel>>,) => {
-      return customInstance<DataCleanupLastRunDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/data-cleanup/last-run`, method: 'GET'
-    },
-      options);
-    }
-
-const getDataCleanupLogs = (
-    params?: GetDataCleanupLogsParams,
- options?: SecondParameter<typeof customInstance<PagedModelDataCleanupLogDtoModel>>,) => {
-      return customInstance<PagedModelDataCleanupLogDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/data-cleanup/logs`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const getDataCleanupRuns = (
-    params?: GetDataCleanupRunsParams,
- options?: SecondParameter<typeof customInstance<PagedModelDataCleanupRunDtoModel>>,) => {
-      return customInstance<PagedModelDataCleanupRunDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/data-cleanup/runs`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const getDataGenerationLogs = (
-    params?: GetDataGenerationLogsParams,
- options?: SecondParameter<typeof customInstance<PagedModelDataGenerationLogDtoModel>>,) => {
-      return customInstance<PagedModelDataGenerationLogDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/data-generation/logs`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const getPermissionsDocumentType = (
-    params?: GetPermissionsDocumentTypeParams,
- options?: SecondParameter<typeof customInstance<DocumentTypePermissionDtoModel>>,) => {
-      return customInstance<DocumentTypePermissionDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/permissions/document-type`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const postPermissionsDocumentType = (
-    documentTypePermissionDtoModel?: DocumentTypePermissionDtoModel[],
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/permissions/document-type`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: documentTypePermissionDtoModel
-    },
-      options);
-    }
-
-const getPermissionsDocumentTypeAll = (
-
- options?: SecondParameter<typeof customInstance<DocumentTypePermissionDtoModel[]>>,) => {
-      return customInstance<DocumentTypePermissionDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/permissions/document-type/all`, method: 'GET'
-    },
-      options);
-    }
-
-const postGoal = (
-    saveGoalRequestModel?: NonReadonly<SaveGoalRequestModel>,
- options?: SecondParameter<typeof customInstance<string>>,) => {
-      return customInstance<string>(
-      {url: `/umbraco/engage/management/api/v1/goal`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: saveGoalRequestModel
-    },
-      options);
-    }
-
-const postGoalAll = (
-    tableFilterModel?: TableFilterModel,
- options?: SecondParameter<typeof customInstance<PageGoalSummaryModel>>,) => {
-      return customInstance<PageGoalSummaryModel>(
-      {url: `/umbraco/engage/management/api/v1/goal/all`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: tableFilterModel
-    },
-      options);
-    }
-
-const getGoalAllTypes = (
-
- options?: SecondParameter<typeof customInstance<(CustomGoalTypeModel | PageEventGoalTypeModel | PageviewGoalTypeModel)[]>>,) => {
-      return customInstance<(CustomGoalTypeModel | PageEventGoalTypeModel | PageviewGoalTypeModel)[]>(
-      {url: `/umbraco/engage/management/api/v1/goal/all/types`, method: 'GET'
-    },
-      options);
-    }
-
-const getGoalDetails = (
-    params?: GetGoalDetailsParams,
- options?: SecondParameter<typeof customInstance<GoalModel>>,) => {
-      return customInstance<GoalModel>(
-      {url: `/umbraco/engage/management/api/v1/goal/details`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const getGoalsAll = (
-
- options?: SecondParameter<typeof customInstance<GoalDtoModel[]>>,) => {
-      return customInstance<GoalDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/goals/all`, method: 'GET'
-    },
-      options);
-    }
-
-const getGoalsMain = (
-
- options?: SecondParameter<typeof customInstance<GoalDtoModel[]>>,) => {
-      return customInstance<GoalDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/goals/main`, method: 'GET'
-    },
-      options);
-    }
-
-const postHeatmapsGenerateScrollHeatmap = (
-    heatmapSettingsRequestModel?: HeatmapSettingsRequestModel,
- options?: SecondParameter<typeof customInstance<HeatmapModel>>,) => {
-      return customInstance<HeatmapModel>(
-      {url: `/umbraco/engage/management/api/v1/heatmaps/generate-scroll-heatmap`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: heatmapSettingsRequestModel
-    },
-      options);
-    }
-
-const getHeatmapsVariants = (
-    params?: GetHeatmapsVariantsParams,
- options?: SecondParameter<typeof customInstance<HeatmapPageVariantModel[]>>,) => {
-      return customInstance<HeatmapPageVariantModel[]>(
-      {url: `/umbraco/engage/management/api/v1/heatmaps/variants`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const getMainSwitch = (
-
- options?: SecondParameter<typeof customInstance<MainSwitchStatusResponseModel>>,) => {
-      return customInstance<MainSwitchStatusResponseModel>(
-      {url: `/umbraco/engage/management/api/v1/main-switch`, method: 'GET'
-    },
-      options);
-    }
-
-const postMainSwitchTurnOff = (
+const postPreviewStart = (
 
  options?: SecondParameter<typeof customInstance<void>>,) => {
       return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/main-switch/turn-off`, method: 'POST'
-    },
-      options);
-    }
-
-const postMainSwitchTurnOn = (
-
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/main-switch/turn-on`, method: 'POST'
+      {url: `/umbraco/engage/management/api/v1/preview/start`, method: 'POST'
     },
       options);
     }
@@ -3648,112 +3541,339 @@ const getPackage = (
       options);
     }
 
-const postUmbracoEngagePagedataCollect = (
-    params?: PostUmbracoEngagePagedataCollectParams,
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/pagedata/collect`, method: 'POST',
+const getPermissionsUserGroupAll = (
+
+ options?: SecondParameter<typeof customInstance<UserGroupPermissionDtoModel[]>>,) => {
+      return customInstance<UserGroupPermissionDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/permissions/user-group/all`, method: 'GET'
+    },
+      options);
+    }
+
+const getPermissionsUserGroup = (
+    params?: GetPermissionsUserGroupParams,
+ options?: SecondParameter<typeof customInstance<UserGroupPermissionDtoModel>>,) => {
+      return customInstance<UserGroupPermissionDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/permissions/user-group`, method: 'GET',
         params
     },
       options);
     }
 
-const postUmbracoEngagePagedataCollectEvent = (
-    clientSideEventModel?: ClientSideEventModel,
+const postPermissionsUserGroup = (
+    userGroupPermissionDtoModel: UserGroupPermissionDtoModel,
  options?: SecondParameter<typeof customInstance<void>>,) => {
       return customInstance<void>(
-      {url: `/umbraco/engage/pagedata/collect-event`, method: 'POST',
+      {url: `/umbraco/engage/management/api/v1/permissions/user-group`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: clientSideEventModel
+      data: userGroupPermissionDtoModel
     },
       options);
     }
 
-const getUmbracoEngagePagedataPing = (
-
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/pagedata/ping`, method: 'GET'
-    },
-      options);
-    }
-
-const postUmbracoEngagePagedataPing = (
-
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/pagedata/ping`, method: 'POST'
-    },
-      options);
-    }
-
-const deletePersona = (
-    params?: DeletePersonaParams,
- options?: SecondParameter<typeof customInstance<ValidationResultsModel>>,) => {
-      return customInstance<ValidationResultsModel>(
-      {url: `/umbraco/engage/management/api/v1/persona`, method: 'DELETE',
+const getTrafficFilter = (
+    params?: GetTrafficFilterParams,
+ options?: SecondParameter<typeof customInstance<TrafficFilterModel>>,) => {
+      return customInstance<TrafficFilterModel>(
+      {url: `/umbraco/engage/management/api/v1/traffic-filter`, method: 'GET',
         params
     },
       options);
     }
 
-const postPersona = (
-    personasDtoModel?: PersonasDtoModel,
- options?: SecondParameter<typeof customInstance<SavePersonaResponseModel>>,) => {
-      return customInstance<SavePersonaResponseModel>(
-      {url: `/umbraco/engage/management/api/v1/persona`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: personasDtoModel
-    },
-      options);
-    }
-
-const getPersonaAll = (
-
- options?: SecondParameter<typeof customInstance<PersonasDtoModel[]>>,) => {
-      return customInstance<PersonasDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/persona/all`, method: 'GET'
-    },
-      options);
-    }
-
-const getPersonaDetails = (
-    params?: GetPersonaDetailsParams,
- options?: SecondParameter<typeof customInstance<PersonasDtoModel>>,) => {
-      return customInstance<PersonasDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/persona/details`, method: 'GET',
+const deleteTrafficFilter = (
+    params?: DeleteTrafficFilterParams,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/traffic-filter`, method: 'DELETE',
         params
     },
       options);
     }
 
-const getPersonaEmpty = (
-
- options?: SecondParameter<typeof customInstance<PersonasDtoModel>>,) => {
-      return customInstance<PersonasDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/persona/empty`, method: 'GET'
+const postTrafficFilter = (
+    trafficFilterModel: TrafficFilterModel,
+ options?: SecondParameter<typeof customInstance<string>>,) => {
+      return customInstance<string>(
+      {url: `/umbraco/engage/management/api/v1/traffic-filter`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: trafficFilterModel
     },
       options);
     }
 
-const postPersonaLock = (
-    modifyExplicitScoreRequestModel?: ModifyExplicitScoreRequestModel,
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/persona/lock`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: modifyExplicitScoreRequestModel
+const getTrafficFilterEmpty = (
+
+ options?: SecondParameter<typeof customInstance<TrafficFilterModel>>,) => {
+      return customInstance<TrafficFilterModel>(
+      {url: `/umbraco/engage/management/api/v1/traffic-filter/empty`, method: 'GET'
     },
       options);
     }
 
-const postPersonaUnlock = (
-    modifyExplicitScoreRequestModel?: ModifyExplicitScoreRequestModel,
+const getTrafficFilterAll = (
+
+ options?: SecondParameter<typeof customInstance<TrafficFilterModel[]>>,) => {
+      return customInstance<TrafficFilterModel[]>(
+      {url: `/umbraco/engage/management/api/v1/traffic-filter/all`, method: 'GET'
+    },
+      options);
+    }
+
+const getSuspiciousActivityOverview = (
+    params?: GetSuspiciousActivityOverviewParams,
+ options?: SecondParameter<typeof customInstance<SuspiciousActivityResponseModel>>,) => {
+      return customInstance<SuspiciousActivityResponseModel>(
+      {url: `/umbraco/engage/management/api/v1/suspicious-activity/overview`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const putSuspiciousActivityVisitorsByVisitorIdVisitorType = (
+    visitorId: number,
+    setVisitorTypeRequestModel: SetVisitorTypeRequestModel,
  options?: SecondParameter<typeof customInstance<void>>,) => {
       return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/persona/unlock`, method: 'POST',
+      {url: `/umbraco/engage/management/api/v1/suspicious-activity/visitors/${visitorId}/visitor-type`, method: 'PUT',
       headers: {'Content-Type': 'application/json', },
-      data: modifyExplicitScoreRequestModel
+      data: setVisitorTypeRequestModel
+    },
+      options);
+    }
+
+const getStatistics = (
+
+ options?: SecondParameter<typeof customInstance<UmsStatisticsModel>>,) => {
+      return customInstance<UmsStatisticsModel>(
+      {url: `/umbraco/engage/management/api/v1/statistics`, method: 'GET'
+    },
+      options);
+    }
+
+const deleteSegments = (
+    params?: DeleteSegmentsParams,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/segments`, method: 'DELETE',
+        params
+    },
+      options);
+    }
+
+const getSegments = (
+    params?: GetSegmentsParams,
+ options?: SecondParameter<typeof customInstance<SegmentDtoModel>>,) => {
+      return customInstance<SegmentDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/segments`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const postSegments = (
+    segmentDtoModel: SegmentDtoModel,
+ options?: SecondParameter<typeof customInstance<SegmentDtoModel>>,) => {
+      return customInstance<SegmentDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/segments`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: segmentDtoModel
+    },
+      options);
+    }
+
+const getSegmentsAll = (
+    params?: GetSegmentsAllParams,
+ options?: SecondParameter<typeof customInstance<SegmentDtoModel[]>>,) => {
+      return customInstance<SegmentDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/segments/all`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const getSegmentsLocationsData = (
+
+ options?: SecondParameter<typeof customInstance<LocationRuleResponseModel>>,) => {
+      return customInstance<LocationRuleResponseModel>(
+      {url: `/umbraco/engage/management/api/v1/segments/locations/data`, method: 'GET'
+    },
+      options);
+    }
+
+const getSegmentsPreviewableSegments = (
+    params?: GetSegmentsPreviewableSegmentsParams,
+ options?: SecondParameter<typeof customInstance<PreviewableSegmentDtoModel[]>>,) => {
+      return customInstance<PreviewableSegmentDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/segments/previewable-segments`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const postSegmentsUpdatePriority = (
+    segmentPriorityUpdateModel: SegmentPriorityUpdateModel[],
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/segments/update-priority`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: segmentPriorityUpdateModel
+    },
+      options);
+    }
+
+const getSegmentsTreeRoot = (
+
+ options?: SecondParameter<typeof customInstance<EntityItemResponseModel[]>>,) => {
+      return customInstance<EntityItemResponseModel[]>(
+      {url: `/umbraco/engage/management/api/v1/segments/tree/root`, method: 'GET'
+    },
+      options);
+    }
+
+const getSegmentsItem = (
+    params?: GetSegmentsItemParams,
+ options?: SecondParameter<typeof customInstance<EntityItemResponseModel[]>>,) => {
+      return customInstance<EntityItemResponseModel[]>(
+      {url: `/umbraco/engage/management/api/v1/segments/item`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const getSearchTerms = (
+    params?: GetSearchTermsParams,
+ options?: SecondParameter<typeof customInstance<SearchTermByVisitorDtoModel[]>>,) => {
+      return customInstance<SearchTermByVisitorDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/search-terms`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const getReportingGenerationStatus = (
+
+ options?: SecondParameter<typeof customInstance<ReportingStatusModel>>,) => {
+      return customInstance<ReportingStatusModel>(
+      {url: `/umbraco/engage/management/api/v1/reporting/generation/status`, method: 'GET'
+    },
+      options);
+    }
+
+const getReportingGoalPersonalizationPerformanceBySegmentId = (
+    segmentId: number,
+ options?: SecondParameter<typeof customInstance<GoalPersonalizationPerformanceDtoModel[]>>,) => {
+      return customInstance<GoalPersonalizationPerformanceDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/reporting/goal/personalization/performance/${segmentId}`, method: 'GET'
+    },
+      options);
+    }
+
+const getReportingSegmentSessionsPersonalizationBySegmentId = (
+    segmentId: number,
+ options?: SecondParameter<typeof customInstance<SegmentSessionsNeededDtoModel>>,) => {
+      return customInstance<SegmentSessionsNeededDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/reporting/segment/sessions/personalization/${segmentId}`, method: 'GET'
+    },
+      options);
+    }
+
+const getReportingSegmentSessionsPotentialBySegmentId = (
+    segmentId: number,
+ options?: SecondParameter<typeof customInstance<SegmentSessionsNeededDtoModel>>,) => {
+      return customInstance<SegmentSessionsNeededDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/reporting/segment/sessions/potential/${segmentId}`, method: 'GET'
+    },
+      options);
+    }
+
+const getReporting = (
+    params?: GetReportingParams,
+ options?: SecondParameter<typeof customInstance<GoalPersonalizationPerformanceDtoModel[]>>,) => {
+      return customInstance<GoalPersonalizationPerformanceDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/reporting`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const postReportingGenerationStart = (
+
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/reporting/generation/start`, method: 'POST'
+    },
+      options);
+    }
+
+const postReferralScoringScored = (
+    referralPageFiltersModel: ReferralPageFiltersModel,
+ options?: SecondParameter<typeof customInstance<PageReferralPageDtoModel>>,) => {
+      return customInstance<PageReferralPageDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/referral-scoring/scored`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: referralPageFiltersModel
+    },
+      options);
+    }
+
+const postReferralScoringUnscored = (
+    referralPageFiltersModel: ReferralPageFiltersModel,
+ options?: SecondParameter<typeof customInstance<PageReferralPageDtoModel>>,) => {
+      return customInstance<PageReferralPageDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/referral-scoring/unscored`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: referralPageFiltersModel
+    },
+      options);
+    }
+
+const deleteReferralGroup = (
+    params?: DeleteReferralGroupParams,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/referral-group`, method: 'DELETE',
+        params
+    },
+      options);
+    }
+
+const getReferralGroup = (
+    params?: GetReferralGroupParams,
+ options?: SecondParameter<typeof customInstance<ReferralGroupDtoModel>>,) => {
+      return customInstance<ReferralGroupDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/referral-group`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const postReferralGroup = (
+    referralGroupDtoModel: ReferralGroupDtoModel,
+ options?: SecondParameter<typeof customInstance<ReferralGroupDtoModel>>,) => {
+      return customInstance<ReferralGroupDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/referral-group`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: referralGroupDtoModel
+    },
+      options);
+    }
+
+const getReferralGroupAll = (
+
+ options?: SecondParameter<typeof customInstance<ReferralGroupDtoModel[]>>,) => {
+      return customInstance<ReferralGroupDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/referral-group/all`, method: 'GET'
+    },
+      options);
+    }
+
+const getReferralGroupVisitors = (
+    params?: GetReferralGroupVisitorsParams,
+ options?: SecondParameter<typeof customInstance<GetReferralGroupVisitors200One | GetReferralGroupVisitors200Two | GetReferralGroupVisitors200Three>>,) => {
+      return customInstance<GetReferralGroupVisitors200One | GetReferralGroupVisitors200Two | GetReferralGroupVisitors200Three>(
+      {url: `/umbraco/engage/management/api/v1/referral-group/visitors`, method: 'GET',
+        params
     },
       options);
     }
@@ -3765,6 +3885,17 @@ const getProfileBotVisitors = (
       {url: `/umbraco/engage/management/api/v1/profile/bot-visitors`, method: 'GET'
     },
       options);
+    }
+
+const postProfileExportCsv = (
+    nullGetProfileOverviewRequestModel?: null | GetProfileOverviewRequestModel,
+ options?: SecondParameter<typeof customInstance<FileStreamResult>>,) => {
+      return customInstance<FileStreamResult>(
+      {url: `/umbraco/engage/management/api/v1/profile/export/csv`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: nullGetProfileOverviewRequestModel
+    },
+      { responseType: 'blob',  ...options});
     }
 
 const getProfileCustomerJourneyStepScores = (
@@ -3787,6 +3918,16 @@ const getProfileDetails = (
       options);
     }
 
+const getProfilePageEvents = (
+    params?: GetProfilePageEventsParams,
+ options?: SecondParameter<typeof customInstance<ProfilePageviewEventDtoModel[]>>,) => {
+      return customInstance<ProfilePageviewEventDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/profile/page-events`, method: 'GET',
+        params
+    },
+      options);
+    }
+
 const getProfileExport = (
     params?: GetProfileExportParams,
  options?: SecondParameter<typeof customInstance<ExportProfileDtoModel[]>>,) => {
@@ -3797,22 +3938,31 @@ const getProfileExport = (
       options);
     }
 
-const postProfileExportCsv = (
-    getProfileOverviewRequestModel?: GetProfileOverviewRequestModel,
- options?: SecondParameter<typeof customInstance<Blob>>,) => {
-      return customInstance<Blob>(
-      {url: `/umbraco/engage/management/api/v1/profile/export/csv`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: getProfileOverviewRequestModel
-    },
-      { responseType: 'blob',  ...options});
-    }
-
 const getProfileGoalCompletions = (
     params?: GetProfileGoalCompletionsParams,
  options?: SecondParameter<typeof customInstance<ProfileGoalCompletionsDtoModel[]>>,) => {
       return customInstance<ProfileGoalCompletionsDtoModel[]>(
       {url: `/umbraco/engage/management/api/v1/profile/goal-completions`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const getProfileStatisticsGrowth = (
+    params?: GetProfileStatisticsGrowthParams,
+ options?: SecondParameter<typeof customInstance<ProfileGrowthSeriesDtoModel>>,) => {
+      return customInstance<ProfileGrowthSeriesDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/profile/statistics/growth`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const getProfileStatisticsIdentification = (
+    params?: GetProfileStatisticsIdentificationParams,
+ options?: SecondParameter<typeof customInstance<NewProfileSummaryDtoModel>>,) => {
+      return customInstance<NewProfileSummaryDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/profile/statistics/identification`, method: 'GET',
         params
     },
       options);
@@ -3829,22 +3979,12 @@ const getProfileLastActiveSegment = (
     }
 
 const postProfileOverview = (
-    getProfileOverviewRequestModel?: GetProfileOverviewRequestModel,
+    nullGetProfileOverviewRequestModel?: null | GetProfileOverviewRequestModel,
  options?: SecondParameter<typeof customInstance<FindProfileResponseModel>>,) => {
       return customInstance<FindProfileResponseModel>(
       {url: `/umbraco/engage/management/api/v1/profile/overview`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: getProfileOverviewRequestModel
-    },
-      options);
-    }
-
-const getProfilePageEvents = (
-    params?: GetProfilePageEventsParams,
- options?: SecondParameter<typeof customInstance<ProfilePageviewEventDtoModel[]>>,) => {
-      return customInstance<ProfilePageviewEventDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/profile/page-events`, method: 'GET',
-        params
+      data: nullGetProfileOverviewRequestModel
     },
       options);
     }
@@ -3899,26 +4039,6 @@ const getProfileSessions = (
       options);
     }
 
-const getProfileStatisticsGrowth = (
-    params?: GetProfileStatisticsGrowthParams,
- options?: SecondParameter<typeof customInstance<ProfileGrowthSeriesDtoModel>>,) => {
-      return customInstance<ProfileGrowthSeriesDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/profile/statistics/growth`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const getProfileStatisticsIdentification = (
-    params?: GetProfileStatisticsIdentificationParams,
- options?: SecondParameter<typeof customInstance<NewProfileSummaryDtoModel>>,) => {
-      return customInstance<NewProfileSummaryDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/profile/statistics/identification`, method: 'GET',
-        params
-    },
-      options);
-    }
-
 const getProfileStatisticsTotal = (
 
  options?: SecondParameter<typeof customInstance<ProfileTotalSummaryDtoModel>>,) => {
@@ -3928,455 +4048,1139 @@ const getProfileStatisticsTotal = (
       options);
     }
 
-const deleteReferralGroup = (
-    params?: DeleteReferralGroupParams,
+const postPersonaLock = (
+    modifyExplicitScoreRequestModel: ModifyExplicitScoreRequestModel,
  options?: SecondParameter<typeof customInstance<void>>,) => {
       return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/referral-group`, method: 'DELETE',
-        params
-    },
-      options);
-    }
-
-const getReferralGroup = (
-    params?: GetReferralGroupParams,
- options?: SecondParameter<typeof customInstance<ReferralGroupDtoModel>>,) => {
-      return customInstance<ReferralGroupDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/referral-group`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const postReferralGroup = (
-    referralGroupDtoModel?: ReferralGroupDtoModel,
- options?: SecondParameter<typeof customInstance<ReferralGroupDtoModel>>,) => {
-      return customInstance<ReferralGroupDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/referral-group`, method: 'POST',
+      {url: `/umbraco/engage/management/api/v1/persona/lock`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: referralGroupDtoModel
+      data: modifyExplicitScoreRequestModel
     },
       options);
     }
 
-const getReferralGroupAll = (
+const getPersonaEmpty = (
 
- options?: SecondParameter<typeof customInstance<ReferralGroupDtoModel[]>>,) => {
-      return customInstance<ReferralGroupDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/referral-group/all`, method: 'GET'
+ options?: SecondParameter<typeof customInstance<PersonasDtoModel>>,) => {
+      return customInstance<PersonasDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/persona/empty`, method: 'GET'
     },
       options);
     }
 
-const getReferralGroupVisitors = (
-    params?: GetReferralGroupVisitorsParams,
- options?: SecondParameter<typeof customInstance<GetReferralGroupVisitors200One | GetReferralGroupVisitors200Two | GetReferralGroupVisitors200Three>>,) => {
-      return customInstance<GetReferralGroupVisitors200One | GetReferralGroupVisitors200Two | GetReferralGroupVisitors200Three>(
-      {url: `/umbraco/engage/management/api/v1/referral-group/visitors`, method: 'GET',
+const deletePersona = (
+    params?: DeletePersonaParams,
+ options?: SecondParameter<typeof customInstance<ValidationResultsModel>>,) => {
+      return customInstance<ValidationResultsModel>(
+      {url: `/umbraco/engage/management/api/v1/persona`, method: 'DELETE',
         params
     },
       options);
     }
 
-const postReferralScoringScored = (
-    referralPageFiltersModel?: ReferralPageFiltersModel,
- options?: SecondParameter<typeof customInstance<IPageReferralPageDtoModel>>,) => {
-      return customInstance<IPageReferralPageDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/referral-scoring/scored`, method: 'POST',
+const postPersona = (
+    personasDtoModel: PersonasDtoModel,
+ options?: SecondParameter<typeof customInstance<SavePersonaResponseModel>>,) => {
+      return customInstance<SavePersonaResponseModel>(
+      {url: `/umbraco/engage/management/api/v1/persona`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: referralPageFiltersModel
+      data: personasDtoModel
     },
       options);
     }
 
-const postReferralScoringUnscored = (
-    referralPageFiltersModel?: ReferralPageFiltersModel,
- options?: SecondParameter<typeof customInstance<IPageReferralPageDtoModel>>,) => {
-      return customInstance<IPageReferralPageDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/referral-scoring/unscored`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: referralPageFiltersModel
+const getPersonaAll = (
+
+ options?: SecondParameter<typeof customInstance<PersonasDtoModel[]>>,) => {
+      return customInstance<PersonasDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/persona/all`, method: 'GET'
     },
       options);
     }
 
-const getReporting = (
-    params?: GetReportingParams,
- options?: SecondParameter<typeof customInstance<GoalPersonalizationPerformanceDtoModel[]>>,) => {
-      return customInstance<GoalPersonalizationPerformanceDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/reporting`, method: 'GET',
+const getPersonaDetails = (
+    params?: GetPersonaDetailsParams,
+ options?: SecondParameter<typeof customInstance<PersonasDtoModel>>,) => {
+      return customInstance<PersonasDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/persona/details`, method: 'GET',
         params
     },
       options);
     }
 
-const postReportingGenerationStart = (
+const postPersonaUnlock = (
+    modifyExplicitScoreRequestModel: ModifyExplicitScoreRequestModel,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/persona/unlock`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: modifyExplicitScoreRequestModel
+    },
+      options);
+    }
+
+const postUmbracoEngagePagedataCollectEvent = (
+    clientSideEventModel: ClientSideEventModel,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/pagedata/collect-event`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: clientSideEventModel
+    },
+      options);
+    }
+
+const postUmbracoEngagePagedataCollect = (
+    params?: PostUmbracoEngagePagedataCollectParams,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/pagedata/collect`, method: 'POST',
+        params
+    },
+      options);
+    }
+
+const getUmbracoEngagePagedataPing = (
 
  options?: SecondParameter<typeof customInstance<void>>,) => {
       return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/reporting/generation/start`, method: 'POST'
+      {url: `/umbraco/engage/pagedata/ping`, method: 'GET'
     },
       options);
     }
 
-const getReportingGenerationStatus = (
+const postUmbracoEngagePagedataPing = (
 
- options?: SecondParameter<typeof customInstance<ReportingStatusModel>>,) => {
-      return customInstance<ReportingStatusModel>(
-      {url: `/umbraco/engage/management/api/v1/reporting/generation/status`, method: 'GET'
-    },
-      options);
-    }
-
-const getReportingGoalPersonalizationPerformanceBySegmentId = (
-    segmentId: number,
- options?: SecondParameter<typeof customInstance<GoalPersonalizationPerformanceDtoModel[]>>,) => {
-      return customInstance<GoalPersonalizationPerformanceDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/reporting/goal/personalization/performance/${segmentId}`, method: 'GET'
-    },
-      options);
-    }
-
-const getReportingSegmentSessionsPersonalizationBySegmentId = (
-    segmentId: number,
- options?: SecondParameter<typeof customInstance<SegmentSessionsNeededDtoModel>>,) => {
-      return customInstance<SegmentSessionsNeededDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/reporting/segment/sessions/personalization/${segmentId}`, method: 'GET'
-    },
-      options);
-    }
-
-const getReportingSegmentSessionsPotentialBySegmentId = (
-    segmentId: number,
- options?: SecondParameter<typeof customInstance<SegmentSessionsNeededDtoModel>>,) => {
-      return customInstance<SegmentSessionsNeededDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/reporting/segment/sessions/potential/${segmentId}`, method: 'GET'
-    },
-      options);
-    }
-
-const getSearchTerms = (
-    params?: GetSearchTermsParams,
- options?: SecondParameter<typeof customInstance<SearchTermByVisitorDtoModel[]>>,) => {
-      return customInstance<SearchTermByVisitorDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/search-terms`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const deleteSegments = (
-    params?: DeleteSegmentsParams,
  options?: SecondParameter<typeof customInstance<void>>,) => {
       return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/segments`, method: 'DELETE',
-        params
+      {url: `/umbraco/engage/pagedata/ping`, method: 'POST'
     },
       options);
     }
 
-const getSegments = (
-    params?: GetSegmentsParams,
- options?: SecondParameter<typeof customInstance<SegmentDtoModel>>,) => {
-      return customInstance<SegmentDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/segments`, method: 'GET',
-        params
+const getMainSwitch = (
+
+ options?: SecondParameter<typeof customInstance<MainSwitchStatusResponseModel>>,) => {
+      return customInstance<MainSwitchStatusResponseModel>(
+      {url: `/umbraco/engage/management/api/v1/main-switch`, method: 'GET'
     },
       options);
     }
 
-const postSegments = (
-    segmentDtoModel?: SegmentDtoModel,
- options?: SecondParameter<typeof customInstance<SegmentDtoModel>>,) => {
-      return customInstance<SegmentDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/segments`, method: 'POST',
+const postMainSwitchTurnOff = (
+
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/main-switch/turn-off`, method: 'POST'
+    },
+      options);
+    }
+
+const postMainSwitchTurnOn = (
+
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/main-switch/turn-on`, method: 'POST'
+    },
+      options);
+    }
+
+const postHeatmapsGenerateScrollHeatmap = (
+    heatmapSettingsRequestModel: HeatmapSettingsRequestModel,
+ options?: SecondParameter<typeof customInstance<HeatmapModel>>,) => {
+      return customInstance<HeatmapModel>(
+      {url: `/umbraco/engage/management/api/v1/heatmaps/generate-scroll-heatmap`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: segmentDtoModel
+      data: heatmapSettingsRequestModel
     },
       options);
     }
 
-const getSegmentsAll = (
-    params?: GetSegmentsAllParams,
- options?: SecondParameter<typeof customInstance<SegmentDtoModel[]>>,) => {
-      return customInstance<SegmentDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/segments/all`, method: 'GET',
+const getHeatmapsVariants = (
+    params?: GetHeatmapsVariantsParams,
+ options?: SecondParameter<typeof customInstance<HeatmapPageVariantModel[]>>,) => {
+      return customInstance<HeatmapPageVariantModel[]>(
+      {url: `/umbraco/engage/management/api/v1/heatmaps/variants`, method: 'GET',
         params
     },
       options);
     }
 
-const deleteSegmentsDeleteSegmentContent = (
-    params?: DeleteSegmentsDeleteSegmentContentParams,
- options?: SecondParameter<typeof customInstance<boolean>>,) => {
-      return customInstance<boolean>(
-      {url: `/umbraco/engage/management/api/v1/segments/delete-segment-content`, method: 'DELETE',
+const getGoalsAll = (
+
+ options?: SecondParameter<typeof customInstance<GoalDtoModel[]>>,) => {
+      return customInstance<GoalDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/goals/all`, method: 'GET'
+    },
+      options);
+    }
+
+const getGoalsMain = (
+
+ options?: SecondParameter<typeof customInstance<GoalDtoModel[]>>,) => {
+      return customInstance<GoalDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/goals/main`, method: 'GET'
+    },
+      options);
+    }
+
+const getGoalsTreeRoot = (
+
+ options?: SecondParameter<typeof customInstance<EntityItemResponseModel[]>>,) => {
+      return customInstance<EntityItemResponseModel[]>(
+      {url: `/umbraco/engage/management/api/v1/goals/tree/root`, method: 'GET'
+    },
+      options);
+    }
+
+const getGoalsItem = (
+    params?: GetGoalsItemParams,
+ options?: SecondParameter<typeof customInstance<EntityItemResponseModel[]>>,) => {
+      return customInstance<EntityItemResponseModel[]>(
+      {url: `/umbraco/engage/management/api/v1/goals/item`, method: 'GET',
         params
     },
       options);
     }
 
-const getSegmentsLocationsData = (
-
- options?: SecondParameter<typeof customInstance<LocationRuleResponseModel>>,) => {
-      return customInstance<LocationRuleResponseModel>(
-      {url: `/umbraco/engage/management/api/v1/segments/locations/data`, method: 'GET'
-    },
-      options);
-    }
-
-const postSegmentsUpdatePriority = (
-    segmentPriorityUpdateModel?: SegmentPriorityUpdateModel[],
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/segments/update-priority`, method: 'POST',
+const postGoalAll = (
+    tableFilterModel: TableFilterModel,
+ options?: SecondParameter<typeof customInstance<PageGoalSummaryModel>>,) => {
+      return customInstance<PageGoalSummaryModel>(
+      {url: `/umbraco/engage/management/api/v1/goal/all`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: segmentPriorityUpdateModel
+      data: tableFilterModel
     },
       options);
     }
 
-const getStatistics = (
+const getGoalAllTypes = (
 
- options?: SecondParameter<typeof customInstance<UmsStatisticsModel>>,) => {
-      return customInstance<UmsStatisticsModel>(
-      {url: `/umbraco/engage/management/api/v1/statistics`, method: 'GET'
+ options?: SecondParameter<typeof customInstance<GoalTypeModel[]>>,) => {
+      return customInstance<GoalTypeModel[]>(
+      {url: `/umbraco/engage/management/api/v1/goal/all/types`, method: 'GET'
     },
       options);
     }
 
-const getSuspiciousActivityOverview = (
-    params?: GetSuspiciousActivityOverviewParams,
- options?: SecondParameter<typeof customInstance<SuspiciousActivityResponseModel>>,) => {
-      return customInstance<SuspiciousActivityResponseModel>(
-      {url: `/umbraco/engage/management/api/v1/suspicious-activity/overview`, method: 'GET',
+const getGoalDetails = (
+    params?: GetGoalDetailsParams,
+ options?: SecondParameter<typeof customInstance<GoalModel>>,) => {
+      return customInstance<GoalModel>(
+      {url: `/umbraco/engage/management/api/v1/goal/details`, method: 'GET',
         params
     },
       options);
     }
 
-const deleteTrafficFilter = (
-    params?: DeleteTrafficFilterParams,
- options?: SecondParameter<typeof customInstance<void>>,) => {
-      return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/traffic-filter`, method: 'DELETE',
-        params
-    },
-      options);
-    }
-
-const getTrafficFilter = (
-    params?: GetTrafficFilterParams,
- options?: SecondParameter<typeof customInstance<TrafficFilterModel>>,) => {
-      return customInstance<TrafficFilterModel>(
-      {url: `/umbraco/engage/management/api/v1/traffic-filter`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const postTrafficFilter = (
-    trafficFilterModel?: TrafficFilterModel,
+const postGoal = (
+    saveGoalRequestModel: SaveGoalRequestModel,
  options?: SecondParameter<typeof customInstance<string>>,) => {
       return customInstance<string>(
-      {url: `/umbraco/engage/management/api/v1/traffic-filter`, method: 'POST',
+      {url: `/umbraco/engage/management/api/v1/goal`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: trafficFilterModel
+      data: saveGoalRequestModel
     },
       options);
     }
 
-const getTrafficFilterAll = (
+const getPermissionsDocumentTypeAll = (
 
- options?: SecondParameter<typeof customInstance<TrafficFilterModel[]>>,) => {
-      return customInstance<TrafficFilterModel[]>(
-      {url: `/umbraco/engage/management/api/v1/traffic-filter/all`, method: 'GET'
+ options?: SecondParameter<typeof customInstance<DocumentTypePermissionDtoModel[]>>,) => {
+      return customInstance<DocumentTypePermissionDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/permissions/document-type/all`, method: 'GET'
     },
       options);
     }
 
-const getTrafficFilterEmpty = (
-
- options?: SecondParameter<typeof customInstance<TrafficFilterModel>>,) => {
-      return customInstance<TrafficFilterModel>(
-      {url: `/umbraco/engage/management/api/v1/traffic-filter/empty`, method: 'GET'
-    },
-      options);
-    }
-
-const getPermissionsUserGroup = (
-    params?: GetPermissionsUserGroupParams,
- options?: SecondParameter<typeof customInstance<UserGroupPermissionDtoModel>>,) => {
-      return customInstance<UserGroupPermissionDtoModel>(
-      {url: `/umbraco/engage/management/api/v1/permissions/user-group`, method: 'GET',
+const getPermissionsDocumentType = (
+    params?: GetPermissionsDocumentTypeParams,
+ options?: SecondParameter<typeof customInstance<DocumentTypePermissionDtoModel>>,) => {
+      return customInstance<DocumentTypePermissionDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/permissions/document-type`, method: 'GET',
         params
     },
       options);
     }
 
-const postPermissionsUserGroup = (
-    userGroupPermissionDtoModel?: UserGroupPermissionDtoModel,
+const postPermissionsDocumentType = (
+    documentTypePermissionDtoModel: DocumentTypePermissionDtoModel[],
  options?: SecondParameter<typeof customInstance<void>>,) => {
       return customInstance<void>(
-      {url: `/umbraco/engage/management/api/v1/permissions/user-group`, method: 'POST',
+      {url: `/umbraco/engage/management/api/v1/permissions/document-type`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
-      data: userGroupPermissionDtoModel
+      data: documentTypePermissionDtoModel
     },
       options);
     }
 
-const getPermissionsUserGroupAll = (
-
- options?: SecondParameter<typeof customInstance<UserGroupPermissionDtoModel[]>>,) => {
-      return customInstance<UserGroupPermissionDtoModel[]>(
-      {url: `/umbraco/engage/management/api/v1/permissions/user-group/all`, method: 'GET'
+const getDataGenerationLogs = (
+    params?: GetDataGenerationLogsParams,
+ options?: SecondParameter<typeof customInstance<PagedModelOfDataGenerationLogDto>>,) => {
+      return customInstance<PagedModelOfDataGenerationLogDto>(
+      {url: `/umbraco/engage/management/api/v1/data-generation/logs`, method: 'GET',
+        params
     },
       options);
     }
 
-return {postAbTestProject,deleteAbTestProject,getAbTestProject,putAbTestProject,getAbTestProjectAll,getAbTestProjectDetails,deleteAbTestVariant,getAbTestVariant,postAbTestVariant,getAbTestVariantAll,postAbTestVariantCreate,postAbTestVariantDisable,getAbTestVariantSegment,deleteAbTest,getAbTest,postAbTest,getAbTestAll,getAbTestEmpty,getAbTestPage,getAbTestPreviewUrl,postAbTestRuntimeIndication,postAbTestSegment,postAbTestVariantDetails,getAbTestViewModel,getAddOns,getAnalyticsDistinct,postAnalyticsQuery,deleteAnnotations,postAnnotations,getAnnotationsAll,getAnnotationsEmpty,getAnnotationsGlobal,getAnnotationsPage,deleteAppliedPersonalization,postAppliedPersonalization,getAppliedPersonalizationAll,getAppliedPersonalizationId,postAppliedPersonalizationSegment,getAppliedPersonalizationSegment,deleteCampaignGroup,getCampaignGroup,postCampaignGroup,getCampaignGroupAll,getCampaignGroupUnscored,getCampaignGroupVisitors,getCampaigns,postCockpitDeleteCookie,getCockpitGetUmbracoPageInfo,getCockpitAuthDomains,postCockpitAuthGenerateToken,getConfiguration,getContentScoringAll,getContentScoringExportCustomerJourney,getContentScoringExportPersona,deleteContentScoringJourney,deleteContentScoringPersona,postContentScoringSave,getContentTypesAll,getContentTypesSegmentedProperty,getCultures,deleteCustomerJourney,postCustomerJourney,getCustomerJourneyAll,getCustomerJourneyDetails,getCustomerJourneyEmpty,postCustomerJourneyLock,postCustomerJourneyUnlock,getDataCleanupLastRun,getDataCleanupLogs,getDataCleanupRuns,getDataGenerationLogs,getPermissionsDocumentType,postPermissionsDocumentType,getPermissionsDocumentTypeAll,postGoal,postGoalAll,getGoalAllTypes,getGoalDetails,getGoalsAll,getGoalsMain,postHeatmapsGenerateScrollHeatmap,getHeatmapsVariants,getMainSwitch,postMainSwitchTurnOff,postMainSwitchTurnOn,getPackage,postUmbracoEngagePagedataCollect,postUmbracoEngagePagedataCollectEvent,getUmbracoEngagePagedataPing,postUmbracoEngagePagedataPing,deletePersona,postPersona,getPersonaAll,getPersonaDetails,getPersonaEmpty,postPersonaLock,postPersonaUnlock,getProfileBotVisitors,getProfileCustomerJourneyStepScores,getProfileDetails,getProfileExport,postProfileExportCsv,getProfileGoalCompletions,getProfileLastActiveSegment,postProfileOverview,getProfilePageEvents,getProfilePageviews,getProfilePersonaScores,getProfilePotential,getProfileRelated,getProfileSessions,getProfileStatisticsGrowth,getProfileStatisticsIdentification,getProfileStatisticsTotal,deleteReferralGroup,getReferralGroup,postReferralGroup,getReferralGroupAll,getReferralGroupVisitors,postReferralScoringScored,postReferralScoringUnscored,getReporting,postReportingGenerationStart,getReportingGenerationStatus,getReportingGoalPersonalizationPerformanceBySegmentId,getReportingSegmentSessionsPersonalizationBySegmentId,getReportingSegmentSessionsPotentialBySegmentId,getSearchTerms,deleteSegments,getSegments,postSegments,getSegmentsAll,deleteSegmentsDeleteSegmentContent,getSegmentsLocationsData,postSegmentsUpdatePriority,getStatistics,getSuspiciousActivityOverview,deleteTrafficFilter,getTrafficFilter,postTrafficFilter,getTrafficFilterAll,getTrafficFilterEmpty,getPermissionsUserGroup,postPermissionsUserGroup,getPermissionsUserGroupAll}};
-export type PostAbTestProjectResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestProject']>>>
-export type DeleteAbTestProjectResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteAbTestProject']>>>
-export type GetAbTestProjectResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestProject']>>>
-export type PutAbTestProjectResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['putAbTestProject']>>>
-export type GetAbTestProjectAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestProjectAll']>>>
-export type GetAbTestProjectDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestProjectDetails']>>>
-export type DeleteAbTestVariantResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteAbTestVariant']>>>
-export type GetAbTestVariantResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestVariant']>>>
-export type PostAbTestVariantResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestVariant']>>>
-export type GetAbTestVariantAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestVariantAll']>>>
-export type PostAbTestVariantCreateResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestVariantCreate']>>>
-export type PostAbTestVariantDisableResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestVariantDisable']>>>
-export type GetAbTestVariantSegmentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestVariantSegment']>>>
-export type DeleteAbTestResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteAbTest']>>>
-export type GetAbTestResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTest']>>>
-export type PostAbTestResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTest']>>>
-export type GetAbTestAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestAll']>>>
-export type GetAbTestEmptyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestEmpty']>>>
-export type GetAbTestPageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestPage']>>>
-export type GetAbTestPreviewUrlResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestPreviewUrl']>>>
-export type PostAbTestRuntimeIndicationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestRuntimeIndication']>>>
-export type PostAbTestSegmentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestSegment']>>>
-export type PostAbTestVariantDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestVariantDetails']>>>
-export type GetAbTestViewModelResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestViewModel']>>>
-export type GetAddOnsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAddOns']>>>
-export type GetAnalyticsDistinctResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAnalyticsDistinct']>>>
-export type PostAnalyticsQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAnalyticsQuery']>>>
-export type DeleteAnnotationsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteAnnotations']>>>
-export type PostAnnotationsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAnnotations']>>>
-export type GetAnnotationsAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAnnotationsAll']>>>
-export type GetAnnotationsEmptyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAnnotationsEmpty']>>>
-export type GetAnnotationsGlobalResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAnnotationsGlobal']>>>
-export type GetAnnotationsPageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAnnotationsPage']>>>
-export type DeleteAppliedPersonalizationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteAppliedPersonalization']>>>
-export type PostAppliedPersonalizationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAppliedPersonalization']>>>
-export type GetAppliedPersonalizationAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAppliedPersonalizationAll']>>>
-export type GetAppliedPersonalizationIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAppliedPersonalizationId']>>>
-export type PostAppliedPersonalizationSegmentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAppliedPersonalizationSegment']>>>
-export type GetAppliedPersonalizationSegmentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAppliedPersonalizationSegment']>>>
+const getDataCleanupLastRun = (
+
+ options?: SecondParameter<typeof customInstance<DataCleanupLastRunDtoModel>>,) => {
+      return customInstance<DataCleanupLastRunDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/data-cleanup/last-run`, method: 'GET'
+    },
+      options);
+    }
+
+const getDataCleanupLogs = (
+    params?: GetDataCleanupLogsParams,
+ options?: SecondParameter<typeof customInstance<PagedModelOfDataCleanupLogDto>>,) => {
+      return customInstance<PagedModelOfDataCleanupLogDto>(
+      {url: `/umbraco/engage/management/api/v1/data-cleanup/logs`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const getDataCleanupRuns = (
+    params?: GetDataCleanupRunsParams,
+ options?: SecondParameter<typeof customInstance<PagedModelOfDataCleanupRunDto>>,) => {
+      return customInstance<PagedModelOfDataCleanupRunDto>(
+      {url: `/umbraco/engage/management/api/v1/data-cleanup/runs`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const postCustomerJourneyLock = (
+    modifyExplicitScoreRequestModel: ModifyExplicitScoreRequestModel,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/customer-journey/lock`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: modifyExplicitScoreRequestModel
+    },
+      options);
+    }
+
+const getCustomerJourneyEmpty = (
+
+ options?: SecondParameter<typeof customInstance<CustomerJourneyDtoModel>>,) => {
+      return customInstance<CustomerJourneyDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/customer-journey/empty`, method: 'GET'
+    },
+      options);
+    }
+
+const deleteCustomerJourney = (
+    params?: DeleteCustomerJourneyParams,
+ options?: SecondParameter<typeof customInstance<ValidationResultsModel>>,) => {
+      return customInstance<ValidationResultsModel>(
+      {url: `/umbraco/engage/management/api/v1/customer-journey`, method: 'DELETE',
+        params
+    },
+      options);
+    }
+
+const postCustomerJourney = (
+    customerJourneyDtoModel: CustomerJourneyDtoModel,
+ options?: SecondParameter<typeof customInstance<SaveCustomerJourneyResponseModel>>,) => {
+      return customInstance<SaveCustomerJourneyResponseModel>(
+      {url: `/umbraco/engage/management/api/v1/customer-journey`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: customerJourneyDtoModel
+    },
+      options);
+    }
+
+const getCustomerJourneyAll = (
+
+ options?: SecondParameter<typeof customInstance<CustomerJourneyDtoModel[]>>,) => {
+      return customInstance<CustomerJourneyDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/customer-journey/all`, method: 'GET'
+    },
+      options);
+    }
+
+const getCustomerJourneyDetails = (
+    params?: GetCustomerJourneyDetailsParams,
+ options?: SecondParameter<typeof customInstance<CustomerJourneyDtoModel>>,) => {
+      return customInstance<CustomerJourneyDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/customer-journey/details`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const postCustomerJourneyUnlock = (
+    modifyExplicitScoreRequestModel: ModifyExplicitScoreRequestModel,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/customer-journey/unlock`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: modifyExplicitScoreRequestModel
+    },
+      options);
+    }
+
+const getCultures = (
+    params?: GetCulturesParams,
+ options?: SecondParameter<typeof customInstance<string[]>>,) => {
+      return customInstance<string[]>(
+      {url: `/umbraco/engage/management/api/v1/cultures`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const getContentTypesAll = (
+
+ options?: SecondParameter<typeof customInstance<UmsContentTypeModel[]>>,) => {
+      return customInstance<UmsContentTypeModel[]>(
+      {url: `/umbraco/engage/management/api/v1/content-types/all`, method: 'GET'
+    },
+      options);
+    }
+
+const getContentTypesSegmentedProperty = (
+    params?: GetContentTypesSegmentedPropertyParams,
+ options?: SecondParameter<typeof customInstance<SegmentedPropertyResponseModel>>,) => {
+      return customInstance<SegmentedPropertyResponseModel>(
+      {url: `/umbraco/engage/management/api/v1/content-types/segmented-property`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const deleteContentScoringJourney = (
+    params?: DeleteContentScoringJourneyParams,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/content-scoring/journey`, method: 'DELETE',
+        params
+    },
+      options);
+    }
+
+const deleteContentScoringPersona = (
+    params?: DeleteContentScoringPersonaParams,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/content-scoring/persona`, method: 'DELETE',
+        params
+    },
+      options);
+    }
+
+const getContentScoringExportCustomerJourney = (
+
+ options?: SecondParameter<typeof customInstance<FileStreamResult>>,) => {
+      return customInstance<FileStreamResult>(
+      {url: `/umbraco/engage/management/api/v1/content-scoring/export/customer-journey`, method: 'GET'
+    },
+      { responseType: 'blob',  ...options});
+    }
+
+const getContentScoringExportPersona = (
+
+ options?: SecondParameter<typeof customInstance<FileStreamResult>>,) => {
+      return customInstance<FileStreamResult>(
+      {url: `/umbraco/engage/management/api/v1/content-scoring/export/persona`, method: 'GET'
+    },
+      { responseType: 'blob',  ...options});
+    }
+
+const getContentScoringAll = (
+    params?: GetContentScoringAllParams,
+ options?: SecondParameter<typeof customInstance<ContentScoringResultModel>>,) => {
+      return customInstance<ContentScoringResultModel>(
+      {url: `/umbraco/engage/management/api/v1/content-scoring/all`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const postContentScoringSave = (
+    contentScoringEntityDtoModel: ContentScoringEntityDtoModel[],
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/content-scoring/save`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: contentScoringEntityDtoModel
+    },
+      options);
+    }
+
+const getConfiguration = (
+
+ options?: SecondParameter<typeof customInstance<ConfigurationDtoModel>>,) => {
+      return customInstance<ConfigurationDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/configuration`, method: 'GET'
+    },
+      options);
+    }
+
+const postCockpitAuthGenerateToken = (
+
+ options?: SecondParameter<typeof customInstance<GenerateTokenResponseModel>>,) => {
+      return customInstance<GenerateTokenResponseModel>(
+      {url: `/umbraco/engage/management/api/v1/cockpit-auth/generate-token`, method: 'POST'
+    },
+      options);
+    }
+
+const getCockpitAuthDomains = (
+
+ options?: SecondParameter<typeof customInstance<DomainsResponseModel>>,) => {
+      return customInstance<DomainsResponseModel>(
+      {url: `/umbraco/engage/management/api/v1/cockpit-auth/domains`, method: 'GET'
+    },
+      options);
+    }
+
+const postCockpitDeleteCookie = (
+
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/cockpit/delete-cookie`, method: 'POST'
+    },
+      options);
+    }
+
+const getCockpitGetUmbracoPageInfo = (
+    params?: GetCockpitGetUmbracoPageInfoParams,
+ options?: SecondParameter<typeof customInstance<UmbracoPageInfoDtoModel>>,) => {
+      return customInstance<UmbracoPageInfoDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/cockpit/get-umbraco-page-info`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const getCampaigns = (
+    params?: GetCampaignsParams,
+ options?: SecondParameter<typeof customInstance<CampaignsByVisitorDtoModel[]>>,) => {
+      return customInstance<CampaignsByVisitorDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/campaigns`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const deleteCampaignGroup = (
+    params?: DeleteCampaignGroupParams,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/campaign-group`, method: 'DELETE',
+        params
+    },
+      options);
+    }
+
+const getCampaignGroup = (
+    params?: GetCampaignGroupParams,
+ options?: SecondParameter<typeof customInstance<CampaignGroupDtoModel>>,) => {
+      return customInstance<CampaignGroupDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/campaign-group`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const postCampaignGroup = (
+    campaignGroupDtoModel: CampaignGroupDtoModel,
+ options?: SecondParameter<typeof customInstance<CampaignGroupDtoModel>>,) => {
+      return customInstance<CampaignGroupDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/campaign-group`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: campaignGroupDtoModel
+    },
+      options);
+    }
+
+const getCampaignGroupAll = (
+
+ options?: SecondParameter<typeof customInstance<CampaignGroupDtoModel[]>>,) => {
+      return customInstance<CampaignGroupDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/campaign-group/all`, method: 'GET'
+    },
+      options);
+    }
+
+const getCampaignGroupUnscored = (
+
+ options?: SecondParameter<typeof customInstance<UnscoredCampaignDtoModel[]>>,) => {
+      return customInstance<UnscoredCampaignDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/campaign-group/unscored`, method: 'GET'
+    },
+      options);
+    }
+
+const getCampaignGroupVisitors = (
+    params?: GetCampaignGroupVisitorsParams,
+ options?: SecondParameter<typeof customInstance<GetCampaignGroupVisitors200One | GetCampaignGroupVisitors200Two | GetCampaignGroupVisitors200Three>>,) => {
+      return customInstance<GetCampaignGroupVisitors200One | GetCampaignGroupVisitors200Two | GetCampaignGroupVisitors200Three>(
+      {url: `/umbraco/engage/management/api/v1/campaign-group/visitors`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const postAppliedPersonalizationSegment = (
+    params?: PostAppliedPersonalizationSegmentParams,
+ options?: SecondParameter<typeof customInstance<CreateAppliedPersonalizationSegmentResponseModel>>,) => {
+      return customInstance<CreateAppliedPersonalizationSegmentResponseModel>(
+      {url: `/umbraco/engage/management/api/v1/applied-personalization/segment`, method: 'POST',
+        params
+    },
+      options);
+    }
+
+const getAppliedPersonalizationSegment = (
+    params?: GetAppliedPersonalizationSegmentParams,
+ options?: SecondParameter<typeof customInstance<AppliedPersonalizationDtoModel>>,) => {
+      return customInstance<AppliedPersonalizationDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/applied-personalization/segment`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const deleteAppliedPersonalization = (
+    params?: DeleteAppliedPersonalizationParams,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/applied-personalization`, method: 'DELETE',
+        params
+    },
+      options);
+    }
+
+const postAppliedPersonalization = (
+    appliedPersonalizationDtoModel: AppliedPersonalizationDtoModel,
+ options?: SecondParameter<typeof customInstance<AppliedPersonalizationDtoModel>>,) => {
+      return customInstance<AppliedPersonalizationDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/applied-personalization`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: appliedPersonalizationDtoModel
+    },
+      options);
+    }
+
+const getAppliedPersonalizationAll = (
+
+ options?: SecondParameter<typeof customInstance<AppliedPersonalizationDtoModel[]>>,) => {
+      return customInstance<AppliedPersonalizationDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/applied-personalization/all`, method: 'GET'
+    },
+      options);
+    }
+
+const getAppliedPersonalizationId = (
+    params?: GetAppliedPersonalizationIdParams,
+ options?: SecondParameter<typeof customInstance<AppliedPersonalizationDtoModel>>,) => {
+      return customInstance<AppliedPersonalizationDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/applied-personalization/id`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const deleteAnnotations = (
+    params?: DeleteAnnotationsParams,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/annotations`, method: 'DELETE',
+        params
+    },
+      options);
+    }
+
+const postAnnotations = (
+    annotationModel: AnnotationModel,
+ options?: SecondParameter<typeof customInstance<AnnotationModel>>,) => {
+      return customInstance<AnnotationModel>(
+      {url: `/umbraco/engage/management/api/v1/annotations`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: annotationModel
+    },
+      options);
+    }
+
+const getAnnotationsAll = (
+    params?: GetAnnotationsAllParams,
+ options?: SecondParameter<typeof customInstance<AnnotationModel[]>>,) => {
+      return customInstance<AnnotationModel[]>(
+      {url: `/umbraco/engage/management/api/v1/annotations/all`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const getAnnotationsEmpty = (
+
+ options?: SecondParameter<typeof customInstance<AnnotationModel>>,) => {
+      return customInstance<AnnotationModel>(
+      {url: `/umbraco/engage/management/api/v1/annotations/empty`, method: 'GET'
+    },
+      options);
+    }
+
+const getAnnotationsGlobal = (
+    params?: GetAnnotationsGlobalParams,
+ options?: SecondParameter<typeof customInstance<AnnotationModel[]>>,) => {
+      return customInstance<AnnotationModel[]>(
+      {url: `/umbraco/engage/management/api/v1/annotations/global`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const getAnnotationsPage = (
+    params?: GetAnnotationsPageParams,
+ options?: SecondParameter<typeof customInstance<AnnotationModel[]>>,) => {
+      return customInstance<AnnotationModel[]>(
+      {url: `/umbraco/engage/management/api/v1/annotations/page`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const getAnalyticsDistinct = (
+    params?: GetAnalyticsDistinctParams,
+ options?: SecondParameter<typeof customInstance<string[]>>,) => {
+      return customInstance<string[]>(
+      {url: `/umbraco/engage/management/api/v1/analytics/distinct`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const postAnalyticsQuery = (
+    analyticsQueryGetModel: AnalyticsQueryGetModel,
+ options?: SecondParameter<typeof customInstance<AnalyticsQueryResultModel>>,) => {
+      return customInstance<AnalyticsQueryResultModel>(
+      {url: `/umbraco/engage/management/api/v1/analytics/query`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: analyticsQueryGetModel
+    },
+      options);
+    }
+
+const getAddOns = (
+
+ options?: SecondParameter<typeof customInstance<EnabledAddonsModel>>,) => {
+      return customInstance<EnabledAddonsModel>(
+      {url: `/umbraco/engage/management/api/v1/add-ons`, method: 'GET'
+    },
+      options);
+    }
+
+const postAbTestVariantCreate = (
+    params?: PostAbTestVariantCreateParams,
+ options?: SecondParameter<typeof customInstance<AbTestVariantDtoModel>>,) => {
+      return customInstance<AbTestVariantDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/ab-test-variant/create`, method: 'POST',
+        params
+    },
+      options);
+    }
+
+const deleteAbTestVariant = (
+    params?: DeleteAbTestVariantParams,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/ab-test-variant`, method: 'DELETE',
+        params
+    },
+      options);
+    }
+
+const getAbTestVariant = (
+    params?: GetAbTestVariantParams,
+ options?: SecondParameter<typeof customInstance<AbTestVariantDtoModel>>,) => {
+      return customInstance<AbTestVariantDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/ab-test-variant`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const postAbTestVariant = (
+    abTestVariantDtoModel: AbTestVariantDtoModel,
+ options?: SecondParameter<typeof customInstance<AbTestVariantDtoModel>>,) => {
+      return customInstance<AbTestVariantDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/ab-test-variant`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: abTestVariantDtoModel
+    },
+      options);
+    }
+
+const postAbTestVariantDisable = (
+    params?: PostAbTestVariantDisableParams,
+ options?: SecondParameter<typeof customInstance<AbTestVariantDtoModel>>,) => {
+      return customInstance<AbTestVariantDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/ab-test-variant/disable`, method: 'POST',
+        params
+    },
+      options);
+    }
+
+const getAbTestVariantAll = (
+    params?: GetAbTestVariantAllParams,
+ options?: SecondParameter<typeof customInstance<AbTestVariantDtoModel[]>>,) => {
+      return customInstance<AbTestVariantDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/ab-test-variant/all`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const getAbTestVariantSegment = (
+    params?: GetAbTestVariantSegmentParams,
+ options?: SecondParameter<typeof customInstance<AbTestVariantDtoModel>>,) => {
+      return customInstance<AbTestVariantDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/ab-test-variant/segment`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const postAbTestProject = (
+    abTestProjectDtoModel: AbTestProjectDtoModel,
+ options?: SecondParameter<typeof customInstance<AbTestProjectDtoModel>>,) => {
+      return customInstance<AbTestProjectDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/ab-test-project`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: abTestProjectDtoModel
+    },
+      options);
+    }
+
+const deleteAbTestProject = (
+    params?: DeleteAbTestProjectParams,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/ab-test-project`, method: 'DELETE',
+        params
+    },
+      options);
+    }
+
+const getAbTestProject = (
+    params?: GetAbTestProjectParams,
+ options?: SecondParameter<typeof customInstance<AbTestProjectDtoModel>>,) => {
+      return customInstance<AbTestProjectDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/ab-test-project`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const putAbTestProject = (
+    abTestProjectDtoModel: AbTestProjectDtoModel,
+ options?: SecondParameter<typeof customInstance<AbTestProjectDtoModel>>,) => {
+      return customInstance<AbTestProjectDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/ab-test-project`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: abTestProjectDtoModel
+    },
+      options);
+    }
+
+const getAbTestProjectAll = (
+
+ options?: SecondParameter<typeof customInstance<AbTestProjectDtoModel[]>>,) => {
+      return customInstance<AbTestProjectDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/ab-test-project/all`, method: 'GET'
+    },
+      options);
+    }
+
+const getAbTestProjectDetails = (
+    params?: GetAbTestProjectDetailsParams,
+ options?: SecondParameter<typeof customInstance<ProjectModel>>,) => {
+      return customInstance<ProjectModel>(
+      {url: `/umbraco/engage/management/api/v1/ab-test-project/details`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const getAbTestProjectTreeRoot = (
+
+ options?: SecondParameter<typeof customInstance<EntityItemResponseModel[]>>,) => {
+      return customInstance<EntityItemResponseModel[]>(
+      {url: `/umbraco/engage/management/api/v1/ab-test-project/tree/root`, method: 'GET'
+    },
+      options);
+    }
+
+const getAbTestProjectItem = (
+    params?: GetAbTestProjectItemParams,
+ options?: SecondParameter<typeof customInstance<EntityItemResponseModel[]>>,) => {
+      return customInstance<EntityItemResponseModel[]>(
+      {url: `/umbraco/engage/management/api/v1/ab-test-project/item`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const getAbTestEmpty = (
+    params?: GetAbTestEmptyParams,
+ options?: SecondParameter<typeof customInstance<AbTestDetailModel>>,) => {
+      return customInstance<AbTestDetailModel>(
+      {url: `/umbraco/engage/management/api/v1/ab-test/empty`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const postAbTestSegment = (
+    params?: PostAbTestSegmentParams,
+ options?: SecondParameter<typeof customInstance<CreateSegmentAbTestResponseModel>>,) => {
+      return customInstance<CreateSegmentAbTestResponseModel>(
+      {url: `/umbraco/engage/management/api/v1/ab-test/segment`, method: 'POST',
+        params
+    },
+      options);
+    }
+
+const deleteAbTest = (
+    params?: DeleteAbTestParams,
+ options?: SecondParameter<typeof customInstance<ValidationResultsModel>>,) => {
+      return customInstance<ValidationResultsModel>(
+      {url: `/umbraco/engage/management/api/v1/ab-test`, method: 'DELETE',
+        params
+    },
+      options);
+    }
+
+const getAbTest = (
+    params?: GetAbTestParams,
+ options?: SecondParameter<typeof customInstance<AbTestDtoModel>>,) => {
+      return customInstance<AbTestDtoModel>(
+      {url: `/umbraco/engage/management/api/v1/ab-test`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const postAbTest = (
+    abTestDetailModel: AbTestDetailModel,
+ options?: SecondParameter<typeof customInstance<SaveAbTestResponseModel>>,) => {
+      return customInstance<SaveAbTestResponseModel>(
+      {url: `/umbraco/engage/management/api/v1/ab-test`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: abTestDetailModel
+    },
+      options);
+    }
+
+const getAbTestAll = (
+
+ options?: SecondParameter<typeof customInstance<AbTestDtoModel[]>>,) => {
+      return customInstance<AbTestDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/ab-test/all`, method: 'GET'
+    },
+      options);
+    }
+
+const getAbTestPage = (
+    params?: GetAbTestPageParams,
+ options?: SecondParameter<typeof customInstance<ProjectAbTestModel[]>>,) => {
+      return customInstance<ProjectAbTestModel[]>(
+      {url: `/umbraco/engage/management/api/v1/ab-test/page`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const postAbTestVariantDetails = (
+    abTestDtoModel: AbTestDtoModel,
+ options?: SecondParameter<typeof customInstance<AbTestDetailVariantInfoModel[]>>,) => {
+      return customInstance<AbTestDetailVariantInfoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/ab-test/variant-details`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: abTestDtoModel
+    },
+      options);
+    }
+
+const getAbTestViewModel = (
+    params?: GetAbTestViewModelParams,
+ options?: SecondParameter<typeof customInstance<AbTestDetailModel>>,) => {
+      return customInstance<AbTestDetailModel>(
+      {url: `/umbraco/engage/management/api/v1/ab-test/view-model`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const postAbTestRuntimeIndication = (
+    abTestDtoModel: AbTestDtoModel,
+ options?: SecondParameter<typeof customInstance<AbTestIndicationModel>>,) => {
+      return customInstance<AbTestIndicationModel>(
+      {url: `/umbraco/engage/management/api/v1/ab-test/runtime-indication`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: abTestDtoModel
+    },
+      options);
+    }
+
+return {postPreviewEnd,postPreviewStart,getPackage,getPermissionsUserGroupAll,getPermissionsUserGroup,postPermissionsUserGroup,getTrafficFilter,deleteTrafficFilter,postTrafficFilter,getTrafficFilterEmpty,getTrafficFilterAll,getSuspiciousActivityOverview,putSuspiciousActivityVisitorsByVisitorIdVisitorType,getStatistics,deleteSegments,getSegments,postSegments,getSegmentsAll,getSegmentsLocationsData,getSegmentsPreviewableSegments,postSegmentsUpdatePriority,getSegmentsTreeRoot,getSegmentsItem,getSearchTerms,getReportingGenerationStatus,getReportingGoalPersonalizationPerformanceBySegmentId,getReportingSegmentSessionsPersonalizationBySegmentId,getReportingSegmentSessionsPotentialBySegmentId,getReporting,postReportingGenerationStart,postReferralScoringScored,postReferralScoringUnscored,deleteReferralGroup,getReferralGroup,postReferralGroup,getReferralGroupAll,getReferralGroupVisitors,getProfileBotVisitors,postProfileExportCsv,getProfileCustomerJourneyStepScores,getProfileDetails,getProfilePageEvents,getProfileExport,getProfileGoalCompletions,getProfileStatisticsGrowth,getProfileStatisticsIdentification,getProfileLastActiveSegment,postProfileOverview,getProfilePageviews,getProfilePersonaScores,getProfilePotential,getProfileRelated,getProfileSessions,getProfileStatisticsTotal,postPersonaLock,getPersonaEmpty,deletePersona,postPersona,getPersonaAll,getPersonaDetails,postPersonaUnlock,postUmbracoEngagePagedataCollectEvent,postUmbracoEngagePagedataCollect,getUmbracoEngagePagedataPing,postUmbracoEngagePagedataPing,getMainSwitch,postMainSwitchTurnOff,postMainSwitchTurnOn,postHeatmapsGenerateScrollHeatmap,getHeatmapsVariants,getGoalsAll,getGoalsMain,getGoalsTreeRoot,getGoalsItem,postGoalAll,getGoalAllTypes,getGoalDetails,postGoal,getPermissionsDocumentTypeAll,getPermissionsDocumentType,postPermissionsDocumentType,getDataGenerationLogs,getDataCleanupLastRun,getDataCleanupLogs,getDataCleanupRuns,postCustomerJourneyLock,getCustomerJourneyEmpty,deleteCustomerJourney,postCustomerJourney,getCustomerJourneyAll,getCustomerJourneyDetails,postCustomerJourneyUnlock,getCultures,getContentTypesAll,getContentTypesSegmentedProperty,deleteContentScoringJourney,deleteContentScoringPersona,getContentScoringExportCustomerJourney,getContentScoringExportPersona,getContentScoringAll,postContentScoringSave,getConfiguration,postCockpitAuthGenerateToken,getCockpitAuthDomains,postCockpitDeleteCookie,getCockpitGetUmbracoPageInfo,getCampaigns,deleteCampaignGroup,getCampaignGroup,postCampaignGroup,getCampaignGroupAll,getCampaignGroupUnscored,getCampaignGroupVisitors,postAppliedPersonalizationSegment,getAppliedPersonalizationSegment,deleteAppliedPersonalization,postAppliedPersonalization,getAppliedPersonalizationAll,getAppliedPersonalizationId,deleteAnnotations,postAnnotations,getAnnotationsAll,getAnnotationsEmpty,getAnnotationsGlobal,getAnnotationsPage,getAnalyticsDistinct,postAnalyticsQuery,getAddOns,postAbTestVariantCreate,deleteAbTestVariant,getAbTestVariant,postAbTestVariant,postAbTestVariantDisable,getAbTestVariantAll,getAbTestVariantSegment,postAbTestProject,deleteAbTestProject,getAbTestProject,putAbTestProject,getAbTestProjectAll,getAbTestProjectDetails,getAbTestProjectTreeRoot,getAbTestProjectItem,getAbTestEmpty,postAbTestSegment,deleteAbTest,getAbTest,postAbTest,getAbTestAll,getAbTestPage,postAbTestVariantDetails,getAbTestViewModel,postAbTestRuntimeIndication}};
+export type PostPreviewEndResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postPreviewEnd']>>>
+export type PostPreviewStartResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postPreviewStart']>>>
+export type GetPackageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getPackage']>>>
+export type GetPermissionsUserGroupAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getPermissionsUserGroupAll']>>>
+export type GetPermissionsUserGroupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getPermissionsUserGroup']>>>
+export type PostPermissionsUserGroupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postPermissionsUserGroup']>>>
+export type GetTrafficFilterResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getTrafficFilter']>>>
+export type DeleteTrafficFilterResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteTrafficFilter']>>>
+export type PostTrafficFilterResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postTrafficFilter']>>>
+export type GetTrafficFilterEmptyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getTrafficFilterEmpty']>>>
+export type GetTrafficFilterAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getTrafficFilterAll']>>>
+export type GetSuspiciousActivityOverviewResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSuspiciousActivityOverview']>>>
+export type PutSuspiciousActivityVisitorsByVisitorIdVisitorTypeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['putSuspiciousActivityVisitorsByVisitorIdVisitorType']>>>
+export type GetStatisticsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getStatistics']>>>
+export type DeleteSegmentsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteSegments']>>>
+export type GetSegmentsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSegments']>>>
+export type PostSegmentsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postSegments']>>>
+export type GetSegmentsAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSegmentsAll']>>>
+export type GetSegmentsLocationsDataResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSegmentsLocationsData']>>>
+export type GetSegmentsPreviewableSegmentsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSegmentsPreviewableSegments']>>>
+export type PostSegmentsUpdatePriorityResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postSegmentsUpdatePriority']>>>
+export type GetSegmentsTreeRootResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSegmentsTreeRoot']>>>
+export type GetSegmentsItemResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSegmentsItem']>>>
+export type GetSearchTermsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSearchTerms']>>>
+export type GetReportingGenerationStatusResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getReportingGenerationStatus']>>>
+export type GetReportingGoalPersonalizationPerformanceBySegmentIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getReportingGoalPersonalizationPerformanceBySegmentId']>>>
+export type GetReportingSegmentSessionsPersonalizationBySegmentIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getReportingSegmentSessionsPersonalizationBySegmentId']>>>
+export type GetReportingSegmentSessionsPotentialBySegmentIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getReportingSegmentSessionsPotentialBySegmentId']>>>
+export type GetReportingResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getReporting']>>>
+export type PostReportingGenerationStartResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postReportingGenerationStart']>>>
+export type PostReferralScoringScoredResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postReferralScoringScored']>>>
+export type PostReferralScoringUnscoredResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postReferralScoringUnscored']>>>
+export type DeleteReferralGroupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteReferralGroup']>>>
+export type GetReferralGroupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getReferralGroup']>>>
+export type PostReferralGroupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postReferralGroup']>>>
+export type GetReferralGroupAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getReferralGroupAll']>>>
+export type GetReferralGroupVisitorsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getReferralGroupVisitors']>>>
+export type GetProfileBotVisitorsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileBotVisitors']>>>
+export type PostProfileExportCsvResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postProfileExportCsv']>>>
+export type GetProfileCustomerJourneyStepScoresResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileCustomerJourneyStepScores']>>>
+export type GetProfileDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileDetails']>>>
+export type GetProfilePageEventsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfilePageEvents']>>>
+export type GetProfileExportResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileExport']>>>
+export type GetProfileGoalCompletionsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileGoalCompletions']>>>
+export type GetProfileStatisticsGrowthResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileStatisticsGrowth']>>>
+export type GetProfileStatisticsIdentificationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileStatisticsIdentification']>>>
+export type GetProfileLastActiveSegmentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileLastActiveSegment']>>>
+export type PostProfileOverviewResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postProfileOverview']>>>
+export type GetProfilePageviewsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfilePageviews']>>>
+export type GetProfilePersonaScoresResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfilePersonaScores']>>>
+export type GetProfilePotentialResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfilePotential']>>>
+export type GetProfileRelatedResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileRelated']>>>
+export type GetProfileSessionsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileSessions']>>>
+export type GetProfileStatisticsTotalResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileStatisticsTotal']>>>
+export type PostPersonaLockResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postPersonaLock']>>>
+export type GetPersonaEmptyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getPersonaEmpty']>>>
+export type DeletePersonaResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deletePersona']>>>
+export type PostPersonaResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postPersona']>>>
+export type GetPersonaAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getPersonaAll']>>>
+export type GetPersonaDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getPersonaDetails']>>>
+export type PostPersonaUnlockResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postPersonaUnlock']>>>
+export type PostUmbracoEngagePagedataCollectEventResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postUmbracoEngagePagedataCollectEvent']>>>
+export type PostUmbracoEngagePagedataCollectResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postUmbracoEngagePagedataCollect']>>>
+export type GetUmbracoEngagePagedataPingResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getUmbracoEngagePagedataPing']>>>
+export type PostUmbracoEngagePagedataPingResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postUmbracoEngagePagedataPing']>>>
+export type GetMainSwitchResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getMainSwitch']>>>
+export type PostMainSwitchTurnOffResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postMainSwitchTurnOff']>>>
+export type PostMainSwitchTurnOnResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postMainSwitchTurnOn']>>>
+export type PostHeatmapsGenerateScrollHeatmapResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postHeatmapsGenerateScrollHeatmap']>>>
+export type GetHeatmapsVariantsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getHeatmapsVariants']>>>
+export type GetGoalsAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getGoalsAll']>>>
+export type GetGoalsMainResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getGoalsMain']>>>
+export type GetGoalsTreeRootResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getGoalsTreeRoot']>>>
+export type GetGoalsItemResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getGoalsItem']>>>
+export type PostGoalAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postGoalAll']>>>
+export type GetGoalAllTypesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getGoalAllTypes']>>>
+export type GetGoalDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getGoalDetails']>>>
+export type PostGoalResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postGoal']>>>
+export type GetPermissionsDocumentTypeAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getPermissionsDocumentTypeAll']>>>
+export type GetPermissionsDocumentTypeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getPermissionsDocumentType']>>>
+export type PostPermissionsDocumentTypeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postPermissionsDocumentType']>>>
+export type GetDataGenerationLogsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getDataGenerationLogs']>>>
+export type GetDataCleanupLastRunResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getDataCleanupLastRun']>>>
+export type GetDataCleanupLogsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getDataCleanupLogs']>>>
+export type GetDataCleanupRunsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getDataCleanupRuns']>>>
+export type PostCustomerJourneyLockResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postCustomerJourneyLock']>>>
+export type GetCustomerJourneyEmptyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCustomerJourneyEmpty']>>>
+export type DeleteCustomerJourneyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteCustomerJourney']>>>
+export type PostCustomerJourneyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postCustomerJourney']>>>
+export type GetCustomerJourneyAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCustomerJourneyAll']>>>
+export type GetCustomerJourneyDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCustomerJourneyDetails']>>>
+export type PostCustomerJourneyUnlockResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postCustomerJourneyUnlock']>>>
+export type GetCulturesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCultures']>>>
+export type GetContentTypesAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getContentTypesAll']>>>
+export type GetContentTypesSegmentedPropertyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getContentTypesSegmentedProperty']>>>
+export type DeleteContentScoringJourneyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteContentScoringJourney']>>>
+export type DeleteContentScoringPersonaResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteContentScoringPersona']>>>
+export type GetContentScoringExportCustomerJourneyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getContentScoringExportCustomerJourney']>>>
+export type GetContentScoringExportPersonaResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getContentScoringExportPersona']>>>
+export type GetContentScoringAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getContentScoringAll']>>>
+export type PostContentScoringSaveResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postContentScoringSave']>>>
+export type GetConfigurationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getConfiguration']>>>
+export type PostCockpitAuthGenerateTokenResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postCockpitAuthGenerateToken']>>>
+export type GetCockpitAuthDomainsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCockpitAuthDomains']>>>
+export type PostCockpitDeleteCookieResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postCockpitDeleteCookie']>>>
+export type GetCockpitGetUmbracoPageInfoResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCockpitGetUmbracoPageInfo']>>>
+export type GetCampaignsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCampaigns']>>>
 export type DeleteCampaignGroupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteCampaignGroup']>>>
 export type GetCampaignGroupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCampaignGroup']>>>
 export type PostCampaignGroupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postCampaignGroup']>>>
 export type GetCampaignGroupAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCampaignGroupAll']>>>
 export type GetCampaignGroupUnscoredResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCampaignGroupUnscored']>>>
 export type GetCampaignGroupVisitorsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCampaignGroupVisitors']>>>
-export type GetCampaignsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCampaigns']>>>
-export type PostCockpitDeleteCookieResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postCockpitDeleteCookie']>>>
-export type GetCockpitGetUmbracoPageInfoResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCockpitGetUmbracoPageInfo']>>>
-export type GetCockpitAuthDomainsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCockpitAuthDomains']>>>
-export type PostCockpitAuthGenerateTokenResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postCockpitAuthGenerateToken']>>>
-export type GetConfigurationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getConfiguration']>>>
-export type GetContentScoringAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getContentScoringAll']>>>
-export type GetContentScoringExportCustomerJourneyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getContentScoringExportCustomerJourney']>>>
-export type GetContentScoringExportPersonaResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getContentScoringExportPersona']>>>
-export type DeleteContentScoringJourneyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteContentScoringJourney']>>>
-export type DeleteContentScoringPersonaResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteContentScoringPersona']>>>
-export type PostContentScoringSaveResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postContentScoringSave']>>>
-export type GetContentTypesAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getContentTypesAll']>>>
-export type GetContentTypesSegmentedPropertyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getContentTypesSegmentedProperty']>>>
-export type GetCulturesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCultures']>>>
-export type DeleteCustomerJourneyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteCustomerJourney']>>>
-export type PostCustomerJourneyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postCustomerJourney']>>>
-export type GetCustomerJourneyAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCustomerJourneyAll']>>>
-export type GetCustomerJourneyDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCustomerJourneyDetails']>>>
-export type GetCustomerJourneyEmptyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getCustomerJourneyEmpty']>>>
-export type PostCustomerJourneyLockResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postCustomerJourneyLock']>>>
-export type PostCustomerJourneyUnlockResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postCustomerJourneyUnlock']>>>
-export type GetDataCleanupLastRunResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getDataCleanupLastRun']>>>
-export type GetDataCleanupLogsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getDataCleanupLogs']>>>
-export type GetDataCleanupRunsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getDataCleanupRuns']>>>
-export type GetDataGenerationLogsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getDataGenerationLogs']>>>
-export type GetPermissionsDocumentTypeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getPermissionsDocumentType']>>>
-export type PostPermissionsDocumentTypeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postPermissionsDocumentType']>>>
-export type GetPermissionsDocumentTypeAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getPermissionsDocumentTypeAll']>>>
-export type PostGoalResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postGoal']>>>
-export type PostGoalAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postGoalAll']>>>
-export type GetGoalAllTypesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getGoalAllTypes']>>>
-export type GetGoalDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getGoalDetails']>>>
-export type GetGoalsAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getGoalsAll']>>>
-export type GetGoalsMainResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getGoalsMain']>>>
-export type PostHeatmapsGenerateScrollHeatmapResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postHeatmapsGenerateScrollHeatmap']>>>
-export type GetHeatmapsVariantsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getHeatmapsVariants']>>>
-export type GetMainSwitchResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getMainSwitch']>>>
-export type PostMainSwitchTurnOffResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postMainSwitchTurnOff']>>>
-export type PostMainSwitchTurnOnResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postMainSwitchTurnOn']>>>
-export type GetPackageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getPackage']>>>
-export type PostUmbracoEngagePagedataCollectResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postUmbracoEngagePagedataCollect']>>>
-export type PostUmbracoEngagePagedataCollectEventResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postUmbracoEngagePagedataCollectEvent']>>>
-export type GetUmbracoEngagePagedataPingResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getUmbracoEngagePagedataPing']>>>
-export type PostUmbracoEngagePagedataPingResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postUmbracoEngagePagedataPing']>>>
-export type DeletePersonaResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deletePersona']>>>
-export type PostPersonaResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postPersona']>>>
-export type GetPersonaAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getPersonaAll']>>>
-export type GetPersonaDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getPersonaDetails']>>>
-export type GetPersonaEmptyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getPersonaEmpty']>>>
-export type PostPersonaLockResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postPersonaLock']>>>
-export type PostPersonaUnlockResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postPersonaUnlock']>>>
-export type GetProfileBotVisitorsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileBotVisitors']>>>
-export type GetProfileCustomerJourneyStepScoresResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileCustomerJourneyStepScores']>>>
-export type GetProfileDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileDetails']>>>
-export type GetProfileExportResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileExport']>>>
-export type PostProfileExportCsvResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postProfileExportCsv']>>>
-export type GetProfileGoalCompletionsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileGoalCompletions']>>>
-export type GetProfileLastActiveSegmentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileLastActiveSegment']>>>
-export type PostProfileOverviewResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postProfileOverview']>>>
-export type GetProfilePageEventsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfilePageEvents']>>>
-export type GetProfilePageviewsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfilePageviews']>>>
-export type GetProfilePersonaScoresResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfilePersonaScores']>>>
-export type GetProfilePotentialResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfilePotential']>>>
-export type GetProfileRelatedResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileRelated']>>>
-export type GetProfileSessionsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileSessions']>>>
-export type GetProfileStatisticsGrowthResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileStatisticsGrowth']>>>
-export type GetProfileStatisticsIdentificationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileStatisticsIdentification']>>>
-export type GetProfileStatisticsTotalResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileStatisticsTotal']>>>
-export type DeleteReferralGroupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteReferralGroup']>>>
-export type GetReferralGroupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getReferralGroup']>>>
-export type PostReferralGroupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postReferralGroup']>>>
-export type GetReferralGroupAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getReferralGroupAll']>>>
-export type GetReferralGroupVisitorsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getReferralGroupVisitors']>>>
-export type PostReferralScoringScoredResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postReferralScoringScored']>>>
-export type PostReferralScoringUnscoredResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postReferralScoringUnscored']>>>
-export type GetReportingResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getReporting']>>>
-export type PostReportingGenerationStartResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postReportingGenerationStart']>>>
-export type GetReportingGenerationStatusResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getReportingGenerationStatus']>>>
-export type GetReportingGoalPersonalizationPerformanceBySegmentIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getReportingGoalPersonalizationPerformanceBySegmentId']>>>
-export type GetReportingSegmentSessionsPersonalizationBySegmentIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getReportingSegmentSessionsPersonalizationBySegmentId']>>>
-export type GetReportingSegmentSessionsPotentialBySegmentIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getReportingSegmentSessionsPotentialBySegmentId']>>>
-export type GetSearchTermsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSearchTerms']>>>
-export type DeleteSegmentsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteSegments']>>>
-export type GetSegmentsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSegments']>>>
-export type PostSegmentsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postSegments']>>>
-export type GetSegmentsAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSegmentsAll']>>>
-export type DeleteSegmentsDeleteSegmentContentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteSegmentsDeleteSegmentContent']>>>
-export type GetSegmentsLocationsDataResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSegmentsLocationsData']>>>
-export type PostSegmentsUpdatePriorityResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postSegmentsUpdatePriority']>>>
-export type GetStatisticsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getStatistics']>>>
-export type GetSuspiciousActivityOverviewResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSuspiciousActivityOverview']>>>
-export type DeleteTrafficFilterResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteTrafficFilter']>>>
-export type GetTrafficFilterResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getTrafficFilter']>>>
-export type PostTrafficFilterResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postTrafficFilter']>>>
-export type GetTrafficFilterAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getTrafficFilterAll']>>>
-export type GetTrafficFilterEmptyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getTrafficFilterEmpty']>>>
-export type GetPermissionsUserGroupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getPermissionsUserGroup']>>>
-export type PostPermissionsUserGroupResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postPermissionsUserGroup']>>>
-export type GetPermissionsUserGroupAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getPermissionsUserGroupAll']>>>
+export type PostAppliedPersonalizationSegmentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAppliedPersonalizationSegment']>>>
+export type GetAppliedPersonalizationSegmentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAppliedPersonalizationSegment']>>>
+export type DeleteAppliedPersonalizationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteAppliedPersonalization']>>>
+export type PostAppliedPersonalizationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAppliedPersonalization']>>>
+export type GetAppliedPersonalizationAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAppliedPersonalizationAll']>>>
+export type GetAppliedPersonalizationIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAppliedPersonalizationId']>>>
+export type DeleteAnnotationsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteAnnotations']>>>
+export type PostAnnotationsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAnnotations']>>>
+export type GetAnnotationsAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAnnotationsAll']>>>
+export type GetAnnotationsEmptyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAnnotationsEmpty']>>>
+export type GetAnnotationsGlobalResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAnnotationsGlobal']>>>
+export type GetAnnotationsPageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAnnotationsPage']>>>
+export type GetAnalyticsDistinctResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAnalyticsDistinct']>>>
+export type PostAnalyticsQueryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAnalyticsQuery']>>>
+export type GetAddOnsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAddOns']>>>
+export type PostAbTestVariantCreateResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestVariantCreate']>>>
+export type DeleteAbTestVariantResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteAbTestVariant']>>>
+export type GetAbTestVariantResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestVariant']>>>
+export type PostAbTestVariantResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestVariant']>>>
+export type PostAbTestVariantDisableResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestVariantDisable']>>>
+export type GetAbTestVariantAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestVariantAll']>>>
+export type GetAbTestVariantSegmentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestVariantSegment']>>>
+export type PostAbTestProjectResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestProject']>>>
+export type DeleteAbTestProjectResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteAbTestProject']>>>
+export type GetAbTestProjectResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestProject']>>>
+export type PutAbTestProjectResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['putAbTestProject']>>>
+export type GetAbTestProjectAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestProjectAll']>>>
+export type GetAbTestProjectDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestProjectDetails']>>>
+export type GetAbTestProjectTreeRootResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestProjectTreeRoot']>>>
+export type GetAbTestProjectItemResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestProjectItem']>>>
+export type GetAbTestEmptyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestEmpty']>>>
+export type PostAbTestSegmentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestSegment']>>>
+export type DeleteAbTestResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteAbTest']>>>
+export type GetAbTestResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTest']>>>
+export type PostAbTestResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTest']>>>
+export type GetAbTestAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestAll']>>>
+export type GetAbTestPageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestPage']>>>
+export type PostAbTestVariantDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestVariantDetails']>>>
+export type GetAbTestViewModelResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestViewModel']>>>
+export type PostAbTestRuntimeIndicationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestRuntimeIndication']>>>

@@ -39,8 +39,8 @@ export class AppliedPersonalizationTestHelper {
   }
 
   /**
-   * Normalizes fields that are never reproducible across runs — `id` and
-   * `umbracoSegmentAlias` are both derived from a site-wide auto-increment
+   * Normalizes fields that are never reproducible across runs — `id`,
+   * `umbracoSegmentAlias` and `previewSegment` are all derived from a site-wide auto-increment
    * counter, and `unique` is a freshly minted GUID per create() call.
    */
   static normalizeIds(data: any): any {
@@ -58,6 +58,14 @@ export class AppliedPersonalizationTestHelper {
       }
       if ("umbracoSegmentAlias" in normalized) {
         normalized.umbracoSegmentAlias = "NORMALIZED_SEGMENT_ALIAS";
+      }
+      // Engage 18's previewSegment embeds the same auto-increment id
+      // (`engage_personalization_<id>`).
+      if (typeof normalized.previewSegment === "string") {
+        normalized.previewSegment = normalized.previewSegment.replace(
+          /^engage_personalization_\d+$/,
+          "engage_personalization_NORMALIZED_ID",
+        );
       }
       for (const key of Object.keys(normalized)) {
         const value = normalized[key];

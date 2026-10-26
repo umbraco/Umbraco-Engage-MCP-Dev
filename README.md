@@ -10,6 +10,21 @@ The MCP server authenticates using an Umbraco API user, ensuring secure, permiss
 
 It chains to the [Umbraco CMS MCP server](https://www.npmjs.com/package/@umbraco-cms/mcp-dev), proxying its tools with a `cms:` prefix. This gives your AI agent access to both Engage and CMS capabilities in a single session — useful when personalization, A/B tests, or campaigns need to reference real documents, media, or content types.
 
+## Versions
+
+Install the line that matches your Umbraco major:
+
+| Umbraco | Package version | Source branches |
+|---|---|---|
+| 18 (with Umbraco Engage 18.2.0 or later) | `18.x` | `v18/main`, `v18/dev` |
+| 17 (with Umbraco Engage 17.x) | `17.x` | `main`, `dev` |
+
+Engage changed its Management API within 18.x, so the Umbraco 18 line needs Umbraco Engage 18.2.0 or later; on 18.0/18.1 several tools fail.
+
+The server checks the connected Umbraco's major version at startup and blocks the first tool call with a warning if it doesn't match. Set `UMBRACO_EXPECTED_MAJOR` only to override that deliberately.
+
+Note for contributors: this repo's branch layout is deliberately the reverse of the Umbraco CMS, Forms and Automate MCP repos, which keep their newest major on `main`/`dev` and Umbraco 17 on `v17/*`.
+
 ## Quick Start
 
 ### 1. Create an Umbraco API User
@@ -54,6 +69,7 @@ All settings can be provided as environment variables or CLI flags.
 | `UMBRACO_CLIENT_ID` | `--umbraco-client-id` | OAuth client ID |
 | `UMBRACO_CLIENT_SECRET` | `--umbraco-client-secret` | OAuth client secret |
 | `UMBRACO_BASE_URL` | `--umbraco-base-url` | Umbraco instance URL |
+| `UMBRACO_EXPECTED_MAJOR` | `--umbraco-expected-major` | Override the Umbraco major this server expects (normally leave unset) |
 
 ### Tool Filtering
 
@@ -87,7 +103,7 @@ Modes are named groups that enable related collections together. Set `UMBRACO_TO
 
 | Collection | Tools | Description |
 |---|---|---|
-| `ab-test` | 11 | A/B test CRUD, pages, preview URL, runtime indication, view model |
+| `ab-test` | 12 | A/B test CRUD, start/stop, pages, runtime indication, view model |
 | `ab-test-project` | 6 | A/B test project CRUD and details |
 | `ab-test-variant` | 7 | Variants: create, disable, details, segment lookup |
 | `add-ons` | 1 | Engage add-on metadata |
@@ -114,7 +130,7 @@ Modes are named groups that enable related collections together. Set `UMBRACO_TO
 | `referral-scoring` | 2 | Mark referrals as scored / unscored |
 | `reporting` | 6 | Reporting generation, segment and goal performance |
 | `search-terms` | 1 | Search terms report |
-| `segments` | 7 | Segments CRUD, content assignment, priority, locations |
+| `segments` | 6 | Segments CRUD, priority, locations |
 | `statistics` | 1 | Overall Engage statistics |
 | `suspicious-activity` | 1 | Suspicious activity overview |
 | `traffic-filter` | 5 | Traffic filter CRUD |

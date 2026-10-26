@@ -3,6 +3,7 @@ const GUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
 // as `engage_ab-testing_<numeric variant id>` — the trailing number is the
 // same per-run-random variant id already blanked elsewhere in the object, just
 // embedded inside a string instead of its own field.
+// Engage 18 also returns the same value as the variant's `previewSegment`.
 const AUTO_SEGMENT_REGEX = /^engage_ab-testing_\d+$/;
 
 /**
@@ -53,7 +54,11 @@ export function normalizeAbTestVariantIdentifiers(value: unknown): unknown {
         }
       } else if (isDateKey) {
         out[key] = "NORMALIZED_DATE";
-      } else if (key === "segment" && typeof val === "string" && AUTO_SEGMENT_REGEX.test(val)) {
+      } else if (
+        (key === "segment" || key === "previewSegment") &&
+        typeof val === "string" &&
+        AUTO_SEGMENT_REGEX.test(val)
+      ) {
         out[key] = "engage_ab-testing_NORMALIZED_ID";
       } else {
         out[key] = normalizeAbTestVariantIdentifiers(val);

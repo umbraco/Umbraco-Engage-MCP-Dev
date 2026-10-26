@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { ToolValidationError } from "@umbraco-cms/mcp-server-sdk";
 import type { postAbTestBody } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
 import type { z } from "zod";
@@ -16,6 +17,13 @@ type UmbracoPageVariant = FullBody["test"]["umbracoPageVariants"][number];
  * testType (SinglePage/MultiPage) needs exactly the one page. ContentType
  * isn't handled here - this collection's tools don't populate `contentTypes`
  * so a ContentType test can't be created/updated as valid through them.
+ *
+ * On Engage 18 a page variant references its page by `nodeKey` (its own
+ * `unique` is the page-variant row's id) and carries a required
+ * `contentTypeKey`. The server derives the real content type from `nodeKey`
+ * when it saves (confirmed against 18.2.0: an all-zero contentTypeKey is
+ * stored as the page's actual document type key), so callers only supply
+ * the page.
  */
 export function buildUmbracoPageVariants(
   testType: FullBody["test"]["testType"],
@@ -47,9 +55,11 @@ export function buildUmbracoPageVariants(
     });
   }
 
-  const makePage = (unique: string): UmbracoPageVariant => ({
+  const makePage = (nodeKey: string): UmbracoPageVariant => ({
     id: 0,
-    unique,
+    unique: randomUUID(),
+    nodeKey,
+    contentTypeKey: "00000000-0000-0000-0000-000000000000",
     nodeName: null,
     culture: null,
     abTestId: null,

@@ -15,10 +15,9 @@ type FullBody = z.infer<typeof postAppliedPersonalizationBody>;
 // `id`/`created`/`unique` (top-level and per-page/content-type) are
 // mechanical join-row identifiers the server assigns - the caller supplies
 // the real foreign keys (`nodeId`, `contentTypeId`) instead. The full
-// nested `segment` DTO (with its own `rules[]`) is dropped in favor of
-// `segmentId` (reference a segment created via the segments collection) or
-// `umbracoSegmentAlias`, since embedding the whole segment definition here
-// has no real decision content for a caller that already has a segment id.
+// Engage 18 references the segment by `segmentKey` (its `unique` guid; the
+// numeric `segmentId` and embedded `segment` DTO of Engage 17 are gone), or
+// by `umbracoSegmentAlias`.
 const inputSchema = z.object({
   name: z.string().nullish(),
   description: z.string().nullish(),
@@ -26,7 +25,7 @@ const inputSchema = z.object({
   isActive: z.boolean().default(true),
   css: z.string().nullish(),
   javascript: z.string().nullish(),
-  segmentId: z.number().nullish().describe("An existing segment's numeric id, if this personalization should target a segment."),
+  segmentKey: z.uuid().nullish().describe("An existing segment's `unique` guid (from the segments collection), if this personalization should target a segment."),
   umbracoSegmentAlias: z.string().nullish(),
   pages: z
     .array(z.object({ nodeId: z.number(), culture: z.string().nullish() }))
@@ -52,8 +51,7 @@ const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
       id: 0,
       created: new Date().toISOString(),
       unique: randomUUID(),
-      segmentId: params.segmentId ?? null,
-      segment: null,
+      segmentKey: params.segmentKey ?? null,
       type: params.type,
       umbracoSegmentAlias: params.umbracoSegmentAlias ?? null,
       name: params.name ?? null,
@@ -76,7 +74,8 @@ const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
         contentTypeId: contentType.contentTypeId,
         culture: contentType.culture ?? null,
       })),
-      previewUrl: null,
+      previewSegment: null,
+      previewNodeKey: null,
     };
     return executeGetApiCall<ReturnType<ApiClient["postAppliedPersonalization"]>, ApiClient>(
       (client) => client.postAppliedPersonalization(body, CAPTURE_RAW_HTTP_RESPONSE),

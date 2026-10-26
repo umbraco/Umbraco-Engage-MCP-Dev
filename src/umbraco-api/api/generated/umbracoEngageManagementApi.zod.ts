@@ -7,3226 +7,226 @@
  */
 import * as zod from 'zod';
 
-export const postAbTestProjectBody = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "amountOfTests": zod.int(),
-  "amountOfActiveTests": zod.int(),
-  "invalid": zod.boolean(),
-  "archived": zod.boolean(),
-  "abTests": zod.array(zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "participationPercentage": zod.number().nullish(),
-  "minimumDetectableEffect": zod.number().nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})),
-  "umbracoPageVariants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeName": zod.string().nullish(),
-  "culture": zod.string().nullish(),
-  "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
-})),
-  "contentTypes": zod.array(zod.object({
-  "contentTypeId": zod.int(),
-  "contentTypeName": zod.string().nullish(),
-  "culture": zod.string().nullish()
-})),
-  "winner": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-}).nullish(),
-  "isCompleted": zod.boolean(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "completedByUmbracoUserKey": zod.guid().nullish(),
-  "stoppedByUmbracoUserKey": zod.guid().nullish(),
-  "estimatedDailyVisitors": zod.int().nullish(),
-  "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
-}))
-})
+export const postPreviewEndResponse = zod.unknown()
 
-export const postAbTestProjectResponse = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "amountOfTests": zod.int(),
-  "amountOfActiveTests": zod.int(),
-  "invalid": zod.boolean(),
-  "archived": zod.boolean(),
-  "abTests": zod.array(zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "participationPercentage": zod.number().nullish(),
-  "minimumDetectableEffect": zod.number().nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})),
-  "umbracoPageVariants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeName": zod.string().nullish(),
-  "culture": zod.string().nullish(),
-  "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
-})),
-  "contentTypes": zod.array(zod.object({
-  "contentTypeId": zod.int(),
-  "contentTypeName": zod.string().nullish(),
-  "culture": zod.string().nullish()
-})),
-  "winner": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-}).nullish(),
-  "isCompleted": zod.boolean(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "completedByUmbracoUserKey": zod.guid().nullish(),
-  "stoppedByUmbracoUserKey": zod.guid().nullish(),
-  "estimatedDailyVisitors": zod.int().nullish(),
-  "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
-}))
+
+export const postPreviewStartResponse = zod.unknown()
+
+
+export const getPackageResponse = zod.object({
+  "tierName": zod.string().nullable(),
+  "domains": zod.array(zod.string()).nullable(),
+  "featureAnalyticsEnabled": zod.boolean(),
+  "featureAbTestingEnabled": zod.boolean(),
+  "featurePersonalizationEnabled": zod.boolean(),
+  "expirationDate": zod.iso.datetime({"offset":true}).nullish(),
+  "isPackageEnabled": zod.boolean(),
+  "isTrialMode": zod.boolean(),
+  "licenseStatus": zod.enum(['Undefined', 'Valid', 'Expired', 'Invalid', 'LimitReached']),
+  "expiresSoon": zod.boolean(),
+  "isNearLimit": zod.boolean(),
+  "monthlyPageviewLimit": zod.int(),
+  "currentPageviewsThisMonth": zod.int(),
+  "version": zod.string().nullish(),
+  "whitelistedDomainRegexes": zod.array(zod.string()).nullable()
 })
 
 
-export const deleteAbTestProjectQueryParams = zod.object({
+export const getPermissionsUserGroupAllResponseItem = zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "userGroupKey": zod.guid(),
+  "userGroupName": zod.string().nullish(),
+  "userGroupAlias": zod.string().nullish(),
+  "userGroupIconUrl": zod.string().nullish(),
+  "accessToAnalytics": zod.boolean(),
+  "accessToAbTesting": zod.boolean(),
+  "accessToPersonalization": zod.boolean(),
+  "accessToSettings": zod.boolean(),
+  "accessToProfiles": zod.boolean(),
+  "accessToReporting": zod.boolean(),
+  "updated": zod.iso.datetime({"offset":true}),
+  "updatedByUmbracoUserKey": zod.guid(),
+  "updatedByUmbracoUser": zod.string().nullish()
+})
+export const getPermissionsUserGroupAllResponse = zod.array(getPermissionsUserGroupAllResponseItem)
+
+
+export const getPermissionsUserGroupQueryParams = zod.object({
+  "userGroupKey": zod.guid().optional()
+})
+
+export const getPermissionsUserGroupResponse = zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "userGroupKey": zod.guid(),
+  "userGroupName": zod.string().nullish(),
+  "userGroupAlias": zod.string().nullish(),
+  "userGroupIconUrl": zod.string().nullish(),
+  "accessToAnalytics": zod.boolean(),
+  "accessToAbTesting": zod.boolean(),
+  "accessToPersonalization": zod.boolean(),
+  "accessToSettings": zod.boolean(),
+  "accessToProfiles": zod.boolean(),
+  "accessToReporting": zod.boolean(),
+  "updated": zod.iso.datetime({"offset":true}),
+  "updatedByUmbracoUserKey": zod.guid(),
+  "updatedByUmbracoUser": zod.string().nullish()
+})
+
+
+export const postPermissionsUserGroupBody = zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "userGroupKey": zod.guid(),
+  "userGroupName": zod.string().nullish(),
+  "userGroupAlias": zod.string().nullish(),
+  "userGroupIconUrl": zod.string().nullish(),
+  "accessToAnalytics": zod.boolean(),
+  "accessToAbTesting": zod.boolean(),
+  "accessToPersonalization": zod.boolean(),
+  "accessToSettings": zod.boolean(),
+  "accessToProfiles": zod.boolean(),
+  "accessToReporting": zod.boolean(),
+  "updated": zod.iso.datetime({"offset":true}),
+  "updatedByUmbracoUserKey": zod.guid(),
+  "updatedByUmbracoUser": zod.string().nullish()
+})
+
+export const postPermissionsUserGroupResponse = zod.unknown()
+
+
+export const getTrafficFilterQueryParams = zod.object({
+  "key": zod.guid().optional()
+})
+
+export const getTrafficFilterResponse = zod.object({
+  "key": zod.guid(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "name": zod.string(),
+  "description": zod.string(),
+  "type": zod.string(),
+  "mode": zod.enum(['Block', 'Filter', 'BlockAndFilter']),
+  "condition": zod.string(),
+  "value": zod.string().nullish(),
+  "values": zod.array(zod.string()),
+  "isActive": zod.boolean(),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+
+export const deleteTrafficFilterQueryParams = zod.object({
+  "key": zod.guid().optional()
+})
+
+export const deleteTrafficFilterResponse = zod.unknown()
+
+
+export const postTrafficFilterBody = zod.object({
+  "key": zod.guid(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "name": zod.string(),
+  "description": zod.string(),
+  "type": zod.string(),
+  "mode": zod.enum(['Block', 'Filter', 'BlockAndFilter']),
+  "condition": zod.string(),
+  "value": zod.string().nullish(),
+  "values": zod.array(zod.string()),
+  "isActive": zod.boolean(),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+export const postTrafficFilterResponse = zod.guid()
+
+
+export const getTrafficFilterEmptyResponse = zod.object({
+  "key": zod.guid(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "name": zod.string(),
+  "description": zod.string(),
+  "type": zod.string(),
+  "mode": zod.enum(['Block', 'Filter', 'BlockAndFilter']),
+  "condition": zod.string(),
+  "value": zod.string().nullish(),
+  "values": zod.array(zod.string()),
+  "isActive": zod.boolean(),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+
+export const getTrafficFilterAllResponseItem = zod.object({
+  "key": zod.guid(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "name": zod.string(),
+  "description": zod.string(),
+  "type": zod.string(),
+  "mode": zod.enum(['Block', 'Filter', 'BlockAndFilter']),
+  "condition": zod.string(),
+  "value": zod.string().nullish(),
+  "values": zod.array(zod.string()),
+  "isActive": zod.boolean(),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+export const getTrafficFilterAllResponse = zod.array(getTrafficFilterAllResponseItem)
+
+
+export const getSuspiciousActivityOverviewQuerySkipDefault = 0;
+export const getSuspiciousActivityOverviewQueryTakeDefault = 20;
+
+export const getSuspiciousActivityOverviewQueryParams = zod.object({
+  "skip": zod.int().optional(),
+  "take": zod.int().default(getSuspiciousActivityOverviewQueryTakeDefault),
+  "filter": zod.enum(['All', 'Person', 'NonPerson']).optional()
+})
+
+export const getSuspiciousActivityOverviewResponse = zod.object({
+  "results": zod.array(zod.object({
+  "visitorId": zod.int(),
+  "totalPageviews": zod.int(),
+  "visitorType": zod.enum(['Person', 'Bot', 'Monitor', 'Spam']),
+  "ipAddress": zod.string().nullish(),
+  "userAgent": zod.string().nullish()
+})),
+  "totalResults": zod.int()
+})
+
+
+export const putSuspiciousActivityVisitorsByVisitorIdVisitorTypeParams = zod.object({
+  "visitorId": zod.int()
+})
+
+export const putSuspiciousActivityVisitorsByVisitorIdVisitorTypeBody = zod.object({
+  "visitorType": zod.union([zod.null(),zod.enum(['Person', 'Bot', 'Monitor', 'Spam'])]).optional()
+})
+
+export const putSuspiciousActivityVisitorsByVisitorIdVisitorTypeResponse = zod.unknown()
+
+
+export const getStatisticsResponse = zod.object({
+  "numberOfPageviews": zod.int(),
+  "numberOfPersonVisitors": zod.int(),
+  "numberOfBotVisitors": zod.int(),
+  "numberOfEvents": zod.int(),
+  "numberOfSegmentSettings": zod.int()
+})
+
+
+export const deleteSegmentsQueryParams = zod.object({
   "id": zod.guid().optional()
 })
 
-export const deleteAbTestProjectResponse = zod.unknown()
+export const deleteSegmentsResponse = zod.unknown()
 
 
-export const getAbTestProjectQueryParams = zod.object({
+export const getSegmentsQueryParams = zod.object({
   "id": zod.guid().optional()
 })
 
-export const getAbTestProjectResponse = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "amountOfTests": zod.int(),
-  "amountOfActiveTests": zod.int(),
-  "invalid": zod.boolean(),
-  "archived": zod.boolean(),
-  "abTests": zod.array(zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "participationPercentage": zod.number().nullish(),
-  "minimumDetectableEffect": zod.number().nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})),
-  "umbracoPageVariants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeName": zod.string().nullish(),
-  "culture": zod.string().nullish(),
-  "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
-})),
-  "contentTypes": zod.array(zod.object({
-  "contentTypeId": zod.int(),
-  "contentTypeName": zod.string().nullish(),
-  "culture": zod.string().nullish()
-})),
-  "winner": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-}).nullish(),
-  "isCompleted": zod.boolean(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "completedByUmbracoUserKey": zod.guid().nullish(),
-  "stoppedByUmbracoUserKey": zod.guid().nullish(),
-  "estimatedDailyVisitors": zod.int().nullish(),
-  "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
-}))
-})
-
-
-export const putAbTestProjectBody = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "amountOfTests": zod.int(),
-  "amountOfActiveTests": zod.int(),
-  "invalid": zod.boolean(),
-  "archived": zod.boolean(),
-  "abTests": zod.array(zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "participationPercentage": zod.number().nullish(),
-  "minimumDetectableEffect": zod.number().nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})),
-  "umbracoPageVariants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeName": zod.string().nullish(),
-  "culture": zod.string().nullish(),
-  "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
-})),
-  "contentTypes": zod.array(zod.object({
-  "contentTypeId": zod.int(),
-  "contentTypeName": zod.string().nullish(),
-  "culture": zod.string().nullish()
-})),
-  "winner": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-}).nullish(),
-  "isCompleted": zod.boolean(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "completedByUmbracoUserKey": zod.guid().nullish(),
-  "stoppedByUmbracoUserKey": zod.guid().nullish(),
-  "estimatedDailyVisitors": zod.int().nullish(),
-  "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
-}))
-})
-
-export const putAbTestProjectResponse = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "amountOfTests": zod.int(),
-  "amountOfActiveTests": zod.int(),
-  "invalid": zod.boolean(),
-  "archived": zod.boolean(),
-  "abTests": zod.array(zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "participationPercentage": zod.number().nullish(),
-  "minimumDetectableEffect": zod.number().nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})),
-  "umbracoPageVariants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeName": zod.string().nullish(),
-  "culture": zod.string().nullish(),
-  "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
-})),
-  "contentTypes": zod.array(zod.object({
-  "contentTypeId": zod.int(),
-  "contentTypeName": zod.string().nullish(),
-  "culture": zod.string().nullish()
-})),
-  "winner": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-}).nullish(),
-  "isCompleted": zod.boolean(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "completedByUmbracoUserKey": zod.guid().nullish(),
-  "stoppedByUmbracoUserKey": zod.guid().nullish(),
-  "estimatedDailyVisitors": zod.int().nullish(),
-  "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
-}))
-})
-
-
-export const getAbTestProjectAllResponseItem = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "amountOfTests": zod.int(),
-  "amountOfActiveTests": zod.int(),
-  "invalid": zod.boolean(),
-  "archived": zod.boolean(),
-  "abTests": zod.array(zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "participationPercentage": zod.number().nullish(),
-  "minimumDetectableEffect": zod.number().nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})),
-  "umbracoPageVariants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeName": zod.string().nullish(),
-  "culture": zod.string().nullish(),
-  "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
-})),
-  "contentTypes": zod.array(zod.object({
-  "contentTypeId": zod.int(),
-  "contentTypeName": zod.string().nullish(),
-  "culture": zod.string().nullish()
-})),
-  "winner": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-}).nullish(),
-  "isCompleted": zod.boolean(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "completedByUmbracoUserKey": zod.guid().nullish(),
-  "stoppedByUmbracoUserKey": zod.guid().nullish(),
-  "estimatedDailyVisitors": zod.int().nullish(),
-  "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
-}))
-})
-export const getAbTestProjectAllResponse = zod.array(getAbTestProjectAllResponseItem)
-
-
-export const getAbTestProjectDetailsQueryParams = zod.object({
-  "id": zod.guid().optional()
-})
-
-export const getAbTestProjectDetailsResponse = zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedByUmbracoUserKey": zod.guid().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish(),
-  "invalid": zod.boolean(),
-  "abTests": zod.array(zod.object({
-  "unique": zod.guid(),
-  "created": zod.iso.datetime({"offset":true}).nullish(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserKey": zod.guid().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "runtimeInDays": zod.int().nullish(),
-  "totalVariants": zod.int(),
-  "totalVisitors": zod.int(),
-  "winner": zod.string().nullish(),
-  "winnerDescription": zod.string().nullish()
-})),
-  "amountOfActiveTests": zod.int(),
-  "amountOfTests": zod.int(),
-  "archived": zod.boolean()
-})
-
-
-export const deleteAbTestVariantQueryParams = zod.object({
-  "variantId": zod.int().optional()
-})
-
-export const deleteAbTestVariantResponse = zod.unknown()
-
-
-export const getAbTestVariantQueryParams = zod.object({
-  "id": zod.int().optional()
-})
-
-export const getAbTestVariantResponse = zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})
-
-
-export const postAbTestVariantBody = zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})
-
-export const postAbTestVariantResponse = zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})
-
-
-export const getAbTestVariantAllQueryParams = zod.object({
-  "abTestId": zod.int().optional()
-})
-
-export const getAbTestVariantAllResponseItem = zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})
-export const getAbTestVariantAllResponse = zod.array(getAbTestVariantAllResponseItem)
-
-
-export const postAbTestVariantCreateQueryParams = zod.object({
-  "testId": zod.int().optional()
-})
-
-export const postAbTestVariantCreateResponse = zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})
-
-
-export const postAbTestVariantDisableQueryParams = zod.object({
-  "variantId": zod.int().optional()
-})
-
-export const postAbTestVariantDisableResponse = zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})
-
-
-export const getAbTestVariantSegmentQueryParams = zod.object({
-  "segment": zod.string().optional()
-})
-
-export const getAbTestVariantSegmentResponse = zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})
-
-
-export const deleteAbTestQueryParams = zod.object({
-  "unique": zod.guid().optional()
-})
-
-export const deleteAbTestResponse = zod.object({
-  "isValid": zod.boolean(),
-  "warnings": zod.array(zod.string()),
-  "errors": zod.array(zod.string())
-})
-
-
-export const getAbTestQueryParams = zod.object({
-  "id": zod.int().optional()
-})
-
-export const getAbTestResponse = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "participationPercentage": zod.number().nullish(),
-  "minimumDetectableEffect": zod.number().nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})),
-  "umbracoPageVariants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeName": zod.string().nullish(),
-  "culture": zod.string().nullish(),
-  "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
-})),
-  "contentTypes": zod.array(zod.object({
-  "contentTypeId": zod.int(),
-  "contentTypeName": zod.string().nullish(),
-  "culture": zod.string().nullish()
-})),
-  "winner": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-}).nullish(),
-  "isCompleted": zod.boolean(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "completedByUmbracoUserKey": zod.guid().nullish(),
-  "stoppedByUmbracoUserKey": zod.guid().nullish(),
-  "estimatedDailyVisitors": zod.int().nullish(),
-  "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
-})
-
-
-export const postAbTestBody = zod.object({
-  "test": zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "participationPercentage": zod.number().nullish(),
-  "minimumDetectableEffect": zod.number().nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})),
-  "umbracoPageVariants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeName": zod.string().nullish(),
-  "culture": zod.string().nullish(),
-  "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
-})),
-  "contentTypes": zod.array(zod.object({
-  "contentTypeId": zod.int(),
-  "contentTypeName": zod.string().nullish(),
-  "culture": zod.string().nullish()
-})),
-  "winner": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-}).nullish(),
-  "isCompleted": zod.boolean(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "completedByUmbracoUserKey": zod.guid().nullish(),
-  "stoppedByUmbracoUserKey": zod.guid().nullish(),
-  "estimatedDailyVisitors": zod.int().nullish(),
-  "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
-}),
-  "indication": zod.object({
-  "estimatedRuntimeInDays": zod.int().nullish(),
-  "estimatedRequiredRuntimeRemainingInDays": zod.int().nullish(),
-  "currentRuntimeInDays": zod.int(),
-  "mde": zod.number(),
-  "benchmarkConversionRate": zod.number(),
-  "targetConversionRate": zod.number(),
-  "variantCount": zod.int(),
-  "requiredVisitorsTotal": zod.int().nullish(),
-  "requiredVisitorsPerVariant": zod.int().nullish(),
-  "expectedDailyVisitors": zod.int(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "hurtingVariants": zod.array(zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-})),
-  "currentVisitorsPerVariant": zod.int(),
-  "currentVisitors": zod.int(),
-  "reliableVariants": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "originalVariantIsWinning": zod.boolean(),
-  "winningVariant": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "bestNonBenchmarkVariant": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "earliestReliableVariant": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "bestPrognosis": zod.object({
-  "variantId": zod.int(),
-  "conversionIncrease": zod.number(),
-  "currentVisitors": zod.int(),
-  "requiredVisitorsTotal": zod.int().nullish(),
-  "expectedDailyVisitors": zod.number(),
-  "estimatedRuntimeInDays": zod.int().nullish(),
-  "isHurtingMainConversion": zod.boolean(),
-  "remainingVisitors": zod.int().nullish(),
-  "isReliable": zod.boolean()
-}),
-  "winner": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "winningVariantConversionChange": zod.number(),
-  "bestNonWinningVariantConversionChange": zod.number(),
-  "winnerConversionChange": zod.number(),
-  "stoppedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "hasSelectedWinner": zod.boolean(),
-  "completedByUsername": zod.string().nullish(),
-  "stoppedByUsername": zod.string().nullish(),
-  "hasSurpassedViableVisitorThreshold": zod.boolean(),
-  "variantStatus": zod.record(zod.string(), zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']))
-}).nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "label": zod.string().nullish(),
-  "currentTotalParticipantCount": zod.int(),
-  "currentTotalPageviewCount": zod.int(),
-  "requiredTotalVisitorCount": zod.int().nullish(),
-  "goalCompletions": zod.int(),
-  "goalValue": zod.number(),
-  "difference": zod.number(),
-  "participantPortion": zod.number(),
-  "visitorsPortion": zod.number(),
-  "conversionRate": zod.number(),
-  "conversionRateImprovement": zod.number(),
-  "conversionRateImprovementRelative": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-})),
-  "mainGoalWarning": zod.boolean(),
-  "goalWarning": zod.boolean(),
-  "status": zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']),
-  "previewUrl": zod.string().nullish(),
-  "isWinner": zod.boolean(),
-  "isLeading": zod.boolean()
-})).nullish(),
-  "isInvertedGoal": zod.boolean()
-})
-
-export const postAbTestResponse = zod.object({
-  "test": zod.object({
-  "test": zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "participationPercentage": zod.number().nullish(),
-  "minimumDetectableEffect": zod.number().nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})),
-  "umbracoPageVariants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeName": zod.string().nullish(),
-  "culture": zod.string().nullish(),
-  "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
-})),
-  "contentTypes": zod.array(zod.object({
-  "contentTypeId": zod.int(),
-  "contentTypeName": zod.string().nullish(),
-  "culture": zod.string().nullish()
-})),
-  "winner": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-}).nullish(),
-  "isCompleted": zod.boolean(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "completedByUmbracoUserKey": zod.guid().nullish(),
-  "stoppedByUmbracoUserKey": zod.guid().nullish(),
-  "estimatedDailyVisitors": zod.int().nullish(),
-  "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
-}),
-  "indication": zod.object({
-  "estimatedRuntimeInDays": zod.int().nullish(),
-  "estimatedRequiredRuntimeRemainingInDays": zod.int().nullish(),
-  "currentRuntimeInDays": zod.int(),
-  "mde": zod.number(),
-  "benchmarkConversionRate": zod.number(),
-  "targetConversionRate": zod.number(),
-  "variantCount": zod.int(),
-  "requiredVisitorsTotal": zod.int().nullish(),
-  "requiredVisitorsPerVariant": zod.int().nullish(),
-  "expectedDailyVisitors": zod.int(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "hurtingVariants": zod.array(zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-})),
-  "currentVisitorsPerVariant": zod.int(),
-  "currentVisitors": zod.int(),
-  "reliableVariants": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "originalVariantIsWinning": zod.boolean(),
-  "winningVariant": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "bestNonBenchmarkVariant": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "earliestReliableVariant": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "bestPrognosis": zod.object({
-  "variantId": zod.int(),
-  "conversionIncrease": zod.number(),
-  "currentVisitors": zod.int(),
-  "requiredVisitorsTotal": zod.int().nullish(),
-  "expectedDailyVisitors": zod.number(),
-  "estimatedRuntimeInDays": zod.int().nullish(),
-  "isHurtingMainConversion": zod.boolean(),
-  "remainingVisitors": zod.int().nullish(),
-  "isReliable": zod.boolean()
-}),
-  "winner": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "winningVariantConversionChange": zod.number(),
-  "bestNonWinningVariantConversionChange": zod.number(),
-  "winnerConversionChange": zod.number(),
-  "stoppedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "hasSelectedWinner": zod.boolean(),
-  "completedByUsername": zod.string().nullish(),
-  "stoppedByUsername": zod.string().nullish(),
-  "hasSurpassedViableVisitorThreshold": zod.boolean(),
-  "variantStatus": zod.record(zod.string(), zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']))
-}).nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "label": zod.string().nullish(),
-  "currentTotalParticipantCount": zod.int(),
-  "currentTotalPageviewCount": zod.int(),
-  "requiredTotalVisitorCount": zod.int().nullish(),
-  "goalCompletions": zod.int(),
-  "goalValue": zod.number(),
-  "difference": zod.number(),
-  "participantPortion": zod.number(),
-  "visitorsPortion": zod.number(),
-  "conversionRate": zod.number(),
-  "conversionRateImprovement": zod.number(),
-  "conversionRateImprovementRelative": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-})),
-  "mainGoalWarning": zod.boolean(),
-  "goalWarning": zod.boolean(),
-  "status": zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']),
-  "previewUrl": zod.string().nullish(),
-  "isWinner": zod.boolean(),
-  "isLeading": zod.boolean()
-})).nullish(),
-  "isInvertedGoal": zod.boolean()
-}),
-  "validationResults": zod.object({
-  "isValid": zod.boolean(),
-  "warnings": zod.array(zod.string()),
-  "errors": zod.array(zod.string())
-})
-})
-
-
-export const getAbTestAllResponseItem = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "participationPercentage": zod.number().nullish(),
-  "minimumDetectableEffect": zod.number().nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})),
-  "umbracoPageVariants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeName": zod.string().nullish(),
-  "culture": zod.string().nullish(),
-  "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
-})),
-  "contentTypes": zod.array(zod.object({
-  "contentTypeId": zod.int(),
-  "contentTypeName": zod.string().nullish(),
-  "culture": zod.string().nullish()
-})),
-  "winner": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-}).nullish(),
-  "isCompleted": zod.boolean(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "completedByUmbracoUserKey": zod.guid().nullish(),
-  "stoppedByUmbracoUserKey": zod.guid().nullish(),
-  "estimatedDailyVisitors": zod.int().nullish(),
-  "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
-})
-export const getAbTestAllResponse = zod.array(getAbTestAllResponseItem)
-
-
-export const getAbTestEmptyQueryParams = zod.object({
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']).optional()
-})
-
-export const getAbTestEmptyResponse = zod.object({
-  "test": zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "participationPercentage": zod.number().nullish(),
-  "minimumDetectableEffect": zod.number().nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})),
-  "umbracoPageVariants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeName": zod.string().nullish(),
-  "culture": zod.string().nullish(),
-  "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
-})),
-  "contentTypes": zod.array(zod.object({
-  "contentTypeId": zod.int(),
-  "contentTypeName": zod.string().nullish(),
-  "culture": zod.string().nullish()
-})),
-  "winner": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-}).nullish(),
-  "isCompleted": zod.boolean(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "completedByUmbracoUserKey": zod.guid().nullish(),
-  "stoppedByUmbracoUserKey": zod.guid().nullish(),
-  "estimatedDailyVisitors": zod.int().nullish(),
-  "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
-}),
-  "indication": zod.object({
-  "estimatedRuntimeInDays": zod.int().nullish(),
-  "estimatedRequiredRuntimeRemainingInDays": zod.int().nullish(),
-  "currentRuntimeInDays": zod.int(),
-  "mde": zod.number(),
-  "benchmarkConversionRate": zod.number(),
-  "targetConversionRate": zod.number(),
-  "variantCount": zod.int(),
-  "requiredVisitorsTotal": zod.int().nullish(),
-  "requiredVisitorsPerVariant": zod.int().nullish(),
-  "expectedDailyVisitors": zod.int(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "hurtingVariants": zod.array(zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-})),
-  "currentVisitorsPerVariant": zod.int(),
-  "currentVisitors": zod.int(),
-  "reliableVariants": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "originalVariantIsWinning": zod.boolean(),
-  "winningVariant": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "bestNonBenchmarkVariant": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "earliestReliableVariant": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "bestPrognosis": zod.object({
-  "variantId": zod.int(),
-  "conversionIncrease": zod.number(),
-  "currentVisitors": zod.int(),
-  "requiredVisitorsTotal": zod.int().nullish(),
-  "expectedDailyVisitors": zod.number(),
-  "estimatedRuntimeInDays": zod.int().nullish(),
-  "isHurtingMainConversion": zod.boolean(),
-  "remainingVisitors": zod.int().nullish(),
-  "isReliable": zod.boolean()
-}),
-  "winner": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "winningVariantConversionChange": zod.number(),
-  "bestNonWinningVariantConversionChange": zod.number(),
-  "winnerConversionChange": zod.number(),
-  "stoppedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "hasSelectedWinner": zod.boolean(),
-  "completedByUsername": zod.string().nullish(),
-  "stoppedByUsername": zod.string().nullish(),
-  "hasSurpassedViableVisitorThreshold": zod.boolean(),
-  "variantStatus": zod.record(zod.string(), zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']))
-}).nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "label": zod.string().nullish(),
-  "currentTotalParticipantCount": zod.int(),
-  "currentTotalPageviewCount": zod.int(),
-  "requiredTotalVisitorCount": zod.int().nullish(),
-  "goalCompletions": zod.int(),
-  "goalValue": zod.number(),
-  "difference": zod.number(),
-  "participantPortion": zod.number(),
-  "visitorsPortion": zod.number(),
-  "conversionRate": zod.number(),
-  "conversionRateImprovement": zod.number(),
-  "conversionRateImprovementRelative": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-})),
-  "mainGoalWarning": zod.boolean(),
-  "goalWarning": zod.boolean(),
-  "status": zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']),
-  "previewUrl": zod.string().nullish(),
-  "isWinner": zod.boolean(),
-  "isLeading": zod.boolean()
-})).nullish(),
-  "isInvertedGoal": zod.boolean()
-})
-
-
-export const getAbTestPageQueryParams = zod.object({
-  "unique": zod.guid().optional()
-})
-
-export const getAbTestPageResponseItem = zod.object({
-  "unique": zod.guid(),
-  "created": zod.iso.datetime({"offset":true}).nullish(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserKey": zod.guid().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "runtimeInDays": zod.int().nullish(),
-  "totalVariants": zod.int(),
-  "totalVisitors": zod.int(),
-  "winner": zod.string().nullish(),
-  "winnerDescription": zod.string().nullish()
-})
-export const getAbTestPageResponse = zod.array(getAbTestPageResponseItem)
-
-
-export const getAbTestPreviewUrlQueryParams = zod.object({
-  "abTestId": zod.int().optional(),
-  "variantId": zod.int().optional()
-})
-
-export const getAbTestPreviewUrlResponse = zod.object({
-  "errorMessage": zod.string().nullish(),
-  "previewUrl": zod.string().nullish()
-})
-
-
-export const postAbTestRuntimeIndicationBody = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "participationPercentage": zod.number().nullish(),
-  "minimumDetectableEffect": zod.number().nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})),
-  "umbracoPageVariants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeName": zod.string().nullish(),
-  "culture": zod.string().nullish(),
-  "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
-})),
-  "contentTypes": zod.array(zod.object({
-  "contentTypeId": zod.int(),
-  "contentTypeName": zod.string().nullish(),
-  "culture": zod.string().nullish()
-})),
-  "winner": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-}).nullish(),
-  "isCompleted": zod.boolean(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "completedByUmbracoUserKey": zod.guid().nullish(),
-  "stoppedByUmbracoUserKey": zod.guid().nullish(),
-  "estimatedDailyVisitors": zod.int().nullish(),
-  "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
-})
-
-export const postAbTestRuntimeIndicationResponse = zod.object({
-  "estimatedRuntimeInDays": zod.int().nullish(),
-  "estimatedRequiredRuntimeRemainingInDays": zod.int().nullish(),
-  "currentRuntimeInDays": zod.int(),
-  "mde": zod.number(),
-  "benchmarkConversionRate": zod.number(),
-  "targetConversionRate": zod.number(),
-  "variantCount": zod.int(),
-  "requiredVisitorsTotal": zod.int().nullish(),
-  "requiredVisitorsPerVariant": zod.int().nullish(),
-  "expectedDailyVisitors": zod.int(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "hurtingVariants": zod.array(zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-})),
-  "currentVisitorsPerVariant": zod.int(),
-  "currentVisitors": zod.int(),
-  "reliableVariants": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "originalVariantIsWinning": zod.boolean(),
-  "winningVariant": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "bestNonBenchmarkVariant": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "earliestReliableVariant": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "bestPrognosis": zod.object({
-  "variantId": zod.int(),
-  "conversionIncrease": zod.number(),
-  "currentVisitors": zod.int(),
-  "requiredVisitorsTotal": zod.int().nullish(),
-  "expectedDailyVisitors": zod.number(),
-  "estimatedRuntimeInDays": zod.int().nullish(),
-  "isHurtingMainConversion": zod.boolean(),
-  "remainingVisitors": zod.int().nullish(),
-  "isReliable": zod.boolean()
-}),
-  "winner": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "winningVariantConversionChange": zod.number(),
-  "bestNonWinningVariantConversionChange": zod.number(),
-  "winnerConversionChange": zod.number(),
-  "stoppedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "hasSelectedWinner": zod.boolean(),
-  "completedByUsername": zod.string().nullish(),
-  "stoppedByUsername": zod.string().nullish(),
-  "hasSurpassedViableVisitorThreshold": zod.boolean(),
-  "variantStatus": zod.record(zod.string(), zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']))
-})
-
-
-export const postAbTestSegmentQueryParams = zod.object({
-  "unique": zod.guid().optional(),
-  "culture": zod.string().optional(),
-  "segment": zod.string().optional()
-})
-
-export const postAbTestSegmentResponse = zod.object({
-  "created": zod.boolean()
-})
-
-
-export const postAbTestVariantDetailsBody = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "participationPercentage": zod.number().nullish(),
-  "minimumDetectableEffect": zod.number().nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})),
-  "umbracoPageVariants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeName": zod.string().nullish(),
-  "culture": zod.string().nullish(),
-  "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
-})),
-  "contentTypes": zod.array(zod.object({
-  "contentTypeId": zod.int(),
-  "contentTypeName": zod.string().nullish(),
-  "culture": zod.string().nullish()
-})),
-  "winner": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-}).nullish(),
-  "isCompleted": zod.boolean(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "completedByUmbracoUserKey": zod.guid().nullish(),
-  "stoppedByUmbracoUserKey": zod.guid().nullish(),
-  "estimatedDailyVisitors": zod.int().nullish(),
-  "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
-})
-
-export const postAbTestVariantDetailsResponseItem = zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "label": zod.string().nullish(),
-  "currentTotalParticipantCount": zod.int(),
-  "currentTotalPageviewCount": zod.int(),
-  "requiredTotalVisitorCount": zod.int().nullish(),
-  "goalCompletions": zod.int(),
-  "goalValue": zod.number(),
-  "difference": zod.number(),
-  "participantPortion": zod.number(),
-  "visitorsPortion": zod.number(),
-  "conversionRate": zod.number(),
-  "conversionRateImprovement": zod.number(),
-  "conversionRateImprovementRelative": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-})),
-  "mainGoalWarning": zod.boolean(),
-  "goalWarning": zod.boolean(),
-  "status": zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']),
-  "previewUrl": zod.string().nullish(),
-  "isWinner": zod.boolean(),
-  "isLeading": zod.boolean()
-})
-export const postAbTestVariantDetailsResponse = zod.array(postAbTestVariantDetailsResponseItem)
-
-
-export const getAbTestViewModelQueryParams = zod.object({
-  "unique": zod.guid().optional()
-})
-
-export const getAbTestViewModelResponse = zod.object({
-  "test": zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "participationPercentage": zod.number().nullish(),
-  "minimumDetectableEffect": zod.number().nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-})),
-  "umbracoPageVariants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeName": zod.string().nullish(),
-  "culture": zod.string().nullish(),
-  "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
-})),
-  "contentTypes": zod.array(zod.object({
-  "contentTypeId": zod.int(),
-  "contentTypeName": zod.string().nullish(),
-  "culture": zod.string().nullish()
-})),
-  "winner": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int()
-}).nullish(),
-  "isCompleted": zod.boolean(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "completedByUmbracoUserKey": zod.guid().nullish(),
-  "stoppedByUmbracoUserKey": zod.guid().nullish(),
-  "estimatedDailyVisitors": zod.int().nullish(),
-  "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
-}),
-  "indication": zod.object({
-  "estimatedRuntimeInDays": zod.int().nullish(),
-  "estimatedRequiredRuntimeRemainingInDays": zod.int().nullish(),
-  "currentRuntimeInDays": zod.int(),
-  "mde": zod.number(),
-  "benchmarkConversionRate": zod.number(),
-  "targetConversionRate": zod.number(),
-  "variantCount": zod.int(),
-  "requiredVisitorsTotal": zod.int().nullish(),
-  "requiredVisitorsPerVariant": zod.int().nullish(),
-  "expectedDailyVisitors": zod.int(),
-  "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "hurtingVariants": zod.array(zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-})),
-  "currentVisitorsPerVariant": zod.int(),
-  "currentVisitors": zod.int(),
-  "reliableVariants": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "originalVariantIsWinning": zod.boolean(),
-  "winningVariant": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "bestNonBenchmarkVariant": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "earliestReliableVariant": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "bestPrognosis": zod.object({
-  "variantId": zod.int(),
-  "conversionIncrease": zod.number(),
-  "currentVisitors": zod.int(),
-  "requiredVisitorsTotal": zod.int().nullish(),
-  "expectedDailyVisitors": zod.number(),
-  "estimatedRuntimeInDays": zod.int().nullish(),
-  "isHurtingMainConversion": zod.boolean(),
-  "remainingVisitors": zod.int().nullish(),
-  "isReliable": zod.boolean()
-}),
-  "winner": zod.object({
-  "abTestVariant": zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "isBenchmark": zod.boolean(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
-}),
-  "visitors": zod.int(),
-  "goalCompletions": zod.int(),
-  "benchmarkVisitors": zod.int(),
-  "benchmarkGoalCompletions": zod.int(),
-  "conversionRate": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-}))
-}).nullish(),
-  "winningVariantConversionChange": zod.number(),
-  "bestNonWinningVariantConversionChange": zod.number(),
-  "winnerConversionChange": zod.number(),
-  "stoppedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "startTime": zod.iso.datetime({"offset":true}).nullish(),
-  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "hasSelectedWinner": zod.boolean(),
-  "completedByUsername": zod.string().nullish(),
-  "stoppedByUsername": zod.string().nullish(),
-  "hasSurpassedViableVisitorThreshold": zod.boolean(),
-  "variantStatus": zod.record(zod.string(), zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']))
-}).nullish(),
-  "variants": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "abTestId": zod.int(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "redirectNodeKey": zod.guid().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdByUmbracoUserKey": zod.guid(),
-  "isBenchmark": zod.boolean(),
-  "disabled": zod.iso.datetime({"offset":true}).nullish(),
-  "disabledByUmbracoUserKey": zod.guid().nullish(),
-  "isDisabled": zod.boolean(),
-  "segment": zod.string().nullish(),
-  "totalPageviewsForVariant": zod.int(),
-  "totalVisitorsForVariant": zod.int(),
-  "label": zod.string().nullish(),
-  "currentTotalParticipantCount": zod.int(),
-  "currentTotalPageviewCount": zod.int(),
-  "requiredTotalVisitorCount": zod.int().nullish(),
-  "goalCompletions": zod.int(),
-  "goalValue": zod.number(),
-  "difference": zod.number(),
-  "participantPortion": zod.number(),
-  "visitorsPortion": zod.number(),
-  "conversionRate": zod.number(),
-  "conversionRateImprovement": zod.number(),
-  "conversionRateImprovementRelative": zod.number(),
-  "mainGoalComparisons": zod.array(zod.object({
-  "mainGoalId": zod.int(),
-  "mainGoalCompletions": zod.int(),
-  "mainGoalCompletionsTotalValue": zod.int(),
-  "benchmarkMainGoalCompletions": zod.int(),
-  "isInvertedGoal": zod.boolean(),
-  "hurtingThreshold": zod.number(),
-  "mainGoalDifference": zod.int(),
-  "warning": zod.boolean(),
-  "mainGoalRatio": zod.number().nullish(),
-  "isHurting": zod.boolean()
-})),
-  "mainGoalWarning": zod.boolean(),
-  "goalWarning": zod.boolean(),
-  "status": zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']),
-  "previewUrl": zod.string().nullish(),
-  "isWinner": zod.boolean(),
-  "isLeading": zod.boolean()
-})).nullish(),
-  "isInvertedGoal": zod.boolean()
-})
-
-
-export const getAddOnsResponse = zod.object({
-  "umbracoForms": zod.boolean(),
-  "umbracoCommerce": zod.boolean()
-})
-
-
-export const getAnalyticsDistinctQueryParams = zod.object({
-  "dimension": zod.enum(['UNDEFINED', 'usertype', 'referralPath', 'fullReferrer', 'campaign', 'source', 'medium', 'sourceMedium', 'browser', 'browserVersion', 'operatingSystem', 'operatingSystemVersion', 'deviceCategory', 'country', 'city', 'hostname', 'pageUrl', 'pageId', 'NodeId', 'NodeCulture', 'NodeSegment', 'NodeContentType', 'pagePath', 'eventCategory', 'eventAction', 'eventLabel', 'date', 'year', 'month', 'week', 'day', 'hour', 'minute', 'nthMonth', 'nthWeek', 'nthDay', 'nthMinute', 'nthHour', 'abTest', 'abTestVariant', 'goal', 'goalId', 'goalType', 'isMainGoal', 'visitorType', 'bot', 'botId', 'botVersion', 'botVersionId', 'referralHostname', 'referralIsInternalPage', 'referralPathAndQuery', 'browserId', 'datetime', 'pageviewSegmentId', 'pageviewSegmentName', 'pageviewAppliedSegmentId', 'pageviewAppliedSegmentName', 'pageviewAppliedPersonalizationId', 'pageviewAppliedPersonalizationName', 'videoName', 'videoUrl', 'videoEventType', 'videoEventTypeName', 'umbracoFormsName', 'umbracoFormsId', 'umbracoFormsFieldName', 'umbracoFormsFieldId', 'umbracoFormsFieldError', 'cityId', 'countryId', 'province', 'provinceId', 'county', 'countyId', 'sourcePlatform', 'creativeFormat', 'marketingTactic', 'segmentId', 'segmentName', 'searchTerm']).optional()
-})
-
-export const getAnalyticsDistinctResponseItem = zod.string()
-export const getAnalyticsDistinctResponse = zod.array(getAnalyticsDistinctResponseItem)
-
-
-export const postAnalyticsQueryBody = zod.object({
-  "startDate": zod.iso.datetime({"offset":true}),
-  "endDate": zod.iso.datetime({"offset":true}),
-  "metrics": zod.array(zod.enum(['UNDEFINED', 'users', 'newVisitors', 'percentNewSessions', 'sessions', 'bounceRate', 'sessionDuration', 'avgSessionDuration', 'goalCompletionsAll', 'goalValueAll', 'pageviews', 'pageviewsWithSubpages', 'pageviewsPerSession', 'uniquePageviews', 'avgTimeOnPage', 'totalEvents', 'eventValue', 'avgEventValue', 'abTestVariantVisitors', 'abTestVariantCompletionsAll', 'videoPlays', 'videoPlaytime', 'avgVideoPlaytime', 'avgRelativeVideoPlaytime', 'videoEvents', 'umbracoFormsViews', 'umbracoFormsSubmissions', 'umbracoFormsStarts', 'umbracoFormsAbandons', 'umbracoFormsErrors', 'umbracoFormsFieldFocusses', 'umbracoFormsFieldAbandons', 'umbracoFormsFieldErrors', 'avgEngagedTimeOnPage', 'pageviewsBot', 'pageSessions', 'pageVisitors', 'pageSessionsWithSubpages', 'pageVisitorsWithSubpages', 'activeSegmentPageviews', 'inactiveSegmentPageviews', 'activeSegmentSessions', 'inactiveSegmentSessions', 'activeSegmentProfiles', 'inactiveSegmentProfiles', 'activePersonalizedSegmentPageviews', 'inactivePersonalizedSegmentPageviews', 'activePersonalizedSegmentSessions', 'inactivePersonalizedSegmentSessions', 'activePersonalizedSegmentProfiles', 'inactivePersonalizedSegmentProfiles', 'searchVolume', 'searchVolumeWithSubpages', 'visitors', 'campaignEntries', 'campaignVisitors', 'campaignGoals', 'campaignGoalValue', 'campaignFormSubmissions', 'campaignCommerceOrders'])),
-  "dimensions": zod.array(zod.enum(['UNDEFINED', 'usertype', 'referralPath', 'fullReferrer', 'campaign', 'source', 'medium', 'sourceMedium', 'browser', 'browserVersion', 'operatingSystem', 'operatingSystemVersion', 'deviceCategory', 'country', 'city', 'hostname', 'pageUrl', 'pageId', 'NodeId', 'NodeCulture', 'NodeSegment', 'NodeContentType', 'pagePath', 'eventCategory', 'eventAction', 'eventLabel', 'date', 'year', 'month', 'week', 'day', 'hour', 'minute', 'nthMonth', 'nthWeek', 'nthDay', 'nthMinute', 'nthHour', 'abTest', 'abTestVariant', 'goal', 'goalId', 'goalType', 'isMainGoal', 'visitorType', 'bot', 'botId', 'botVersion', 'botVersionId', 'referralHostname', 'referralIsInternalPage', 'referralPathAndQuery', 'browserId', 'datetime', 'pageviewSegmentId', 'pageviewSegmentName', 'pageviewAppliedSegmentId', 'pageviewAppliedSegmentName', 'pageviewAppliedPersonalizationId', 'pageviewAppliedPersonalizationName', 'videoName', 'videoUrl', 'videoEventType', 'videoEventTypeName', 'umbracoFormsName', 'umbracoFormsId', 'umbracoFormsFieldName', 'umbracoFormsFieldId', 'umbracoFormsFieldError', 'cityId', 'countryId', 'province', 'provinceId', 'county', 'countyId', 'sourcePlatform', 'creativeFormat', 'marketingTactic', 'segmentId', 'segmentName', 'searchTerm'])),
-  "realtime": zod.boolean(),
-  "sort": zod.enum(['UNDEFINED', 'usertype', 'referralPath', 'fullReferrer', 'campaign', 'source', 'medium', 'sourceMedium', 'browser', 'browserVersion', 'operatingSystem', 'operatingSystemVersion', 'deviceCategory', 'country', 'city', 'hostname', 'pageUrl', 'pageId', 'NodeId', 'NodeCulture', 'NodeSegment', 'NodeContentType', 'pagePath', 'eventCategory', 'eventAction', 'eventLabel', 'date', 'year', 'month', 'week', 'day', 'hour', 'minute', 'nthMonth', 'nthWeek', 'nthDay', 'nthMinute', 'nthHour', 'abTest', 'abTestVariant', 'goal', 'goalId', 'goalType', 'isMainGoal', 'visitorType', 'bot', 'botId', 'botVersion', 'botVersionId', 'referralHostname', 'referralIsInternalPage', 'referralPathAndQuery', 'browserId', 'datetime', 'pageviewSegmentId', 'pageviewSegmentName', 'pageviewAppliedSegmentId', 'pageviewAppliedSegmentName', 'pageviewAppliedPersonalizationId', 'pageviewAppliedPersonalizationName', 'videoName', 'videoUrl', 'videoEventType', 'videoEventTypeName', 'umbracoFormsName', 'umbracoFormsId', 'umbracoFormsFieldName', 'umbracoFormsFieldId', 'umbracoFormsFieldError', 'cityId', 'countryId', 'province', 'provinceId', 'county', 'countyId', 'sourcePlatform', 'creativeFormat', 'marketingTactic', 'segmentId', 'segmentName', 'searchTerm', 'users', 'newVisitors', 'percentNewSessions', 'sessions', 'bounceRate', 'sessionDuration', 'avgSessionDuration', 'goalCompletionsAll', 'goalValueAll', 'pageviews', 'pageviewsWithSubpages', 'pageviewsPerSession', 'uniquePageviews', 'avgTimeOnPage', 'totalEvents', 'eventValue', 'avgEventValue', 'abTestVariantVisitors', 'abTestVariantCompletionsAll', 'videoPlays', 'videoPlaytime', 'avgVideoPlaytime', 'avgRelativeVideoPlaytime', 'videoEvents', 'umbracoFormsViews', 'umbracoFormsSubmissions', 'umbracoFormsStarts', 'umbracoFormsAbandons', 'umbracoFormsErrors', 'umbracoFormsFieldFocusses', 'umbracoFormsFieldAbandons', 'umbracoFormsFieldErrors', 'avgEngagedTimeOnPage', 'pageviewsBot', 'pageSessions', 'pageVisitors', 'pageSessionsWithSubpages', 'pageVisitorsWithSubpages', 'activeSegmentPageviews', 'inactiveSegmentPageviews', 'activeSegmentSessions', 'inactiveSegmentSessions', 'activeSegmentProfiles', 'inactiveSegmentProfiles', 'activePersonalizedSegmentPageviews', 'inactivePersonalizedSegmentPageviews', 'activePersonalizedSegmentSessions', 'inactivePersonalizedSegmentSessions', 'activePersonalizedSegmentProfiles', 'inactivePersonalizedSegmentProfiles', 'searchVolume', 'searchVolumeWithSubpages', 'visitors', 'campaignEntries', 'campaignVisitors', 'campaignGoals', 'campaignGoalValue', 'campaignFormSubmissions', 'campaignCommerceOrders']),
-  "ascending": zod.boolean(),
-  "page": zod.int(),
-  "pageSize": zod.int(),
-  "includeSubpages": zod.boolean(),
-  "filter": zod.string().nullish()
-})
-
-export const postAnalyticsQueryResponse = zod.object({
-  "columns": zod.array(zod.enum(['UNDEFINED', 'usertype', 'referralPath', 'fullReferrer', 'campaign', 'source', 'medium', 'sourceMedium', 'browser', 'browserVersion', 'operatingSystem', 'operatingSystemVersion', 'deviceCategory', 'country', 'city', 'hostname', 'pageUrl', 'pageId', 'NodeId', 'NodeCulture', 'NodeSegment', 'NodeContentType', 'pagePath', 'eventCategory', 'eventAction', 'eventLabel', 'date', 'year', 'month', 'week', 'day', 'hour', 'minute', 'nthMonth', 'nthWeek', 'nthDay', 'nthMinute', 'nthHour', 'abTest', 'abTestVariant', 'goal', 'goalId', 'goalType', 'isMainGoal', 'visitorType', 'bot', 'botId', 'botVersion', 'botVersionId', 'referralHostname', 'referralIsInternalPage', 'referralPathAndQuery', 'browserId', 'datetime', 'pageviewSegmentId', 'pageviewSegmentName', 'pageviewAppliedSegmentId', 'pageviewAppliedSegmentName', 'pageviewAppliedPersonalizationId', 'pageviewAppliedPersonalizationName', 'videoName', 'videoUrl', 'videoEventType', 'videoEventTypeName', 'umbracoFormsName', 'umbracoFormsId', 'umbracoFormsFieldName', 'umbracoFormsFieldId', 'umbracoFormsFieldError', 'cityId', 'countryId', 'province', 'provinceId', 'county', 'countyId', 'sourcePlatform', 'creativeFormat', 'marketingTactic', 'segmentId', 'segmentName', 'searchTerm', 'users', 'newVisitors', 'percentNewSessions', 'sessions', 'bounceRate', 'sessionDuration', 'avgSessionDuration', 'goalCompletionsAll', 'goalValueAll', 'pageviews', 'pageviewsWithSubpages', 'pageviewsPerSession', 'uniquePageviews', 'avgTimeOnPage', 'totalEvents', 'eventValue', 'avgEventValue', 'abTestVariantVisitors', 'abTestVariantCompletionsAll', 'videoPlays', 'videoPlaytime', 'avgVideoPlaytime', 'avgRelativeVideoPlaytime', 'videoEvents', 'umbracoFormsViews', 'umbracoFormsSubmissions', 'umbracoFormsStarts', 'umbracoFormsAbandons', 'umbracoFormsErrors', 'umbracoFormsFieldFocusses', 'umbracoFormsFieldAbandons', 'umbracoFormsFieldErrors', 'avgEngagedTimeOnPage', 'pageviewsBot', 'pageSessions', 'pageVisitors', 'pageSessionsWithSubpages', 'pageVisitorsWithSubpages', 'activeSegmentPageviews', 'inactiveSegmentPageviews', 'activeSegmentSessions', 'inactiveSegmentSessions', 'activeSegmentProfiles', 'inactiveSegmentProfiles', 'activePersonalizedSegmentPageviews', 'inactivePersonalizedSegmentPageviews', 'activePersonalizedSegmentSessions', 'inactivePersonalizedSegmentSessions', 'activePersonalizedSegmentProfiles', 'inactivePersonalizedSegmentProfiles', 'searchVolume', 'searchVolumeWithSubpages', 'visitors', 'campaignEntries', 'campaignVisitors', 'campaignGoals', 'campaignGoalValue', 'campaignFormSubmissions', 'campaignCommerceOrders'])),
-  "currentPage": zod.int(),
-  "rows": zod.array(zod.array(zod.unknown())),
-  "rowsPerPage": zod.int(),
-  "totalRows": zod.int(),
-  "totalPages": zod.int(),
-  "fromRow": zod.int(),
-  "toRow": zod.int(),
-  "reportsExist": zod.boolean()
-})
-
-
-export const deleteAnnotationsQueryParams = zod.object({
-  "id": zod.int().optional()
-})
-
-export const deleteAnnotationsResponse = zod.unknown()
-
-
-export const postAnnotationsBody = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "timestamp": zod.iso.datetime({"offset":true}),
-  "description": zod.string(),
-  "createdByUserName": zod.string(),
-  "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
-  "invalid": zod.boolean(),
-  "pageVariants": zod.array(zod.object({
-  "unique": zod.guid(),
-  "culture": zod.string().nullish()
-}))
-})
-
-export const postAnnotationsResponse = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "timestamp": zod.iso.datetime({"offset":true}),
-  "description": zod.string(),
-  "createdByUserName": zod.string(),
-  "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
-  "invalid": zod.boolean(),
-  "pageVariants": zod.array(zod.object({
-  "unique": zod.guid(),
-  "culture": zod.string().nullish()
-}))
-})
-
-
-export const getAnnotationsAllQueryParams = zod.object({
-  "from": zod.iso.datetime({"offset":true}).optional(),
-  "to": zod.iso.datetime({"offset":true}).optional()
-})
-
-export const getAnnotationsAllResponseItem = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "timestamp": zod.iso.datetime({"offset":true}),
-  "description": zod.string(),
-  "createdByUserName": zod.string(),
-  "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
-  "invalid": zod.boolean(),
-  "pageVariants": zod.array(zod.object({
-  "unique": zod.guid(),
-  "culture": zod.string().nullish()
-}))
-})
-export const getAnnotationsAllResponse = zod.array(getAnnotationsAllResponseItem)
-
-
-export const getAnnotationsEmptyResponse = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "timestamp": zod.iso.datetime({"offset":true}),
-  "description": zod.string(),
-  "createdByUserName": zod.string(),
-  "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
-  "invalid": zod.boolean(),
-  "pageVariants": zod.array(zod.object({
-  "unique": zod.guid(),
-  "culture": zod.string().nullish()
-}))
-})
-
-
-export const getAnnotationsGlobalQueryParams = zod.object({
-  "from": zod.iso.datetime({"offset":true}).optional(),
-  "to": zod.iso.datetime({"offset":true}).optional()
-})
-
-export const getAnnotationsGlobalResponseItem = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "timestamp": zod.iso.datetime({"offset":true}),
-  "description": zod.string(),
-  "createdByUserName": zod.string(),
-  "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
-  "invalid": zod.boolean(),
-  "pageVariants": zod.array(zod.object({
-  "unique": zod.guid(),
-  "culture": zod.string().nullish()
-}))
-})
-export const getAnnotationsGlobalResponse = zod.array(getAnnotationsGlobalResponseItem)
-
-
-export const getAnnotationsPageQueryCultureDefault = ``;
-
-export const getAnnotationsPageQueryParams = zod.object({
-  "unique": zod.guid().optional(),
-  "from": zod.iso.datetime({"offset":true}).optional(),
-  "to": zod.iso.datetime({"offset":true}).optional(),
-  "culture": zod.string().optional()
-})
-
-export const getAnnotationsPageResponseItem = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "timestamp": zod.iso.datetime({"offset":true}),
-  "description": zod.string(),
-  "createdByUserName": zod.string(),
-  "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
-  "invalid": zod.boolean(),
-  "pageVariants": zod.array(zod.object({
-  "unique": zod.guid(),
-  "culture": zod.string().nullish()
-}))
-})
-export const getAnnotationsPageResponse = zod.array(getAnnotationsPageResponseItem)
-
-
-export const deleteAppliedPersonalizationQueryParams = zod.object({
-  "id": zod.guid().optional()
-})
-
-export const deleteAppliedPersonalizationResponse = zod.unknown()
-
-
-export const postAppliedPersonalizationBody = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "segmentId": zod.int().nullish(),
-  "segment": zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
+export const getSegmentsResponse = zod.object({
   "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
@@ -3238,45 +238,17 @@ export const postAppliedPersonalizationBody = zod.object({
   "unique": zod.guid(),
   "segmentId": zod.int(),
   "type": zod.string().nullish(),
-  "config": zod.unknown().nullish(),
+  "config": zod.unknown().optional(),
   "isNegation": zod.boolean(),
   "created": zod.iso.datetime({"offset":true})
 })),
-  "controlGroupSize": zod.number()
-}).nullish(),
-  "type": zod.enum(['SinglePage', 'MultiPage', 'ContentType']),
-  "umbracoSegmentAlias": zod.string().nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "started": zod.iso.datetime({"offset":true}).nullish(),
-  "isActive": zod.boolean(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish(),
-  "pages": zod.array(zod.object({
+  "controlGroupSize": zod.number(),
   "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeId": zod.int(),
-  "culture": zod.string().nullish()
-})),
-  "contentTypes": zod.array(zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "contentTypeId": zod.int(),
-  "culture": zod.string().nullish()
-})),
-  "previewUrl": zod.string().nullish()
+  "created": zod.iso.datetime({"offset":true})
 })
 
-export const postAppliedPersonalizationResponse = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "segmentId": zod.int().nullish(),
-  "segment": zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
+
+export const postSegmentsBody = zod.object({
   "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
@@ -3288,46 +260,16 @@ export const postAppliedPersonalizationResponse = zod.object({
   "unique": zod.guid(),
   "segmentId": zod.int(),
   "type": zod.string().nullish(),
-  "config": zod.unknown().nullish(),
+  "config": zod.unknown().optional(),
   "isNegation": zod.boolean(),
   "created": zod.iso.datetime({"offset":true})
 })),
-  "controlGroupSize": zod.number()
-}).nullish(),
-  "type": zod.enum(['SinglePage', 'MultiPage', 'ContentType']),
-  "umbracoSegmentAlias": zod.string().nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "started": zod.iso.datetime({"offset":true}).nullish(),
-  "isActive": zod.boolean(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish(),
-  "pages": zod.array(zod.object({
+  "controlGroupSize": zod.number(),
   "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeId": zod.int(),
-  "culture": zod.string().nullish()
-})),
-  "contentTypes": zod.array(zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "contentTypeId": zod.int(),
-  "culture": zod.string().nullish()
-})),
-  "previewUrl": zod.string().nullish()
+  "created": zod.iso.datetime({"offset":true})
 })
 
-
-export const getAppliedPersonalizationAllResponseItem = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "segmentId": zod.int().nullish(),
-  "segment": zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
+export const postSegmentsResponse = zod.object({
   "unique": zod.guid(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
@@ -3339,748 +281,766 @@ export const getAppliedPersonalizationAllResponseItem = zod.object({
   "unique": zod.guid(),
   "segmentId": zod.int(),
   "type": zod.string().nullish(),
-  "config": zod.unknown().nullish(),
+  "config": zod.unknown().optional(),
   "isNegation": zod.boolean(),
   "created": zod.iso.datetime({"offset":true})
 })),
-  "controlGroupSize": zod.number()
-}).nullish(),
-  "type": zod.enum(['SinglePage', 'MultiPage', 'ContentType']),
-  "umbracoSegmentAlias": zod.string().nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "started": zod.iso.datetime({"offset":true}).nullish(),
-  "isActive": zod.boolean(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish(),
-  "pages": zod.array(zod.object({
+  "controlGroupSize": zod.number(),
   "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeId": zod.int(),
-  "culture": zod.string().nullish()
-})),
-  "contentTypes": zod.array(zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "contentTypeId": zod.int(),
-  "culture": zod.string().nullish()
-})),
-  "previewUrl": zod.string().nullish()
-})
-export const getAppliedPersonalizationAllResponse = zod.array(getAppliedPersonalizationAllResponseItem)
-
-
-export const getAppliedPersonalizationIdQueryParams = zod.object({
-  "id": zod.guid().optional()
-})
-
-export const getAppliedPersonalizationIdResponse = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "segmentId": zod.int().nullish(),
-  "segment": zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "isTemporary": zod.boolean(),
-  "sortOrder": zod.int(),
-  "rules": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "segmentId": zod.int(),
-  "type": zod.string().nullish(),
-  "config": zod.unknown().nullish(),
-  "isNegation": zod.boolean(),
   "created": zod.iso.datetime({"offset":true})
-})),
-  "controlGroupSize": zod.number()
-}).nullish(),
-  "type": zod.enum(['SinglePage', 'MultiPage', 'ContentType']),
-  "umbracoSegmentAlias": zod.string().nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "started": zod.iso.datetime({"offset":true}).nullish(),
-  "isActive": zod.boolean(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish(),
-  "pages": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeId": zod.int(),
-  "culture": zod.string().nullish()
-})),
-  "contentTypes": zod.array(zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "contentTypeId": zod.int(),
-  "culture": zod.string().nullish()
-})),
-  "previewUrl": zod.string().nullish()
 })
 
 
-export const postAppliedPersonalizationSegmentQueryParams = zod.object({
-  "unique": zod.guid().optional(),
-  "segment": zod.string().optional(),
-  "culture": zod.string().optional()
-})
-
-export const postAppliedPersonalizationSegmentResponse = zod.object({
-  "created": zod.boolean()
-})
-
-
-export const getAppliedPersonalizationSegmentQueryParams = zod.object({
-  "segment": zod.string().optional()
-})
-
-export const getAppliedPersonalizationSegmentResponse = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "segmentId": zod.int().nullish(),
-  "segment": zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "isTemporary": zod.boolean(),
-  "sortOrder": zod.int(),
-  "rules": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "segmentId": zod.int(),
-  "type": zod.string().nullish(),
-  "config": zod.unknown().nullish(),
-  "isNegation": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true})
-})),
-  "controlGroupSize": zod.number()
-}).nullish(),
-  "type": zod.enum(['SinglePage', 'MultiPage', 'ContentType']),
-  "umbracoSegmentAlias": zod.string().nullish(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "css": zod.string().nullish(),
-  "javascript": zod.string().nullish(),
-  "started": zod.iso.datetime({"offset":true}).nullish(),
-  "isActive": zod.boolean(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish(),
-  "pages": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeId": zod.int(),
-  "culture": zod.string().nullish()
-})),
-  "contentTypes": zod.array(zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "contentTypeId": zod.int(),
-  "culture": zod.string().nullish()
-})),
-  "previewUrl": zod.string().nullish()
-})
-
-
-export const deleteCampaignGroupQueryParams = zod.object({
-  "id": zod.guid().optional()
-})
-
-export const deleteCampaignGroupResponse = zod.unknown()
-
-
-export const getCampaignGroupQueryParams = zod.object({
-  "id": zod.guid().optional()
-})
-
-export const getCampaignGroupResponse = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "invalid": zod.boolean(),
-  "campaigns": zod.array(zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid().nullish(),
-  "campaignGroupId": zod.int(),
-  "utmSource": zod.string().nullish(),
-  "utmMedium": zod.string().nullish(),
-  "utmCampaign": zod.string().nullish(),
-  "utmTerm": zod.string().nullish(),
-  "utmContent": zod.string().nullish(),
-  "utmSourcePlatform": zod.string().nullish(),
-  "utmCreativeFormat": zod.string().nullish(),
-  "utmMarketingTactic": zod.string().nullish()
-})),
-  "customerJourneyScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "groupId": zod.int(),
-  "customerJourneyStepId": zod.int()
-})),
-  "personaScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "groupId": zod.int(),
-  "personaId": zod.int()
-}))
-})
-
-
-export const postCampaignGroupBody = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "invalid": zod.boolean(),
-  "campaigns": zod.array(zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid().nullish(),
-  "campaignGroupId": zod.int(),
-  "utmSource": zod.string().nullish(),
-  "utmMedium": zod.string().nullish(),
-  "utmCampaign": zod.string().nullish(),
-  "utmTerm": zod.string().nullish(),
-  "utmContent": zod.string().nullish(),
-  "utmSourcePlatform": zod.string().nullish(),
-  "utmCreativeFormat": zod.string().nullish(),
-  "utmMarketingTactic": zod.string().nullish()
-})),
-  "customerJourneyScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "groupId": zod.int(),
-  "customerJourneyStepId": zod.int()
-})),
-  "personaScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "groupId": zod.int(),
-  "personaId": zod.int()
-}))
-})
-
-export const postCampaignGroupResponse = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "invalid": zod.boolean(),
-  "campaigns": zod.array(zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid().nullish(),
-  "campaignGroupId": zod.int(),
-  "utmSource": zod.string().nullish(),
-  "utmMedium": zod.string().nullish(),
-  "utmCampaign": zod.string().nullish(),
-  "utmTerm": zod.string().nullish(),
-  "utmContent": zod.string().nullish(),
-  "utmSourcePlatform": zod.string().nullish(),
-  "utmCreativeFormat": zod.string().nullish(),
-  "utmMarketingTactic": zod.string().nullish()
-})),
-  "customerJourneyScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "groupId": zod.int(),
-  "customerJourneyStepId": zod.int()
-})),
-  "personaScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "groupId": zod.int(),
-  "personaId": zod.int()
-}))
-})
-
-
-export const getCampaignGroupAllResponseItem = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "invalid": zod.boolean(),
-  "campaigns": zod.array(zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid().nullish(),
-  "campaignGroupId": zod.int(),
-  "utmSource": zod.string().nullish(),
-  "utmMedium": zod.string().nullish(),
-  "utmCampaign": zod.string().nullish(),
-  "utmTerm": zod.string().nullish(),
-  "utmContent": zod.string().nullish(),
-  "utmSourcePlatform": zod.string().nullish(),
-  "utmCreativeFormat": zod.string().nullish(),
-  "utmMarketingTactic": zod.string().nullish()
-})),
-  "customerJourneyScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "groupId": zod.int(),
-  "customerJourneyStepId": zod.int()
-})),
-  "personaScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "groupId": zod.int(),
-  "personaId": zod.int()
-}))
-})
-export const getCampaignGroupAllResponse = zod.array(getCampaignGroupAllResponseItem)
-
-
-export const getCampaignGroupUnscoredResponseItem = zod.object({
-  "utmSource": zod.string().nullish(),
-  "utmMedium": zod.string().nullish(),
-  "utmCampaign": zod.string().nullish(),
-  "utmTerm": zod.string().nullish(),
-  "utmContent": zod.string().nullish(),
-  "utmSourcePlatform": zod.string().nullish(),
-  "utmCreativeFormat": zod.string().nullish(),
-  "utmMarketingTactic": zod.string().nullish()
-})
-export const getCampaignGroupUnscoredResponse = zod.array(getCampaignGroupUnscoredResponseItem)
-
-
-export const getCampaignGroupVisitorsQueryParams = zod.object({
+export const getSegmentsAllQueryParams = zod.object({
+  "isTemporary": zod.boolean().optional(),
   "amountOfDays": zod.int().optional()
 })
 
-export const getCampaignGroupVisitorsResponse = zod.record(zod.string(), zod.int())
+export const getSegmentsAllResponseItem = zod.object({
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "endTime": zod.iso.datetime({"offset":true}).nullish(),
+  "isTemporary": zod.boolean(),
+  "sortOrder": zod.int(),
+  "rules": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "segmentId": zod.int(),
+  "type": zod.string().nullish(),
+  "config": zod.unknown().optional(),
+  "isNegation": zod.boolean(),
+  "created": zod.iso.datetime({"offset":true})
+})),
+  "controlGroupSize": zod.number(),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+export const getSegmentsAllResponse = zod.array(getSegmentsAllResponseItem)
 
 
-export const getCampaignsQueryParams = zod.object({
+export const getSegmentsLocationsDataResponse = zod.object({
+  "countries": zod.array(zod.string()),
+  "provinces": zod.record(zod.string(), zod.array(zod.string())),
+  "cities": zod.record(zod.string(), zod.array(zod.string())),
+  "counties": zod.record(zod.string(), zod.array(zod.string()))
+})
+
+
+export const getSegmentsPreviewableSegmentsQueryParams = zod.object({
+  "id": zod.guid().optional()
+})
+
+export const getSegmentsPreviewableSegmentsResponseItem = zod.object({
+  "alias": zod.string(),
+  "name": zod.string().nullish(),
+  "cultures": zod.array(zod.string()).nullish()
+})
+export const getSegmentsPreviewableSegmentsResponse = zod.array(getSegmentsPreviewableSegmentsResponseItem)
+
+
+export const postSegmentsUpdatePriorityBodyItem = zod.object({
+  "id": zod.int(),
+  "sortOrder": zod.int()
+})
+export const postSegmentsUpdatePriorityBody = zod.array(postSegmentsUpdatePriorityBodyItem)
+
+export const postSegmentsUpdatePriorityResponse = zod.unknown()
+
+
+export const getSegmentsTreeRootResponseItem = zod.object({
+  "name": zod.string(),
+  "unique": zod.guid(),
+  "description": zod.string().nullish()
+})
+export const getSegmentsTreeRootResponse = zod.array(getSegmentsTreeRootResponseItem)
+
+
+export const getSegmentsItemQueryParams = zod.object({
+  "id": zod.array(zod.guid()).optional()
+})
+
+export const getSegmentsItemResponseItem = zod.object({
+  "name": zod.string(),
+  "unique": zod.guid(),
+  "description": zod.string().nullish()
+})
+export const getSegmentsItemResponse = zod.array(getSegmentsItemResponseItem)
+
+
+export const getSearchTermsQueryParams = zod.object({
   "visitorId": zod.int().optional()
 })
 
-export const getCampaignsResponseItem = zod.object({
-  "timestamp": zod.iso.datetime({"offset":true}),
-  "utmCampaign": zod.string().nullish(),
-  "utmSource": zod.string().nullish(),
-  "utmMedium": zod.string().nullish()
+export const getSearchTermsResponseItem = zod.object({
+  "query": zod.string(),
+  "timestamp": zod.iso.datetime({"offset":true})
 })
-export const getCampaignsResponse = zod.array(getCampaignsResponseItem)
+export const getSearchTermsResponse = zod.array(getSearchTermsResponseItem)
 
 
-export const postCockpitDeleteCookieResponse = zod.unknown()
-
-
-export const getCockpitGetUmbracoPageInfoQueryParams = zod.object({
-  "pageId": zod.guid().optional(),
-  "culture": zod.string().optional()
+export const getReportingGenerationStatusResponse = zod.object({
+  "reportingTablesExist": zod.boolean(),
+  "isGenerating": zod.boolean(),
+  "databaseIsRunningStatus": zod.boolean(),
+  "lastGenerated": zod.iso.datetime({"offset":true}).nullish()
 })
 
-export const getCockpitGetUmbracoPageInfoResponse = zod.object({
-  "status": zod.string().nullish(),
-  "documentType": zod.string().nullish(),
-  "template": zod.string().nullish(),
+
+export const getReportingGoalPersonalizationPerformanceBySegmentIdParams = zod.object({
+  "segmentId": zod.int()
+})
+
+export const getReportingGoalPersonalizationPerformanceBySegmentIdResponseItem = zod.object({
+  "goalName": zod.string().nullish(),
+  "goalType": zod.string().nullish(),
+  "controlGroupProfiles": zod.int(),
+  "controlGroupGoalCompletions": zod.int(),
+  "controlGroupGoalValue": zod.int(),
+  "personalizedGroupProfiles": zod.int(),
+  "personalizedGroupGoalCompletions": zod.int(),
+  "personalizedGroupGoalValue": zod.int()
+})
+export const getReportingGoalPersonalizationPerformanceBySegmentIdResponse = zod.array(getReportingGoalPersonalizationPerformanceBySegmentIdResponseItem)
+
+
+export const getReportingSegmentSessionsPersonalizationBySegmentIdParams = zod.object({
+  "segmentId": zod.int()
+})
+
+export const getReportingSegmentSessionsPersonalizationBySegmentIdResponse = zod.object({
+  "segmentId": zod.int(),
+  "one": zod.int(),
+  "two": zod.int(),
+  "three": zod.int(),
+  "four": zod.int(),
+  "moreThanFour": zod.int()
+})
+
+
+export const getReportingSegmentSessionsPotentialBySegmentIdParams = zod.object({
+  "segmentId": zod.int()
+})
+
+export const getReportingSegmentSessionsPotentialBySegmentIdResponse = zod.object({
+  "segmentId": zod.int(),
+  "one": zod.int(),
+  "two": zod.int(),
+  "three": zod.int(),
+  "four": zod.int(),
+  "moreThanFour": zod.int()
+})
+
+
+export const getReportingQueryParams = zod.object({
+  "segmentId": zod.int().optional()
+})
+
+export const getReportingResponseItem = zod.object({
+  "goalName": zod.string().nullish(),
+  "goalType": zod.string().nullish(),
+  "controlGroupProfiles": zod.int(),
+  "controlGroupGoalCompletions": zod.int(),
+  "controlGroupGoalValue": zod.int(),
+  "personalizedGroupProfiles": zod.int(),
+  "personalizedGroupGoalCompletions": zod.int(),
+  "personalizedGroupGoalValue": zod.int()
+})
+export const getReportingResponse = zod.array(getReportingResponseItem)
+
+
+export const postReportingGenerationStartResponse = zod.unknown()
+
+
+export const postReferralScoringScoredBody = zod.object({
+  "page": zod.int(),
+  "pageSize": zod.int(),
+  "amountOfDays": zod.int()
+})
+
+export const postReferralScoringScoredResponse = zod.object({
+  "currentPage": zod.int(),
+  "totalPages": zod.int(),
+  "totalRowCount": zod.int(),
+  "itemsPerPage": zod.int(),
+  "rows": zod.array(zod.object({
   "id": zod.int(),
+  "referralGroupId": zod.int().nullish(),
   "url": zod.string().nullish(),
-  "editor": zod.object({
-  "createdBy": zod.string().nullish(),
-  "createdDate": zod.iso.datetime({"offset":true}),
-  "editedBy": zod.string().nullish(),
-  "editedDate": zod.iso.datetime({"offset":true}).nullish()
-}).nullish()
+  "referrals": zod.int()
+})).nullable()
 })
 
 
-export const getCockpitAuthDomainsResponse = zod.object({
-  "domains": zod.array(zod.object({
+export const postReferralScoringUnscoredBody = zod.object({
+  "page": zod.int(),
+  "pageSize": zod.int(),
+  "amountOfDays": zod.int()
+})
+
+export const postReferralScoringUnscoredResponse = zod.object({
+  "currentPage": zod.int(),
+  "totalPages": zod.int(),
+  "totalRowCount": zod.int(),
+  "itemsPerPage": zod.int(),
+  "rows": zod.array(zod.object({
+  "id": zod.int(),
+  "referralGroupId": zod.int().nullish(),
+  "url": zod.string().nullish(),
+  "referrals": zod.int()
+})).nullable()
+})
+
+
+export const deleteReferralGroupQueryParams = zod.object({
+  "id": zod.guid().optional()
+})
+
+export const deleteReferralGroupResponse = zod.unknown()
+
+
+export const getReferralGroupQueryParams = zod.object({
+  "id": zod.guid().optional()
+})
+
+export const getReferralGroupResponse = zod.object({
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "invalid": zod.boolean(),
+  "pages": zod.array(zod.object({
+  "id": zod.int(),
+  "key": zod.guid(),
+  "pageId": zod.int(),
+  "referralGroupId": zod.int(),
+  "domainOnly": zod.boolean(),
+  "pageUrl": zod.string().nullish()
+})),
+  "customerJourneyScoring": zod.array(zod.object({
+  "groupId": zod.int(),
+  "customerJourneyStepId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})),
+  "personaScoring": zod.array(zod.object({
+  "groupId": zod.int(),
+  "personaId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+
+export const postReferralGroupBody = zod.object({
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "invalid": zod.boolean(),
+  "pages": zod.array(zod.object({
+  "id": zod.int(),
+  "key": zod.guid(),
+  "pageId": zod.int(),
+  "referralGroupId": zod.int(),
+  "domainOnly": zod.boolean(),
+  "pageUrl": zod.string().nullish()
+})),
+  "customerJourneyScoring": zod.array(zod.object({
+  "groupId": zod.int(),
+  "customerJourneyStepId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})),
+  "personaScoring": zod.array(zod.object({
+  "groupId": zod.int(),
+  "personaId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+export const postReferralGroupResponse = zod.object({
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "invalid": zod.boolean(),
+  "pages": zod.array(zod.object({
+  "id": zod.int(),
+  "key": zod.guid(),
+  "pageId": zod.int(),
+  "referralGroupId": zod.int(),
+  "domainOnly": zod.boolean(),
+  "pageUrl": zod.string().nullish()
+})),
+  "customerJourneyScoring": zod.array(zod.object({
+  "groupId": zod.int(),
+  "customerJourneyStepId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})),
+  "personaScoring": zod.array(zod.object({
+  "groupId": zod.int(),
+  "personaId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+
+export const getReferralGroupAllResponseItem = zod.object({
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "invalid": zod.boolean(),
+  "pages": zod.array(zod.object({
+  "id": zod.int(),
+  "key": zod.guid(),
+  "pageId": zod.int(),
+  "referralGroupId": zod.int(),
+  "domainOnly": zod.boolean(),
+  "pageUrl": zod.string().nullish()
+})),
+  "customerJourneyScoring": zod.array(zod.object({
+  "groupId": zod.int(),
+  "customerJourneyStepId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})),
+  "personaScoring": zod.array(zod.object({
+  "groupId": zod.int(),
+  "personaId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+export const getReferralGroupAllResponse = zod.array(getReferralGroupAllResponseItem)
+
+
+export const getReferralGroupVisitorsQueryParams = zod.object({
+  "amountOfDays": zod.int().optional()
+})
+
+export const getReferralGroupVisitorsResponse = zod.record(zod.string(), zod.int())
+
+
+export const getProfileBotVisitorsResponse = zod.record(zod.string(), zod.string())
+
+
+export const postProfileExportCsvBody = zod.union([zod.null(),zod.object({
+  "skip": zod.int(),
+  "take": zod.int(),
+  "order": zod.string().nullish(),
+  "ascending": zod.boolean().nullish(),
+  "segmentId": zod.guid().nullish(),
+  "minimumGoalValue": zod.int().nullish(),
+  "minimumCompletedGoals": zod.int().nullish(),
+  "isUnidentified": zod.boolean().nullish(),
+  "isIdentified": zod.boolean().nullish(),
+  "isHighPotential": zod.boolean().nullish(),
+  "activeRange": zod.union([zod.null(),zod.object({
+  "from": zod.iso.datetime({"offset":true}).nullish(),
+  "to": zod.iso.datetime({"offset":true}).nullish()
+})]).optional(),
+  "identifiedName": zod.string().nullish()
+})])
+
+export const postProfileExportCsvResponse = zod.object({
+  "fileStream": zod.instanceof(Blob),
+  "contentType": zod.string().nullable(),
+  "fileDownloadName": zod.string().nullable(),
+  "lastModified": zod.iso.datetime({"offset":true}).nullish(),
+  "entityTag": zod.union([zod.null(),zod.object({
+  "tag": zod.object({
+  "buffer": zod.string().nullish(),
+  "offset": zod.int(),
+  "length": zod.int(),
+  "value": zod.string().nullish(),
+  "hasValue": zod.boolean()
+}),
+  "isWeak": zod.boolean()
+})]).optional(),
+  "enableRangeProcessing": zod.boolean()
+})
+
+
+export const getProfileCustomerJourneyStepScoresQueryParams = zod.object({
+  "visitorId": zod.int().optional()
+})
+
+export const getProfileCustomerJourneyStepScoresResponseItem = zod.object({
+  "customerJourneyStepId": zod.int(),
+  "groupId": zod.int(),
+  "score": zod.int(),
+  "isActive": zod.boolean(),
+  "isLocked": zod.boolean()
+})
+export const getProfileCustomerJourneyStepScoresResponse = zod.array(getProfileCustomerJourneyStepScoresResponseItem)
+
+
+export const getProfileDetailsQueryParams = zod.object({
+  "visitorId": zod.int().optional()
+})
+
+export const getProfileDetailsResponse = zod.object({
+  "visitorExternalId": zod.guid(),
+  "visitorId": zod.int(),
+  "identifiedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "firstActiveOn": zod.iso.datetime({"offset":true}),
+  "lastActiveOn": zod.iso.datetime({"offset":true}),
+  "totalGoalCompletions": zod.int(),
+  "totalGoalValue": zod.number(),
+  "totalSeconds": zod.int(),
+  "totalEngagedSeconds": zod.int(),
+  "totalSessions": zod.int(),
+  "totalPageviews": zod.int(),
+  "hasBeenPersonalized": zod.boolean(),
+  "hasBeenAbTested": zod.boolean(),
+  "members": zod.array(zod.object({
+  "id": zod.string(),
   "name": zod.string(),
-  "rootContentId": zod.int().nullish(),
-  "languageIsoCode": zod.string().nullish()
+  "unique": zod.guid().nullish(),
+  "registrationDate": zod.iso.datetime({"offset":true}).nullish(),
+  "lastLoginDate": zod.iso.datetime({"offset":true}).nullish(),
+  "properties": zod.looseObject({
+
+}).nullish()
 }))
 })
 
 
-export const postCockpitAuthGenerateTokenResponse = zod.object({
-  "token": zod.string(),
-  "expires": zod.iso.datetime({"offset":true})
+export const getProfilePageEventsQueryParams = zod.object({
+  "pageviewId": zod.int().optional()
 })
 
-
-export const getConfigurationResponse = zod.object({
-  "settings": zod.union([zod.object({
-  "DatabaseConnectionStringName": zod.string(),
-  "Enabled": zod.boolean(),
-  "UseLegacySegmentNames": zod.boolean(),
-  "SuspiciousActivity": zod.object({
-  "PageviewThreshold": zod.int()
-})
-}),zod.object({
-  "databaseConnectionStringName": zod.string(),
-  "enabled": zod.boolean(),
-  "useLegacySegmentNames": zod.boolean(),
-  "suspiciousActivity": zod.object({
-  "pageviewThreshold": zod.int()
-})
-})]),
-  "analytics": zod.union([zod.object({
-  "VisitorCookie": zod.object({
-  "ExpirationInDays": zod.int(),
-  "CookieName": zod.string(),
-  "LegacyCookieName": zod.string(),
-  "IncludeSubdomains": zod.boolean()
-}),
-  "DataCollection": zod.object({
-  "AnonymizeIPAddress": zod.boolean(),
-  "FlushRateInRecords": zod.int(),
-  "FlushIntervalInSeconds": zod.int(),
-  "RegexTimeoutInMilliseconds": zod.int(),
-  "InternalSiteSearch": zod.object({
-  "AutomaticSearchTracking": zod.boolean(),
-  "SearchTermParameters": zod.string(),
-  "SearchBoxParameters": zod.string().nullish(),
-  "CategoryParameters": zod.string().nullish()
-})
-}),
-  "DataStorage": zod.object({
-  "AnonymizeAnalyticsDataAfterDays": zod.int(),
-  "DeleteAnalyticsDataAfterDays": zod.int(),
-  "deleteControlGroupDataAfterDays": zod.int(),
-  "DeleteRawDataAfterDays": zod.int()
-}),
-  "DataProcessing": zod.object({
-  "IntervalInSeconds": zod.int(),
-  "SessionLengthInMinutes": zod.int(),
-  "IsProcessingServer": zod.boolean()
-}),
-  "DataCleanup": zod.object({
-  "Enabled": zod.boolean(),
-  "FirstRunTime": zod.string(),
-  "StartupDelay": zod.string(),
-  "Interval": zod.string(),
-  "CommandTimeout": zod.int(),
-  "StartAfterSeconds": zod.int(),
-  "IntervalInSeconds": zod.int(),
-  "NumberOfRows": zod.int()
-})
-}),zod.object({
-  "visitorCookie": zod.union([zod.object({
-  "ExpirationInDays": zod.int(),
-  "CookieName": zod.string(),
-  "LegacyCookieName": zod.string(),
-  "IncludeSubdomains": zod.boolean()
-}),zod.object({
-  "expirationInDays": zod.int(),
-  "cookieName": zod.string(),
-  "legacyCookieName": zod.string(),
-  "includeSubdomains": zod.boolean()
-})]),
-  "dataCollection": zod.union([zod.object({
-  "AnonymizeIPAddress": zod.boolean(),
-  "FlushRateInRecords": zod.int(),
-  "FlushIntervalInSeconds": zod.int(),
-  "RegexTimeoutInMilliseconds": zod.int(),
-  "InternalSiteSearch": zod.object({
-  "AutomaticSearchTracking": zod.boolean(),
-  "SearchTermParameters": zod.string(),
-  "SearchBoxParameters": zod.string().nullish(),
-  "CategoryParameters": zod.string().nullish()
-})
-}),zod.object({
-  "anonymizeIPAddress": zod.boolean(),
-  "flushRateInRecords": zod.int(),
-  "flushIntervalInSeconds": zod.int(),
-  "regexTimeoutInMilliseconds": zod.int(),
-  "internalSiteSearch": zod.union([zod.object({
-  "AutomaticSearchTracking": zod.boolean(),
-  "SearchTermParameters": zod.string(),
-  "SearchBoxParameters": zod.string().nullish(),
-  "CategoryParameters": zod.string().nullish()
-}),zod.object({
-  "automaticSearchTracking": zod.boolean(),
-  "searchTermParameters": zod.array(zod.string()),
-  "searchBoxParameters": zod.array(zod.string()),
-  "categoryParameters": zod.array(zod.string())
-})])
-})]),
-  "dataStorage": zod.union([zod.object({
-  "AnonymizeAnalyticsDataAfterDays": zod.int(),
-  "DeleteAnalyticsDataAfterDays": zod.int(),
-  "deleteControlGroupDataAfterDays": zod.int(),
-  "DeleteRawDataAfterDays": zod.int()
-}),zod.object({
-  "anonymizeAnalyticsDataAfterDays": zod.int(),
-  "deleteAnalyticsDataAfterDays": zod.int(),
-  "deleteControlGroupDataAfterDays": zod.int(),
-  "deleteRawDataAfterDays": zod.int()
-})]),
-  "dataProcessing": zod.union([zod.object({
-  "IntervalInSeconds": zod.int(),
-  "SessionLengthInMinutes": zod.int(),
-  "IsProcessingServer": zod.boolean()
-}),zod.object({
-  "intervalInSeconds": zod.int(),
-  "sessionLengthInMinutes": zod.int(),
-  "isProcessingServer": zod.boolean()
-})]),
-  "dataCleanup": zod.union([zod.object({
-  "Enabled": zod.boolean(),
-  "FirstRunTime": zod.string(),
-  "StartupDelay": zod.string(),
-  "Interval": zod.string(),
-  "CommandTimeout": zod.int(),
-  "StartAfterSeconds": zod.int(),
-  "IntervalInSeconds": zod.int(),
-  "NumberOfRows": zod.int()
-}),zod.object({
-  "enabled": zod.boolean(),
-  "firstRunTime": zod.string(),
-  "startupDelay": zod.string(),
-  "interval": zod.string(),
-  "commandTimeout": zod.int(),
-  "startAfterSeconds": zod.int(),
-  "intervalInSeconds": zod.int(),
-  "numberOfRows": zod.int()
-})])
-})]),
-  "abTesting": zod.union([zod.object({
-  "RequiredVisitorPercentageBeforeShowingAdvice": zod.int(),
-  "MinimumPercentageMacroGoalWarning": zod.int()
-}),zod.object({
-  "requiredVisitorPercentageBeforeShowingAdvice": zod.int(),
-  "minimumPercentageMacroGoalWarning": zod.int()
-})]),
-  "profiles": zod.union([zod.object({
-  "Potential": zod.object({
-  "ActiveThresholdInDays": zod.int(),
-  "EngagedThresholdInSeconds": zod.int(),
-  "EngagedThresholdNumberOfSessions": zod.int()
-}),
-  "Identification": zod.object({
-  "Name": zod.string(),
-  "Abbreviation": zod.string()
-})
-}),zod.object({
-  "potential": zod.union([zod.object({
-  "ActiveThresholdInDays": zod.int(),
-  "EngagedThresholdInSeconds": zod.int(),
-  "EngagedThresholdNumberOfSessions": zod.int()
-}),zod.object({
-  "activeThresholdInDays": zod.int(),
-  "engagedThresholdInSeconds": zod.int(),
-  "engagedThresholdNumberOfSessions": zod.int()
-})]),
-  "identification": zod.union([zod.object({
-  "Name": zod.string(),
-  "Abbreviation": zod.string()
-}),zod.object({
-  "name": zod.string(),
-  "abbreviation": zod.string()
-})])
-})]),
-  "reporting": zod.union([zod.object({
-  "dataGenerationEnabled": zod.boolean(),
-  "dataGenerationTime": zod.string(),
-  "timezone": zod.string().nullish(),
-  "reportingTimeZone": zod.object({
-  "id": zod.string(),
-  "hasIanaId": zod.boolean(),
-  "displayName": zod.string(),
-  "standardName": zod.string(),
-  "daylightName": zod.string(),
-  "baseUtcOffset": zod.string(),
-  "supportsDaylightSavingTime": zod.boolean()
-})
-}),zod.object({
-  "dataGenerationEnabled": zod.boolean(),
-  "dataGenerationTime": zod.string().nullish(),
-  "timezone": zod.string().nullish(),
-  "reportingTimeZone": zod.object({
-  "id": zod.string(),
-  "hasIanaId": zod.boolean(),
-  "displayName": zod.string(),
-  "standardName": zod.string(),
-  "daylightName": zod.string(),
-  "baseUtcOffset": zod.string(),
-  "supportsDaylightSavingTime": zod.boolean()
-})
-})]),
-  "deliveryApi": zod.union([zod.object({
-  "DisableVisitorCookie": zod.boolean(),
-  "Segmentation": zod.object({
-  "ContentByQuery": zod.boolean(),
-  "ContentById": zod.boolean(),
-  "ContentByIds": zod.boolean(),
-  "ContentByPath": zod.boolean(),
-  "anySegmentationEnabled": zod.boolean()
-})
-}),zod.object({
-  "disableVisitorCookie": zod.boolean(),
-  "segmentation": zod.object({
-  "contentByQuery": zod.boolean(),
-  "contentById": zod.boolean(),
-  "contentByIds": zod.boolean(),
-  "contentByPath": zod.boolean(),
-  "anySegmentationEnabled": zod.boolean()
-})
-})]),
-  "backoffice": zod.object({
-  "personaGroupColorPicker": zod.guid(),
-  "personaGroupMediaPicker": zod.guid(),
-  "customerJourneyColorPicker": zod.guid(),
-  "customerJourneyIconPicker": zod.guid()
-}),
-  "cockpit": zod.union([zod.object({
-  "enableInjection": zod.boolean(),
-  "authentication": zod.object({
-  "tokenLifetimeSeconds": zod.int(),
-  "sessionLifetimeMinutes": zod.int(),
-  "requireHttps": zod.boolean(),
-  "cleanupIntervalMinutes": zod.int(),
-  "tokenRetentionBufferMinutes": zod.int(),
-  "sessionRetentionBufferMinutes": zod.int(),
-  "sessionCookieSameSite": zod.string()
-})
-}),zod.object({
-  "enableInjection": zod.boolean(),
-  "authentication": zod.object({
-  "tokenLifetimeSeconds": zod.int(),
-  "sessionLifetimeMinutes": zod.int(),
-  "requireHttps": zod.boolean(),
-  "cleanupIntervalMinutes": zod.int(),
-  "tokenRetentionBufferMinutes": zod.int(),
-  "sessionRetentionBufferMinutes": zod.int(),
-  "sessionCookieSameSite": zod.string()
-})
-})]),
-  "segmentation": zod.union([zod.object({
-  "excludedPropertyAliases": zod.array(zod.string())
-}),zod.object({
-  "excludedPropertyAliases": zod.array(zod.string())
-})])
-})
-
-
-export const getContentScoringAllQueryParams = zod.object({
-  "unique": zod.guid().optional()
-})
-
-export const getContentScoringAllResponse = zod.object({
-  "items": zod.array(zod.object({
+export const getProfilePageEventsResponseItem = zod.object({
   "id": zod.int(),
-  "entityId": zod.int(),
-  "documentUnique": zod.guid(),
-  "culture": zod.string().nullish(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "type": zod.enum(['None', 'Persona', 'Journey'])
+  "type": zod.enum(['UNDEFINED', 'Start', 'End', 'ScrollDepth', 'GoalCompletion', 'OutClick', 'Event', 'Video', 'UmbracoForms']),
+  "timestamp": zod.iso.datetime({"offset":true}),
+  "detail": zod.string().nullish()
+})
+export const getProfilePageEventsResponse = zod.array(getProfilePageEventsResponseItem)
+
+
+export const getProfileExportQueryParams = zod.object({
+  "Skip": zod.int().optional(),
+  "Take": zod.int().optional(),
+  "Order": zod.string().optional(),
+  "Ascending": zod.boolean().optional(),
+  "SegmentId": zod.guid().optional(),
+  "MinimumGoalValue": zod.int().optional(),
+  "MinimumCompletedGoals": zod.int().optional(),
+  "IsUnidentified": zod.boolean().optional(),
+  "IsIdentified": zod.boolean().optional(),
+  "IsHighPotential": zod.boolean().optional(),
+  "ActiveRange.From": zod.iso.datetime({"offset":true}).optional(),
+  "ActiveRange.To": zod.iso.datetime({"offset":true}).optional(),
+  "IdentifiedName": zod.string().optional()
+})
+
+export const getProfileExportResponseItem = zod.object({
+  "type": zod.string().nullish(),
+  "sessionCount": zod.int(),
+  "pageviewCount": zod.int(),
+  "firstSession": zod.iso.datetime({"offset":true}),
+  "lastSession": zod.iso.datetime({"offset":true}),
+  "totalGoalCompletions": zod.int(),
+  "totalGoalValue": zod.number(),
+  "visitorId": zod.int(),
+  "url": zod.string().nullish(),
+  "memberName": zod.string().nullish(),
+  "memberEmail": zod.string().nullish()
+})
+export const getProfileExportResponse = zod.array(getProfileExportResponseItem)
+
+
+export const getProfileGoalCompletionsQueryParams = zod.object({
+  "visitorId": zod.int().optional()
+})
+
+export const getProfileGoalCompletionsResponseItem = zod.object({
+  "unique": zod.guid(),
+  "goalId": zod.int(),
+  "completionCount": zod.int(),
+  "totalValue": zod.int()
+})
+export const getProfileGoalCompletionsResponse = zod.array(getProfileGoalCompletionsResponseItem)
+
+
+export const getProfileStatisticsGrowthQueryNumberOfMonthsDefault = 12;
+
+export const getProfileStatisticsGrowthQueryParams = zod.object({
+  "numberOfMonths": zod.int().default(getProfileStatisticsGrowthQueryNumberOfMonthsDefault)
+})
+
+export const getProfileStatisticsGrowthResponse = zod.object({
+  "identified": zod.array(zod.object({
+  "year": zod.int(),
+  "month": zod.int(),
+  "count": zod.int()
 })),
-  "unique": zod.guid()
+  "unknown": zod.array(zod.object({
+  "year": zod.int(),
+  "month": zod.int(),
+  "count": zod.int()
+}))
 })
 
 
-export const getContentScoringExportCustomerJourneyResponse = zod.instanceof(Blob)
+export const getProfileStatisticsIdentificationQueryNumberOfDaysDefault = 30;
 
-
-export const getContentScoringExportPersonaResponse = zod.instanceof(Blob)
-
-
-export const deleteContentScoringJourneyQueryParams = zod.object({
-  "id": zod.int().optional()
+export const getProfileStatisticsIdentificationQueryParams = zod.object({
+  "numberOfDays": zod.int().default(getProfileStatisticsIdentificationQueryNumberOfDaysDefault)
 })
 
-export const deleteContentScoringJourneyResponse = zod.unknown()
-
-
-export const deleteContentScoringPersonaQueryParams = zod.object({
-  "id": zod.int().optional()
+export const getProfileStatisticsIdentificationResponse = zod.object({
+  "newlyIdentified": zod.int(),
+  "formerlyUnknown": zod.int(),
+  "unknown": zod.int()
 })
 
-export const deleteContentScoringPersonaResponse = zod.unknown()
+
+export const getProfileLastActiveSegmentQueryParams = zod.object({
+  "visitorId": zod.int().optional()
+})
+
+export const getProfileLastActiveSegmentResponseItem = zod.guid()
+export const getProfileLastActiveSegmentResponse = zod.array(getProfileLastActiveSegmentResponseItem)
 
 
-export const postContentScoringSaveBodyItem = zod.object({
+export const postProfileOverviewBody = zod.union([zod.null(),zod.object({
+  "skip": zod.int(),
+  "take": zod.int(),
+  "order": zod.string().nullish(),
+  "ascending": zod.boolean().nullish(),
+  "segmentId": zod.guid().nullish(),
+  "minimumGoalValue": zod.int().nullish(),
+  "minimumCompletedGoals": zod.int().nullish(),
+  "isUnidentified": zod.boolean().nullish(),
+  "isIdentified": zod.boolean().nullish(),
+  "isHighPotential": zod.boolean().nullish(),
+  "activeRange": zod.union([zod.null(),zod.object({
+  "from": zod.iso.datetime({"offset":true}).nullish(),
+  "to": zod.iso.datetime({"offset":true}).nullish()
+})]).optional(),
+  "identifiedName": zod.string().nullish()
+})])
+
+export const postProfileOverviewResponse = zod.object({
+  "results": zod.array(zod.object({
+  "visitorExternalId": zod.guid(),
+  "visitorId": zod.int(),
+  "identifiedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "firstActiveOn": zod.iso.datetime({"offset":true}),
+  "lastActiveOn": zod.iso.datetime({"offset":true}),
+  "totalGoalCompletions": zod.int(),
+  "totalGoalValue": zod.number(),
+  "totalSeconds": zod.int(),
+  "totalEngagedSeconds": zod.int(),
+  "totalSessions": zod.int(),
+  "totalPageviews": zod.int(),
+  "hasBeenPersonalized": zod.boolean(),
+  "hasBeenAbTested": zod.boolean(),
+  "members": zod.array(zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "unique": zod.guid().nullish(),
+  "registrationDate": zod.iso.datetime({"offset":true}).nullish(),
+  "lastLoginDate": zod.iso.datetime({"offset":true}).nullish(),
+  "properties": zod.looseObject({
+
+}).nullish()
+}))
+})),
+  "totalResults": zod.int()
+})
+
+
+export const getProfilePageviewsQueryParams = zod.object({
+  "sessionId": zod.int().optional()
+})
+
+export const getProfilePageviewsResponseItem = zod.object({
   "id": zod.int(),
-  "entityId": zod.int(),
-  "documentUnique": zod.guid(),
-  "culture": zod.string().nullish(),
+  "date": zod.iso.datetime({"offset":true}),
+  "url": zod.string().nullish(),
+  "referrerUrl": zod.string().nullish(),
+  "timeOnPageInSeconds": zod.int().nullish(),
+  "engagedTimeInSeconds": zod.int().nullish(),
+  "scrollDepth": zod.number().nullish(),
+  "umbracoNodeId": zod.int().nullish(),
+  "goalCompletions": zod.int(),
+  "events": zod.int(),
+  "appliedPersonalizationId": zod.int().nullish(),
+  "appliedPersonalizationName": zod.string().nullish(),
+  "abTests": zod.array(zod.object({
+  "id": zod.int().nullish(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "variantId": zod.int().nullish(),
+  "variantName": zod.string().nullish()
+})),
+  "ipAddress": zod.string().nullish(),
+  "country": zod.string().nullish(),
+  "city": zod.string().nullish(),
+  "memberId": zod.string().nullish(),
+  "isInControlGroup": zod.boolean()
+})
+export const getProfilePageviewsResponse = zod.array(getProfilePageviewsResponseItem)
+
+
+export const getProfilePersonaScoresQueryParams = zod.object({
+  "visitorId": zod.int().optional()
+})
+
+export const getProfilePersonaScoresResponseItem = zod.object({
+  "personaId": zod.int(),
+  "groupId": zod.int(),
   "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "type": zod.enum(['None', 'Persona', 'Journey'])
+  "isActive": zod.boolean(),
+  "isLocked": zod.boolean()
 })
-export const postContentScoringSaveBody = zod.array(postContentScoringSaveBodyItem)
-
-export const postContentScoringSaveResponse = zod.unknown()
+export const getProfilePersonaScoresResponse = zod.array(getProfilePersonaScoresResponseItem)
 
 
-export const getContentTypesAllResponseItem = zod.object({
+export const getProfilePotentialQueryParams = zod.object({
+  "visitorId": zod.int().optional()
+})
+
+export const getProfilePotentialResponse = zod.object({
+  "active": zod.number(),
+  "engaged": zod.number()
+})
+
+
+export const getProfileRelatedQueryParams = zod.object({
+  "memberId": zod.guid().optional()
+})
+
+export const getProfileRelatedResponseItem = zod.int()
+export const getProfileRelatedResponse = zod.array(getProfileRelatedResponseItem)
+
+
+export const getProfileSessionsQueryParams = zod.object({
+  "VisitorId": zod.int().optional(),
+  "PageIndex": zod.int().optional(),
+  "PageSize": zod.int().optional()
+})
+
+export const getProfileSessionsResponse = zod.object({
+  "results": zod.array(zod.object({
   "id": zod.int(),
-  "alias": zod.string().nullish(),
-  "name": zod.string().nullish()
+  "wasAbTested": zod.boolean(),
+  "wasPersonalized": zod.boolean(),
+  "startDate": zod.iso.datetime({"offset":true}),
+  "deviceType": zod.enum(['Unknown', 'Desktop', 'Tablet', 'Mobile', 'Console', 'TV', 'CarBrowser', 'SmartDisplay', 'Camera', 'PortableMediaPlayer', 'Phablet', 'SmartSpeaker', 'Wearable']),
+  "pageviewCount": zod.int(),
+  "sessionDurationInSeconds": zod.int(),
+  "engagedTimeInSeconds": zod.int(),
+  "goalCompletionCount": zod.int(),
+  "eventCount": zod.int(),
+  "inboundUrl": zod.string().nullish(),
+  "referrerUrl": zod.string().nullish(),
+  "operatingSystemName": zod.string().nullish(),
+  "browserName": zod.string().nullish(),
+  "browserVersion": zod.string().nullish(),
+  "country": zod.string().nullish(),
+  "province": zod.string().nullish(),
+  "county": zod.string().nullish(),
+  "city": zod.string().nullish()
+})),
+  "totalResults": zod.int()
 })
-export const getContentTypesAllResponse = zod.array(getContentTypesAllResponseItem)
 
 
-export const getContentTypesSegmentedPropertyQueryParams = zod.object({
-  "unique": zod.guid().optional()
+export const getProfileStatisticsTotalResponse = zod.object({
+  "identified": zod.int(),
+  "unknown": zod.int()
 })
 
-export const getContentTypesSegmentedPropertyResponse = zod.boolean()
 
-
-export const getCulturesQueryParams = zod.object({
-  "id": zod.int().optional()
+export const postPersonaLockBody = zod.object({
+  "entityId": zod.int(),
+  "visitorId": zod.int()
 })
 
-export const getCulturesResponseItem = zod.string()
-export const getCulturesResponse = zod.array(getCulturesResponseItem)
+export const postPersonaLockResponse = zod.unknown()
 
 
-export const deleteCustomerJourneyQueryParams = zod.object({
+export const getPersonaEmptyResponse = zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "title": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "personas": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "title": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "icon": zod.string().nullish(),
+  "iconUrl": zod.string().nullish(),
+  "color": zod.string().nullish(),
+  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish()
+})),
+  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish(),
+  "minimumParticipationScoreThreshold": zod.int().nullish(),
+  "minimumDeviationType": zod.union([zod.null(),zod.union([zod.literal('Absolute'),zod.literal('Percent'),zod.literal(null)])]).optional(),
+  "minimumDeviation": zod.int().nullish(),
+  "expirationType": zod.union([zod.null(),zod.union([zod.literal('days'),zod.literal('sessions'),zod.literal('never'),zod.literal(null)])]).optional(),
+  "expiration": zod.int().nullish(),
+  "upperScoreLimit": zod.int().nullish()
+})
+
+
+export const deletePersonaQueryParams = zod.object({
   "id": zod.guid().optional()
 })
 
-export const deleteCustomerJourneyResponse = zod.object({
+export const deletePersonaResponse = zod.object({
   "isValid": zod.boolean(),
-  "warnings": zod.array(zod.string()),
-  "errors": zod.array(zod.string())
+  "warnings": zod.array(zod.string()).nullable(),
+  "errors": zod.array(zod.string()).nullable()
 })
 
 
-export const postCustomerJourneyBody = zod.object({
+export const postPersonaBody = zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "steps": zod.array(zod.object({
+  "personas": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
   "title": zod.string().nullish(),
@@ -4102,20 +1062,20 @@ export const postCustomerJourneyBody = zod.object({
   "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish(),
   "minimumParticipationScoreThreshold": zod.int().nullish(),
-  "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
+  "minimumDeviationType": zod.union([zod.null(),zod.union([zod.literal('Absolute'),zod.literal('Percent'),zod.literal(null)])]).optional(),
   "minimumDeviation": zod.int().nullish(),
-  "expirationType": zod.enum(['days', 'sessions', 'never']),
+  "expirationType": zod.union([zod.null(),zod.union([zod.literal('days'),zod.literal('sessions'),zod.literal('never'),zod.literal(null)])]).optional(),
   "expiration": zod.int().nullish(),
   "upperScoreLimit": zod.int().nullish()
 })
 
-export const postCustomerJourneyResponse = zod.object({
-  "journey": zod.object({
+export const postPersonaResponse = zod.object({
+  "persona": zod.union([zod.null(),zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "steps": zod.array(zod.object({
+  "personas": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
   "title": zod.string().nullish(),
@@ -4137,26 +1097,26 @@ export const postCustomerJourneyResponse = zod.object({
   "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish(),
   "minimumParticipationScoreThreshold": zod.int().nullish(),
-  "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
+  "minimumDeviationType": zod.union([zod.null(),zod.union([zod.literal('Absolute'),zod.literal('Percent'),zod.literal(null)])]).optional(),
   "minimumDeviation": zod.int().nullish(),
-  "expirationType": zod.enum(['days', 'sessions', 'never']),
+  "expirationType": zod.union([zod.null(),zod.union([zod.literal('days'),zod.literal('sessions'),zod.literal('never'),zod.literal(null)])]).optional(),
   "expiration": zod.int().nullish(),
   "upperScoreLimit": zod.int().nullish()
-}).nullable(),
+})]),
   "validationResults": zod.object({
   "isValid": zod.boolean(),
-  "warnings": zod.array(zod.string()),
-  "errors": zod.array(zod.string())
+  "warnings": zod.array(zod.string()).nullable(),
+  "errors": zod.array(zod.string()).nullable()
 })
 })
 
 
-export const getCustomerJourneyAllResponseItem = zod.object({
+export const getPersonaAllResponseItem = zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "steps": zod.array(zod.object({
+  "personas": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
   "title": zod.string().nullish(),
@@ -4178,60 +1138,25 @@ export const getCustomerJourneyAllResponseItem = zod.object({
   "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish(),
   "minimumParticipationScoreThreshold": zod.int().nullish(),
-  "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
+  "minimumDeviationType": zod.union([zod.null(),zod.union([zod.literal('Absolute'),zod.literal('Percent'),zod.literal(null)])]).optional(),
   "minimumDeviation": zod.int().nullish(),
-  "expirationType": zod.enum(['days', 'sessions', 'never']),
+  "expirationType": zod.union([zod.null(),zod.union([zod.literal('days'),zod.literal('sessions'),zod.literal('never'),zod.literal(null)])]).optional(),
   "expiration": zod.int().nullish(),
   "upperScoreLimit": zod.int().nullish()
 })
-export const getCustomerJourneyAllResponse = zod.array(getCustomerJourneyAllResponseItem)
+export const getPersonaAllResponse = zod.array(getPersonaAllResponseItem)
 
 
-export const getCustomerJourneyDetailsQueryParams = zod.object({
+export const getPersonaDetailsQueryParams = zod.object({
   "id": zod.guid().optional()
 })
 
-export const getCustomerJourneyDetailsResponse = zod.object({
+export const getPersonaDetailsResponse = zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
   "title": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "steps": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "title": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "icon": zod.string().nullish(),
-  "iconUrl": zod.string().nullish(),
-  "color": zod.string().nullish(),
-  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
-  "createdByUmbracoUserKey": zod.guid().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedByUmbracoUserKey": zod.guid().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish()
-})),
-  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
-  "createdByUmbracoUserKey": zod.guid().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedByUmbracoUserKey": zod.guid().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish(),
-  "minimumParticipationScoreThreshold": zod.int().nullish(),
-  "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
-  "minimumDeviation": zod.int().nullish(),
-  "expirationType": zod.enum(['days', 'sessions', 'never']),
-  "expiration": zod.int().nullish(),
-  "upperScoreLimit": zod.int().nullish()
-})
-
-
-export const getCustomerJourneyEmptyResponse = zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "title": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "steps": zod.array(zod.object({
+  "personas": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
   "title": zod.string().nullish(),
@@ -4253,28 +1178,347 @@ export const getCustomerJourneyEmptyResponse = zod.object({
   "updatedByUmbracoUserKey": zod.guid().nullish(),
   "updatedByUmbracoUserName": zod.string().nullish(),
   "minimumParticipationScoreThreshold": zod.int().nullish(),
-  "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
+  "minimumDeviationType": zod.union([zod.null(),zod.union([zod.literal('Absolute'),zod.literal('Percent'),zod.literal(null)])]).optional(),
   "minimumDeviation": zod.int().nullish(),
-  "expirationType": zod.enum(['days', 'sessions', 'never']),
+  "expirationType": zod.union([zod.null(),zod.union([zod.literal('days'),zod.literal('sessions'),zod.literal('never'),zod.literal(null)])]).optional(),
   "expiration": zod.int().nullish(),
   "upperScoreLimit": zod.int().nullish()
 })
 
 
-export const postCustomerJourneyLockBody = zod.object({
+export const postPersonaUnlockBody = zod.object({
   "entityId": zod.int(),
   "visitorId": zod.int()
 })
 
-export const postCustomerJourneyLockResponse = zod.unknown()
+export const postPersonaUnlockResponse = zod.unknown()
 
 
-export const postCustomerJourneyUnlockBody = zod.object({
-  "entityId": zod.int(),
-  "visitorId": zod.int()
+export const postUmbracoEngagePagedataCollectEventBody = zod.object({
+  "category": zod.string().nullish(),
+  "action": zod.string().nullish(),
+  "label": zod.string().nullish(),
+  "value": zod.number().nullish(),
+  "nonInteraction": zod.boolean(),
+  "timestamp": zod.unknown()
 })
 
-export const postCustomerJourneyUnlockResponse = zod.unknown()
+export const postUmbracoEngagePagedataCollectEventResponse = zod.void()
+
+
+export const postUmbracoEngagePagedataCollectQueryParams = zod.object({
+  "version": zod.int().optional(),
+  "pageviewGuid": zod.guid().optional()
+})
+
+export const postUmbracoEngagePagedataCollectResponse = zod.void()
+
+
+export const getUmbracoEngagePagedataPingResponse = zod.void()
+
+
+export const postUmbracoEngagePagedataPingResponse = zod.void()
+
+
+export const getMainSwitchResponse = zod.object({
+  "on": zod.boolean()
+})
+
+
+export const postMainSwitchTurnOffResponse = zod.unknown()
+
+
+export const postMainSwitchTurnOnResponse = zod.unknown()
+
+
+export const postHeatmapsGenerateScrollHeatmapBody = zod.object({
+  "from": zod.iso.datetime({"offset":true}).nullish(),
+  "to": zod.iso.datetime({"offset":true}).nullish(),
+  "deviceTypes": zod.array(zod.int()).nullish(),
+  "unique": zod.guid(),
+  "culture": zod.string().nullish(),
+  "segment": zod.string().nullish(),
+  "borderLines": zod.array(zod.number()).nullish()
+})
+
+export const postHeatmapsGenerateScrollHeatmapResponse = zod.object({
+  "visitorPercentagesPerPixel": zod.array(zod.object({
+  "visitorPercentage": zod.number(),
+  "pixelCount": zod.int()
+})),
+  "borderLines": zod.array(zod.object({
+  "pixels": zod.int(),
+  "seenByVisitorPercentage": zod.number()
+}))
+})
+
+
+export const getHeatmapsVariantsQueryParams = zod.object({
+  "unique": zod.guid().optional(),
+  "culture": zod.string().optional()
+})
+
+export const getHeatmapsVariantsResponseItem = zod.object({
+  "name": zod.string().nullish(),
+  "segment": zod.string().nullish()
+})
+export const getHeatmapsVariantsResponse = zod.array(getHeatmapsVariantsResponseItem)
+
+
+export const getGoalsAllResponseItem = zod.object({
+  "id": zod.int(),
+  "key": zod.guid(),
+  "name": zod.string().nullish(),
+  "value": zod.number(),
+  "goalTypeId": zod.guid(),
+  "goalTypeConfig": zod.string(),
+  "isMain": zod.boolean(),
+  "isInverted": zod.boolean(),
+  "isActive": zod.boolean(),
+  "isInvalid": zod.boolean(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdBy": zod.guid(),
+  "updated": zod.iso.datetime({"offset":true}).nullish(),
+  "updatedBy": zod.guid().nullish()
+})
+export const getGoalsAllResponse = zod.array(getGoalsAllResponseItem)
+
+
+export const getGoalsMainResponseItem = zod.object({
+  "id": zod.int(),
+  "key": zod.guid(),
+  "name": zod.string().nullish(),
+  "value": zod.number(),
+  "goalTypeId": zod.guid(),
+  "goalTypeConfig": zod.string(),
+  "isMain": zod.boolean(),
+  "isInverted": zod.boolean(),
+  "isActive": zod.boolean(),
+  "isInvalid": zod.boolean(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdBy": zod.guid(),
+  "updated": zod.iso.datetime({"offset":true}).nullish(),
+  "updatedBy": zod.guid().nullish()
+})
+export const getGoalsMainResponse = zod.array(getGoalsMainResponseItem)
+
+
+export const getGoalsTreeRootResponseItem = zod.object({
+  "name": zod.string(),
+  "unique": zod.guid(),
+  "description": zod.string().nullish()
+})
+export const getGoalsTreeRootResponse = zod.array(getGoalsTreeRootResponseItem)
+
+
+export const getGoalsItemQueryParams = zod.object({
+  "id": zod.array(zod.guid()).optional()
+})
+
+export const getGoalsItemResponseItem = zod.object({
+  "name": zod.string(),
+  "unique": zod.guid(),
+  "description": zod.string().nullish()
+})
+export const getGoalsItemResponse = zod.array(getGoalsItemResponseItem)
+
+
+export const postGoalAllBody = zod.object({
+  "page": zod.int(),
+  "pageSize": zod.int(),
+  "filterBy": zod.string().nullish(),
+  "orderBy": zod.string().nullish(),
+  "includeInvalid": zod.boolean().nullish()
+})
+
+export const postGoalAllResponse = zod.object({
+  "currentPage": zod.int(),
+  "totalPages": zod.int(),
+  "totalRowCount": zod.int(),
+  "itemsPerPage": zod.int(),
+  "rows": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "typeText": zod.string().nullish(),
+  "completionCount": zod.int(),
+  "isMain": zod.boolean(),
+  "isActive": zod.boolean(),
+  "isInverted": zod.boolean(),
+  "isImplicitScoringEnabled": zod.boolean()
+})),
+  "fromRow": zod.int(),
+  "toRow": zod.int()
+})
+
+
+export const getGoalAllTypesResponseItem = zod.object({
+  "configurationEditorAlias": zod.string().nullable(),
+  "id": zod.guid(),
+  "name": zod.string().nullable()
+})
+export const getGoalAllTypesResponse = zod.array(getGoalAllTypesResponseItem)
+
+
+export const getGoalDetailsQueryParams = zod.object({
+  "id": zod.guid().optional()
+})
+
+export const getGoalDetailsResponse = zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullable(),
+  "value": zod.number(),
+  "goalTypeId": zod.guid(),
+  "goalTypeConfig": zod.string().nullable(),
+  "isMain": zod.boolean(),
+  "isInverted": zod.boolean(),
+  "isActive": zod.boolean(),
+  "isInvalid": zod.boolean(),
+  "isImplicitScoringEnabled": zod.boolean(),
+  "implicitPersonaScoring": zod.array(zod.object({
+  "personaId": zod.int(),
+  "scoreType": zod.enum(['UNDEFINED', 'Content', 'Referral', 'Searchterm', 'Custom', 'Campaign', 'GoalCompletion']),
+  "entityId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeId": zod.int(),
+  "culture": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "updated": zod.iso.datetime({"offset":true}).nullish(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})).nullish(),
+  "implicitCustomerJourneyStepScoring": zod.array(zod.object({
+  "customerJourneyStepId": zod.int(),
+  "scoreType": zod.enum(['UNDEFINED', 'Content', 'Referral', 'Searchterm', 'Custom', 'Campaign', 'GoalCompletion']),
+  "entityId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeId": zod.int(),
+  "culture": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "updated": zod.iso.datetime({"offset":true}).nullish(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})).nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "updated": zod.iso.datetime({"offset":true}).nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish()
+})
+
+
+export const postGoalBody = zod.object({
+  "id": zod.int().nullish(),
+  "unique": zod.guid(),
+  "name": zod.string().nullable(),
+  "value": zod.number().nullable(),
+  "goalTypeId": zod.guid().nullable(),
+  "goalTypeConfig": zod.string().nullable(),
+  "isMain": zod.boolean().nullable(),
+  "isInverted": zod.boolean().nullable(),
+  "isActive": zod.boolean().nullable(),
+  "isInvalid": zod.boolean().nullable(),
+  "isImplicitScoringEnabled": zod.boolean().nullable(),
+  "implicitPersonaScoring": zod.array(zod.object({
+  "personaId": zod.int(),
+  "scoreType": zod.enum(['UNDEFINED', 'Content', 'Referral', 'Searchterm', 'Custom', 'Campaign', 'GoalCompletion']),
+  "entityId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeId": zod.int(),
+  "culture": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "updated": zod.iso.datetime({"offset":true}).nullish(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})),
+  "implicitCustomerJourneyStepScoring": zod.array(zod.object({
+  "customerJourneyStepId": zod.int(),
+  "scoreType": zod.enum(['UNDEFINED', 'Content', 'Referral', 'Searchterm', 'Custom', 'Campaign', 'GoalCompletion']),
+  "entityId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeId": zod.int(),
+  "culture": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "updated": zod.iso.datetime({"offset":true}).nullish(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+}))
+})
+
+export const postGoalResponse = zod.guid()
+
+
+export const getPermissionsDocumentTypeAllResponseItem = zod.object({
+  "id": zod.int(),
+  "contentTypeId": zod.int(),
+  "contentTypeName": zod.string().nullish(),
+  "showAnalytics": zod.boolean(),
+  "allowAbTesting": zod.boolean(),
+  "allowScorePersonalization": zod.boolean(),
+  "allowApplyPersonalization": zod.boolean(),
+  "updated": zod.iso.datetime({"offset":true}),
+  "updatedByUmbracoUserKey": zod.guid(),
+  "updatedByUmbracoUser": zod.string().nullish()
+})
+export const getPermissionsDocumentTypeAllResponse = zod.array(getPermissionsDocumentTypeAllResponseItem)
+
+
+export const getPermissionsDocumentTypeQueryParams = zod.object({
+  "contentTypeId": zod.int().optional()
+})
+
+export const getPermissionsDocumentTypeResponse = zod.object({
+  "id": zod.int(),
+  "contentTypeId": zod.int(),
+  "contentTypeName": zod.string().nullish(),
+  "showAnalytics": zod.boolean(),
+  "allowAbTesting": zod.boolean(),
+  "allowScorePersonalization": zod.boolean(),
+  "allowApplyPersonalization": zod.boolean(),
+  "updated": zod.iso.datetime({"offset":true}),
+  "updatedByUmbracoUserKey": zod.guid(),
+  "updatedByUmbracoUser": zod.string().nullish()
+})
+
+
+export const postPermissionsDocumentTypeBodyItem = zod.object({
+  "id": zod.int(),
+  "contentTypeId": zod.int(),
+  "contentTypeName": zod.string().nullish(),
+  "showAnalytics": zod.boolean(),
+  "allowAbTesting": zod.boolean(),
+  "allowScorePersonalization": zod.boolean(),
+  "allowApplyPersonalization": zod.boolean(),
+  "updated": zod.iso.datetime({"offset":true}),
+  "updatedByUmbracoUserKey": zod.guid(),
+  "updatedByUmbracoUser": zod.string().nullish()
+})
+export const postPermissionsDocumentTypeBody = zod.array(postPermissionsDocumentTypeBodyItem)
+
+export const postPermissionsDocumentTypeResponse = zod.unknown()
+
+
+export const getDataGenerationLogsQuerySkipDefault = 0;
+export const getDataGenerationLogsQueryTakeDefault = 100;
+
+export const getDataGenerationLogsQueryParams = zod.object({
+  "skip": zod.int().optional(),
+  "take": zod.int().default(getDataGenerationLogsQueryTakeDefault)
+})
+
+export const getDataGenerationLogsResponse = zod.object({
+  "items": zod.array(zod.object({
+  "started": zod.iso.datetime({"offset":true}),
+  "finished": zod.iso.datetime({"offset":true}).nullish(),
+  "failed": zod.boolean(),
+  "errorMessage": zod.string().nullish()
+})),
+  "total": zod.int()
+})
 
 
 export const getDataCleanupLastRunResponse = zod.object({
@@ -4283,11 +1527,15 @@ export const getDataCleanupLastRunResponse = zod.object({
   "totalDurationMs": zod.int(),
   "failed": zod.boolean(),
   "errorMessage": zod.string().nullish(),
-  "anonymizedVisitors": zod.int(),
-  "deletedPageviews": zod.int(),
-  "deletedVisitors": zod.int(),
+  "anonymizedVisitors": zod.int().nullish(),
+  "deletedPageviews": zod.int().nullish(),
+  "deletedVisitors": zod.int().nullish(),
+  "deletedControlGroups": zod.int().nullish(),
+  "deletedRawRecords": zod.int().nullish(),
   "anonymizeAfterDays": zod.int(),
   "deleteAfterDays": zod.int(),
+  "deleteControlGroupDataAfterDays": zod.int(),
+  "deleteRawDataAfterDays": zod.int(),
   "databaseSchemaComplete": zod.boolean()
 })
 
@@ -4345,1440 +1593,4008 @@ export const getDataCleanupRunsResponse = zod.object({
 })
 
 
-export const getDataGenerationLogsQuerySkipDefault = 0;
-export const getDataGenerationLogsQueryTakeDefault = 100;
-
-export const getDataGenerationLogsQueryParams = zod.object({
-  "skip": zod.int().optional(),
-  "take": zod.int().default(getDataGenerationLogsQueryTakeDefault)
+export const postCustomerJourneyLockBody = zod.object({
+  "entityId": zod.int(),
+  "visitorId": zod.int()
 })
 
-export const getDataGenerationLogsResponse = zod.object({
-  "items": zod.array(zod.object({
-  "started": zod.iso.datetime({"offset":true}),
-  "finished": zod.iso.datetime({"offset":true}).nullish(),
-  "failed": zod.boolean(),
-  "errorMessage": zod.string().nullish()
+export const postCustomerJourneyLockResponse = zod.unknown()
+
+
+export const getCustomerJourneyEmptyResponse = zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "title": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "steps": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "title": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "icon": zod.string().nullish(),
+  "iconUrl": zod.string().nullish(),
+  "color": zod.string().nullish(),
+  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish()
 })),
-  "total": zod.int()
+  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish(),
+  "minimumParticipationScoreThreshold": zod.int().nullish(),
+  "minimumDeviationType": zod.union([zod.null(),zod.union([zod.literal('Absolute'),zod.literal('Percent'),zod.literal(null)])]).optional(),
+  "minimumDeviation": zod.int().nullish(),
+  "expirationType": zod.union([zod.null(),zod.union([zod.literal('days'),zod.literal('sessions'),zod.literal('never'),zod.literal(null)])]).optional(),
+  "expiration": zod.int().nullish(),
+  "upperScoreLimit": zod.int().nullish()
 })
 
 
-export const getPermissionsDocumentTypeQueryParams = zod.object({
-  "contentTypeId": zod.int().optional()
-})
-
-export const getPermissionsDocumentTypeResponse = zod.object({
-  "id": zod.int(),
-  "contentTypeId": zod.int(),
-  "contentTypeName": zod.string().nullish(),
-  "showAnalytics": zod.boolean(),
-  "allowAbTesting": zod.boolean(),
-  "allowScorePersonalization": zod.boolean(),
-  "allowApplyPersonalization": zod.boolean(),
-  "updated": zod.iso.datetime({"offset":true}),
-  "updatedByUmbracoUserKey": zod.guid(),
-  "updatedByUmbracoUser": zod.string().nullish()
-})
-
-
-export const postPermissionsDocumentTypeBodyItem = zod.object({
-  "id": zod.int(),
-  "contentTypeId": zod.int(),
-  "contentTypeName": zod.string().nullish(),
-  "showAnalytics": zod.boolean(),
-  "allowAbTesting": zod.boolean(),
-  "allowScorePersonalization": zod.boolean(),
-  "allowApplyPersonalization": zod.boolean(),
-  "updated": zod.iso.datetime({"offset":true}),
-  "updatedByUmbracoUserKey": zod.guid(),
-  "updatedByUmbracoUser": zod.string().nullish()
-})
-export const postPermissionsDocumentTypeBody = zod.array(postPermissionsDocumentTypeBodyItem)
-
-export const postPermissionsDocumentTypeResponse = zod.unknown()
-
-
-export const getPermissionsDocumentTypeAllResponseItem = zod.object({
-  "id": zod.int(),
-  "contentTypeId": zod.int(),
-  "contentTypeName": zod.string().nullish(),
-  "showAnalytics": zod.boolean(),
-  "allowAbTesting": zod.boolean(),
-  "allowScorePersonalization": zod.boolean(),
-  "allowApplyPersonalization": zod.boolean(),
-  "updated": zod.iso.datetime({"offset":true}),
-  "updatedByUmbracoUserKey": zod.guid(),
-  "updatedByUmbracoUser": zod.string().nullish()
-})
-export const getPermissionsDocumentTypeAllResponse = zod.array(getPermissionsDocumentTypeAllResponseItem)
-
-
-
-
-
-
-export const postGoalBody = zod.object({
-  "id": zod.int().nullish(),
-  "unique": zod.guid(),
-  "name": zod.string().min(1),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string().min(1),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "isImplicitScoringEnabled": zod.boolean(),
-  "implicitPersonaScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeId": zod.int(),
-  "culture": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "personaId": zod.int(),
-  "scoreType": zod.enum(['UNDEFINED', 'Content', 'Referral', 'Searchterm', 'Custom', 'Campaign', 'GoalCompletion']),
-  "entityId": zod.int()
-})),
-  "implicitCustomerJourneyStepScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeId": zod.int(),
-  "culture": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "customerJourneyStepId": zod.int(),
-  "scoreType": zod.enum(['UNDEFINED', 'Content', 'Referral', 'Searchterm', 'Custom', 'Campaign', 'GoalCompletion']),
-  "entityId": zod.int()
-}))
-})
-
-export const postGoalResponse = zod.guid()
-
-
-export const postGoalAllBody = zod.object({
-  "page": zod.int(),
-  "pageSize": zod.int(),
-  "filterBy": zod.string().nullish(),
-  "orderBy": zod.string().nullish(),
-  "includeInvalid": zod.boolean().nullish()
-})
-
-export const postGoalAllResponse = zod.object({
-  "currentPage": zod.int(),
-  "totalPages": zod.int(),
-  "totalRowCount": zod.int(),
-  "itemsPerPage": zod.int(),
-  "rows": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "typeText": zod.string().nullish(),
-  "completionCount": zod.int(),
-  "isMain": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isImplicitScoringEnabled": zod.boolean()
-})),
-  "fromRow": zod.int(),
-  "toRow": zod.int()
-})
-
-
-export const getGoalAllTypesResponseItem = zod.union([zod.object({
-  "configurationEditorAlias": zod.string(),
-  "id": zod.guid(),
-  "name": zod.string()
-}),zod.object({
-  "configurationEditorAlias": zod.string(),
-  "id": zod.guid(),
-  "name": zod.string()
-}),zod.object({
-  "configurationEditorAlias": zod.string(),
-  "id": zod.guid(),
-  "name": zod.string()
-})])
-export const getGoalAllTypesResponse = zod.array(getGoalAllTypesResponseItem)
-
-
-export const getGoalDetailsQueryParams = zod.object({
+export const deleteCustomerJourneyQueryParams = zod.object({
   "id": zod.guid().optional()
 })
 
-export const getGoalDetailsResponse = zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "name": zod.string(),
-  "value": zod.number(),
-  "isImplicitScoringEnabled": zod.boolean(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "implicitPersonaScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeId": zod.int(),
-  "culture": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "personaId": zod.int(),
-  "scoreType": zod.enum(['UNDEFINED', 'Content', 'Referral', 'Searchterm', 'Custom', 'Campaign', 'GoalCompletion']),
-  "entityId": zod.int()
-})).nullish(),
-  "implicitCustomerJourneyStepScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "nodeId": zod.int(),
-  "culture": zod.string().nullish(),
-  "created": zod.iso.datetime({"offset":true}),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "customerJourneyStepId": zod.int(),
-  "scoreType": zod.enum(['UNDEFINED', 'Content', 'Referral', 'Searchterm', 'Custom', 'Campaign', 'GoalCompletion']),
-  "entityId": zod.int()
-})).nullish()
+export const deleteCustomerJourneyResponse = zod.object({
+  "isValid": zod.boolean(),
+  "warnings": zod.array(zod.string()).nullable(),
+  "errors": zod.array(zod.string()).nullable()
 })
 
 
-export const getGoalsAllResponseItem = zod.object({
+export const postCustomerJourneyBody = zod.object({
   "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-})
-export const getGoalsAllResponse = zod.array(getGoalsAllResponseItem)
-
-
-export const getGoalsMainResponseItem = zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-})
-export const getGoalsMainResponse = zod.array(getGoalsMainResponseItem)
-
-
-export const postHeatmapsGenerateScrollHeatmapBody = zod.object({
-  "from": zod.iso.datetime({"offset":true}).nullish(),
-  "to": zod.iso.datetime({"offset":true}).nullish(),
-  "deviceTypes": zod.array(zod.int()).nullish(),
   "unique": zod.guid(),
-  "culture": zod.string().nullish(),
-  "segment": zod.string().nullish(),
-  "borderLines": zod.array(zod.number()).nullish()
-})
-
-export const postHeatmapsGenerateScrollHeatmapResponse = zod.object({
-  "visitorPercentagesPerPixel": zod.array(zod.object({
-  "visitorPercentage": zod.number(),
-  "pixelCount": zod.int()
+  "title": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "steps": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "title": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "icon": zod.string().nullish(),
+  "iconUrl": zod.string().nullish(),
+  "color": zod.string().nullish(),
+  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish()
 })),
-  "borderLines": zod.array(zod.object({
-  "pixels": zod.int(),
-  "seenByVisitorPercentage": zod.number()
+  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish(),
+  "minimumParticipationScoreThreshold": zod.int().nullish(),
+  "minimumDeviationType": zod.union([zod.null(),zod.union([zod.literal('Absolute'),zod.literal('Percent'),zod.literal(null)])]).optional(),
+  "minimumDeviation": zod.int().nullish(),
+  "expirationType": zod.union([zod.null(),zod.union([zod.literal('days'),zod.literal('sessions'),zod.literal('never'),zod.literal(null)])]).optional(),
+  "expiration": zod.int().nullish(),
+  "upperScoreLimit": zod.int().nullish()
+})
+
+export const postCustomerJourneyResponse = zod.object({
+  "journey": zod.union([zod.null(),zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "title": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "steps": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "title": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "icon": zod.string().nullish(),
+  "iconUrl": zod.string().nullish(),
+  "color": zod.string().nullish(),
+  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish()
+})),
+  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish(),
+  "minimumParticipationScoreThreshold": zod.int().nullish(),
+  "minimumDeviationType": zod.union([zod.null(),zod.union([zod.literal('Absolute'),zod.literal('Percent'),zod.literal(null)])]).optional(),
+  "minimumDeviation": zod.int().nullish(),
+  "expirationType": zod.union([zod.null(),zod.union([zod.literal('days'),zod.literal('sessions'),zod.literal('never'),zod.literal(null)])]).optional(),
+  "expiration": zod.int().nullish(),
+  "upperScoreLimit": zod.int().nullish()
+})]),
+  "validationResults": zod.object({
+  "isValid": zod.boolean(),
+  "warnings": zod.array(zod.string()).nullable(),
+  "errors": zod.array(zod.string()).nullable()
+})
+})
+
+
+export const getCustomerJourneyAllResponseItem = zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "title": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "steps": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "title": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "icon": zod.string().nullish(),
+  "iconUrl": zod.string().nullish(),
+  "color": zod.string().nullish(),
+  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish()
+})),
+  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish(),
+  "minimumParticipationScoreThreshold": zod.int().nullish(),
+  "minimumDeviationType": zod.union([zod.null(),zod.union([zod.literal('Absolute'),zod.literal('Percent'),zod.literal(null)])]).optional(),
+  "minimumDeviation": zod.int().nullish(),
+  "expirationType": zod.union([zod.null(),zod.union([zod.literal('days'),zod.literal('sessions'),zod.literal('never'),zod.literal(null)])]).optional(),
+  "expiration": zod.int().nullish(),
+  "upperScoreLimit": zod.int().nullish()
+})
+export const getCustomerJourneyAllResponse = zod.array(getCustomerJourneyAllResponseItem)
+
+
+export const getCustomerJourneyDetailsQueryParams = zod.object({
+  "id": zod.guid().optional()
+})
+
+export const getCustomerJourneyDetailsResponse = zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "title": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "steps": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "title": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "icon": zod.string().nullish(),
+  "iconUrl": zod.string().nullish(),
+  "color": zod.string().nullish(),
+  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish()
+})),
+  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish(),
+  "minimumParticipationScoreThreshold": zod.int().nullish(),
+  "minimumDeviationType": zod.union([zod.null(),zod.union([zod.literal('Absolute'),zod.literal('Percent'),zod.literal(null)])]).optional(),
+  "minimumDeviation": zod.int().nullish(),
+  "expirationType": zod.union([zod.null(),zod.union([zod.literal('days'),zod.literal('sessions'),zod.literal('never'),zod.literal(null)])]).optional(),
+  "expiration": zod.int().nullish(),
+  "upperScoreLimit": zod.int().nullish()
+})
+
+
+export const postCustomerJourneyUnlockBody = zod.object({
+  "entityId": zod.int(),
+  "visitorId": zod.int()
+})
+
+export const postCustomerJourneyUnlockResponse = zod.unknown()
+
+
+export const getCulturesQueryParams = zod.object({
+  "id": zod.int().optional()
+})
+
+export const getCulturesResponseItem = zod.string()
+export const getCulturesResponse = zod.array(getCulturesResponseItem)
+
+
+export const getContentTypesAllResponseItem = zod.object({
+  "id": zod.int(),
+  "alias": zod.string().nullish(),
+  "name": zod.string().nullish()
+})
+export const getContentTypesAllResponse = zod.array(getContentTypesAllResponseItem)
+
+
+export const getContentTypesSegmentedPropertyQueryParams = zod.object({
+  "unique": zod.guid().optional()
+})
+
+export const getContentTypesSegmentedPropertyResponse = zod.object({
+  "hasSegmentedProperty": zod.boolean(),
+  "cultureSharedSegmentedProperties": zod.array(zod.string())
+})
+
+
+export const deleteContentScoringJourneyQueryParams = zod.object({
+  "id": zod.int().optional()
+})
+
+export const deleteContentScoringJourneyResponse = zod.unknown()
+
+
+export const deleteContentScoringPersonaQueryParams = zod.object({
+  "id": zod.int().optional()
+})
+
+export const deleteContentScoringPersonaResponse = zod.unknown()
+
+
+export const getContentScoringExportCustomerJourneyResponse = zod.object({
+  "fileStream": zod.instanceof(Blob),
+  "contentType": zod.string().nullable(),
+  "fileDownloadName": zod.string().nullable(),
+  "lastModified": zod.iso.datetime({"offset":true}).nullish(),
+  "entityTag": zod.union([zod.null(),zod.object({
+  "tag": zod.object({
+  "buffer": zod.string().nullish(),
+  "offset": zod.int(),
+  "length": zod.int(),
+  "value": zod.string().nullish(),
+  "hasValue": zod.boolean()
+}),
+  "isWeak": zod.boolean()
+})]).optional(),
+  "enableRangeProcessing": zod.boolean()
+})
+
+
+export const getContentScoringExportPersonaResponse = zod.object({
+  "fileStream": zod.instanceof(Blob),
+  "contentType": zod.string().nullable(),
+  "fileDownloadName": zod.string().nullable(),
+  "lastModified": zod.iso.datetime({"offset":true}).nullish(),
+  "entityTag": zod.union([zod.null(),zod.object({
+  "tag": zod.object({
+  "buffer": zod.string().nullish(),
+  "offset": zod.int(),
+  "length": zod.int(),
+  "value": zod.string().nullish(),
+  "hasValue": zod.boolean()
+}),
+  "isWeak": zod.boolean()
+})]).optional(),
+  "enableRangeProcessing": zod.boolean()
+})
+
+
+export const getContentScoringAllQueryParams = zod.object({
+  "unique": zod.guid().optional()
+})
+
+export const getContentScoringAllResponse = zod.object({
+  "items": zod.array(zod.object({
+  "id": zod.int(),
+  "entityId": zod.int(),
+  "documentUnique": zod.guid(),
+  "culture": zod.string().nullish(),
+  "score": zod.int(),
+  "isLocked": zod.boolean(),
+  "type": zod.enum(['None', 'Persona', 'Journey'])
+})),
+  "unique": zod.guid()
+})
+
+
+export const postContentScoringSaveBodyItem = zod.object({
+  "id": zod.int(),
+  "entityId": zod.int(),
+  "documentUnique": zod.guid(),
+  "culture": zod.string().nullish(),
+  "score": zod.int(),
+  "isLocked": zod.boolean(),
+  "type": zod.enum(['None', 'Persona', 'Journey'])
+})
+export const postContentScoringSaveBody = zod.array(postContentScoringSaveBodyItem)
+
+export const postContentScoringSaveResponse = zod.unknown()
+
+
+export const getConfigurationResponseAnalyticsDataCleanupStartupDelayRegExp = new RegExp('^-?(\\d+\\.)?\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,7})?$');
+export const getConfigurationResponseAnalyticsDataCleanupIntervalRegExp = new RegExp('^-?(\\d+\\.)?\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,7})?$');
+export const getConfigurationResponseReportingDataGenerationTimeRegExp = new RegExp('^-?(\\d+\\.)?\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,7})?$');
+export const getConfigurationResponseReportingReportingTimeZoneBaseUtcOffsetRegExp = new RegExp('^-?(\\d+\\.)?\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,7})?$');
+
+
+export const getConfigurationResponse = zod.object({
+  "settings": zod.object({
+  "databaseConnectionStringName": zod.string().nullable(),
+  "enabled": zod.boolean(),
+  "useLegacySegmentNames": zod.boolean(),
+  "suspiciousActivity": zod.object({
+  "pageviewThreshold": zod.int()
+})
+}),
+  "analytics": zod.object({
+  "visitorCookie": zod.object({
+  "expirationInDays": zod.int(),
+  "cookieName": zod.string().nullable(),
+  "legacyCookieName": zod.string().nullable(),
+  "includeSubdomains": zod.boolean()
+}),
+  "dataCollection": zod.object({
+  "anonymizeIPAddress": zod.boolean(),
+  "requireAnalyticsPermissionForMemberTracking": zod.boolean(),
+  "flushRateInRecords": zod.int(),
+  "flushIntervalInSeconds": zod.int(),
+  "regexTimeoutInMilliseconds": zod.int(),
+  "internalSiteSearch": zod.object({
+  "automaticSearchTracking": zod.boolean(),
+  "searchTermParameters": zod.array(zod.string()).nullable(),
+  "searchBoxParameters": zod.array(zod.string()).nullable(),
+  "categoryParameters": zod.array(zod.string()).nullable()
+})
+}),
+  "dataStorage": zod.object({
+  "anonymizeAnalyticsDataAfterDays": zod.int(),
+  "deleteAnalyticsDataAfterDays": zod.int(),
+  "deleteControlGroupDataAfterDays": zod.int(),
+  "deleteRawDataAfterDays": zod.int()
+}),
+  "dataProcessing": zod.object({
+  "intervalInSeconds": zod.int(),
+  "sessionLengthInMinutes": zod.int(),
+  "isProcessingServer": zod.boolean()
+}),
+  "dataCleanup": zod.object({
+  "enabled": zod.boolean(),
+  "firstRunTime": zod.string().nullable(),
+  "startupDelay": zod.string().regex(getConfigurationResponseAnalyticsDataCleanupStartupDelayRegExp),
+  "interval": zod.string().regex(getConfigurationResponseAnalyticsDataCleanupIntervalRegExp),
+  "commandTimeout": zod.int(),
+  "startAfterSeconds": zod.int(),
+  "intervalInSeconds": zod.int(),
+  "numberOfRows": zod.int()
+})
+}),
+  "abTesting": zod.object({
+  "requiredVisitorPercentageBeforeShowingAdvice": zod.int(),
+  "minimumPercentageMacroGoalWarning": zod.int()
+}),
+  "profiles": zod.object({
+  "potential": zod.object({
+  "activeThresholdInDays": zod.int(),
+  "engagedThresholdInSeconds": zod.int(),
+  "engagedThresholdNumberOfSessions": zod.int()
+}),
+  "identification": zod.object({
+  "name": zod.string().nullable(),
+  "abbreviation": zod.string().nullable()
+})
+}),
+  "reporting": zod.object({
+  "dataGenerationEnabled": zod.boolean(),
+  "dataGenerationTime": zod.string().regex(getConfigurationResponseReportingDataGenerationTimeRegExp).nullish(),
+  "timezone": zod.string().nullish(),
+  "reportingTimeZone": zod.object({
+  "id": zod.string().nullable(),
+  "hasIanaId": zod.boolean(),
+  "displayName": zod.string().nullable(),
+  "standardName": zod.string().nullable(),
+  "daylightName": zod.string().nullable(),
+  "baseUtcOffset": zod.string().regex(getConfigurationResponseReportingReportingTimeZoneBaseUtcOffsetRegExp),
+  "supportsDaylightSavingTime": zod.boolean()
+})
+}),
+  "deliveryApi": zod.object({
+  "disableVisitorCookie": zod.boolean(),
+  "segmentation": zod.object({
+  "contentByQuery": zod.boolean(),
+  "contentById": zod.boolean(),
+  "contentByIds": zod.boolean(),
+  "contentByPath": zod.boolean(),
+  "anySegmentationEnabled": zod.boolean()
+})
+}),
+  "backoffice": zod.object({
+  "personaGroupColorPicker": zod.guid(),
+  "personaGroupMediaPicker": zod.guid(),
+  "customerJourneyColorPicker": zod.guid(),
+  "customerJourneyIconPicker": zod.guid()
+}),
+  "cockpit": zod.object({
+  "enableInjection": zod.boolean(),
+  "authentication": zod.object({
+  "tokenLifetimeSeconds": zod.int(),
+  "sessionLifetimeMinutes": zod.int(),
+  "requireHttps": zod.boolean(),
+  "cleanupIntervalMinutes": zod.int(),
+  "tokenRetentionBufferMinutes": zod.int(),
+  "sessionRetentionBufferMinutes": zod.int(),
+  "sessionCookieSameSite": zod.string().nullable()
+})
+}),
+  "segmentation": zod.object({
+  "excludedPropertyAliases": zod.array(zod.string()).nullable()
+})
+})
+
+
+export const postCockpitAuthGenerateTokenResponse = zod.object({
+  "token": zod.string(),
+  "expires": zod.iso.datetime({"offset":true})
+})
+
+
+export const getCockpitAuthDomainsResponse = zod.object({
+  "domains": zod.array(zod.object({
+  "name": zod.string(),
+  "rootContentId": zod.int().nullish(),
+  "languageIsoCode": zod.string().nullish()
 }))
 })
 
 
-export const getHeatmapsVariantsQueryParams = zod.object({
-  "unique": zod.guid().optional(),
+export const postCockpitDeleteCookieResponse = zod.unknown()
+
+
+export const getCockpitGetUmbracoPageInfoQueryParams = zod.object({
+  "pageId": zod.guid().optional(),
   "culture": zod.string().optional()
 })
 
-export const getHeatmapsVariantsResponseItem = zod.object({
-  "name": zod.string().nullish(),
-  "queryString": zod.string().nullish()
-})
-export const getHeatmapsVariantsResponse = zod.array(getHeatmapsVariantsResponseItem)
-
-
-export const getMainSwitchResponse = zod.object({
-  "on": zod.boolean()
-})
-
-
-export const postMainSwitchTurnOffResponse = zod.unknown()
-
-
-export const postMainSwitchTurnOnResponse = zod.unknown()
-
-
-export const getPackageResponse = zod.object({
-  "tierName": zod.string(),
-  "domains": zod.array(zod.string()),
-  "featureAnalyticsEnabled": zod.boolean(),
-  "featureAbTestingEnabled": zod.boolean(),
-  "featurePersonalizationEnabled": zod.boolean(),
-  "expirationDate": zod.iso.datetime({"offset":true}).nullish(),
-  "isPackageEnabled": zod.boolean(),
-  "isTrialMode": zod.boolean(),
-  "licenseStatus": zod.enum(['Undefined', 'Valid', 'Expired', 'Invalid', 'LimitReached']),
-  "expiresSoon": zod.boolean(),
-  "isNearLimit": zod.boolean(),
-  "monthlyPageviewLimit": zod.int(),
-  "currentPageviewsThisMonth": zod.int(),
-  "version": zod.string().nullish(),
-  "whitelistedDomainRegexes": zod.array(zod.string())
+export const getCockpitGetUmbracoPageInfoResponse = zod.object({
+  "status": zod.string().nullish(),
+  "documentType": zod.string().nullish(),
+  "template": zod.string().nullish(),
+  "id": zod.int(),
+  "url": zod.string().nullish(),
+  "editor": zod.union([zod.null(),zod.object({
+  "createdBy": zod.string().nullish(),
+  "createdDate": zod.iso.datetime({"offset":true}),
+  "editedBy": zod.string().nullish(),
+  "editedDate": zod.iso.datetime({"offset":true}).nullish()
+})]).optional()
 })
 
 
-export const postUmbracoEngagePagedataCollectQueryParams = zod.object({
-  "version": zod.int().optional(),
-  "pageviewGuid": zod.guid().optional()
+export const getCampaignsQueryParams = zod.object({
+  "visitorId": zod.int().optional()
 })
 
-export const postUmbracoEngagePagedataCollectResponse = zod.void()
-
-
-export const postUmbracoEngagePagedataCollectEventBody = zod.object({
-  "category": zod.string().nullish(),
-  "action": zod.string().nullish(),
-  "label": zod.string().nullish(),
-  "value": zod.number().nullish(),
-  "nonInteraction": zod.boolean(),
-  "timestamp": zod.iso.datetime({"offset":true})
+export const getCampaignsResponseItem = zod.object({
+  "timestamp": zod.iso.datetime({"offset":true}),
+  "utmCampaign": zod.string().nullish(),
+  "utmSource": zod.string().nullish(),
+  "utmMedium": zod.string().nullish()
 })
-
-export const postUmbracoEngagePagedataCollectEventResponse = zod.void()
-
-
-export const getUmbracoEngagePagedataPingResponse = zod.void()
+export const getCampaignsResponse = zod.array(getCampaignsResponseItem)
 
 
-export const postUmbracoEngagePagedataPingResponse = zod.void()
-
-
-export const deletePersonaQueryParams = zod.object({
+export const deleteCampaignGroupQueryParams = zod.object({
   "id": zod.guid().optional()
 })
 
-export const deletePersonaResponse = zod.object({
+export const deleteCampaignGroupResponse = zod.unknown()
+
+
+export const getCampaignGroupQueryParams = zod.object({
+  "id": zod.guid().optional()
+})
+
+export const getCampaignGroupResponse = zod.object({
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "invalid": zod.boolean(),
+  "campaigns": zod.array(zod.object({
+  "unique": zod.guid().nullish(),
+  "campaignGroupId": zod.int(),
+  "utmSource": zod.string().nullish(),
+  "utmMedium": zod.string().nullish(),
+  "utmCampaign": zod.string().nullish(),
+  "utmTerm": zod.string().nullish(),
+  "utmContent": zod.string().nullish(),
+  "utmSourcePlatform": zod.string().nullish(),
+  "utmCreativeFormat": zod.string().nullish(),
+  "utmMarketingTactic": zod.string().nullish(),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})),
+  "customerJourneyScoring": zod.array(zod.object({
+  "groupId": zod.int(),
+  "customerJourneyStepId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})),
+  "personaScoring": zod.array(zod.object({
+  "groupId": zod.int(),
+  "personaId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+
+export const postCampaignGroupBody = zod.object({
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "invalid": zod.boolean(),
+  "campaigns": zod.array(zod.object({
+  "unique": zod.guid().nullish(),
+  "campaignGroupId": zod.int(),
+  "utmSource": zod.string().nullish(),
+  "utmMedium": zod.string().nullish(),
+  "utmCampaign": zod.string().nullish(),
+  "utmTerm": zod.string().nullish(),
+  "utmContent": zod.string().nullish(),
+  "utmSourcePlatform": zod.string().nullish(),
+  "utmCreativeFormat": zod.string().nullish(),
+  "utmMarketingTactic": zod.string().nullish(),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})),
+  "customerJourneyScoring": zod.array(zod.object({
+  "groupId": zod.int(),
+  "customerJourneyStepId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})),
+  "personaScoring": zod.array(zod.object({
+  "groupId": zod.int(),
+  "personaId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+export const postCampaignGroupResponse = zod.object({
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "invalid": zod.boolean(),
+  "campaigns": zod.array(zod.object({
+  "unique": zod.guid().nullish(),
+  "campaignGroupId": zod.int(),
+  "utmSource": zod.string().nullish(),
+  "utmMedium": zod.string().nullish(),
+  "utmCampaign": zod.string().nullish(),
+  "utmTerm": zod.string().nullish(),
+  "utmContent": zod.string().nullish(),
+  "utmSourcePlatform": zod.string().nullish(),
+  "utmCreativeFormat": zod.string().nullish(),
+  "utmMarketingTactic": zod.string().nullish(),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})),
+  "customerJourneyScoring": zod.array(zod.object({
+  "groupId": zod.int(),
+  "customerJourneyStepId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})),
+  "personaScoring": zod.array(zod.object({
+  "groupId": zod.int(),
+  "personaId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+
+export const getCampaignGroupAllResponseItem = zod.object({
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "invalid": zod.boolean(),
+  "campaigns": zod.array(zod.object({
+  "unique": zod.guid().nullish(),
+  "campaignGroupId": zod.int(),
+  "utmSource": zod.string().nullish(),
+  "utmMedium": zod.string().nullish(),
+  "utmCampaign": zod.string().nullish(),
+  "utmTerm": zod.string().nullish(),
+  "utmContent": zod.string().nullish(),
+  "utmSourcePlatform": zod.string().nullish(),
+  "utmCreativeFormat": zod.string().nullish(),
+  "utmMarketingTactic": zod.string().nullish(),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})),
+  "customerJourneyScoring": zod.array(zod.object({
+  "groupId": zod.int(),
+  "customerJourneyStepId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})),
+  "personaScoring": zod.array(zod.object({
+  "groupId": zod.int(),
+  "personaId": zod.int(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "score": zod.int(),
+  "isLocked": zod.boolean()
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+export const getCampaignGroupAllResponse = zod.array(getCampaignGroupAllResponseItem)
+
+
+export const getCampaignGroupUnscoredResponseItem = zod.object({
+  "utmSource": zod.string().nullish(),
+  "utmMedium": zod.string().nullish(),
+  "utmCampaign": zod.string().nullish(),
+  "utmTerm": zod.string().nullish(),
+  "utmContent": zod.string().nullish(),
+  "utmSourcePlatform": zod.string().nullish(),
+  "utmCreativeFormat": zod.string().nullish(),
+  "utmMarketingTactic": zod.string().nullish()
+})
+export const getCampaignGroupUnscoredResponse = zod.array(getCampaignGroupUnscoredResponseItem)
+
+
+export const getCampaignGroupVisitorsQueryParams = zod.object({
+  "amountOfDays": zod.int().optional()
+})
+
+export const getCampaignGroupVisitorsResponse = zod.record(zod.string(), zod.int())
+
+
+export const postAppliedPersonalizationSegmentQueryParams = zod.object({
+  "unique": zod.guid().optional(),
+  "segment": zod.string().optional(),
+  "culture": zod.string().optional()
+})
+
+export const postAppliedPersonalizationSegmentResponse = zod.object({
+  "created": zod.boolean(),
+  "cultureSharedSegmentedProperties": zod.array(zod.string())
+})
+
+
+export const getAppliedPersonalizationSegmentQueryParams = zod.object({
+  "segment": zod.string().optional()
+})
+
+export const getAppliedPersonalizationSegmentResponse = zod.object({
+  "unique": zod.guid(),
+  "segmentKey": zod.guid().nullish(),
+  "type": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal(null)])]).optional(),
+  "umbracoSegmentAlias": zod.string().nullish(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "started": zod.iso.datetime({"offset":true}).nullish(),
+  "isActive": zod.boolean(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish(),
+  "pages": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeId": zod.int(),
+  "nodeKey": zod.guid().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "contentTypes": zod.array(zod.object({
+  "id": zod.int(),
+  "key": zod.guid(),
+  "contentTypeId": zod.int(),
+  "contentTypeUnique": zod.guid().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "previewSegment": zod.string().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+
+export const deleteAppliedPersonalizationQueryParams = zod.object({
+  "id": zod.guid().optional()
+})
+
+export const deleteAppliedPersonalizationResponse = zod.unknown()
+
+
+export const postAppliedPersonalizationBody = zod.object({
+  "unique": zod.guid(),
+  "segmentKey": zod.guid().nullish(),
+  "type": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal(null)])]).optional(),
+  "umbracoSegmentAlias": zod.string().nullish(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "started": zod.iso.datetime({"offset":true}).nullish(),
+  "isActive": zod.boolean(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish(),
+  "pages": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeId": zod.int(),
+  "nodeKey": zod.guid().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "contentTypes": zod.array(zod.object({
+  "id": zod.int(),
+  "key": zod.guid(),
+  "contentTypeId": zod.int(),
+  "contentTypeUnique": zod.guid().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "previewSegment": zod.string().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+export const postAppliedPersonalizationResponse = zod.object({
+  "unique": zod.guid(),
+  "segmentKey": zod.guid().nullish(),
+  "type": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal(null)])]).optional(),
+  "umbracoSegmentAlias": zod.string().nullish(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "started": zod.iso.datetime({"offset":true}).nullish(),
+  "isActive": zod.boolean(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish(),
+  "pages": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeId": zod.int(),
+  "nodeKey": zod.guid().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "contentTypes": zod.array(zod.object({
+  "id": zod.int(),
+  "key": zod.guid(),
+  "contentTypeId": zod.int(),
+  "contentTypeUnique": zod.guid().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "previewSegment": zod.string().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+
+export const getAppliedPersonalizationAllResponseItem = zod.object({
+  "unique": zod.guid(),
+  "segmentKey": zod.guid().nullish(),
+  "type": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal(null)])]).optional(),
+  "umbracoSegmentAlias": zod.string().nullish(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "started": zod.iso.datetime({"offset":true}).nullish(),
+  "isActive": zod.boolean(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish(),
+  "pages": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeId": zod.int(),
+  "nodeKey": zod.guid().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "contentTypes": zod.array(zod.object({
+  "id": zod.int(),
+  "key": zod.guid(),
+  "contentTypeId": zod.int(),
+  "contentTypeUnique": zod.guid().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "previewSegment": zod.string().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+export const getAppliedPersonalizationAllResponse = zod.array(getAppliedPersonalizationAllResponseItem)
+
+
+export const getAppliedPersonalizationIdQueryParams = zod.object({
+  "id": zod.guid().optional()
+})
+
+export const getAppliedPersonalizationIdResponse = zod.object({
+  "unique": zod.guid(),
+  "segmentKey": zod.guid().nullish(),
+  "type": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal(null)])]).optional(),
+  "umbracoSegmentAlias": zod.string().nullish(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "started": zod.iso.datetime({"offset":true}).nullish(),
+  "isActive": zod.boolean(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish(),
+  "pages": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeId": zod.int(),
+  "nodeKey": zod.guid().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "contentTypes": zod.array(zod.object({
+  "id": zod.int(),
+  "key": zod.guid(),
+  "contentTypeId": zod.int(),
+  "contentTypeUnique": zod.guid().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "previewSegment": zod.string().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+
+export const deleteAnnotationsQueryParams = zod.object({
+  "id": zod.int().optional()
+})
+
+export const deleteAnnotationsResponse = zod.unknown()
+
+
+export const postAnnotationsBody = zod.object({
+  "timestamp": zod.iso.datetime({"offset":true}),
+  "description": zod.string(),
+  "createdByUserName": zod.string(),
+  "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
+  "invalid": zod.boolean(),
+  "pageVariants": zod.array(zod.object({
+  "unique": zod.guid(),
+  "culture": zod.string().nullish()
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+export const postAnnotationsResponse = zod.object({
+  "timestamp": zod.iso.datetime({"offset":true}),
+  "description": zod.string(),
+  "createdByUserName": zod.string(),
+  "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
+  "invalid": zod.boolean(),
+  "pageVariants": zod.array(zod.object({
+  "unique": zod.guid(),
+  "culture": zod.string().nullish()
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+
+export const getAnnotationsAllQueryParams = zod.object({
+  "from": zod.iso.datetime({"offset":true}).optional(),
+  "to": zod.iso.datetime({"offset":true}).optional()
+})
+
+export const getAnnotationsAllResponseItem = zod.object({
+  "timestamp": zod.iso.datetime({"offset":true}),
+  "description": zod.string(),
+  "createdByUserName": zod.string(),
+  "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
+  "invalid": zod.boolean(),
+  "pageVariants": zod.array(zod.object({
+  "unique": zod.guid(),
+  "culture": zod.string().nullish()
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+export const getAnnotationsAllResponse = zod.array(getAnnotationsAllResponseItem)
+
+
+export const getAnnotationsEmptyResponse = zod.object({
+  "timestamp": zod.iso.datetime({"offset":true}),
+  "description": zod.string(),
+  "createdByUserName": zod.string(),
+  "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
+  "invalid": zod.boolean(),
+  "pageVariants": zod.array(zod.object({
+  "unique": zod.guid(),
+  "culture": zod.string().nullish()
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+
+export const getAnnotationsGlobalQueryParams = zod.object({
+  "from": zod.iso.datetime({"offset":true}).optional(),
+  "to": zod.iso.datetime({"offset":true}).optional()
+})
+
+export const getAnnotationsGlobalResponseItem = zod.object({
+  "timestamp": zod.iso.datetime({"offset":true}),
+  "description": zod.string(),
+  "createdByUserName": zod.string(),
+  "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
+  "invalid": zod.boolean(),
+  "pageVariants": zod.array(zod.object({
+  "unique": zod.guid(),
+  "culture": zod.string().nullish()
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+export const getAnnotationsGlobalResponse = zod.array(getAnnotationsGlobalResponseItem)
+
+
+export const getAnnotationsPageQueryCultureDefault = ``;
+
+export const getAnnotationsPageQueryParams = zod.object({
+  "unique": zod.guid().optional(),
+  "from": zod.iso.datetime({"offset":true}).optional(),
+  "to": zod.iso.datetime({"offset":true}).optional(),
+  "culture": zod.string().optional()
+})
+
+export const getAnnotationsPageResponseItem = zod.object({
+  "timestamp": zod.iso.datetime({"offset":true}),
+  "description": zod.string(),
+  "createdByUserName": zod.string(),
+  "visibility": zod.enum(['Always', 'Node', 'NodeAndDescendants', 'Created', 'Published', 'AbTestStart', 'AbTestEnd']),
+  "invalid": zod.boolean(),
+  "pageVariants": zod.array(zod.object({
+  "unique": zod.guid(),
+  "culture": zod.string().nullish()
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+export const getAnnotationsPageResponse = zod.array(getAnnotationsPageResponseItem)
+
+
+export const getAnalyticsDistinctQueryParams = zod.object({
+  "dimension": zod.enum(['UNDEFINED', 'usertype', 'referralPath', 'fullReferrer', 'campaign', 'source', 'medium', 'sourceMedium', 'browser', 'browserVersion', 'operatingSystem', 'operatingSystemVersion', 'deviceCategory', 'country', 'city', 'hostname', 'pageUrl', 'pageId', 'NodeId', 'NodeCulture', 'NodeSegment', 'NodeContentType', 'pagePath', 'eventCategory', 'eventAction', 'eventLabel', 'date', 'year', 'month', 'week', 'day', 'hour', 'minute', 'nthMonth', 'nthWeek', 'nthDay', 'nthMinute', 'nthHour', 'abTest', 'abTestVariant', 'goal', 'goalId', 'goalType', 'isMainGoal', 'visitorType', 'bot', 'botId', 'botVersion', 'botVersionId', 'referralHostname', 'referralIsInternalPage', 'referralPathAndQuery', 'browserId', 'datetime', 'pageviewSegmentId', 'pageviewSegmentName', 'pageviewAppliedSegmentId', 'pageviewAppliedSegmentName', 'pageviewAppliedPersonalizationId', 'pageviewAppliedPersonalizationName', 'videoName', 'videoUrl', 'videoEventType', 'videoEventTypeName', 'umbracoFormsName', 'umbracoFormsId', 'umbracoFormsFieldName', 'umbracoFormsFieldId', 'umbracoFormsFieldError', 'cityId', 'countryId', 'province', 'provinceId', 'county', 'countyId', 'sourcePlatform', 'creativeFormat', 'marketingTactic', 'segmentId', 'segmentName', 'searchTerm']).optional()
+})
+
+export const getAnalyticsDistinctResponseItem = zod.string()
+export const getAnalyticsDistinctResponse = zod.array(getAnalyticsDistinctResponseItem)
+
+
+export const postAnalyticsQueryBody = zod.object({
+  "filter": zod.string().nullish(),
+  "startDate": zod.iso.datetime({"offset":true}).nullable(),
+  "endDate": zod.iso.datetime({"offset":true}).nullable(),
+  "metrics": zod.array(zod.enum(['UNDEFINED', 'users', 'newVisitors', 'percentNewSessions', 'sessions', 'bounceRate', 'sessionDuration', 'avgSessionDuration', 'goalCompletionsAll', 'goalValueAll', 'pageviews', 'pageviewsWithSubpages', 'pageviewsPerSession', 'uniquePageviews', 'avgTimeOnPage', 'totalEvents', 'eventValue', 'avgEventValue', 'abTestVariantVisitors', 'abTestVariantCompletionsAll', 'videoPlays', 'videoPlaytime', 'avgVideoPlaytime', 'avgRelativeVideoPlaytime', 'videoEvents', 'umbracoFormsViews', 'umbracoFormsSubmissions', 'umbracoFormsStarts', 'umbracoFormsAbandons', 'umbracoFormsErrors', 'umbracoFormsFieldFocusses', 'umbracoFormsFieldAbandons', 'umbracoFormsFieldErrors', 'avgEngagedTimeOnPage', 'pageviewsBot', 'pageSessions', 'pageVisitors', 'pageSessionsWithSubpages', 'pageVisitorsWithSubpages', 'activeSegmentPageviews', 'inactiveSegmentPageviews', 'activeSegmentSessions', 'inactiveSegmentSessions', 'activeSegmentProfiles', 'inactiveSegmentProfiles', 'activePersonalizedSegmentPageviews', 'inactivePersonalizedSegmentPageviews', 'activePersonalizedSegmentSessions', 'inactivePersonalizedSegmentSessions', 'activePersonalizedSegmentProfiles', 'inactivePersonalizedSegmentProfiles', 'searchVolume', 'searchVolumeWithSubpages', 'visitors', 'campaignEntries', 'campaignVisitors', 'campaignGoals', 'campaignGoalValue', 'campaignFormSubmissions', 'campaignCommerceOrders', 'entrySessions'])),
+  "dimensions": zod.array(zod.enum(['UNDEFINED', 'usertype', 'referralPath', 'fullReferrer', 'campaign', 'source', 'medium', 'sourceMedium', 'browser', 'browserVersion', 'operatingSystem', 'operatingSystemVersion', 'deviceCategory', 'country', 'city', 'hostname', 'pageUrl', 'pageId', 'NodeId', 'NodeCulture', 'NodeSegment', 'NodeContentType', 'pagePath', 'eventCategory', 'eventAction', 'eventLabel', 'date', 'year', 'month', 'week', 'day', 'hour', 'minute', 'nthMonth', 'nthWeek', 'nthDay', 'nthMinute', 'nthHour', 'abTest', 'abTestVariant', 'goal', 'goalId', 'goalType', 'isMainGoal', 'visitorType', 'bot', 'botId', 'botVersion', 'botVersionId', 'referralHostname', 'referralIsInternalPage', 'referralPathAndQuery', 'browserId', 'datetime', 'pageviewSegmentId', 'pageviewSegmentName', 'pageviewAppliedSegmentId', 'pageviewAppliedSegmentName', 'pageviewAppliedPersonalizationId', 'pageviewAppliedPersonalizationName', 'videoName', 'videoUrl', 'videoEventType', 'videoEventTypeName', 'umbracoFormsName', 'umbracoFormsId', 'umbracoFormsFieldName', 'umbracoFormsFieldId', 'umbracoFormsFieldError', 'cityId', 'countryId', 'province', 'provinceId', 'county', 'countyId', 'sourcePlatform', 'creativeFormat', 'marketingTactic', 'segmentId', 'segmentName', 'searchTerm'])),
+  "realtime": zod.boolean(),
+  "sort": zod.union([zod.null(),zod.enum(['UNDEFINED', 'usertype', 'referralPath', 'fullReferrer', 'campaign', 'source', 'medium', 'sourceMedium', 'browser', 'browserVersion', 'operatingSystem', 'operatingSystemVersion', 'deviceCategory', 'country', 'city', 'hostname', 'pageUrl', 'pageId', 'NodeId', 'NodeCulture', 'NodeSegment', 'NodeContentType', 'pagePath', 'eventCategory', 'eventAction', 'eventLabel', 'date', 'year', 'month', 'week', 'day', 'hour', 'minute', 'nthMonth', 'nthWeek', 'nthDay', 'nthMinute', 'nthHour', 'abTest', 'abTestVariant', 'goal', 'goalId', 'goalType', 'isMainGoal', 'visitorType', 'bot', 'botId', 'botVersion', 'botVersionId', 'referralHostname', 'referralIsInternalPage', 'referralPathAndQuery', 'browserId', 'datetime', 'pageviewSegmentId', 'pageviewSegmentName', 'pageviewAppliedSegmentId', 'pageviewAppliedSegmentName', 'pageviewAppliedPersonalizationId', 'pageviewAppliedPersonalizationName', 'videoName', 'videoUrl', 'videoEventType', 'videoEventTypeName', 'umbracoFormsName', 'umbracoFormsId', 'umbracoFormsFieldName', 'umbracoFormsFieldId', 'umbracoFormsFieldError', 'cityId', 'countryId', 'province', 'provinceId', 'county', 'countyId', 'sourcePlatform', 'creativeFormat', 'marketingTactic', 'segmentId', 'segmentName', 'searchTerm', 'users', 'newVisitors', 'percentNewSessions', 'sessions', 'bounceRate', 'sessionDuration', 'avgSessionDuration', 'goalCompletionsAll', 'goalValueAll', 'pageviews', 'pageviewsWithSubpages', 'pageviewsPerSession', 'uniquePageviews', 'avgTimeOnPage', 'totalEvents', 'eventValue', 'avgEventValue', 'abTestVariantVisitors', 'abTestVariantCompletionsAll', 'videoPlays', 'videoPlaytime', 'avgVideoPlaytime', 'avgRelativeVideoPlaytime', 'videoEvents', 'umbracoFormsViews', 'umbracoFormsSubmissions', 'umbracoFormsStarts', 'umbracoFormsAbandons', 'umbracoFormsErrors', 'umbracoFormsFieldFocusses', 'umbracoFormsFieldAbandons', 'umbracoFormsFieldErrors', 'avgEngagedTimeOnPage', 'pageviewsBot', 'pageSessions', 'pageVisitors', 'pageSessionsWithSubpages', 'pageVisitorsWithSubpages', 'activeSegmentPageviews', 'inactiveSegmentPageviews', 'activeSegmentSessions', 'inactiveSegmentSessions', 'activeSegmentProfiles', 'inactiveSegmentProfiles', 'activePersonalizedSegmentPageviews', 'inactivePersonalizedSegmentPageviews', 'activePersonalizedSegmentSessions', 'inactivePersonalizedSegmentSessions', 'activePersonalizedSegmentProfiles', 'inactivePersonalizedSegmentProfiles', 'searchVolume', 'searchVolumeWithSubpages', 'visitors', 'campaignEntries', 'campaignVisitors', 'campaignGoals', 'campaignGoalValue', 'campaignFormSubmissions', 'campaignCommerceOrders', 'entrySessions'])]).optional(),
+  "ascending": zod.boolean(),
+  "page": zod.int(),
+  "pageSize": zod.int(),
+  "paging": zod.union([zod.null(),zod.object({
+  "page": zod.int(),
+  "pageSize": zod.int(),
+  "includeTotals": zod.boolean()
+})]).optional(),
+  "search": zod.string().nullish(),
+  "includeTotals": zod.boolean().nullish(),
+  "includeTotalRows": zod.boolean().nullish(),
+  "comparison": zod.union([zod.null(),zod.object({
+  "startDate": zod.iso.datetime({"offset":true}).nullable(),
+  "endDate": zod.iso.datetime({"offset":true}).nullable()
+})]).optional(),
+  "includeSubpages": zod.boolean()
+})
+
+export const postAnalyticsQueryResponse = zod.object({
+  "columns": zod.array(zod.enum(['UNDEFINED', 'usertype', 'referralPath', 'fullReferrer', 'campaign', 'source', 'medium', 'sourceMedium', 'browser', 'browserVersion', 'operatingSystem', 'operatingSystemVersion', 'deviceCategory', 'country', 'city', 'hostname', 'pageUrl', 'pageId', 'NodeId', 'NodeCulture', 'NodeSegment', 'NodeContentType', 'pagePath', 'eventCategory', 'eventAction', 'eventLabel', 'date', 'year', 'month', 'week', 'day', 'hour', 'minute', 'nthMonth', 'nthWeek', 'nthDay', 'nthMinute', 'nthHour', 'abTest', 'abTestVariant', 'goal', 'goalId', 'goalType', 'isMainGoal', 'visitorType', 'bot', 'botId', 'botVersion', 'botVersionId', 'referralHostname', 'referralIsInternalPage', 'referralPathAndQuery', 'browserId', 'datetime', 'pageviewSegmentId', 'pageviewSegmentName', 'pageviewAppliedSegmentId', 'pageviewAppliedSegmentName', 'pageviewAppliedPersonalizationId', 'pageviewAppliedPersonalizationName', 'videoName', 'videoUrl', 'videoEventType', 'videoEventTypeName', 'umbracoFormsName', 'umbracoFormsId', 'umbracoFormsFieldName', 'umbracoFormsFieldId', 'umbracoFormsFieldError', 'cityId', 'countryId', 'province', 'provinceId', 'county', 'countyId', 'sourcePlatform', 'creativeFormat', 'marketingTactic', 'segmentId', 'segmentName', 'searchTerm', 'users', 'newVisitors', 'percentNewSessions', 'sessions', 'bounceRate', 'sessionDuration', 'avgSessionDuration', 'goalCompletionsAll', 'goalValueAll', 'pageviews', 'pageviewsWithSubpages', 'pageviewsPerSession', 'uniquePageviews', 'avgTimeOnPage', 'totalEvents', 'eventValue', 'avgEventValue', 'abTestVariantVisitors', 'abTestVariantCompletionsAll', 'videoPlays', 'videoPlaytime', 'avgVideoPlaytime', 'avgRelativeVideoPlaytime', 'videoEvents', 'umbracoFormsViews', 'umbracoFormsSubmissions', 'umbracoFormsStarts', 'umbracoFormsAbandons', 'umbracoFormsErrors', 'umbracoFormsFieldFocusses', 'umbracoFormsFieldAbandons', 'umbracoFormsFieldErrors', 'avgEngagedTimeOnPage', 'pageviewsBot', 'pageSessions', 'pageVisitors', 'pageSessionsWithSubpages', 'pageVisitorsWithSubpages', 'activeSegmentPageviews', 'inactiveSegmentPageviews', 'activeSegmentSessions', 'inactiveSegmentSessions', 'activeSegmentProfiles', 'inactiveSegmentProfiles', 'activePersonalizedSegmentPageviews', 'inactivePersonalizedSegmentPageviews', 'activePersonalizedSegmentSessions', 'inactivePersonalizedSegmentSessions', 'activePersonalizedSegmentProfiles', 'inactivePersonalizedSegmentProfiles', 'searchVolume', 'searchVolumeWithSubpages', 'visitors', 'campaignEntries', 'campaignVisitors', 'campaignGoals', 'campaignGoalValue', 'campaignFormSubmissions', 'campaignCommerceOrders', 'entrySessions'])),
+  "currentPage": zod.int(),
+  "rows": zod.array(zod.array(zod.unknown())),
+  "rowsPerPage": zod.int(),
+  "totalRows": zod.int(),
+  "totalPages": zod.int(),
+  "metricTotals": zod.array(zod.number()).nullish(),
+  "fromRow": zod.int(),
+  "toRow": zod.int(),
+  "reportsExist": zod.boolean()
+})
+
+
+export const getAddOnsResponse = zod.object({
+  "umbracoForms": zod.boolean(),
+  "umbracoCommerce": zod.boolean()
+})
+
+
+export const postAbTestVariantCreateQueryParams = zod.object({
+  "testId": zod.int().optional()
+})
+
+export const postAbTestVariantCreateResponse = zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})
+
+
+export const deleteAbTestVariantQueryParams = zod.object({
+  "variantId": zod.int().optional()
+})
+
+export const deleteAbTestVariantResponse = zod.unknown()
+
+
+export const getAbTestVariantQueryParams = zod.object({
+  "id": zod.int().optional()
+})
+
+export const getAbTestVariantResponse = zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})
+
+
+export const postAbTestVariantBody = zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})
+
+export const postAbTestVariantResponse = zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})
+
+
+export const postAbTestVariantDisableQueryParams = zod.object({
+  "variantId": zod.int().optional()
+})
+
+export const postAbTestVariantDisableResponse = zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})
+
+
+export const getAbTestVariantAllQueryParams = zod.object({
+  "abTestId": zod.int().optional()
+})
+
+export const getAbTestVariantAllResponseItem = zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})
+export const getAbTestVariantAllResponse = zod.array(getAbTestVariantAllResponseItem)
+
+
+export const getAbTestVariantSegmentQueryParams = zod.object({
+  "segment": zod.string().optional()
+})
+
+export const getAbTestVariantSegmentResponse = zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})
+
+
+export const postAbTestProjectBody = zod.object({
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "amountOfTests": zod.int(),
+  "amountOfActiveTests": zod.int(),
+  "invalid": zod.boolean(),
+  "archived": zod.boolean(),
+  "abTests": zod.array(zod.object({
+  "unique": zod.guid(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
+  "status": zod.union([zod.null(),zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)])]).optional(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "testType": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal('SplitUrl'),zod.literal(null)])]).optional(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "endTime": zod.iso.datetime({"offset":true}).nullish(),
+  "participationPercentage": zod.number().nullish(),
+  "minimumDetectableEffect": zod.number().nullish(),
+  "variants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})),
+  "umbracoPageVariants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeKey": zod.guid(),
+  "nodeName": zod.string().nullish(),
+  "culture": zod.string().nullish(),
+  "abTestId": zod.int().nullish(),
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
+})),
+  "contentTypes": zod.array(zod.object({
+  "contentTypeId": zod.int(),
+  "contentTypeName": zod.string().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "winner": zod.union([zod.null(),zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})]).optional(),
+  "isCompleted": zod.boolean(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
+  "estimatedDailyVisitors": zod.int().nullish(),
+  "baselineConversionRate": zod.number().nullish(),
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft']),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+export const postAbTestProjectResponse = zod.object({
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "amountOfTests": zod.int(),
+  "amountOfActiveTests": zod.int(),
+  "invalid": zod.boolean(),
+  "archived": zod.boolean(),
+  "abTests": zod.array(zod.object({
+  "unique": zod.guid(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
+  "status": zod.union([zod.null(),zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)])]).optional(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "testType": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal('SplitUrl'),zod.literal(null)])]).optional(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "endTime": zod.iso.datetime({"offset":true}).nullish(),
+  "participationPercentage": zod.number().nullish(),
+  "minimumDetectableEffect": zod.number().nullish(),
+  "variants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})),
+  "umbracoPageVariants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeKey": zod.guid(),
+  "nodeName": zod.string().nullish(),
+  "culture": zod.string().nullish(),
+  "abTestId": zod.int().nullish(),
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
+})),
+  "contentTypes": zod.array(zod.object({
+  "contentTypeId": zod.int(),
+  "contentTypeName": zod.string().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "winner": zod.union([zod.null(),zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})]).optional(),
+  "isCompleted": zod.boolean(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
+  "estimatedDailyVisitors": zod.int().nullish(),
+  "baselineConversionRate": zod.number().nullish(),
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft']),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+
+export const deleteAbTestProjectQueryParams = zod.object({
+  "id": zod.guid().optional()
+})
+
+export const deleteAbTestProjectResponse = zod.unknown()
+
+
+export const getAbTestProjectQueryParams = zod.object({
+  "id": zod.guid().optional()
+})
+
+export const getAbTestProjectResponse = zod.object({
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "amountOfTests": zod.int(),
+  "amountOfActiveTests": zod.int(),
+  "invalid": zod.boolean(),
+  "archived": zod.boolean(),
+  "abTests": zod.array(zod.object({
+  "unique": zod.guid(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
+  "status": zod.union([zod.null(),zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)])]).optional(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "testType": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal('SplitUrl'),zod.literal(null)])]).optional(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "endTime": zod.iso.datetime({"offset":true}).nullish(),
+  "participationPercentage": zod.number().nullish(),
+  "minimumDetectableEffect": zod.number().nullish(),
+  "variants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})),
+  "umbracoPageVariants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeKey": zod.guid(),
+  "nodeName": zod.string().nullish(),
+  "culture": zod.string().nullish(),
+  "abTestId": zod.int().nullish(),
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
+})),
+  "contentTypes": zod.array(zod.object({
+  "contentTypeId": zod.int(),
+  "contentTypeName": zod.string().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "winner": zod.union([zod.null(),zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})]).optional(),
+  "isCompleted": zod.boolean(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
+  "estimatedDailyVisitors": zod.int().nullish(),
+  "baselineConversionRate": zod.number().nullish(),
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft']),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+
+export const putAbTestProjectBody = zod.object({
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "amountOfTests": zod.int(),
+  "amountOfActiveTests": zod.int(),
+  "invalid": zod.boolean(),
+  "archived": zod.boolean(),
+  "abTests": zod.array(zod.object({
+  "unique": zod.guid(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
+  "status": zod.union([zod.null(),zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)])]).optional(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "testType": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal('SplitUrl'),zod.literal(null)])]).optional(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "endTime": zod.iso.datetime({"offset":true}).nullish(),
+  "participationPercentage": zod.number().nullish(),
+  "minimumDetectableEffect": zod.number().nullish(),
+  "variants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})),
+  "umbracoPageVariants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeKey": zod.guid(),
+  "nodeName": zod.string().nullish(),
+  "culture": zod.string().nullish(),
+  "abTestId": zod.int().nullish(),
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
+})),
+  "contentTypes": zod.array(zod.object({
+  "contentTypeId": zod.int(),
+  "contentTypeName": zod.string().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "winner": zod.union([zod.null(),zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})]).optional(),
+  "isCompleted": zod.boolean(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
+  "estimatedDailyVisitors": zod.int().nullish(),
+  "baselineConversionRate": zod.number().nullish(),
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft']),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+export const putAbTestProjectResponse = zod.object({
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "amountOfTests": zod.int(),
+  "amountOfActiveTests": zod.int(),
+  "invalid": zod.boolean(),
+  "archived": zod.boolean(),
+  "abTests": zod.array(zod.object({
+  "unique": zod.guid(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
+  "status": zod.union([zod.null(),zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)])]).optional(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "testType": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal('SplitUrl'),zod.literal(null)])]).optional(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "endTime": zod.iso.datetime({"offset":true}).nullish(),
+  "participationPercentage": zod.number().nullish(),
+  "minimumDetectableEffect": zod.number().nullish(),
+  "variants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})),
+  "umbracoPageVariants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeKey": zod.guid(),
+  "nodeName": zod.string().nullish(),
+  "culture": zod.string().nullish(),
+  "abTestId": zod.int().nullish(),
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
+})),
+  "contentTypes": zod.array(zod.object({
+  "contentTypeId": zod.int(),
+  "contentTypeName": zod.string().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "winner": zod.union([zod.null(),zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})]).optional(),
+  "isCompleted": zod.boolean(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
+  "estimatedDailyVisitors": zod.int().nullish(),
+  "baselineConversionRate": zod.number().nullish(),
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft']),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+
+export const getAbTestProjectAllResponseItem = zod.object({
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "amountOfTests": zod.int(),
+  "amountOfActiveTests": zod.int(),
+  "invalid": zod.boolean(),
+  "archived": zod.boolean(),
+  "abTests": zod.array(zod.object({
+  "unique": zod.guid(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
+  "status": zod.union([zod.null(),zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)])]).optional(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "testType": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal('SplitUrl'),zod.literal(null)])]).optional(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "endTime": zod.iso.datetime({"offset":true}).nullish(),
+  "participationPercentage": zod.number().nullish(),
+  "minimumDetectableEffect": zod.number().nullish(),
+  "variants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})),
+  "umbracoPageVariants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeKey": zod.guid(),
+  "nodeName": zod.string().nullish(),
+  "culture": zod.string().nullish(),
+  "abTestId": zod.int().nullish(),
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
+})),
+  "contentTypes": zod.array(zod.object({
+  "contentTypeId": zod.int(),
+  "contentTypeName": zod.string().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "winner": zod.union([zod.null(),zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})]).optional(),
+  "isCompleted": zod.boolean(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
+  "estimatedDailyVisitors": zod.int().nullish(),
+  "baselineConversionRate": zod.number().nullish(),
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft']),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+export const getAbTestProjectAllResponse = zod.array(getAbTestProjectAllResponseItem)
+
+
+export const getAbTestProjectDetailsQueryParams = zod.object({
+  "id": zod.guid().optional()
+})
+
+export const getAbTestProjectDetailsResponse = zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "updated": zod.iso.datetime({"offset":true}).nullish(),
+  "updatedByUmbracoUserKey": zod.guid().nullish(),
+  "updatedByUmbracoUserName": zod.string().nullish(),
+  "invalid": zod.boolean(),
+  "abTests": zod.array(zod.object({
+  "unique": zod.guid(),
+  "created": zod.iso.datetime({"offset":true}).nullish(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdByUmbracoUserKey": zod.guid().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "testType": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal('SplitUrl'),zod.literal(null)])]).optional(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "status": zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)]),
+  "endTime": zod.iso.datetime({"offset":true}).nullish(),
+  "runtimeInDays": zod.int().nullish(),
+  "totalVariants": zod.int(),
+  "totalVisitors": zod.int(),
+  "winner": zod.string().nullish(),
+  "winnerDescription": zod.string().nullish()
+})),
+  "amountOfActiveTests": zod.int(),
+  "amountOfTests": zod.int(),
+  "archived": zod.boolean()
+})
+
+
+export const getAbTestProjectTreeRootResponseItem = zod.object({
+  "name": zod.string(),
+  "unique": zod.guid(),
+  "description": zod.string().nullish()
+})
+export const getAbTestProjectTreeRootResponse = zod.array(getAbTestProjectTreeRootResponseItem)
+
+
+export const getAbTestProjectItemQueryParams = zod.object({
+  "id": zod.array(zod.guid()).optional()
+})
+
+export const getAbTestProjectItemResponseItem = zod.object({
+  "name": zod.string(),
+  "unique": zod.guid(),
+  "description": zod.string().nullish()
+})
+export const getAbTestProjectItemResponse = zod.array(getAbTestProjectItemResponseItem)
+
+
+export const getAbTestEmptyQueryParams = zod.object({
+  "testType": zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal('SplitUrl'),zod.literal(null)]).optional(),
+  "nodeKey": zod.guid().optional()
+})
+
+export const getAbTestEmptyResponse = zod.object({
+  "test": zod.object({
+  "unique": zod.guid(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
+  "status": zod.union([zod.null(),zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)])]).optional(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "testType": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal('SplitUrl'),zod.literal(null)])]).optional(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "endTime": zod.iso.datetime({"offset":true}).nullish(),
+  "participationPercentage": zod.number().nullish(),
+  "minimumDetectableEffect": zod.number().nullish(),
+  "variants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})),
+  "umbracoPageVariants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeKey": zod.guid(),
+  "nodeName": zod.string().nullish(),
+  "culture": zod.string().nullish(),
+  "abTestId": zod.int().nullish(),
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
+})),
+  "contentTypes": zod.array(zod.object({
+  "contentTypeId": zod.int(),
+  "contentTypeName": zod.string().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "winner": zod.union([zod.null(),zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})]).optional(),
+  "isCompleted": zod.boolean(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
+  "estimatedDailyVisitors": zod.int().nullish(),
+  "baselineConversionRate": zod.number().nullish(),
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft']),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+}),
+  "indication": zod.union([zod.null(),zod.object({
+  "estimatedRuntimeInDays": zod.int().nullish(),
+  "estimatedRequiredRuntimeRemainingInDays": zod.int().nullish(),
+  "currentRuntimeInDays": zod.int(),
+  "mde": zod.number(),
+  "benchmarkConversionRate": zod.number(),
+  "targetConversionRate": zod.number(),
+  "variantCount": zod.int(),
+  "requiredVisitorsTotal": zod.int().nullish(),
+  "requiredVisitorsPerVariant": zod.int().nullish(),
+  "expectedDailyVisitors": zod.int(),
+  "status": zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)]),
+  "hurtingVariants": zod.array(zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})),
+  "currentVisitorsPerVariant": zod.int(),
+  "currentVisitors": zod.int(),
+  "reliableVariants": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "originalVariantIsWinning": zod.boolean(),
+  "winningVariant": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "bestNonBenchmarkVariant": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "earliestReliableVariant": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "bestPrognosis": zod.object({
+  "variantId": zod.int(),
+  "conversionIncrease": zod.number(),
+  "currentVisitors": zod.int(),
+  "requiredVisitorsTotal": zod.int().nullish(),
+  "expectedDailyVisitors": zod.number(),
+  "estimatedRuntimeInDays": zod.int().nullish(),
+  "isHurtingMainConversion": zod.boolean(),
+  "remainingVisitors": zod.int().nullish(),
+  "isReliable": zod.boolean()
+}),
+  "winner": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "winningVariantConversionChange": zod.number(),
+  "bestNonWinningVariantConversionChange": zod.number(),
+  "winnerConversionChange": zod.number(),
+  "stoppedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "hasSelectedWinner": zod.boolean(),
+  "completedByUsername": zod.string().nullish(),
+  "stoppedByUsername": zod.string().nullish(),
+  "hasSurpassedViableVisitorThreshold": zod.boolean(),
+  "variantStatus": zod.record(zod.string(), zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']))
+})]).optional(),
+  "variants": zod.array(zod.object({
+  "label": zod.string().nullish(),
+  "currentTotalParticipantCount": zod.int(),
+  "currentTotalPageviewCount": zod.int(),
+  "requiredTotalVisitorCount": zod.int().nullish(),
+  "goalCompletions": zod.int(),
+  "goalValue": zod.number(),
+  "difference": zod.number(),
+  "participantPortion": zod.number(),
+  "visitorsPortion": zod.number(),
+  "conversionRate": zod.number(),
+  "conversionRateImprovement": zod.number(),
+  "conversionRateImprovementRelative": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})),
+  "mainGoalWarning": zod.boolean(),
+  "goalWarning": zod.boolean(),
+  "status": zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']),
+  "isWinner": zod.boolean(),
+  "isLeading": zod.boolean(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})).nullish(),
+  "isInvertedGoal": zod.boolean(),
+  "cultureSharedSegmentedProperties": zod.array(zod.string()).nullish()
+})
+
+
+export const postAbTestSegmentQueryParams = zod.object({
+  "unique": zod.guid().optional(),
+  "culture": zod.string().optional(),
+  "segment": zod.string().optional()
+})
+
+export const postAbTestSegmentResponse = zod.object({
+  "created": zod.boolean(),
+  "cultureSharedSegmentedProperties": zod.array(zod.string())
+})
+
+
+export const deleteAbTestQueryParams = zod.object({
+  "unique": zod.guid().optional()
+})
+
+export const deleteAbTestResponse = zod.object({
   "isValid": zod.boolean(),
-  "warnings": zod.array(zod.string()),
-  "errors": zod.array(zod.string())
+  "warnings": zod.array(zod.string()).nullable(),
+  "errors": zod.array(zod.string()).nullable()
 })
 
 
-export const postPersonaBody = zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "title": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "personas": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "title": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "icon": zod.string().nullish(),
-  "iconUrl": zod.string().nullish(),
-  "color": zod.string().nullish(),
-  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
-  "createdByUmbracoUserKey": zod.guid().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedByUmbracoUserKey": zod.guid().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish()
-})),
-  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
-  "createdByUmbracoUserKey": zod.guid().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedByUmbracoUserKey": zod.guid().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish(),
-  "minimumParticipationScoreThreshold": zod.int().nullish(),
-  "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
-  "minimumDeviation": zod.int().nullish(),
-  "expirationType": zod.enum(['days', 'sessions', 'never']),
-  "expiration": zod.int().nullish(),
-  "upperScoreLimit": zod.int().nullish()
+export const getAbTestQueryParams = zod.object({
+  "id": zod.int().optional()
 })
 
-export const postPersonaResponse = zod.object({
-  "persona": zod.object({
-  "id": zod.int(),
+export const getAbTestResponse = zod.object({
   "unique": zod.guid(),
-  "title": zod.string().nullish(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
+  "status": zod.union([zod.null(),zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)])]).optional(),
+  "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "personas": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "title": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "icon": zod.string().nullish(),
-  "iconUrl": zod.string().nullish(),
-  "color": zod.string().nullish(),
-  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
-  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
-  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedByUmbracoUserKey": zod.guid().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish()
+  "testType": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal('SplitUrl'),zod.literal(null)])]).optional(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "endTime": zod.iso.datetime({"offset":true}).nullish(),
+  "participationPercentage": zod.number().nullish(),
+  "minimumDetectableEffect": zod.number().nullish(),
+  "variants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
 })),
-  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
-  "createdByUmbracoUserKey": zod.guid().nullish(),
+  "umbracoPageVariants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeKey": zod.guid(),
+  "nodeName": zod.string().nullish(),
+  "culture": zod.string().nullish(),
+  "abTestId": zod.int().nullish(),
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
+})),
+  "contentTypes": zod.array(zod.object({
+  "contentTypeId": zod.int(),
+  "contentTypeName": zod.string().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "winner": zod.union([zod.null(),zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})]).optional(),
+  "isCompleted": zod.boolean(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
+  "estimatedDailyVisitors": zod.int().nullish(),
+  "baselineConversionRate": zod.number().nullish(),
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft']),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+
+export const postAbTestBody = zod.object({
+  "test": zod.object({
+  "unique": zod.guid(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
+  "status": zod.union([zod.null(),zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)])]).optional(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
-  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedByUmbracoUserKey": zod.guid().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish(),
-  "minimumParticipationScoreThreshold": zod.int().nullish(),
-  "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
-  "minimumDeviation": zod.int().nullish(),
-  "expirationType": zod.enum(['days', 'sessions', 'never']),
-  "expiration": zod.int().nullish(),
-  "upperScoreLimit": zod.int().nullish()
-}).nullable(),
+  "testType": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal('SplitUrl'),zod.literal(null)])]).optional(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "endTime": zod.iso.datetime({"offset":true}).nullish(),
+  "participationPercentage": zod.number().nullish(),
+  "minimumDetectableEffect": zod.number().nullish(),
+  "variants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})),
+  "umbracoPageVariants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeKey": zod.guid(),
+  "nodeName": zod.string().nullish(),
+  "culture": zod.string().nullish(),
+  "abTestId": zod.int().nullish(),
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
+})),
+  "contentTypes": zod.array(zod.object({
+  "contentTypeId": zod.int(),
+  "contentTypeName": zod.string().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "winner": zod.union([zod.null(),zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})]).optional(),
+  "isCompleted": zod.boolean(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
+  "estimatedDailyVisitors": zod.int().nullish(),
+  "baselineConversionRate": zod.number().nullish(),
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft']),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+}),
+  "indication": zod.union([zod.null(),zod.object({
+  "estimatedRuntimeInDays": zod.int().nullish(),
+  "estimatedRequiredRuntimeRemainingInDays": zod.int().nullish(),
+  "currentRuntimeInDays": zod.int(),
+  "mde": zod.number(),
+  "benchmarkConversionRate": zod.number(),
+  "targetConversionRate": zod.number(),
+  "variantCount": zod.int(),
+  "requiredVisitorsTotal": zod.int().nullish(),
+  "requiredVisitorsPerVariant": zod.int().nullish(),
+  "expectedDailyVisitors": zod.int(),
+  "status": zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)]),
+  "hurtingVariants": zod.array(zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})),
+  "currentVisitorsPerVariant": zod.int(),
+  "currentVisitors": zod.int(),
+  "reliableVariants": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "originalVariantIsWinning": zod.boolean(),
+  "winningVariant": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "bestNonBenchmarkVariant": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "earliestReliableVariant": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "bestPrognosis": zod.object({
+  "variantId": zod.int(),
+  "conversionIncrease": zod.number(),
+  "currentVisitors": zod.int(),
+  "requiredVisitorsTotal": zod.int().nullish(),
+  "expectedDailyVisitors": zod.number(),
+  "estimatedRuntimeInDays": zod.int().nullish(),
+  "isHurtingMainConversion": zod.boolean(),
+  "remainingVisitors": zod.int().nullish(),
+  "isReliable": zod.boolean()
+}),
+  "winner": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "winningVariantConversionChange": zod.number(),
+  "bestNonWinningVariantConversionChange": zod.number(),
+  "winnerConversionChange": zod.number(),
+  "stoppedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "hasSelectedWinner": zod.boolean(),
+  "completedByUsername": zod.string().nullish(),
+  "stoppedByUsername": zod.string().nullish(),
+  "hasSurpassedViableVisitorThreshold": zod.boolean(),
+  "variantStatus": zod.record(zod.string(), zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']))
+})]).optional(),
+  "variants": zod.array(zod.object({
+  "label": zod.string().nullish(),
+  "currentTotalParticipantCount": zod.int(),
+  "currentTotalPageviewCount": zod.int(),
+  "requiredTotalVisitorCount": zod.int().nullish(),
+  "goalCompletions": zod.int(),
+  "goalValue": zod.number(),
+  "difference": zod.number(),
+  "participantPortion": zod.number(),
+  "visitorsPortion": zod.number(),
+  "conversionRate": zod.number(),
+  "conversionRateImprovement": zod.number(),
+  "conversionRateImprovementRelative": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})),
+  "mainGoalWarning": zod.boolean(),
+  "goalWarning": zod.boolean(),
+  "status": zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']),
+  "isWinner": zod.boolean(),
+  "isLeading": zod.boolean(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})).nullish(),
+  "isInvertedGoal": zod.boolean(),
+  "cultureSharedSegmentedProperties": zod.array(zod.string()).nullish()
+})
+
+export const postAbTestResponse = zod.object({
+  "test": zod.object({
+  "test": zod.object({
+  "unique": zod.guid(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
+  "status": zod.union([zod.null(),zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)])]).optional(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "testType": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal('SplitUrl'),zod.literal(null)])]).optional(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "endTime": zod.iso.datetime({"offset":true}).nullish(),
+  "participationPercentage": zod.number().nullish(),
+  "minimumDetectableEffect": zod.number().nullish(),
+  "variants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})),
+  "umbracoPageVariants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeKey": zod.guid(),
+  "nodeName": zod.string().nullish(),
+  "culture": zod.string().nullish(),
+  "abTestId": zod.int().nullish(),
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
+})),
+  "contentTypes": zod.array(zod.object({
+  "contentTypeId": zod.int(),
+  "contentTypeName": zod.string().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "winner": zod.union([zod.null(),zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})]).optional(),
+  "isCompleted": zod.boolean(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
+  "estimatedDailyVisitors": zod.int().nullish(),
+  "baselineConversionRate": zod.number().nullish(),
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft']),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+}),
+  "indication": zod.union([zod.null(),zod.object({
+  "estimatedRuntimeInDays": zod.int().nullish(),
+  "estimatedRequiredRuntimeRemainingInDays": zod.int().nullish(),
+  "currentRuntimeInDays": zod.int(),
+  "mde": zod.number(),
+  "benchmarkConversionRate": zod.number(),
+  "targetConversionRate": zod.number(),
+  "variantCount": zod.int(),
+  "requiredVisitorsTotal": zod.int().nullish(),
+  "requiredVisitorsPerVariant": zod.int().nullish(),
+  "expectedDailyVisitors": zod.int(),
+  "status": zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)]),
+  "hurtingVariants": zod.array(zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})),
+  "currentVisitorsPerVariant": zod.int(),
+  "currentVisitors": zod.int(),
+  "reliableVariants": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "originalVariantIsWinning": zod.boolean(),
+  "winningVariant": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "bestNonBenchmarkVariant": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "earliestReliableVariant": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "bestPrognosis": zod.object({
+  "variantId": zod.int(),
+  "conversionIncrease": zod.number(),
+  "currentVisitors": zod.int(),
+  "requiredVisitorsTotal": zod.int().nullish(),
+  "expectedDailyVisitors": zod.number(),
+  "estimatedRuntimeInDays": zod.int().nullish(),
+  "isHurtingMainConversion": zod.boolean(),
+  "remainingVisitors": zod.int().nullish(),
+  "isReliable": zod.boolean()
+}),
+  "winner": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "winningVariantConversionChange": zod.number(),
+  "bestNonWinningVariantConversionChange": zod.number(),
+  "winnerConversionChange": zod.number(),
+  "stoppedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "hasSelectedWinner": zod.boolean(),
+  "completedByUsername": zod.string().nullish(),
+  "stoppedByUsername": zod.string().nullish(),
+  "hasSurpassedViableVisitorThreshold": zod.boolean(),
+  "variantStatus": zod.record(zod.string(), zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']))
+})]).optional(),
+  "variants": zod.array(zod.object({
+  "label": zod.string().nullish(),
+  "currentTotalParticipantCount": zod.int(),
+  "currentTotalPageviewCount": zod.int(),
+  "requiredTotalVisitorCount": zod.int().nullish(),
+  "goalCompletions": zod.int(),
+  "goalValue": zod.number(),
+  "difference": zod.number(),
+  "participantPortion": zod.number(),
+  "visitorsPortion": zod.number(),
+  "conversionRate": zod.number(),
+  "conversionRateImprovement": zod.number(),
+  "conversionRateImprovementRelative": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})),
+  "mainGoalWarning": zod.boolean(),
+  "goalWarning": zod.boolean(),
+  "status": zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']),
+  "isWinner": zod.boolean(),
+  "isLeading": zod.boolean(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})).nullish(),
+  "isInvertedGoal": zod.boolean(),
+  "cultureSharedSegmentedProperties": zod.array(zod.string()).nullish()
+}),
   "validationResults": zod.object({
   "isValid": zod.boolean(),
-  "warnings": zod.array(zod.string()),
-  "errors": zod.array(zod.string())
+  "warnings": zod.array(zod.string()).nullable(),
+  "errors": zod.array(zod.string()).nullable()
 })
 })
 
 
-export const getPersonaAllResponseItem = zod.object({
-  "id": zod.int(),
+export const getAbTestAllResponseItem = zod.object({
   "unique": zod.guid(),
-  "title": zod.string().nullish(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
+  "status": zod.union([zod.null(),zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)])]).optional(),
+  "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "personas": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "title": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "icon": zod.string().nullish(),
-  "iconUrl": zod.string().nullish(),
-  "color": zod.string().nullish(),
-  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
-  "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
-  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedByUmbracoUserKey": zod.guid().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish()
+  "testType": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal('SplitUrl'),zod.literal(null)])]).optional(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "endTime": zod.iso.datetime({"offset":true}).nullish(),
+  "participationPercentage": zod.number().nullish(),
+  "minimumDetectableEffect": zod.number().nullish(),
+  "variants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
 })),
-  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
-  "createdByUmbracoUserKey": zod.guid().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedByUmbracoUserKey": zod.guid().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish(),
-  "minimumParticipationScoreThreshold": zod.int().nullish(),
-  "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
-  "minimumDeviation": zod.int().nullish(),
-  "expirationType": zod.enum(['days', 'sessions', 'never']),
-  "expiration": zod.int().nullish(),
-  "upperScoreLimit": zod.int().nullish()
-})
-export const getPersonaAllResponse = zod.array(getPersonaAllResponseItem)
-
-
-export const getPersonaDetailsQueryParams = zod.object({
-  "id": zod.guid().optional()
-})
-
-export const getPersonaDetailsResponse = zod.object({
+  "umbracoPageVariants": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
-  "title": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "personas": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "title": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "icon": zod.string().nullish(),
-  "iconUrl": zod.string().nullish(),
-  "color": zod.string().nullish(),
-  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
-  "createdByUmbracoUserKey": zod.guid().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedByUmbracoUserKey": zod.guid().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish()
+  "nodeKey": zod.guid(),
+  "nodeName": zod.string().nullish(),
+  "culture": zod.string().nullish(),
+  "abTestId": zod.int().nullish(),
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
 })),
-  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
-  "createdByUmbracoUserKey": zod.guid().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedByUmbracoUserKey": zod.guid().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish(),
-  "minimumParticipationScoreThreshold": zod.int().nullish(),
-  "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
-  "minimumDeviation": zod.int().nullish(),
-  "expirationType": zod.enum(['days', 'sessions', 'never']),
-  "expiration": zod.int().nullish(),
-  "upperScoreLimit": zod.int().nullish()
-})
-
-
-export const getPersonaEmptyResponse = zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "title": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "personas": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "title": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "icon": zod.string().nullish(),
-  "iconUrl": zod.string().nullish(),
-  "color": zod.string().nullish(),
-  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
-  "createdByUmbracoUserKey": zod.guid().nullish(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedByUmbracoUserKey": zod.guid().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish()
+  "contentTypes": zod.array(zod.object({
+  "contentTypeId": zod.int(),
+  "contentTypeName": zod.string().nullish(),
+  "culture": zod.string().nullish()
 })),
-  "createdOn": zod.iso.datetime({"offset":true}).nullish(),
+  "winner": zod.union([zod.null(),zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})]).optional(),
+  "isCompleted": zod.boolean(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
+  "estimatedDailyVisitors": zod.int().nullish(),
+  "baselineConversionRate": zod.number().nullish(),
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft']),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+export const getAbTestAllResponse = zod.array(getAbTestAllResponseItem)
+
+
+export const getAbTestPageQueryParams = zod.object({
+  "unique": zod.guid().optional()
+})
+
+export const getAbTestPageResponseItem = zod.object({
+  "unique": zod.guid(),
+  "created": zod.iso.datetime({"offset":true}).nullish(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
   "createdByUmbracoUserKey": zod.guid().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
-  "updatedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedByUmbracoUserKey": zod.guid().nullish(),
-  "updatedByUmbracoUserName": zod.string().nullish(),
-  "minimumParticipationScoreThreshold": zod.int().nullish(),
-  "minimumDeviationType": zod.enum(['Absolute', 'Percent']),
-  "minimumDeviation": zod.int().nullish(),
-  "expirationType": zod.enum(['days', 'sessions', 'never']),
-  "expiration": zod.int().nullish(),
-  "upperScoreLimit": zod.int().nullish()
+  "testType": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal('SplitUrl'),zod.literal(null)])]).optional(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "status": zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)]),
+  "endTime": zod.iso.datetime({"offset":true}).nullish(),
+  "runtimeInDays": zod.int().nullish(),
+  "totalVariants": zod.int(),
+  "totalVisitors": zod.int(),
+  "winner": zod.string().nullish(),
+  "winnerDescription": zod.string().nullish()
 })
+export const getAbTestPageResponse = zod.array(getAbTestPageResponseItem)
 
 
-export const postPersonaLockBody = zod.object({
-  "entityId": zod.int(),
-  "visitorId": zod.int()
-})
-
-export const postPersonaLockResponse = zod.unknown()
-
-
-export const postPersonaUnlockBody = zod.object({
-  "entityId": zod.int(),
-  "visitorId": zod.int()
-})
-
-export const postPersonaUnlockResponse = zod.unknown()
-
-
-export const getProfileBotVisitorsResponse = zod.record(zod.string(), zod.string())
-
-
-export const getProfileCustomerJourneyStepScoresQueryParams = zod.object({
-  "visitorId": zod.int().optional()
-})
-
-export const getProfileCustomerJourneyStepScoresResponseItem = zod.object({
-  "groupId": zod.int(),
-  "score": zod.int(),
-  "isActive": zod.boolean(),
-  "isLocked": zod.boolean(),
-  "customerJourneyStepId": zod.int()
-})
-export const getProfileCustomerJourneyStepScoresResponse = zod.array(getProfileCustomerJourneyStepScoresResponseItem)
-
-
-export const getProfileDetailsQueryParams = zod.object({
-  "visitorId": zod.int().optional()
-})
-
-export const getProfileDetailsResponse = zod.object({
-  "visitorExternalId": zod.guid(),
-  "visitorId": zod.int(),
-  "identifiedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "firstActiveOn": zod.iso.datetime({"offset":true}),
-  "lastActiveOn": zod.iso.datetime({"offset":true}),
-  "totalGoalCompletions": zod.int(),
-  "totalGoalValue": zod.number(),
-  "totalSeconds": zod.int(),
-  "totalEngagedSeconds": zod.int(),
-  "totalSessions": zod.int(),
-  "totalPageviews": zod.int(),
-  "hasBeenPersonalized": zod.boolean(),
-  "hasBeenAbTested": zod.boolean(),
-  "members": zod.array(zod.object({
-  "id": zod.string(),
-  "name": zod.string(),
-  "unique": zod.guid().nullish(),
-  "registrationDate": zod.iso.datetime({"offset":true}).nullish(),
-  "lastLoginDate": zod.iso.datetime({"offset":true}).nullish(),
-  "properties": zod.record(zod.string(), zod.unknown().nullable()).nullish()
-}))
-})
-
-
-export const getProfileExportQueryParams = zod.object({
-  "Skip": zod.int().optional(),
-  "Take": zod.int().optional(),
-  "Order": zod.string().optional(),
-  "Ascending": zod.boolean().optional(),
-  "SegmentId": zod.guid().optional(),
-  "MinimumGoalValue": zod.int().optional(),
-  "MinimumCompletedGoals": zod.int().optional(),
-  "IsUnidentified": zod.boolean().optional(),
-  "IsIdentified": zod.boolean().optional(),
-  "IsHighPotential": zod.boolean().optional(),
-  "ActiveRange.From": zod.iso.datetime({"offset":true}).optional(),
-  "ActiveRange.To": zod.iso.datetime({"offset":true}).optional(),
-  "IdentifiedName": zod.string().optional()
-})
-
-export const getProfileExportResponseItem = zod.object({
-  "type": zod.string().nullish(),
-  "sessionCount": zod.int(),
-  "pageviewCount": zod.int(),
-  "firstSession": zod.iso.datetime({"offset":true}),
-  "lastSession": zod.iso.datetime({"offset":true}),
-  "totalGoalCompletions": zod.int(),
-  "totalGoalValue": zod.number(),
-  "visitorId": zod.int(),
-  "url": zod.string().nullish(),
-  "memberName": zod.string().nullish(),
-  "memberEmail": zod.string().nullish()
-})
-export const getProfileExportResponse = zod.array(getProfileExportResponseItem)
-
-
-export const postProfileExportCsvBody = zod.object({
-  "skip": zod.int(),
-  "take": zod.int(),
-  "order": zod.string().nullish(),
-  "ascending": zod.boolean().nullish(),
-  "segmentId": zod.guid().nullish(),
-  "minimumGoalValue": zod.int().nullish(),
-  "minimumCompletedGoals": zod.int().nullish(),
-  "isUnidentified": zod.boolean().nullish(),
-  "isIdentified": zod.boolean().nullish(),
-  "isHighPotential": zod.boolean().nullish(),
-  "activeRange": zod.object({
-  "from": zod.iso.datetime({"offset":true}).nullish(),
-  "to": zod.iso.datetime({"offset":true}).nullish()
-}).nullish(),
-  "identifiedName": zod.string().nullish()
-})
-
-export const postProfileExportCsvResponse = zod.instanceof(Blob)
-
-
-export const getProfileGoalCompletionsQueryParams = zod.object({
-  "visitorId": zod.int().optional()
-})
-
-export const getProfileGoalCompletionsResponseItem = zod.object({
+export const postAbTestVariantDetailsBody = zod.object({
   "unique": zod.guid(),
-  "goalId": zod.int(),
-  "completionCount": zod.int(),
-  "totalValue": zod.int()
-})
-export const getProfileGoalCompletionsResponse = zod.array(getProfileGoalCompletionsResponseItem)
-
-
-export const getProfileLastActiveSegmentQueryParams = zod.object({
-  "visitorId": zod.int().optional()
-})
-
-export const getProfileLastActiveSegmentResponseItem = zod.guid()
-export const getProfileLastActiveSegmentResponse = zod.array(getProfileLastActiveSegmentResponseItem)
-
-
-export const postProfileOverviewBody = zod.object({
-  "skip": zod.int(),
-  "take": zod.int(),
-  "order": zod.string().nullish(),
-  "ascending": zod.boolean().nullish(),
-  "segmentId": zod.guid().nullish(),
-  "minimumGoalValue": zod.int().nullish(),
-  "minimumCompletedGoals": zod.int().nullish(),
-  "isUnidentified": zod.boolean().nullish(),
-  "isIdentified": zod.boolean().nullish(),
-  "isHighPotential": zod.boolean().nullish(),
-  "activeRange": zod.object({
-  "from": zod.iso.datetime({"offset":true}).nullish(),
-  "to": zod.iso.datetime({"offset":true}).nullish()
-}).nullish(),
-  "identifiedName": zod.string().nullish()
-})
-
-export const postProfileOverviewResponse = zod.object({
-  "results": zod.array(zod.object({
-  "visitorExternalId": zod.guid(),
-  "visitorId": zod.int(),
-  "identifiedOn": zod.iso.datetime({"offset":true}).nullish(),
-  "firstActiveOn": zod.iso.datetime({"offset":true}),
-  "lastActiveOn": zod.iso.datetime({"offset":true}),
-  "totalGoalCompletions": zod.int(),
-  "totalGoalValue": zod.number(),
-  "totalSeconds": zod.int(),
-  "totalEngagedSeconds": zod.int(),
-  "totalSessions": zod.int(),
-  "totalPageviews": zod.int(),
-  "hasBeenPersonalized": zod.boolean(),
-  "hasBeenAbTested": zod.boolean(),
-  "members": zod.array(zod.object({
-  "id": zod.string(),
-  "name": zod.string(),
-  "unique": zod.guid().nullish(),
-  "registrationDate": zod.iso.datetime({"offset":true}).nullish(),
-  "lastLoginDate": zod.iso.datetime({"offset":true}).nullish(),
-  "properties": zod.record(zod.string(), zod.unknown().nullable()).nullish()
-}))
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
+  "status": zod.union([zod.null(),zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)])]).optional(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "testType": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal('SplitUrl'),zod.literal(null)])]).optional(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "endTime": zod.iso.datetime({"offset":true}).nullish(),
+  "participationPercentage": zod.number().nullish(),
+  "minimumDetectableEffect": zod.number().nullish(),
+  "variants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
 })),
-  "totalResults": zod.int()
-})
-
-
-export const getProfilePageEventsQueryParams = zod.object({
-  "pageviewId": zod.int().optional()
-})
-
-export const getProfilePageEventsResponseItem = zod.object({
+  "umbracoPageVariants": zod.array(zod.object({
   "id": zod.int(),
-  "type": zod.enum(['UNDEFINED', 'Start', 'End', 'ScrollDepth', 'GoalCompletion', 'OutClick', 'Event', 'Video', 'UmbracoForms']),
-  "timestamp": zod.iso.datetime({"offset":true}),
-  "detail": zod.string().nullish()
-})
-export const getProfilePageEventsResponse = zod.array(getProfilePageEventsResponseItem)
-
-
-export const getProfilePageviewsQueryParams = zod.object({
-  "sessionId": zod.int().optional()
-})
-
-export const getProfilePageviewsResponseItem = zod.object({
+  "unique": zod.guid(),
+  "nodeKey": zod.guid(),
+  "nodeName": zod.string().nullish(),
+  "culture": zod.string().nullish(),
+  "abTestId": zod.int().nullish(),
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
+})),
+  "contentTypes": zod.array(zod.object({
+  "contentTypeId": zod.int(),
+  "contentTypeName": zod.string().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "winner": zod.union([zod.null(),zod.object({
   "id": zod.int(),
-  "date": zod.iso.datetime({"offset":true}),
-  "url": zod.string().nullish(),
-  "referrerUrl": zod.string().nullish(),
-  "timeOnPageInSeconds": zod.int().nullish(),
-  "engagedTimeInSeconds": zod.int().nullish(),
-  "scrollDepth": zod.number().nullish(),
-  "umbracoNodeId": zod.int().nullish(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})]).optional(),
+  "isCompleted": zod.boolean(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
+  "estimatedDailyVisitors": zod.int().nullish(),
+  "baselineConversionRate": zod.number().nullish(),
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft']),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+export const postAbTestVariantDetailsResponseItem = zod.object({
+  "label": zod.string().nullish(),
+  "currentTotalParticipantCount": zod.int(),
+  "currentTotalPageviewCount": zod.int(),
+  "requiredTotalVisitorCount": zod.int().nullish(),
   "goalCompletions": zod.int(),
-  "events": zod.int(),
-  "appliedPersonalizationId": zod.int().nullish(),
-  "appliedPersonalizationName": zod.string().nullish(),
-  "abTests": zod.array(zod.object({
-  "id": zod.int().nullish(),
+  "goalValue": zod.number(),
+  "difference": zod.number(),
+  "participantPortion": zod.number(),
+  "visitorsPortion": zod.number(),
+  "conversionRate": zod.number(),
+  "conversionRateImprovement": zod.number(),
+  "conversionRateImprovementRelative": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})),
+  "mainGoalWarning": zod.boolean(),
+  "goalWarning": zod.boolean(),
+  "status": zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']),
+  "isWinner": zod.boolean(),
+  "isLeading": zod.boolean(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "variantId": zod.int().nullish(),
-  "variantName": zod.string().nullish()
-})),
-  "ipAddress": zod.string().nullish(),
-  "country": zod.string().nullish(),
-  "city": zod.string().nullish(),
-  "memberId": zod.string().nullish(),
-  "isInControlGroup": zod.boolean()
-})
-export const getProfilePageviewsResponse = zod.array(getProfilePageviewsResponseItem)
-
-
-export const getProfilePersonaScoresQueryParams = zod.object({
-  "visitorId": zod.int().optional()
-})
-
-export const getProfilePersonaScoresResponseItem = zod.object({
-  "groupId": zod.int(),
-  "score": zod.int(),
-  "isActive": zod.boolean(),
-  "isLocked": zod.boolean(),
-  "personaId": zod.int()
-})
-export const getProfilePersonaScoresResponse = zod.array(getProfilePersonaScoresResponseItem)
-
-
-export const getProfilePotentialQueryParams = zod.object({
-  "visitorId": zod.int().optional()
-})
-
-export const getProfilePotentialResponse = zod.object({
-  "active": zod.number(),
-  "engaged": zod.number()
-})
-
-
-export const getProfileRelatedQueryParams = zod.object({
-  "memberId": zod.guid().optional()
-})
-
-export const getProfileRelatedResponseItem = zod.int()
-export const getProfileRelatedResponse = zod.array(getProfileRelatedResponseItem)
-
-
-export const getProfileSessionsQueryParams = zod.object({
-  "VisitorId": zod.int().optional(),
-  "PageIndex": zod.int().optional(),
-  "PageSize": zod.int().optional()
-})
-
-export const getProfileSessionsResponse = zod.object({
-  "results": zod.array(zod.object({
-  "id": zod.int(),
-  "wasAbTested": zod.boolean(),
-  "wasPersonalized": zod.boolean(),
-  "startDate": zod.iso.datetime({"offset":true}),
-  "deviceType": zod.enum(['Unknown', 'Desktop', 'Tablet', 'Mobile', 'Console', 'TV', 'CarBrowser', 'SmartDisplay', 'Camera', 'PortableMediaPlayer', 'Phablet', 'SmartSpeaker', 'Wearable']),
-  "pageviewCount": zod.int(),
-  "sessionDurationInSeconds": zod.int(),
-  "engagedTimeInSeconds": zod.int(),
-  "goalCompletionCount": zod.int(),
-  "eventCount": zod.int(),
-  "inboundUrl": zod.string().nullish(),
-  "referrerUrl": zod.string().nullish(),
-  "operatingSystemName": zod.string().nullish(),
-  "browserName": zod.string().nullish(),
-  "browserVersion": zod.string().nullish(),
-  "country": zod.string().nullish(),
-  "province": zod.string().nullish(),
-  "county": zod.string().nullish(),
-  "city": zod.string().nullish()
-})),
-  "totalResults": zod.int()
-})
-
-
-export const getProfileStatisticsGrowthQueryNumberOfMonthsDefault = 12;
-
-export const getProfileStatisticsGrowthQueryParams = zod.object({
-  "numberOfMonths": zod.int().default(getProfileStatisticsGrowthQueryNumberOfMonthsDefault)
-})
-
-export const getProfileStatisticsGrowthResponse = zod.object({
-  "identified": zod.array(zod.object({
-  "year": zod.int(),
-  "month": zod.int(),
-  "count": zod.int()
-})),
-  "unknown": zod.array(zod.object({
-  "year": zod.int(),
-  "month": zod.int(),
-  "count": zod.int()
-}))
-})
-
-
-export const getProfileStatisticsIdentificationQueryNumberOfDaysDefault = 30;
-
-export const getProfileStatisticsIdentificationQueryParams = zod.object({
-  "numberOfDays": zod.int().default(getProfileStatisticsIdentificationQueryNumberOfDaysDefault)
-})
-
-export const getProfileStatisticsIdentificationResponse = zod.object({
-  "newlyIdentified": zod.int(),
-  "formerlyUnknown": zod.int(),
-  "unknown": zod.int()
-})
-
-
-export const getProfileStatisticsTotalResponse = zod.object({
-  "identified": zod.int(),
-  "unknown": zod.int()
-})
-
-
-export const deleteReferralGroupQueryParams = zod.object({
-  "id": zod.guid().optional()
-})
-
-export const deleteReferralGroupResponse = zod.unknown()
-
-
-export const getReferralGroupQueryParams = zod.object({
-  "id": zod.guid().optional()
-})
-
-export const getReferralGroupResponse = zod.object({
-  "id": zod.int(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
   "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})
+export const postAbTestVariantDetailsResponse = zod.array(postAbTestVariantDetailsResponseItem)
+
+
+export const getAbTestViewModelQueryParams = zod.object({
+  "unique": zod.guid().optional()
+})
+
+export const getAbTestViewModelResponse = zod.object({
+  "test": zod.object({
   "unique": zod.guid(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
+  "status": zod.union([zod.null(),zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)])]).optional(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
-  "invalid": zod.boolean(),
-  "pages": zod.array(zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "pageId": zod.int(),
-  "referralGroupId": zod.int(),
-  "domainOnly": zod.boolean(),
-  "pageUrl": zod.string().nullish()
-})),
-  "customerJourneyScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "groupId": zod.int(),
-  "customerJourneyStepId": zod.int()
-})),
-  "personaScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "groupId": zod.int(),
-  "personaId": zod.int()
-}))
-})
-
-
-export const postReferralGroupBody = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "invalid": zod.boolean(),
-  "pages": zod.array(zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "pageId": zod.int(),
-  "referralGroupId": zod.int(),
-  "domainOnly": zod.boolean(),
-  "pageUrl": zod.string().nullish()
-})),
-  "customerJourneyScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "groupId": zod.int(),
-  "customerJourneyStepId": zod.int()
-})),
-  "personaScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "groupId": zod.int(),
-  "personaId": zod.int()
-}))
-})
-
-export const postReferralGroupResponse = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "invalid": zod.boolean(),
-  "pages": zod.array(zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "pageId": zod.int(),
-  "referralGroupId": zod.int(),
-  "domainOnly": zod.boolean(),
-  "pageUrl": zod.string().nullish()
-})),
-  "customerJourneyScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "groupId": zod.int(),
-  "customerJourneyStepId": zod.int()
-})),
-  "personaScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "groupId": zod.int(),
-  "personaId": zod.int()
-}))
-})
-
-
-export const getReferralGroupAllResponseItem = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "invalid": zod.boolean(),
-  "pages": zod.array(zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "pageId": zod.int(),
-  "referralGroupId": zod.int(),
-  "domainOnly": zod.boolean(),
-  "pageUrl": zod.string().nullish()
-})),
-  "customerJourneyScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "groupId": zod.int(),
-  "customerJourneyStepId": zod.int()
-})),
-  "personaScoring": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "score": zod.int(),
-  "isLocked": zod.boolean(),
-  "groupId": zod.int(),
-  "personaId": zod.int()
-}))
-})
-export const getReferralGroupAllResponse = zod.array(getReferralGroupAllResponseItem)
-
-
-export const getReferralGroupVisitorsQueryParams = zod.object({
-  "amountOfDays": zod.int().optional()
-})
-
-export const getReferralGroupVisitorsResponse = zod.record(zod.string(), zod.int())
-
-
-export const postReferralScoringScoredBody = zod.object({
-  "page": zod.int(),
-  "pageSize": zod.int(),
-  "amountOfDays": zod.int()
-})
-
-export const postReferralScoringScoredResponse = zod.object({
-  "currentPage": zod.int(),
-  "totalPages": zod.int(),
-  "totalRowCount": zod.int(),
-  "itemsPerPage": zod.int(),
-  "rows": zod.array(zod.object({
-  "id": zod.int(),
-  "referralGroupId": zod.int().nullish(),
-  "url": zod.string().nullish(),
-  "referrals": zod.int()
-}))
-})
-
-
-export const postReferralScoringUnscoredBody = zod.object({
-  "page": zod.int(),
-  "pageSize": zod.int(),
-  "amountOfDays": zod.int()
-})
-
-export const postReferralScoringUnscoredResponse = zod.object({
-  "currentPage": zod.int(),
-  "totalPages": zod.int(),
-  "totalRowCount": zod.int(),
-  "itemsPerPage": zod.int(),
-  "rows": zod.array(zod.object({
-  "id": zod.int(),
-  "referralGroupId": zod.int().nullish(),
-  "url": zod.string().nullish(),
-  "referrals": zod.int()
-}))
-})
-
-
-export const getReportingQueryParams = zod.object({
-  "segmentId": zod.int().optional()
-})
-
-export const getReportingResponseItem = zod.object({
-  "goalName": zod.string().nullish(),
-  "goalType": zod.string().nullish(),
-  "controlGroupProfiles": zod.int(),
-  "controlGroupGoalCompletions": zod.int(),
-  "controlGroupGoalValue": zod.int(),
-  "personalizedGroupProfiles": zod.int(),
-  "personalizedGroupGoalCompletions": zod.int(),
-  "personalizedGroupGoalValue": zod.int()
-})
-export const getReportingResponse = zod.array(getReportingResponseItem)
-
-
-export const postReportingGenerationStartResponse = zod.unknown()
-
-
-export const getReportingGenerationStatusResponse = zod.object({
-  "reportingTablesExist": zod.boolean(),
-  "isGenerating": zod.boolean(),
-  "databaseIsRunningStatus": zod.boolean(),
-  "lastGenerated": zod.iso.datetime({"offset":true}).nullish()
-})
-
-
-export const getReportingGoalPersonalizationPerformanceBySegmentIdParams = zod.object({
-  "segmentId": zod.int()
-})
-
-export const getReportingGoalPersonalizationPerformanceBySegmentIdResponseItem = zod.object({
-  "goalName": zod.string().nullish(),
-  "goalType": zod.string().nullish(),
-  "controlGroupProfiles": zod.int(),
-  "controlGroupGoalCompletions": zod.int(),
-  "controlGroupGoalValue": zod.int(),
-  "personalizedGroupProfiles": zod.int(),
-  "personalizedGroupGoalCompletions": zod.int(),
-  "personalizedGroupGoalValue": zod.int()
-})
-export const getReportingGoalPersonalizationPerformanceBySegmentIdResponse = zod.array(getReportingGoalPersonalizationPerformanceBySegmentIdResponseItem)
-
-
-export const getReportingSegmentSessionsPersonalizationBySegmentIdParams = zod.object({
-  "segmentId": zod.int()
-})
-
-export const getReportingSegmentSessionsPersonalizationBySegmentIdResponse = zod.object({
-  "segmentId": zod.int(),
-  "one": zod.int(),
-  "two": zod.int(),
-  "three": zod.int(),
-  "four": zod.int(),
-  "moreThanFour": zod.int()
-})
-
-
-export const getReportingSegmentSessionsPotentialBySegmentIdParams = zod.object({
-  "segmentId": zod.int()
-})
-
-export const getReportingSegmentSessionsPotentialBySegmentIdResponse = zod.object({
-  "segmentId": zod.int(),
-  "one": zod.int(),
-  "two": zod.int(),
-  "three": zod.int(),
-  "four": zod.int(),
-  "moreThanFour": zod.int()
-})
-
-
-export const getSearchTermsQueryParams = zod.object({
-  "visitorId": zod.int().optional()
-})
-
-export const getSearchTermsResponseItem = zod.object({
-  "query": zod.string(),
-  "timestamp": zod.iso.datetime({"offset":true})
-})
-export const getSearchTermsResponse = zod.array(getSearchTermsResponseItem)
-
-
-export const deleteSegmentsQueryParams = zod.object({
-  "id": zod.guid().optional()
-})
-
-export const deleteSegmentsResponse = zod.unknown()
-
-
-export const getSegmentsQueryParams = zod.object({
-  "id": zod.guid().optional()
-})
-
-export const getSegmentsResponse = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "isTemporary": zod.boolean(),
-  "sortOrder": zod.int(),
-  "rules": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "segmentId": zod.int(),
-  "type": zod.string().nullish(),
-  "config": zod.unknown().nullish(),
-  "isNegation": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true})
-})),
-  "controlGroupSize": zod.number()
-})
-
-
-export const postSegmentsBody = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "isTemporary": zod.boolean(),
-  "sortOrder": zod.int(),
-  "rules": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "segmentId": zod.int(),
-  "type": zod.string().nullish(),
-  "config": zod.unknown().nullish(),
-  "isNegation": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true})
-})),
-  "controlGroupSize": zod.number()
-})
-
-export const postSegmentsResponse = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "isTemporary": zod.boolean(),
-  "sortOrder": zod.int(),
-  "rules": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "segmentId": zod.int(),
-  "type": zod.string().nullish(),
-  "config": zod.unknown().nullish(),
-  "isNegation": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true})
-})),
-  "controlGroupSize": zod.number()
-})
-
-
-export const getSegmentsAllQueryParams = zod.object({
-  "isTemporary": zod.boolean().optional(),
-  "amountOfDays": zod.int().optional()
-})
-
-export const getSegmentsAllResponseItem = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "isTemporary": zod.boolean(),
-  "sortOrder": zod.int(),
-  "rules": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "segmentId": zod.int(),
-  "type": zod.string().nullish(),
-  "config": zod.unknown().nullish(),
-  "isNegation": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true})
-})),
-  "controlGroupSize": zod.number()
-})
-export const getSegmentsAllResponse = zod.array(getSegmentsAllResponseItem)
-
-
-export const deleteSegmentsDeleteSegmentContentQueryParams = zod.object({
-  "segment": zod.string().optional(),
-  "contentId": zod.guid().optional()
-})
-
-export const deleteSegmentsDeleteSegmentContentResponse = zod.boolean()
-
-
-export const getSegmentsLocationsDataResponse = zod.object({
-  "countries": zod.array(zod.string()),
-  "provinces": zod.record(zod.string(), zod.array(zod.string())),
-  "cities": zod.record(zod.string(), zod.array(zod.string())),
-  "counties": zod.record(zod.string(), zod.array(zod.string()))
-})
-
-
-export const postSegmentsUpdatePriorityBodyItem = zod.object({
-  "id": zod.int(),
-  "sortOrder": zod.int()
-})
-export const postSegmentsUpdatePriorityBody = zod.array(postSegmentsUpdatePriorityBodyItem)
-
-export const postSegmentsUpdatePriorityResponse = zod.unknown()
-
-
-export const getStatisticsResponse = zod.object({
-  "numberOfPageviews": zod.int(),
-  "numberOfPersonVisitors": zod.int(),
-  "numberOfBotVisitors": zod.int(),
-  "numberOfEvents": zod.int(),
-  "numberOfSegmentSettings": zod.int()
-})
-
-
-export const getSuspiciousActivityOverviewQuerySkipDefault = 0;
-export const getSuspiciousActivityOverviewQueryTakeDefault = 20;
-
-export const getSuspiciousActivityOverviewQueryParams = zod.object({
-  "skip": zod.int().optional(),
-  "take": zod.int().default(getSuspiciousActivityOverviewQueryTakeDefault)
-})
-
-export const getSuspiciousActivityOverviewResponse = zod.object({
-  "results": zod.array(zod.object({
-  "visitorId": zod.int(),
-  "totalPageviews": zod.int(),
-  "ipAddress": zod.string().nullish(),
-  "userAgent": zod.string().nullish()
-})),
-  "totalResults": zod.int()
-})
-
-
-export const deleteTrafficFilterQueryParams = zod.object({
-  "key": zod.guid().optional()
-})
-
-export const deleteTrafficFilterResponse = zod.unknown()
-
-
-export const getTrafficFilterQueryParams = zod.object({
-  "key": zod.guid().optional()
-})
-
-export const getTrafficFilterResponse = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "key": zod.guid(),
   "createdByUmbracoUserName": zod.string().nullish(),
-  "name": zod.string(),
-  "description": zod.string(),
-  "type": zod.string(),
-  "mode": zod.enum(['Block', 'Filter', 'BlockAndFilter']),
-  "condition": zod.string(),
-  "value": zod.string().nullish(),
-  "values": zod.array(zod.string()),
-  "isActive": zod.boolean()
-})
-
-
-export const postTrafficFilterBody = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "key": zod.guid(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "name": zod.string(),
-  "description": zod.string(),
-  "type": zod.string(),
-  "mode": zod.enum(['Block', 'Filter', 'BlockAndFilter']),
-  "condition": zod.string(),
-  "value": zod.string().nullish(),
-  "values": zod.array(zod.string()),
-  "isActive": zod.boolean()
-})
-
-export const postTrafficFilterResponse = zod.guid()
-
-
-export const getTrafficFilterAllResponseItem = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "key": zod.guid(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "name": zod.string(),
-  "description": zod.string(),
-  "type": zod.string(),
-  "mode": zod.enum(['Block', 'Filter', 'BlockAndFilter']),
-  "condition": zod.string(),
-  "value": zod.string().nullish(),
-  "values": zod.array(zod.string()),
-  "isActive": zod.boolean()
-})
-export const getTrafficFilterAllResponse = zod.array(getTrafficFilterAllResponseItem)
-
-
-export const getTrafficFilterEmptyResponse = zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "key": zod.guid(),
-  "createdByUmbracoUserName": zod.string().nullish(),
-  "name": zod.string(),
-  "description": zod.string(),
-  "type": zod.string(),
-  "mode": zod.enum(['Block', 'Filter', 'BlockAndFilter']),
-  "condition": zod.string(),
-  "value": zod.string().nullish(),
-  "values": zod.array(zod.string()),
-  "isActive": zod.boolean()
-})
-
-
-export const getPermissionsUserGroupQueryParams = zod.object({
-  "userGroupKey": zod.guid().optional()
-})
-
-export const getPermissionsUserGroupResponse = zod.object({
+  "testType": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal('SplitUrl'),zod.literal(null)])]).optional(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "endTime": zod.iso.datetime({"offset":true}).nullish(),
+  "participationPercentage": zod.number().nullish(),
+  "minimumDetectableEffect": zod.number().nullish(),
+  "variants": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
-  "userGroupKey": zod.guid(),
-  "userGroupName": zod.string().nullish(),
-  "userGroupAlias": zod.string().nullish(),
-  "userGroupIconUrl": zod.string().nullish(),
-  "accessToAnalytics": zod.boolean(),
-  "accessToAbTesting": zod.boolean(),
-  "accessToPersonalization": zod.boolean(),
-  "accessToSettings": zod.boolean(),
-  "accessToProfiles": zod.boolean(),
-  "accessToReporting": zod.boolean(),
-  "updated": zod.iso.datetime({"offset":true}),
-  "updatedByUmbracoUserKey": zod.guid(),
-  "updatedByUmbracoUser": zod.string().nullish()
-})
-
-
-export const postPermissionsUserGroupBody = zod.object({
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})),
+  "umbracoPageVariants": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
-  "userGroupKey": zod.guid(),
-  "userGroupName": zod.string().nullish(),
-  "userGroupAlias": zod.string().nullish(),
-  "userGroupIconUrl": zod.string().nullish(),
-  "accessToAnalytics": zod.boolean(),
-  "accessToAbTesting": zod.boolean(),
-  "accessToPersonalization": zod.boolean(),
-  "accessToSettings": zod.boolean(),
-  "accessToProfiles": zod.boolean(),
-  "accessToReporting": zod.boolean(),
-  "updated": zod.iso.datetime({"offset":true}),
-  "updatedByUmbracoUserKey": zod.guid(),
-  "updatedByUmbracoUser": zod.string().nullish()
-})
-
-export const postPermissionsUserGroupResponse = zod.unknown()
-
-
-export const getPermissionsUserGroupAllResponseItem = zod.object({
+  "nodeKey": zod.guid(),
+  "nodeName": zod.string().nullish(),
+  "culture": zod.string().nullish(),
+  "abTestId": zod.int().nullish(),
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
+})),
+  "contentTypes": zod.array(zod.object({
+  "contentTypeId": zod.int(),
+  "contentTypeName": zod.string().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "winner": zod.union([zod.null(),zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
-  "userGroupKey": zod.guid(),
-  "userGroupName": zod.string().nullish(),
-  "userGroupAlias": zod.string().nullish(),
-  "userGroupIconUrl": zod.string().nullish(),
-  "accessToAnalytics": zod.boolean(),
-  "accessToAbTesting": zod.boolean(),
-  "accessToPersonalization": zod.boolean(),
-  "accessToSettings": zod.boolean(),
-  "accessToProfiles": zod.boolean(),
-  "accessToReporting": zod.boolean(),
-  "updated": zod.iso.datetime({"offset":true}),
-  "updatedByUmbracoUserKey": zod.guid(),
-  "updatedByUmbracoUser": zod.string().nullish()
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})]).optional(),
+  "isCompleted": zod.boolean(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
+  "estimatedDailyVisitors": zod.int().nullish(),
+  "baselineConversionRate": zod.number().nullish(),
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft']),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+}),
+  "indication": zod.union([zod.null(),zod.object({
+  "estimatedRuntimeInDays": zod.int().nullish(),
+  "estimatedRequiredRuntimeRemainingInDays": zod.int().nullish(),
+  "currentRuntimeInDays": zod.int(),
+  "mde": zod.number(),
+  "benchmarkConversionRate": zod.number(),
+  "targetConversionRate": zod.number(),
+  "variantCount": zod.int(),
+  "requiredVisitorsTotal": zod.int().nullish(),
+  "requiredVisitorsPerVariant": zod.int().nullish(),
+  "expectedDailyVisitors": zod.int(),
+  "status": zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)]),
+  "hurtingVariants": zod.array(zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})),
+  "currentVisitorsPerVariant": zod.int(),
+  "currentVisitors": zod.int(),
+  "reliableVariants": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "originalVariantIsWinning": zod.boolean(),
+  "winningVariant": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "bestNonBenchmarkVariant": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "earliestReliableVariant": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "bestPrognosis": zod.object({
+  "variantId": zod.int(),
+  "conversionIncrease": zod.number(),
+  "currentVisitors": zod.int(),
+  "requiredVisitorsTotal": zod.int().nullish(),
+  "expectedDailyVisitors": zod.number(),
+  "estimatedRuntimeInDays": zod.int().nullish(),
+  "isHurtingMainConversion": zod.boolean(),
+  "remainingVisitors": zod.int().nullish(),
+  "isReliable": zod.boolean()
+}),
+  "winner": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "winningVariantConversionChange": zod.number(),
+  "bestNonWinningVariantConversionChange": zod.number(),
+  "winnerConversionChange": zod.number(),
+  "stoppedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "hasSelectedWinner": zod.boolean(),
+  "completedByUsername": zod.string().nullish(),
+  "stoppedByUsername": zod.string().nullish(),
+  "hasSurpassedViableVisitorThreshold": zod.boolean(),
+  "variantStatus": zod.record(zod.string(), zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']))
+})]).optional(),
+  "variants": zod.array(zod.object({
+  "label": zod.string().nullish(),
+  "currentTotalParticipantCount": zod.int(),
+  "currentTotalPageviewCount": zod.int(),
+  "requiredTotalVisitorCount": zod.int().nullish(),
+  "goalCompletions": zod.int(),
+  "goalValue": zod.number(),
+  "difference": zod.number(),
+  "participantPortion": zod.number(),
+  "visitorsPortion": zod.number(),
+  "conversionRate": zod.number(),
+  "conversionRateImprovement": zod.number(),
+  "conversionRateImprovementRelative": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})),
+  "mainGoalWarning": zod.boolean(),
+  "goalWarning": zod.boolean(),
+  "status": zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']),
+  "isWinner": zod.boolean(),
+  "isLeading": zod.boolean(),
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})).nullish(),
+  "isInvertedGoal": zod.boolean(),
+  "cultureSharedSegmentedProperties": zod.array(zod.string()).nullish()
 })
-export const getPermissionsUserGroupAllResponse = zod.array(getPermissionsUserGroupAllResponseItem)
+
+
+export const postAbTestRuntimeIndicationBody = zod.object({
+  "unique": zod.guid(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
+  "status": zod.union([zod.null(),zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)])]).optional(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "createdByUmbracoUserName": zod.string().nullish(),
+  "testType": zod.union([zod.null(),zod.union([zod.literal('SinglePage'),zod.literal('MultiPage'),zod.literal('ContentType'),zod.literal('SplitUrl'),zod.literal(null)])]).optional(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "endTime": zod.iso.datetime({"offset":true}).nullish(),
+  "participationPercentage": zod.number().nullish(),
+  "minimumDetectableEffect": zod.number().nullish(),
+  "variants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})),
+  "umbracoPageVariants": zod.array(zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "nodeKey": zod.guid(),
+  "nodeName": zod.string().nullish(),
+  "culture": zod.string().nullish(),
+  "abTestId": zod.int().nullish(),
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
+})),
+  "contentTypes": zod.array(zod.object({
+  "contentTypeId": zod.int(),
+  "contentTypeName": zod.string().nullish(),
+  "culture": zod.string().nullish()
+})),
+  "winner": zod.union([zod.null(),zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "abTestId": zod.int(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "isBenchmark": zod.boolean(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int()
+})]).optional(),
+  "isCompleted": zod.boolean(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "completedByUmbracoUserKey": zod.guid().nullish(),
+  "stoppedByUmbracoUserKey": zod.guid().nullish(),
+  "estimatedDailyVisitors": zod.int().nullish(),
+  "baselineConversionRate": zod.number().nullish(),
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft']),
+  "id": zod.int(),
+  "created": zod.iso.datetime({"offset":true})
+})
+
+export const postAbTestRuntimeIndicationResponse = zod.object({
+  "estimatedRuntimeInDays": zod.int().nullish(),
+  "estimatedRequiredRuntimeRemainingInDays": zod.int().nullish(),
+  "currentRuntimeInDays": zod.int(),
+  "mde": zod.number(),
+  "benchmarkConversionRate": zod.number(),
+  "targetConversionRate": zod.number(),
+  "variantCount": zod.int(),
+  "requiredVisitorsTotal": zod.int().nullish(),
+  "requiredVisitorsPerVariant": zod.int().nullish(),
+  "expectedDailyVisitors": zod.int(),
+  "status": zod.union([zod.literal('Unknown'),zod.literal('Scheduled'),zod.literal('Running'),zod.literal('Stopped'),zod.literal('Completed'),zod.literal('Draft'),zod.literal(null)]),
+  "hurtingVariants": zod.array(zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})),
+  "currentVisitorsPerVariant": zod.int(),
+  "currentVisitors": zod.int(),
+  "reliableVariants": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "originalVariantIsWinning": zod.boolean(),
+  "winningVariant": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "bestNonBenchmarkVariant": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "earliestReliableVariant": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "bestPrognosis": zod.object({
+  "variantId": zod.int(),
+  "conversionIncrease": zod.number(),
+  "currentVisitors": zod.int(),
+  "requiredVisitorsTotal": zod.int().nullish(),
+  "expectedDailyVisitors": zod.number(),
+  "estimatedRuntimeInDays": zod.int().nullish(),
+  "isHurtingMainConversion": zod.boolean(),
+  "remainingVisitors": zod.int().nullish(),
+  "isReliable": zod.boolean()
+}),
+  "winner": zod.union([zod.null(),zod.object({
+  "abTestVariant": zod.object({
+  "id": zod.int(),
+  "unique": zod.guid(),
+  "name": zod.string().nullish(),
+  "description": zod.string().nullish(),
+  "redirectNodeKey": zod.guid().nullish(),
+  "css": zod.string().nullish(),
+  "javascript": zod.string().nullish(),
+  "created": zod.iso.datetime({"offset":true}),
+  "createdByUmbracoUserKey": zod.guid(),
+  "disabled": zod.iso.datetime({"offset":true}).nullish(),
+  "disabledByUmbracoUserKey": zod.guid().nullish(),
+  "isDisabled": zod.boolean(),
+  "isBenchmark": zod.boolean(),
+  "totalPageviewsForVariant": zod.int(),
+  "totalVisitorsForVariant": zod.int(),
+  "segment": zod.string().nullable(),
+  "previewSegment": zod.string().nullable()
+}),
+  "visitors": zod.int(),
+  "goalCompletions": zod.int(),
+  "benchmarkVisitors": zod.int(),
+  "benchmarkGoalCompletions": zod.int(),
+  "conversionRate": zod.number(),
+  "mainGoalComparisons": zod.array(zod.object({
+  "mainGoalId": zod.int(),
+  "mainGoalCompletions": zod.int(),
+  "mainGoalCompletionsTotalValue": zod.int(),
+  "benchmarkMainGoalCompletions": zod.int(),
+  "isInvertedGoal": zod.boolean(),
+  "hurtingThreshold": zod.number(),
+  "mainGoalDifference": zod.int(),
+  "warning": zod.boolean(),
+  "mainGoalRatio": zod.number().nullish(),
+  "isHurting": zod.boolean()
+})).nullable()
+})]).optional(),
+  "winningVariantConversionChange": zod.number(),
+  "bestNonWinningVariantConversionChange": zod.number(),
+  "winnerConversionChange": zod.number(),
+  "stoppedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "startTime": zod.iso.datetime({"offset":true}).nullish(),
+  "completedOn": zod.iso.datetime({"offset":true}).nullish(),
+  "hasSelectedWinner": zod.boolean(),
+  "completedByUsername": zod.string().nullish(),
+  "stoppedByUsername": zod.string().nullish(),
+  "hasSurpassedViableVisitorThreshold": zod.boolean(),
+  "variantStatus": zod.record(zod.string(), zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']))
+})

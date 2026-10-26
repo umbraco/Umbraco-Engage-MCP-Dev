@@ -16,6 +16,7 @@ exports[`post-ab-test-variant-disable really disables a real, persisted variant 
     "isDisabled": true,
     "javascript": "",
     "name": "",
+    "previewSegment": "engage_ab-testing_NORMALIZED_ID",
     "redirectNodeKey": null,
     "segment": "engage_ab-testing_NORMALIZED_ID",
     "totalPageviewsForVariant": 0,

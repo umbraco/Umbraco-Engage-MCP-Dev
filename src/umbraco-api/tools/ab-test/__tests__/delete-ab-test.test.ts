@@ -28,7 +28,7 @@ describe("delete-ab-test", () => {
     };
     expect(structuredContent?.isValid).toBe(false);
     expect(structuredContent?.errors).toEqual([
-      `${TEST_NON_EXISTENT_UNIQUE} is not a valid A/B id`,
+      `No AbTest exists with key ${TEST_NON_EXISTENT_UNIQUE}.`,
     ]);
   });
 });

@@ -20,9 +20,16 @@ import {
   createCollectionConfigLoader,
   shouldIncludeTool,
   handleCliCommands,
+  checkUmbracoVersion,
+  configureVersionCheckHook,
+  getVersionCheckMessage,
   jsonSchemaObjectToZodObject,
   useDraft202012ToolSchemas,
+  UmbracoManagementClient,
+  CAPTURE_RAW_HTTP_RESPONSE,
+  SERVER_INFORMATION_PATH,
   type CollectionConfiguration,
+  type HttpResponse,
 } from "@umbraco-cms/mcp-server-sdk";
 
 // Import the Orval-generated API client
@@ -70,7 +77,14 @@ import { mcpClientManager } from "./umbraco-api/mcp-client.js";
 import { mcpServers } from "./config/mcp-servers.js";
 
 // Import registries for tool filtering
-import { allModes, allModeNames, allSliceNames, loadServerConfig, clearConfigCache } from "./config/index.js";
+import {
+  allModes,
+  allModeNames,
+  allSliceNames,
+  loadServerConfig,
+  clearConfigCache,
+  UMBRACO_TARGET_MAJOR,
+} from "./config/index.js";
 
 // Initialize the SDK's fetch client for real Umbraco API calls.
 // This enables the Orval-generated client to authenticate via client_credentials.
@@ -89,6 +103,45 @@ if (clientId) {
 // This connects your generated Orval client to executeGetApiCall, executeVoidApiCall, etc.
 configureApiClient(() => getUmbracoEngageManagementAPI());
 
+// Clear config cache to ensure fresh config for each server start
+clearConfigCache();
+
+// Load server configuration (includes filtering settings from env vars)
+const serverConfig = await loadServerConfig(true);
+
+// ============================================================================
+// Version Check
+// ============================================================================
+//
+// Verify the connected Umbraco major matches the major this server's tools
+// were generated against: `UMBRACO_TARGET_MAJOR` in
+// `config/umbraco-target.generated.ts`, which `npm run generate` reads from
+// the Umbraco instance in `.env`. `UMBRACO_EXPECTED_MAJOR` /
+// `--umbraco-expected-major` overrides it for a deliberate mismatch.
+//
+// `configureVersionCheckHook()` makes a mismatch block the first tool call
+// with the warning until the user retries; `getVersionCheckMessage()` folds
+// the same warning into the server's `instructions`. Skipped when no client
+// credentials are configured, so CLI introspection never calls the network.
+if (clientId) {
+  await checkUmbracoVersion({
+    mcpVersion: packageJson.version,
+    expectedUmbracoMajor: serverConfig.custom.expectedUmbracoMajor ?? UMBRACO_TARGET_MAJOR,
+    client: {
+      getServerInformation: async () => {
+        const response = (await UmbracoManagementClient<{ version: string }>(
+          { url: SERVER_INFORMATION_PATH, method: "GET" },
+          CAPTURE_RAW_HTTP_RESPONSE,
+        )) as unknown as HttpResponse<{ version: string }>;
+        return { version: response.data.version };
+      },
+    },
+  });
+  configureVersionCheckHook();
+}
+
+const versionCheckMessage = getVersionCheckMessage();
+
 // ============================================================================
 // MCP Server Setup
 // ============================================================================
@@ -100,24 +153,18 @@ configureApiClient(() => getUmbracoEngageManagementAPI());
 // per-tool repetition. Mirror the same value in `worker.ts` so stdio and
 // hosted deployments behave consistently.
 //
-// const server = new McpServer(
-//   { name: "umbraco-engage-editor-mcp", version: packageJson.version },
-//   { instructions: "When summarising results, refer to items by name, not by ID." },
-// );
-const server = new McpServer({
-  name: "umbraco-engage-editor-mcp",
-  version: packageJson.version,
-});
+// Here it's used to surface a version-mismatch warning when one was detected
+// (null otherwise) - see the Version Check section below. Extend the string
+// if you also want custom guidance, e.g.:
+// [versionCheckMessage, "Refer to items by name, not by ID."].filter(Boolean).join("\n\n")
+const server = new McpServer(
+  { name: "umbraco-engage-editor-mcp", version: packageJson.version },
+  versionCheckMessage ? { instructions: versionCheckMessage } : undefined,
+);
 
 // ============================================================================
 // Tool Filtering Setup
 // ============================================================================
-
-// Clear config cache to ensure fresh config for each server start
-clearConfigCache();
-
-// Load server configuration (includes filtering settings from env vars)
-const serverConfig = await loadServerConfig(true);
 
 // Create collection config loader with our registries
 const configLoader = createCollectionConfigLoader({

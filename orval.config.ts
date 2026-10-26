@@ -1,26 +1,58 @@
+// Loads .env, so the target-major transformer below can ask the connected
+// Umbraco which version it is (it needs UMBRACO_BASE_URL / UMBRACO_CLIENT_ID /
+// UMBRACO_CLIENT_SECRET), and so the spec URL comes from the same instance.
+import "dotenv/config";
+
 import { defineConfig, type HookFunction } from "orval";
-import { orvalImportFixer, postProcessZodFiles } from "@umbraco-cms/mcp-server-sdk/orval";
+import {
+  orvalImportFixer,
+  relaxUntypedArrays,
+  postProcessZodFiles,
+  createUmbracoTargetMajorTransformer,
+} from "@umbraco-cms/mcp-server-sdk/orval";
+
+/**
+ * Stamps the Umbraco major version this server targets into
+ * src/config/umbraco-target.generated.ts, read from an authenticated
+ * `GET /umbraco/management/api/v1/server/information` against the instance in
+ * `.env` (the spec can't supply it: Umbraco hard-codes `info.version` to
+ * "Latest"). It sits in orval's input-transformer slot so the constant and the
+ * generated client can't drift apart; it leaves the spec untouched.
+ */
+const stampTargetMajor = createUmbracoTargetMajorTransformer({
+  outputPath: "./src/config/umbraco-target.generated.ts",
+});
 
 /**
  * Orval Configuration
  *
- * This generates TypeScript API clients from OpenAPI specs.
+ * This is the Umbraco 18 line (branches v18/main, v18/dev), generated against
+ * Umbraco 18 + Umbraco Engage 18.x. Umbraco 18 serves its specs at
+ * /umbraco/openapi/<document>.json (OpenAPI 3.1); Umbraco 17 (the main/dev
+ * branches) serves them through Swashbuckle at
+ * /umbraco/swagger/<document>/swagger.json (OpenAPI 3.0).
  *
- * The template includes a sample OpenAPI spec (src/umbraco-api/api/openapi.yaml) that
- * demonstrates the patterns. Replace it with your add-on's spec.
+ * The spec is read from the same instance as the target major
+ * (UMBRACO_BASE_URL in .env, defaulting to the demo-site's
+ * https://localhost:44448), so the generated client and the stamped
+ * UMBRACO_TARGET_MAJOR cannot come from two different Umbraco installs.
  *
- * Example OpenAPI spec sources:
- * - Local file: "./src/umbraco-api/api/openapi.yaml"
- * - Local Umbraco: "http://localhost:44391/umbraco/swagger/management/swagger.json"
- * - Remote URL: "https://api.example.com/swagger.json"
+ * `relaxUntypedArrays` works around Umbraco 18 schemas that declare
+ * `type: array` with no `items` (e.g. AnalyticsQueryResultModel.rows), which
+ * orval would otherwise turn into an uncompilable `zod.array()`.
  */
+const ENGAGE_MANAGEMENT_SPEC_URL = `${(process.env.UMBRACO_BASE_URL ?? "https://localhost:44448").replace(/\/+$/, "")}/umbraco/openapi/engage-management.json`;
+
 export default defineConfig({
   // Main API client generation
   umbracoEngageManagementApi: {
     input: {
-      // Replace with your local Umbraco instance URL before running npm run generate
-      target: "https://localhost:{port}/umbraco/swagger/engage-management/swagger.json",
+      target: ENGAGE_MANAGEMENT_SPEC_URL,
       unsafeDisableValidation: true,
+      override: {
+        // Orval awaits input transformers, so returning the promise is correct.
+        transformer: (spec) => stampTargetMajor(relaxUntypedArrays(spec)),
+      },
     },
     output: {
       target: "./src/umbraco-api/api/generated/umbracoEngageManagementApi.ts",
@@ -53,8 +85,11 @@ export default defineConfig({
   // Zod schema generation for validation
   umbracoEngageManagementApiZod: {
     input: {
-      target: "https://localhost:{port}/umbraco/swagger/engage-management/swagger.json",
+      target: ENGAGE_MANAGEMENT_SPEC_URL,
       unsafeDisableValidation: true,
+      override: {
+        transformer: (spec) => relaxUntypedArrays(spec),
+      },
     },
     output: {
       target: "./src/umbraco-api/api/generated/umbracoEngageManagementApi.zod.ts",

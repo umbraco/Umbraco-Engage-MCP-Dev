@@ -21,6 +21,20 @@ describe("normalizeAbTestIdentifiers", () => {
     });
   });
 
+  it("blanks Engage 18's guid *Key references and auto-generated previewSegment", () => {
+    const input = {
+      goalKey: "1f3ae040-2913-4918-9d1f-08e91a6000ae",
+      nodeKey: "3781345e-515f-4001-b646-4dae16e3e8a6",
+      previewSegment: "engage_ab-testing_12",
+    };
+
+    expect(normalizeAbTestIdentifiers(input)).toEqual({
+      goalKey: "00000000-0000-0000-0000-000000000000",
+      nodeKey: "00000000-0000-0000-0000-000000000000",
+      previewSegment: "engage_ab-testing_NORMALIZED_ID",
+    });
+  });
+
   it("blanks createdBy/updatedBy/disabledBy-prefixed fields", () => {
     const input = {
       createdByUmbracoUserKey: "489a71d6-c06e-404f-a053-06c7febaa539",

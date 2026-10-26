@@ -2,9 +2,9 @@ name: Test
 
 on:
   push:
-    branches: [dev, main]
+    branches: [v18/dev, v18/main]
   pull_request:
-    branches: [dev, main]
+    branches: [v18/dev, v18/main]
 
 jobs:
   test:
@@ -73,7 +73,7 @@ jobs:
           cat > demo-site/appsettings.local.json << 'EOF'
           {
             "ConnectionStrings": {
-              "umbracoDbDSN": "Server=localhost,1433;Database=umbraco-engage-mcp-ci;User Id=sa;password=Moloko99;TrustServerCertificate=True",
+              "umbracoDbDSN": "Server=localhost,1433;Database=umbraco-engage-mcp-v18-ci;User Id=sa;password=Moloko99;TrustServerCertificate=True",
               "umbracoDbDSN_ProviderName": "Microsoft.Data.SqlClient"
             }
           }
@@ -83,7 +83,7 @@ jobs:
         run: |
           docker exec ${{ job.services.sqlserver.id }} /opt/mssql-tools18/bin/sqlcmd \
             -S localhost -U sa -P Moloko99 -C \
-            -Q "IF DB_ID('umbraco-engage-mcp-ci') IS NULL CREATE DATABASE [umbraco-engage-mcp-ci]"
+            -Q "IF DB_ID('umbraco-engage-mcp-v18-ci') IS NULL CREATE DATABASE [umbraco-engage-mcp-v18-ci]"
 
       - name: Start Umbraco
         run: |
@@ -165,7 +165,7 @@ jobs:
           # service container/database instead of local dev's fixed "sql"
           # container name and "umbraco-engage-mcp" database.
           SQL_CONTAINER_NAME: ${{ job.services.sqlserver.id }}
-          SQL_DATABASE_NAME: umbraco-engage-mcp-ci
+          SQL_DATABASE_NAME: umbraco-engage-mcp-v18-ci
         run: |
           set +e
           FAILED=0
