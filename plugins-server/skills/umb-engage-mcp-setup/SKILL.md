@@ -24,7 +24,7 @@ When the client is a coding agent working against a project (Claude Code, Cursor
   "mcpServers": {
     "umbraco-engage": {
       "command": "npx",
-      "args": ["@umbraco-engage/mcp-dev"],
+      "args": ["@umbraco-engage/mcp-dev@lts-17-beta"],
       "env": {
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",
         "UMBRACO_CLIENT_ID": "your-api-user-id",
