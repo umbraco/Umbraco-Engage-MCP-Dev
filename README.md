@@ -10,6 +10,19 @@ The MCP server authenticates using an Umbraco API user, ensuring secure, permiss
 
 It chains to the [Umbraco CMS MCP server](https://www.npmjs.com/package/@umbraco-cms/mcp-dev), proxying its tools with a `cms:` prefix. This gives your AI agent access to both Engage and CMS capabilities in a single session — useful when personalization, A/B tests, or campaigns need to reference real documents, media, or content types.
 
+## Which version for which Umbraco
+
+| Umbraco | Umbraco Engage | Package |
+|---------|----------------|---------|
+| 18 | 18.2.0 or later | `@umbraco-engage/mcp-dev` (18.x, built from `v18/main`) |
+| **17** | **17.x** | **`@umbraco-engage/mcp-dev@lts-17-beta`** (built from `main`) |
+
+Install the version that matches your site's Umbraco major — the API client differs between them.
+
+The Umbraco 17 line is published under its own `lts-17` dist-tags, so it never takes over `latest`
+or `beta` from the Umbraco 18 line. It is in beta, so install `@lts-17-beta`. A range such as `@17`
+doesn't match prereleases and won't find a version until 17.0.0 is released.
+
 ## Quick Start
 
 ### 1. Create an Umbraco API User
@@ -27,7 +40,7 @@ Add the server to your MCP client configuration (Claude Desktop, Cursor, VS Code
   "mcpServers": {
     "umbraco-engage": {
       "command": "npx",
-      "args": ["@umbraco-engage/mcp-dev"],
+      "args": ["@umbraco-engage/mcp-dev@lts-17-beta"],
       "env": {
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",
         "UMBRACO_CLIENT_ID": "your-api-user-id",
