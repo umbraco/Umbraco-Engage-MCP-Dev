@@ -23,6 +23,9 @@ describe("post-analytics-query", () => {
         pageSize: 10,
         includeSubpages: false,
         filter: undefined,
+        search: undefined,
+        includeTotals: undefined,
+        includeTotalRows: undefined,
       },
       context,
     );

@@ -16,7 +16,13 @@ type FullBody = z.infer<typeof postAnalyticsQueryBody>;
 // boilerplate the underlying API requires but that have obvious sensible
 // defaults; only startDate/endDate/metrics/dimensions carry real decision
 // content for most callers.
-const inputSchema = postAnalyticsQueryBody.extend({
+//
+// Engage 18 added `paging` (a nested duplicate of page/pageSize) and
+// `comparison` (a second date range); both are left out here - the spec
+// still declares the plain AnalyticsQueryResultModel response for this
+// route, while a comparison query is modelled as
+// AnalyticsCompareQueryResultModel, so its output couldn't be validated.
+const inputSchema = postAnalyticsQueryBody.omit({ paging: true, comparison: true }).extend({
   startDate: postAnalyticsQueryBody.shape.startDate.describe(
     "ISO 8601 datetime, e.g. 2026-01-01T00:00:00Z",
   ),
