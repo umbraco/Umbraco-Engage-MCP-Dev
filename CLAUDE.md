@@ -6,6 +6,40 @@ This file provides guidance to Claude Code (claude.ai/code) when working on the 
 
 An MCP server for [Umbraco Engage](https://umbraco.com/products/umbraco-engage/), built from the `@umbraco-cms/mcp-template` starter kit.
 
+## Branches
+
+| Umbraco | Branches | Package version | npm dist-tags |
+|---------|----------|-----------------|---------------|
+| **18** | **`v18/main` (releases), `v18/dev` (integration)** | **18.x** | **`latest`, `beta`** |
+| 17 | `main` (releases), `dev` (integration) | 17.x | see `main`'s CLAUDE.md |
+
+This is the Umbraco 18 line: Umbraco 18 + Umbraco Engage 18.x, generated from Umbraco 18's
+`/umbraco/openapi/engage-management.json` (OpenAPI 3.1). The chained CMS MCP is
+`@umbraco-cms/mcp-dev@18`, and `UMBRACO_TARGET_MAJOR` (`src/config/umbraco-target.generated.ts`,
+stamped by `npm run generate`) is `"18"`. Feature branches come off `v18/dev`; Umbraco 18 work never
+merges into `main`/`dev`, and Umbraco 17 work never merges into `v18/*`. The SDK packages aren't
+versioned per Umbraco major, so both lines stay on the same `1.0.0-beta.x`.
+
+**Minimum Umbraco Engage: 18.2.0.** Engage changed its Management API partway through 18.x, so this
+line only works fully on 18.2.0 and later. Checked by diffing the 18.0.0, 18.1.0 and 18.2.0 specs:
+- 18.1.0 removed `GET /ab-test/preview-url`, made `GET /content-types/segmented-property` return an
+  object, and made `previewSegment` (A/B variants), `contentTypeKey` (A/B page variants),
+  `visitorType` (suspicious visitors) and new data-cleanup fields required.
+- 18.2.0 switched A/B tests from `goalId`/`goal`/`projectId` to `goalKey`/`projectKey` (plus a required
+  `onCompleteAction`), applied personalization from `segmentId` to `segmentKey`, removed
+  `DELETE /segments/delete-segment-content`, and added analytics query fields.
+
+Against 18.1.0, `post-ab-test`/`post-applied-personalization` can't reference goals, projects or
+segments, and `get-ab-test-empty`, `get-configuration` and `get-data-cleanup-last-run` fail. Supporting
+18.0/18.1 would need per-minor gating like the Forms MCP's `FORMS_FEATURE_MIN_VERSIONS`; it isn't
+done. When upgrading, check the new release's spec against the previous minor's, not only the major.
+
+**Engage's branch layout is deliberately the reverse of the CMS, Forms and Automate MCPs.** Those
+repos keep their newest Umbraco major on `main`/`dev` and Umbraco 17 on `v17/main`/`v17/dev`; here
+`main`/`dev` stay Umbraco 17 and Umbraco 18 lives on `v18/main`/`v18/dev`. This is intentional - when
+porting a change between these repos, map the branches rather than assuming `main` means the same
+major.
+
 ## Commands
 
 ```bash
@@ -69,6 +103,7 @@ tests/
 | `UMBRACO_CLIENT_ID` | `--umbraco-client-id` | OAuth client ID |
 | `UMBRACO_CLIENT_SECRET` | `--umbraco-client-secret` | OAuth client secret |
 | `UMBRACO_BASE_URL` | `--umbraco-base-url` | Umbraco instance URL |
+| `UMBRACO_EXPECTED_MAJOR` | `--umbraco-expected-major` | Override the Umbraco major the startup version check expects (normally unset) |
 | `UMBRACO_TOOL_MODES` | `--umbraco-tool-modes` | Comma-separated modes |
 | `UMBRACO_INCLUDE_SLICES` | `--umbraco-include-slices` | Include only these slices |
 | `UMBRACO_EXCLUDE_SLICES` | `--umbraco-exclude-slices` | Exclude these slices |
@@ -131,7 +166,7 @@ Custom fields defined in `config/server-config.ts`.
 
 ## PR / CI Workflow
 
-`dev` is the base branch — always work via a branch off `dev` + PR into `dev`, never push directly to `dev`. Create a branch, push it, open a PR, and let `.github/workflows/test.yml` run before merging. (`main` stays at GitHub's default and receives periodic release merges from `dev`, mirroring `umbraco-mcp-dev-cms`'s `v17/dev` model.)
+`v18/dev` is the base branch for this line — always work via a branch off `v18/dev` + PR into `v18/dev`, never push directly to `v18/dev`. Create a branch, push it, open a PR, and let `.github/workflows/test.yml` run before merging. `v18/main` receives periodic release merges from `v18/dev`; a version bump landing on it tags a release (`release-tag.yml`) and publishes (`build/azure-pipelines.yml`). (`main` stays GitHub's default branch and carries the Umbraco 17 line.)
 
 Whenever you open a new PR or push updates to an existing one, do NOT consider the task done at push time. Watch the CI checks and fix any failures automatically:
 
@@ -145,16 +180,16 @@ Treat a CI failure the same as a local test failure — it's a real regression t
 
 ## Demo Site Setup
 
-Run `npm run umbraco:bootstrap` (or `npm run umbraco:start` to bootstrap and launch it in one step) to materialize `demo-site/` from the tracked `demo-site-template/` via `scripts/bootstrap-demo-site.sh` — idempotent, pass `--force` to recreate it. `demo-site-template/` is the source of truth (Umbraco.Cms 17.6.0 + Umbraco.Cms.DevelopmentMode.Backoffice 17.6.0 + Umbraco.Engage 17.2.1 — see its `demo-site-template.csproj`); `demo-site/` itself stays gitignored, since it's each developer's/CI's own working instance including generated `bin/`/`obj/`/`wwwroot/`/`umbraco/` and local secrets in `appsettings.local.json`.
+Run `npm run umbraco:bootstrap` (or `npm run umbraco:start` to bootstrap and launch it in one step) to materialize `demo-site/` from the tracked `demo-site-template/` via `scripts/bootstrap-demo-site.sh` — idempotent, pass `--force` to recreate it. `demo-site-template/` is the source of truth (Umbraco.Cms 18.2.1 + Umbraco.Cms.DevelopmentMode.Backoffice 18.2.1 + Umbraco.Engage 18.2.0 — see its `demo-site-template.csproj`); `demo-site/` itself stays gitignored, since it's each developer's/CI's own working instance including generated `bin/`/`obj/`/`wwwroot/`/`umbraco/` and local secrets in `appsettings.local.json`.
 
-After bootstrapping, write `demo-site/appsettings.local.json` with your DB connection string (see `.github/workflows/test.yml`'s "Configure Umbraco for CI" step for the exact shape), then run `npm run umbraco:start` (or `cd demo-site && dotnet run` if already bootstrapped).
+After bootstrapping, write `demo-site/appsettings.local.json` with your DB connection string - give the Umbraco 18 site its **own** database (e.g. `umbraco-engage-mcp-v18`): Umbraco can't migrate down, so never point it at a database an Umbraco 17 site has used, or the reverse (see `.github/workflows/test.yml`'s "Configure Umbraco for CI" step for the exact shape), then run `npm run umbraco:start` (or `cd demo-site && dotnet run` if already bootstrapped).
 
 CI (`.github/workflows/test.yml`) does this from scratch on every push/PR: boots a SQL Server service container, bootstraps `demo-site/` from the template, creates the database and the API user, generates Engage's reporting tables (a brand-new install has never run that background job, and several tools query those tables unconditionally), then runs the integration suite collection-by-collection — each collection in its own `jest` process, to avoid a single long-lived process accumulating enough heap across ~35 collections' worth of real API calls to OOM.
 
 If you ever need to rebuild `demo-site-template/` from scratch instead (e.g. bumping the Umbraco/Engage version), the original manual steps were:
 
 1. **`demo-site/demo-site.csproj`** — `Microsoft.NET.Sdk.Web`, `net10.0`, referencing:
-   - `Umbraco.Cms` — pin to a version Engage supports (check the target `Umbraco.Engage` nuspec's `Umbraco.Engage.Core` → `Umbraco.Cms.Web.Website` dependency range; `17.6.0` paired with `Umbraco.Engage 17.2.1` is confirmed working). Use exactly `17.2.1`, not `17.2.0` — the `get-package` integration test's checked-in snapshot expects `version: "17.2.1+cb3108d"` (the NuGet package's embedded repository commit); any other Engage version fails that snapshot on build/version alone.
+   - `Umbraco.Cms` — pin to a version Engage supports (check the target `Umbraco.Engage` nuspec's `Umbraco.Engage.Web` → `Umbraco.Cms.Api.Management` dependency; `18.2.1` paired with `Umbraco.Engage 18.2.0` is confirmed working). Use exactly `18.2.0` — the `get-package` integration test's checked-in snapshot expects `version: "18.2.0+1aa412a"` (the NuGet package's embedded repository commit); any other Engage version fails that snapshot on build/version alone.
    - `Umbraco.Cms.DevelopmentMode.Backoffice` (same version)
    - `Umbraco.Engage` — do **not** add the `Clean` starter-kit package alongside it unless you pin a `Clean` version whose own `Umbraco.Cms.Web.Website` dependency matches (mismatched ranges cause an `NU1107` version-conflict restore failure)
 2. **`Program.cs`** — copy the minimal `CreateUmbracoBuilder().AddBackOffice().AddWebsite().AddComposers().Build()` pattern from a sibling `umbraco-mcp-*` repo's `demo-site/Program.cs`
@@ -197,7 +232,7 @@ See the [SDK docs](../packages/mcp-server-sdk/README.md) and the published [Tool
 ## API Client
 
 Uses Orval to generate typed client from OpenAPI spec:
-1. Configure `orval.config.ts` with the Swagger URL
+1. `orval.config.ts` reads the spec from `UMBRACO_BASE_URL` in `.env` (`/umbraco/openapi/engage-management.json` on Umbraco 18)
 2. Run `npm run generate`
 3. Client and Zod schemas generated to `src/umbraco-api/api/generated/`
 

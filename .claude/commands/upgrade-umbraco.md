@@ -6,25 +6,27 @@ Upgrade the demo-site's Umbraco CMS and/or Umbraco Engage packages to a newer re
 
 ```
 /upgrade-umbraco                   # upgrade both Umbraco.Cms and Umbraco.Engage to latest stable
-/upgrade-umbraco engage 17.3.0     # upgrade only Umbraco.Engage to a specific version
-/upgrade-umbraco cms 17.7.0        # upgrade only Umbraco.Cms (and DevelopmentMode.Backoffice) to a specific version
+/upgrade-umbraco engage 18.3.0     # upgrade only Umbraco.Engage to a specific version
+/upgrade-umbraco cms 18.3.0        # upgrade only Umbraco.Cms (and DevelopmentMode.Backoffice) to a specific version
 ```
 
 ARGUMENTS: $ARGUMENTS
+
+This is the Umbraco 18 line (`v18/main`, `v18/dev`): upgrade within Umbraco 18 / Engage 18.x only. The Umbraco 17 line lives on `main`/`dev` and has its own copy of this command.
 
 ## Prerequisites
 
 - Local SQL Server reachable from `demo-site/appsettings.local.json`
 - A working `.env` with `UMBRACO_CLIENT_ID`, `UMBRACO_CLIENT_SECRET`, `UMBRACO_BASE_URL`
 - `dotnet`, `npm`, `curl`, `python3` on PATH
-- The `umbraco-back-office-mcp` OAuth client must already exist in the target database (created via `scripts/create-api-user.mjs`, see CLAUDE.md's API User Setup section). Reuse the same DB across upgrades so the client persists; Umbraco will run forward migrations automatically.
+- Use a **new, empty database** for each upgrade - do not reuse the previous version's DB. The Development config has `InstallUnattended: true` (admin `admin@admin.com` / `1234567890`), so a brand-new DB auto-installs on first boot, and `scripts/create-api-user.mjs` then creates the API user and the `umbraco-back-office-mcp` client. Nothing needs to be carried over from the old DB. Never point it at a database an Umbraco 17 site uses - Umbraco can't migrate down.
 
 ## Steps
 
 ### 1. Set up an isolated worktree
 
 ```bash
-git worktree add .claude/worktrees/upgrade-umbraco-<version> -b chore/upgrade-umbraco-<version> dev
+git worktree add .claude/worktrees/upgrade-umbraco-<version> -b v18/chore/upgrade-umbraco-<version> origin/v18/dev
 cd .claude/worktrees/upgrade-umbraco-<version>
 npm install
 npm run compile   # confirm a clean baseline before changing anything
@@ -48,7 +50,7 @@ curl -s "https://api.nuget.org/v3-flatcontainer/umbraco.engage/index.json" \
       if not any(x in v for x in ['rc','beta','alpha','pre'])))"
 ```
 
-**Check compatibility before bumping either package independently**: Engage pins a supported `Umbraco.Cms.Web.Website` dependency range in its own nuspec (`Umbraco.Engage.Core`). Don't bump `Umbraco.Cms` past what the target `Umbraco.Engage` version supports, and vice versa — CLAUDE.md's Demo Site Setup section documents `17.6.0` + `17.2.1` as the last confirmed-working pair. Also confirm the matching version of `Umbraco.Cms.DevelopmentMode.Backoffice` (kept in lockstep with `Umbraco.Cms`).
+**Check compatibility before bumping either package independently**: Engage pins a supported `Umbraco.Cms.Web.Website` dependency range in its own nuspec (`Umbraco.Engage.Core`). Don't bump `Umbraco.Cms` past what the target `Umbraco.Engage` version supports, and vice versa — CLAUDE.md's Demo Site Setup section documents the last confirmed-working pair (`18.2.1` + `18.2.0`). Also confirm the matching version of `Umbraco.Cms.DevelopmentMode.Backoffice` (kept in lockstep with `Umbraco.Cms`).
 
 ### 3. Update package versions in the template
 
@@ -67,22 +69,25 @@ Edit `demo-site-template/demo-site-template.csproj`:
 ```bash
 npm run umbraco:stop   # in case anything was running
 bash scripts/bootstrap-demo-site.sh --force
-# Make sure demo-site/appsettings.local.json has the same DB you used previously
-npm run umbraco:start  # NuGet restore, build, run forward migrations, listen on 44448/44449
+# Create a NEW, empty DB (SQL Server doesn't auto-create it), e.g.
+#   IF DB_ID('umbraco-engage-mcp-<new-version>') IS NULL CREATE DATABASE [umbraco-engage-mcp-<new-version>]
+# and write demo-site/appsettings.local.json pointing at it - do not reuse the old version's DB.
+npm run umbraco:start  # NuGet restore, build, unattended install on the fresh DB, listen on 44448/44449
+node scripts/create-api-user.mjs http://localhost:44449 admin@admin.com 1234567890  # API user + client
 ```
 
-Wait until `https://localhost:44448/umbraco` responds. Watch the startup log for migration messages so you know the schema upgraded cleanly.
+Wait until `https://localhost:44448/umbraco` responds. Because the DB is new, the boot log shows a clean unattended install (and Engage's own migrations) rather than forward migrations - that is expected. Then generate Engage's reporting tables the way `.github/workflows/test.yml`'s "Generate Engage reporting tables" step does; several tools query them unconditionally.
 
 ### 5. Regenerate the OpenAPI client
 
-`orval.config.ts` uses a literal `{port}` placeholder in both `target` URLs — replace it with `44448` (or edit temporarily) before running:
+`orval.config.ts` builds the spec URL from `UMBRACO_BASE_URL` in `.env`, and the same `npm run generate` stamps `src/config/umbraco-target.generated.ts` from that instance's version:
 
 ```bash
-npm run generate       # orval reads https://localhost:44448/umbraco/swagger/engage-management/swagger.json
+npm run generate       # orval reads <UMBRACO_BASE_URL>/umbraco/openapi/engage-management.json
 npm run compile        # catch type-level breakages immediately
 ```
 
-The `afterAllFilesWrite` hooks (`orvalImportFixer`, `relaxUuidToGuid` from `@umbraco-cms/mcp-server-sdk/orval`) rewrite imports and relax `zod.uuid()` → `zod.guid()` in the generated `*.zod.ts` file automatically — don't hand-edit generated output to work around either.
+The `afterAllFilesWrite` hooks (`orvalImportFixer`, `relaxUuidToGuid` from `@umbraco-cms/mcp-server-sdk/orval`) rewrite imports and relax `zod.uuid()` → `zod.guid()` in the generated `*.zod.ts` file automatically, and the `relaxUntypedArrays` input transformer gives Umbraco 18's item-less `type: array` schemas an `items` - don't hand-edit generated output to work around any of them.
 
 ### 6. Diff the regenerated API surface
 
@@ -122,7 +127,7 @@ Failures fall into three buckets:
 
 `npm run test:rerun-failures` reruns just the suites listed in `test-failures.log`.
 
-**Known pitfall:** `package/__tests__/get-package.test.ts` snapshots the exact Engage version string (`version: "17.2.1+cb3108d"` as of writing — see CLAUDE.md's Demo Site Setup section). A version bump *always* fails this snapshot on the version field alone; that's expected, not a regression — accept it along with the rest.
+**Known pitfall:** `package/__tests__/get-package.test.ts` snapshots the exact Engage version string (`version: "18.2.0+1aa412a"` as of writing — see CLAUDE.md's Demo Site Setup section). A version bump *always* fails this snapshot on the version field alone; that's expected, not a regression — accept it along with the rest.
 
 ### 9. Plan and add tools for new endpoints
 
@@ -149,13 +154,24 @@ When tests are green (or only have snapshot diffs), summarize:
 - Modified response schemas worth flagging (deprecated fields, additive fields)
 - List of tests with snapshot drift the user should review
 
-Then follow this repo's PR / CI Workflow (CLAUDE.md): push the branch, open a PR against `dev`, and watch `.github/workflows/test.yml` to green before reporting done.
+Then follow this repo's PR / CI Workflow (CLAUDE.md): push the branch, open a PR against `v18/dev`, and watch `.github/workflows/test.yml` to green before reporting done.
+
+### 11. Refresh your local running instance (after merge)
+
+The steps above happen in the isolated upgrade worktree. Your primary checkout's `demo-site/` is **not** updated automatically - `npm run umbraco:start` skips re-bootstrapping whenever `demo-site/` already exists, so it keeps running the old version even after you pull the upgraded template. Once the upgrade is merged and pulled:
+
+```bash
+npm run umbraco:stop                          # stop the old version if running
+bash scripts/bootstrap-demo-site.sh --force   # rm -rf demo-site/ and recopy the upgraded template
+```
+
+`--force` discards the gitignored runtime data (`umbraco/`, `wwwroot/`, `appsettings.local.json`). Recreate them against a **new, empty database** as in step 4, then run `node scripts/create-api-user.mjs` again.
 
 ## Common pitfalls
 
-- **Fresh database:** A brand-new DB will not have `umbraco-back-office-mcp` registered; integration tests will 401. Reuse the developer DB or re-run `scripts/create-api-user.mjs` once against it.
+- **New database per upgrade:** use a fresh, empty DB for each upgrade rather than reusing the old version's. It won't have `umbraco-back-office-mcp` registered until you run `node scripts/create-api-user.mjs` - skip that and integration tests will 401.
 - **Two ports:** `44448` (HTTPS) is the browser/OAuth port; `44449` (HTTP) is the server-to-server port. Both must be listening — `launchSettings.json` pins both, don't override with `--urls`.
-- **`{port}` placeholder in `orval.config.ts`:** it's literal text, not a template variable — must be hand-replaced (or scripted around) before `npm run generate` will resolve a URL.
+- **`npm run generate` needs `.env`:** the spec URL and the target-major stamp both come from `UMBRACO_BASE_URL`/`UMBRACO_CLIENT_ID`/`UMBRACO_CLIENT_SECRET`; without them the run fails rather than guessing.
 - **`zod.uuid()` vs `zod.guid()`:** Umbraco's GUIDs aren't RFC 4122 compliant. The `relaxUuidToGuid` hook handles this for generated output schemas automatically — hand-written tool *input* schemas should keep using `uuid()` directly (per `orval.config.ts`'s own comment).
 - **`demo-site/` is gitignored:** always edit `demo-site-template/`; the site directory is rebuilt by `scripts/bootstrap-demo-site.sh`.
 - **Snapshot updates:** don't run `-u` blindly across the whole suite — review diffs per-file so a real regression doesn't get silently accepted as drift.
