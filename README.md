@@ -26,7 +26,9 @@ Install the version that matches your site's Umbraco major — the API client di
 
 Umbraco Engage 17.5.0 changed its Management API (A/B tests and applied personalization reference
 goals, projects and segments by key, and two endpoints were removed), so the Umbraco 17 line needs
-Umbraco Engage 17.5.0 or later. Earlier 17.x releases aren't supported (on 17.2.x several tools fail).
+Umbraco Engage 17.5.0 or later. On an older Umbraco Engage the affected tools (A/B tests, personalization,
+analytics queries and a few others) refuse to run, with a message naming the required version; the
+other tools keep working.
 
 The Umbraco 17 line is published under its own `lts-17` dist-tags, so it never takes over `latest`
 or `beta` from the Umbraco 18 line. It is in beta, so install `@lts-17-beta`. A range such as `@17`

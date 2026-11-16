@@ -72,6 +72,13 @@ import { mcpServers } from "./config/mcp-servers.js";
 
 // Import registries for tool filtering
 import { allModes, allModeNames, allSliceNames, loadServerConfig, clearConfigCache } from "./config/index.js";
+import {
+  checkEngageVersion,
+  readInstalledEngageVersion,
+  engageVersionWarning,
+  guardVersionSensitiveHandler,
+  ENGAGE_VERSION_NOT_CHECKED,
+} from "./config/engage-version-guard.js";
 
 // Initialize the SDK's fetch client for real Umbraco API calls.
 // This enables the Orval-generated client to authenticate via client_credentials.
@@ -89,26 +96,6 @@ if (clientId) {
 // Configure the API client for use with toolkit helpers
 // This connects your generated Orval client to executeGetApiCall, executeVoidApiCall, etc.
 configureApiClient(() => getUmbracoEngageManagementAPI());
-
-// ============================================================================
-// MCP Server Setup
-// ============================================================================
-
-// Create MCP server.
-// Pass an optional `instructions` string in the second argument to send
-// server-level guidance to clients during `initialize`. Most clients fold
-// this into the model's system prompt, so it applies implicitly without
-// per-tool repetition. Mirror the same value in `worker.ts` so stdio and
-// hosted deployments behave consistently.
-//
-// const server = new McpServer(
-//   { name: "umbraco-engage-editor-mcp", version: packageJson.version },
-//   { instructions: "When summarising results, refer to items by name, not by ID." },
-// );
-const server = new McpServer({
-  name: "umbraco-engage-editor-mcp",
-  version: packageJson.version,
-});
 
 // ============================================================================
 // Tool Filtering Setup
@@ -182,6 +169,42 @@ await handleCliCommands(collections, {
 });
 
 // ============================================================================
+// Engage Version Check
+// ============================================================================
+//
+// Runs after the CLI commands so `--list-tools` and friends stay offline.
+// Reads the installed Umbraco Engage version (the endpoint `get-package`
+// uses) under a 5 s deadline and compares it with `MIN_ENGAGE_VERSION`
+// (`config/engage-version.ts`). On an older Engage it warns on stderr and in
+// the server's `instructions`, and every call to a version-sensitive tool
+// returns an error naming the required version (see the registration loop
+// below). Fails open: if the version can't be read, nothing is blocked.
+// Skipped when no client credentials are configured.
+const engageVersionStatus = clientId
+  ? await checkEngageVersion({ readVersion: readInstalledEngageVersion })
+  : ENGAGE_VERSION_NOT_CHECKED;
+
+// ============================================================================
+// MCP Server Setup
+// ============================================================================
+
+// Create MCP server.
+// Pass an optional `instructions` string in the second argument to send
+// server-level guidance to clients during `initialize`. Most clients fold
+// this into the model's system prompt, so it applies implicitly without
+// per-tool repetition. Mirror the same value in `worker.ts` so stdio and
+// hosted deployments behave consistently.
+//
+// Here it surfaces the Engage version warning when one was detected (no
+// instructions otherwise). Extend the list if you also want custom guidance,
+// e.g. "When summarising results, refer to items by name, not by ID."
+const instructions = [engageVersionWarning(engageVersionStatus)].filter(Boolean).join("\n\n");
+const server = new McpServer(
+  { name: "umbraco-engage-editor-mcp", version: packageJson.version },
+  instructions ? { instructions } : undefined,
+);
+
+// ============================================================================
 // Register Tools with Filtering
 // ============================================================================
 
@@ -210,7 +233,7 @@ for (const collection of collections) {
       // result, so its outputSchema must not be advertised (or enforced).
       outputSchema: getRegisteredOutputSchema(tool),
       annotations,
-    }, tool.handler as ToolCallback<typeof tool.inputSchema>);
+    }, guardVersionSensitiveHandler(tool, engageVersionStatus) as ToolCallback<typeof tool.inputSchema>);
 
     registeredToolCount++;
   }

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- On an Umbraco Engage older than 17.5.0, the server now warns at startup (on stderr and in the MCP
+  `instructions`), and the 31 tools whose Engage API changed (A/B tests, applied personalization,
+  analytics queries, configuration and a few others) return an error naming the required version
+  instead of calling Engage. Other tools are unaffected, and if the Engage version can't be read
+  nothing is blocked.
+
 ### Changed
 
 - **Breaking:** the package is renamed from `@umbraco-engage/mcp-dev` to `@umbraco-engage/mcp`, and

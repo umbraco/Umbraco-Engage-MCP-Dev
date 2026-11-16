@@ -15,6 +15,15 @@ page variants need `nodeKey`/`contentTypeKey`, applied personalization reference
 `post-ab-test`, `post-applied-personalization` and friends fail against Engage 17.2.x. 17.3.x/17.4.x
 weren't checked, so treat 17.5.0 as the minimum.
 
+`MIN_ENGAGE_VERSION` in `src/config/engage-version.ts` enforces this minimum at runtime. At startup
+(`src/index.ts`, after the CLI commands, only with client credentials) the server reads the installed
+Engage version from the endpoint `get-package` uses, under a 5 s deadline. On an older Engage it warns
+on stderr and in the server `instructions`, and every call to a tool in `VERSION_SENSITIVE_TOOLS`
+returns an error naming the required version (`src/config/engage-version-guard.ts`). If the version
+can't be read, nothing is blocked. **Raise `MIN_ENGAGE_VERSION` whenever an alignment with a newer
+Engage changes the API**, and re-derive `VERSION_SENSITIVE_TOOLS` from that alignment's tools/list
+diff (the tools whose input or output schema changed).
+
 ## Commands
 
 ```bash
