@@ -24,7 +24,7 @@ Install the line that matches your Umbraco major:
 | 18 (with Umbraco Engage 18.2.0 or later) | `18.x` | `v18/main`, `v18/dev` |
 | 17 (with Umbraco Engage 17.x) | `17.x` | `main`, `dev` |
 
-Engage changed its Management API within 18.x, so the Umbraco 18 line needs Umbraco Engage 18.2.0 or later; on 18.0/18.1 several tools fail.
+Engage changed its Management API within 18.x, so the Umbraco 18 line needs Umbraco Engage 18.2.0 or later. On an older Umbraco Engage the affected tools (A/B tests, personalization, analytics queries and a few others) refuse to run, with a message naming the required version; the other tools keep working.
 
 The server checks the connected Umbraco's major version at startup and blocks the first tool call with a warning if it doesn't match. Set `UMBRACO_EXPECTED_MAJOR` only to override that deliberately.
 

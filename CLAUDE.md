@@ -34,6 +34,15 @@ segments, and `get-ab-test-empty`, `get-configuration` and `get-data-cleanup-las
 18.0/18.1 would need per-minor gating like the Forms MCP's `FORMS_FEATURE_MIN_VERSIONS`; it isn't
 done. When upgrading, check the new release's spec against the previous minor's, not only the major.
 
+`MIN_ENGAGE_VERSION` in `src/config/engage-version.ts` enforces this minimum at runtime. At startup
+(`src/index.ts`, after the CLI commands, only with client credentials) the server reads the installed
+Engage version from the endpoint `get-package` uses, under a 5 s deadline. On an older Engage it warns
+on stderr and in the server `instructions`, and every call to a tool in `VERSION_SENSITIVE_TOOLS`
+returns an error naming the required version (`src/config/engage-version-guard.ts`). If the version
+can't be read, nothing is blocked. **Raise `MIN_ENGAGE_VERSION` whenever an alignment with a newer
+Engage changes the API**, and re-derive `VERSION_SENSITIVE_TOOLS` from that alignment's tools/list
+diff (the tools whose input or output schema changed).
+
 **Engage's branch layout is deliberately the reverse of the CMS, Forms and Automate MCPs.** Those
 repos keep their newest Umbraco major on `main`/`dev` and Umbraco 17 on `v17/main`/`v17/dev`; here
 `main`/`dev` stay Umbraco 17 and Umbraco 18 lives on `v18/main`/`v18/dev`. This is intentional - when
