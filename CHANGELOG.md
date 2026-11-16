@@ -5,6 +5,27 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Changed
+
+- **Breaking:** the package is renamed from `@umbraco-engage/mcp-dev` to `@umbraco-engage/mcp`, and
+  its CLI command from `umbraco-engage-mcp-dev` to `engage-mcp-server` (matching `forms-mcp-server`
+  and `automate-mcp-server`). Update MCP client configs and scripts that name the old package or command.
+- Upgraded `@umbraco-cms/mcp-server-sdk` and `@umbraco-cms/mcp-hosted` to `1.0.0-beta.48`:
+  - In dry-run mode, write tools return a preview and no longer advertise an output schema.
+  - Environment variables (including an MCP client's `env` block) now take precedence over `./.env`;
+    a file passed with `--env <path>` still overrides both.
+  - The hosted server accepts only S256 PKCE.
+- **Breaking:** requires Umbraco Engage 17.5.0 or later. Engage 17.5.0 changed its Management API
+  (A/B tests and applied personalization reference goals, projects and segments by key), and the
+  tools now follow it. Earlier 17.x releases aren't supported.
+
+### Removed
+
+- **Breaking:** the `get-ab-test-preview-url` and `delete-segments-delete-segment-content` tools,
+  because Engage 17.5.0 removed their endpoints.
+
 ## [17.0.0-beta.2] - 2026-09-11
 
 ### Fixed

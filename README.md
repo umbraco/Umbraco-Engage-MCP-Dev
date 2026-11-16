@@ -4,6 +4,11 @@
 
 An MCP (Model Context Protocol) server for [Umbraco Engage](https://umbraco.com/products/umbraco-engage/) that enables AI-powered marketing, analytics, and personalization workflows. It provides comprehensive access to the Umbraco Engage Management API, allowing your AI agent to run A/B tests, query analytics, manage personas and segments, configure campaigns and goals, inspect visitor profiles, and more — all through natural conversation.
 
+> **Renamed:** this package was previously published as `@umbraco-engage/mcp-dev`. If your MCP
+> client config still names it, change it to `@umbraco-engage/mcp` (Umbraco 18) or
+> `@umbraco-engage/mcp@lts-17-beta` (Umbraco 17). The command is now `engage-mcp-server` (it was `umbraco-engage-mcp-dev`): `npx` finds it automatically,
+> but update any script that runs the old command directly.
+
 ## Intro
 
 The MCP server authenticates using an Umbraco API user, ensuring secure, permission-based access to the Umbraco Engage API. Credentials are provided via OAuth2 client credentials and used for every request to the Engage Management API.
@@ -65,6 +70,10 @@ For local development against a built copy of this repo, the bundled `.mcp.json`
 ## Configuration
 
 All settings can be provided as environment variables or CLI flags.
+
+CLI flags win over environment variables, and environment variables (including your MCP
+client's `env` block) win over a `.env` file in the working directory. A file passed with
+`--env <path>` overrides both the environment and `./.env`.
 
 ### Connection
 
