@@ -4,6 +4,11 @@
 
 An MCP (Model Context Protocol) server for [Umbraco Engage](https://umbraco.com/products/umbraco-engage/) that enables AI-powered marketing, analytics, and personalization workflows. It provides comprehensive access to the Umbraco Engage Management API, allowing your AI agent to run A/B tests, query analytics, manage personas and segments, configure campaigns and goals, inspect visitor profiles, and more — all through natural conversation.
 
+> **Renamed:** this package was previously published as `@umbraco-engage/mcp-dev`. If your MCP
+> client config still names it, change it to `@umbraco-engage/mcp` (Umbraco 18) or
+> `@umbraco-engage/mcp@lts-17-beta` (Umbraco 17). The command is now `engage-mcp-server` (it was `umbraco-engage-mcp-dev`): `npx` finds it automatically,
+> but update any script that runs the old command directly.
+
 ## Intro
 
 The MCP server authenticates using an Umbraco API user, ensuring secure, permission-based access to the Umbraco Engage API. Credentials are provided via OAuth2 client credentials and used for every request to the Engage Management API.
@@ -19,7 +24,7 @@ Install the line that matches your Umbraco major:
 | 18 (with Umbraco Engage 18.2.0 or later) | `18.x` | `v18/main`, `v18/dev` |
 | 17 (with Umbraco Engage 17.x) | `17.x` | `main`, `dev` |
 
-Engage changed its Management API within 18.x, so the Umbraco 18 line needs Umbraco Engage 18.2.0 or later; on 18.0/18.1 several tools fail.
+Engage changed its Management API within 18.x, so the Umbraco 18 line needs Umbraco Engage 18.2.0 or later. On an older Umbraco Engage the affected tools (A/B tests, personalization, analytics queries and a few others) refuse to run, with a message naming the required version; the other tools keep working.
 
 The server checks the connected Umbraco's major version at startup and blocks the first tool call with a warning if it doesn't match. Set `UMBRACO_EXPECTED_MAJOR` only to override that deliberately.
 
@@ -44,7 +49,7 @@ Add the server to your MCP client configuration (Claude Desktop, Cursor, VS Code
   "mcpServers": {
     "umbraco-engage": {
       "command": "npx",
-      "args": ["@umbraco-engage/mcp-dev"],
+      "args": ["@umbraco-engage/mcp"],
       "env": {
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",
         "UMBRACO_CLIENT_ID": "your-api-user-id",
@@ -63,6 +68,10 @@ For local development against a built copy of this repo, the bundled `.mcp.json`
 ## Configuration
 
 All settings can be provided as environment variables or CLI flags.
+
+CLI flags win over environment variables, and environment variables (including your MCP
+client's `env` block) win over a `.env` file in the working directory. A file passed with
+`--env <path>` overrides both the environment and `./.env`.
 
 ### Connection
 
