@@ -33,7 +33,7 @@ describe("get-ab-test-empty", () => {
     const context = createMockRequestHandlerExtra();
 
     const result = await getAbTestEmptyTool.handler(
-      { testType: TEST_TEST_TYPE },
+      { testType: TEST_TEST_TYPE, nodeKey: undefined },
       context,
     );
 

@@ -38,6 +38,15 @@ export interface ABTestingConfigurationModel {
   MinimumPercentageMacroGoalWarning: number;
 }
 
+export type AbTestCompletionActionModel = typeof AbTestCompletionActionModel[keyof typeof AbTestCompletionActionModel];
+
+
+export const AbTestCompletionActionModel = {
+  Nothing: 'Nothing',
+  Publish: 'Publish',
+  Draft: 'Draft',
+} as const;
+
 export interface AbTestContentTypeDtoModel {
   contentTypeId: number;
   /** @nullable */
@@ -57,26 +66,6 @@ export const AbTestStatusModel = {
   Completed: 'Completed',
   Draft: 'Draft',
 } as const;
-
-export interface GoalDtoModel {
-  id: number;
-  key: string;
-  /** @nullable */
-  name?: string | null;
-  value: number;
-  goalTypeId: string;
-  goalTypeConfig: string;
-  isMain: boolean;
-  isInverted: boolean;
-  isActive: boolean;
-  isInvalid: boolean;
-  created: string;
-  createdBy: string;
-  /** @nullable */
-  updated?: string | null;
-  /** @nullable */
-  updatedBy?: string | null;
-}
 
 export type AbTestTypeModel = typeof AbTestTypeModel[keyof typeof AbTestTypeModel];
 
@@ -112,6 +101,8 @@ export interface AbTestVariantDtoModel {
   isDisabled: boolean;
   /** @nullable */
   segment?: string | null;
+  /** @nullable */
+  previewSegment?: string | null;
   totalPageviewsForVariant: number;
   totalVisitorsForVariant: number;
 }
@@ -119,6 +110,7 @@ export interface AbTestVariantDtoModel {
 export interface AbTestUmbracoPageVariantDtoModel {
   id: number;
   unique: string;
+  nodeKey: string;
   /** @nullable */
   nodeName?: string | null;
   /** @nullable */
@@ -126,6 +118,7 @@ export interface AbTestUmbracoPageVariantDtoModel {
   /** @nullable */
   abTestId?: number | null;
   variesBySegment: boolean;
+  contentTypeKey: string;
 }
 
 export interface AbTestDtoModel {
@@ -133,11 +126,10 @@ export interface AbTestDtoModel {
   created: string;
   unique: string;
   /** @nullable */
-  projectId?: number | null;
+  projectKey?: string | null;
   /** @nullable */
-  goalId?: number | null;
+  goalKey?: string | null;
   status: AbTestStatusModel;
-  goal?: GoalDtoModel | null;
   /** @nullable */
   name?: string | null;
   /** @nullable */
@@ -170,6 +162,9 @@ export interface AbTestDtoModel {
   baselineConversionRate?: number | null;
   /** @nullable */
   viableVisitorThreshold?: number | null;
+  /** @nullable */
+  previewNodeKey?: string | null;
+  onCompleteAction: AbTestCompletionActionModel;
 }
 
 export interface AbTestVariantModel {
@@ -196,6 +191,7 @@ export interface AbTestVariantModel {
   totalPageviewsForVariant: number;
   totalVisitorsForVariant: number;
   readonly segment: string;
+  readonly previewSegment: string;
 }
 
 export interface AbTestVariantMainGoalComparisonModel {
@@ -322,6 +318,8 @@ export interface AbTestDetailVariantInfoModel {
   isDisabled: boolean;
   /** @nullable */
   segment?: string | null;
+  /** @nullable */
+  previewSegment?: string | null;
   totalPageviewsForVariant: number;
   totalVisitorsForVariant: number;
   /** @nullable */
@@ -342,8 +340,6 @@ export interface AbTestDetailVariantInfoModel {
   mainGoalWarning: boolean;
   goalWarning: boolean;
   status: AbTestVariantStatusModel;
-  /** @nullable */
-  previewUrl?: string | null;
   isWinner: boolean;
   isLeading: boolean;
 }
@@ -354,6 +350,8 @@ export interface AbTestDetailModel {
   /** @nullable */
   variants?: AbTestDetailVariantInfoModel[] | null;
   isInvertedGoal: boolean;
+  /** @nullable */
+  cultureSharedSegmentedProperties?: string[] | null;
 }
 
 export interface AbTestProjectDtoModel {
@@ -377,275 +375,6 @@ export interface AbTestingConfigurationDtoModel {
   readonly requiredVisitorPercentageBeforeShowingAdvice: number;
   readonly minimumPercentageMacroGoalWarning: number;
 }
-
-export interface AnalyticsVisitorCookieConfigurationModel {
-  ExpirationInDays: number;
-  CookieName: string;
-  LegacyCookieName: string;
-  IncludeSubdomains: boolean;
-}
-
-export interface AnalyticsVisitorCookieConfigurationDtoModel {
-  readonly expirationInDays: number;
-  readonly cookieName: string;
-  readonly legacyCookieName: string;
-  readonly includeSubdomains: boolean;
-}
-
-export interface AnalyticsInternalSiteSearchConfigurationModel {
-  AutomaticSearchTracking: boolean;
-  SearchTermParameters: string;
-  /** @nullable */
-  SearchBoxParameters?: string | null;
-  /** @nullable */
-  CategoryParameters?: string | null;
-}
-
-export interface AnalyticsDataCollectionConfigurationModel {
-  AnonymizeIPAddress: boolean;
-  FlushRateInRecords: number;
-  FlushIntervalInSeconds: number;
-  RegexTimeoutInMilliseconds: number;
-  InternalSiteSearch: AnalyticsInternalSiteSearchConfigurationModel;
-}
-
-export interface InternalSiteSearchConfigurationDtoModel {
-  readonly automaticSearchTracking: boolean;
-  readonly searchTermParameters: readonly string[];
-  readonly searchBoxParameters: readonly string[];
-  readonly categoryParameters: readonly string[];
-}
-
-export interface AnalyticsDataCollectionConfigurationDtoModel {
-  readonly anonymizeIPAddress: boolean;
-  readonly flushRateInRecords: number;
-  readonly flushIntervalInSeconds: number;
-  readonly regexTimeoutInMilliseconds: number;
-  readonly internalSiteSearch: AnalyticsInternalSiteSearchConfigurationModel | InternalSiteSearchConfigurationDtoModel;
-}
-
-export interface AnalyticsDataStorageConfigurationModel {
-  AnonymizeAnalyticsDataAfterDays: number;
-  DeleteAnalyticsDataAfterDays: number;
-  deleteControlGroupDataAfterDays: number;
-  DeleteRawDataAfterDays: number;
-}
-
-export interface AnalyticsDataStorageConfigurationDtoModel {
-  readonly anonymizeAnalyticsDataAfterDays: number;
-  readonly deleteAnalyticsDataAfterDays: number;
-  readonly deleteControlGroupDataAfterDays: number;
-  readonly deleteRawDataAfterDays: number;
-}
-
-export interface AnalyticsDataProcessingConfigurationModel {
-  IntervalInSeconds: number;
-  SessionLengthInMinutes: number;
-  IsProcessingServer: boolean;
-}
-
-export interface AnalyticsDataProcessingConfigurationDtoModel {
-  readonly intervalInSeconds: number;
-  readonly sessionLengthInMinutes: number;
-  readonly isProcessingServer: boolean;
-}
-
-export interface AnalyticsDataCleanupConfigurationModel {
-  Enabled: boolean;
-  FirstRunTime: string;
-  StartupDelay: string;
-  Interval: string;
-  CommandTimeout: number;
-  /** @deprecated */
-  StartAfterSeconds: number;
-  /** @deprecated */
-  IntervalInSeconds: number;
-  /** @deprecated */
-  NumberOfRows: number;
-}
-
-export interface AnalyticsDataCleanupConfigurationDtoModel {
-  readonly enabled: boolean;
-  readonly firstRunTime: string;
-  readonly startupDelay: string;
-  readonly interval: string;
-  readonly commandTimeout: number;
-  /** @deprecated */
-  readonly startAfterSeconds: number;
-  /** @deprecated */
-  readonly intervalInSeconds: number;
-  /** @deprecated */
-  readonly numberOfRows: number;
-}
-
-export interface AnalyticsConfigurationDtoModel {
-  readonly visitorCookie: AnalyticsVisitorCookieConfigurationModel | AnalyticsVisitorCookieConfigurationDtoModel;
-  readonly dataCollection: AnalyticsDataCollectionConfigurationModel | AnalyticsDataCollectionConfigurationDtoModel;
-  readonly dataStorage: AnalyticsDataStorageConfigurationModel | AnalyticsDataStorageConfigurationDtoModel;
-  readonly dataProcessing: AnalyticsDataProcessingConfigurationModel | AnalyticsDataProcessingConfigurationDtoModel;
-  readonly dataCleanup: AnalyticsDataCleanupConfigurationModel | AnalyticsDataCleanupConfigurationDtoModel;
-}
-
-export interface AnalyticsConfigurationModel {
-  VisitorCookie: AnalyticsVisitorCookieConfigurationModel;
-  DataCollection: AnalyticsDataCollectionConfigurationModel;
-  DataStorage: AnalyticsDataStorageConfigurationModel;
-  DataProcessing: AnalyticsDataProcessingConfigurationModel;
-  DataCleanup: AnalyticsDataCleanupConfigurationModel;
-}
-
-export type MetricModel = typeof MetricModel[keyof typeof MetricModel];
-
-
-export const MetricModel = {
-  UNDEFINED: 'UNDEFINED',
-  users: 'users',
-  newVisitors: 'newVisitors',
-  percentNewSessions: 'percentNewSessions',
-  sessions: 'sessions',
-  bounceRate: 'bounceRate',
-  sessionDuration: 'sessionDuration',
-  avgSessionDuration: 'avgSessionDuration',
-  goalCompletionsAll: 'goalCompletionsAll',
-  goalValueAll: 'goalValueAll',
-  pageviews: 'pageviews',
-  pageviewsWithSubpages: 'pageviewsWithSubpages',
-  pageviewsPerSession: 'pageviewsPerSession',
-  uniquePageviews: 'uniquePageviews',
-  avgTimeOnPage: 'avgTimeOnPage',
-  totalEvents: 'totalEvents',
-  eventValue: 'eventValue',
-  avgEventValue: 'avgEventValue',
-  abTestVariantVisitors: 'abTestVariantVisitors',
-  abTestVariantCompletionsAll: 'abTestVariantCompletionsAll',
-  videoPlays: 'videoPlays',
-  videoPlaytime: 'videoPlaytime',
-  avgVideoPlaytime: 'avgVideoPlaytime',
-  avgRelativeVideoPlaytime: 'avgRelativeVideoPlaytime',
-  videoEvents: 'videoEvents',
-  umbracoFormsViews: 'umbracoFormsViews',
-  umbracoFormsSubmissions: 'umbracoFormsSubmissions',
-  umbracoFormsStarts: 'umbracoFormsStarts',
-  umbracoFormsAbandons: 'umbracoFormsAbandons',
-  umbracoFormsErrors: 'umbracoFormsErrors',
-  umbracoFormsFieldFocusses: 'umbracoFormsFieldFocusses',
-  umbracoFormsFieldAbandons: 'umbracoFormsFieldAbandons',
-  umbracoFormsFieldErrors: 'umbracoFormsFieldErrors',
-  avgEngagedTimeOnPage: 'avgEngagedTimeOnPage',
-  pageviewsBot: 'pageviewsBot',
-  pageSessions: 'pageSessions',
-  pageVisitors: 'pageVisitors',
-  pageSessionsWithSubpages: 'pageSessionsWithSubpages',
-  pageVisitorsWithSubpages: 'pageVisitorsWithSubpages',
-  activeSegmentPageviews: 'activeSegmentPageviews',
-  inactiveSegmentPageviews: 'inactiveSegmentPageviews',
-  activeSegmentSessions: 'activeSegmentSessions',
-  inactiveSegmentSessions: 'inactiveSegmentSessions',
-  activeSegmentProfiles: 'activeSegmentProfiles',
-  inactiveSegmentProfiles: 'inactiveSegmentProfiles',
-  activePersonalizedSegmentPageviews: 'activePersonalizedSegmentPageviews',
-  inactivePersonalizedSegmentPageviews: 'inactivePersonalizedSegmentPageviews',
-  activePersonalizedSegmentSessions: 'activePersonalizedSegmentSessions',
-  inactivePersonalizedSegmentSessions: 'inactivePersonalizedSegmentSessions',
-  activePersonalizedSegmentProfiles: 'activePersonalizedSegmentProfiles',
-  inactivePersonalizedSegmentProfiles: 'inactivePersonalizedSegmentProfiles',
-  searchVolume: 'searchVolume',
-  searchVolumeWithSubpages: 'searchVolumeWithSubpages',
-  visitors: 'visitors',
-  campaignEntries: 'campaignEntries',
-  campaignVisitors: 'campaignVisitors',
-  campaignGoals: 'campaignGoals',
-  campaignGoalValue: 'campaignGoalValue',
-  campaignFormSubmissions: 'campaignFormSubmissions',
-  campaignCommerceOrders: 'campaignCommerceOrders',
-} as const;
-
-export type DimensionModel = typeof DimensionModel[keyof typeof DimensionModel];
-
-
-export const DimensionModel = {
-  UNDEFINED: 'UNDEFINED',
-  usertype: 'usertype',
-  referralPath: 'referralPath',
-  fullReferrer: 'fullReferrer',
-  campaign: 'campaign',
-  source: 'source',
-  medium: 'medium',
-  sourceMedium: 'sourceMedium',
-  browser: 'browser',
-  browserVersion: 'browserVersion',
-  operatingSystem: 'operatingSystem',
-  operatingSystemVersion: 'operatingSystemVersion',
-  deviceCategory: 'deviceCategory',
-  country: 'country',
-  city: 'city',
-  hostname: 'hostname',
-  pageUrl: 'pageUrl',
-  pageId: 'pageId',
-  NodeId: 'NodeId',
-  NodeCulture: 'NodeCulture',
-  NodeSegment: 'NodeSegment',
-  NodeContentType: 'NodeContentType',
-  pagePath: 'pagePath',
-  eventCategory: 'eventCategory',
-  eventAction: 'eventAction',
-  eventLabel: 'eventLabel',
-  date: 'date',
-  year: 'year',
-  month: 'month',
-  week: 'week',
-  day: 'day',
-  hour: 'hour',
-  minute: 'minute',
-  nthMonth: 'nthMonth',
-  nthWeek: 'nthWeek',
-  nthDay: 'nthDay',
-  nthMinute: 'nthMinute',
-  nthHour: 'nthHour',
-  abTest: 'abTest',
-  abTestVariant: 'abTestVariant',
-  goal: 'goal',
-  goalId: 'goalId',
-  goalType: 'goalType',
-  isMainGoal: 'isMainGoal',
-  visitorType: 'visitorType',
-  bot: 'bot',
-  botId: 'botId',
-  botVersion: 'botVersion',
-  botVersionId: 'botVersionId',
-  referralHostname: 'referralHostname',
-  referralIsInternalPage: 'referralIsInternalPage',
-  referralPathAndQuery: 'referralPathAndQuery',
-  browserId: 'browserId',
-  datetime: 'datetime',
-  pageviewSegmentId: 'pageviewSegmentId',
-  pageviewSegmentName: 'pageviewSegmentName',
-  pageviewAppliedSegmentId: 'pageviewAppliedSegmentId',
-  pageviewAppliedSegmentName: 'pageviewAppliedSegmentName',
-  pageviewAppliedPersonalizationId: 'pageviewAppliedPersonalizationId',
-  pageviewAppliedPersonalizationName: 'pageviewAppliedPersonalizationName',
-  videoName: 'videoName',
-  videoUrl: 'videoUrl',
-  videoEventType: 'videoEventType',
-  videoEventTypeName: 'videoEventTypeName',
-  umbracoFormsName: 'umbracoFormsName',
-  umbracoFormsId: 'umbracoFormsId',
-  umbracoFormsFieldName: 'umbracoFormsFieldName',
-  umbracoFormsFieldId: 'umbracoFormsFieldId',
-  umbracoFormsFieldError: 'umbracoFormsFieldError',
-  cityId: 'cityId',
-  countryId: 'countryId',
-  province: 'province',
-  provinceId: 'provinceId',
-  county: 'county',
-  countyId: 'countyId',
-  sourcePlatform: 'sourcePlatform',
-  creativeFormat: 'creativeFormat',
-  marketingTactic: 'marketingTactic',
-  segmentId: 'segmentId',
-  segmentName: 'segmentName',
-  searchTerm: 'searchTerm',
-} as const;
 
 export type ColumnModel = typeof ColumnModel[keyof typeof ColumnModel];
 
@@ -791,7 +520,312 @@ export const ColumnModel = {
   campaignGoalValue: 'campaignGoalValue',
   campaignFormSubmissions: 'campaignFormSubmissions',
   campaignCommerceOrders: 'campaignCommerceOrders',
+  entrySessions: 'entrySessions',
 } as const;
+
+export type MetricModel = typeof MetricModel[keyof typeof MetricModel];
+
+
+export const MetricModel = {
+  UNDEFINED: 'UNDEFINED',
+  users: 'users',
+  newVisitors: 'newVisitors',
+  percentNewSessions: 'percentNewSessions',
+  sessions: 'sessions',
+  bounceRate: 'bounceRate',
+  sessionDuration: 'sessionDuration',
+  avgSessionDuration: 'avgSessionDuration',
+  goalCompletionsAll: 'goalCompletionsAll',
+  goalValueAll: 'goalValueAll',
+  pageviews: 'pageviews',
+  pageviewsWithSubpages: 'pageviewsWithSubpages',
+  pageviewsPerSession: 'pageviewsPerSession',
+  uniquePageviews: 'uniquePageviews',
+  avgTimeOnPage: 'avgTimeOnPage',
+  totalEvents: 'totalEvents',
+  eventValue: 'eventValue',
+  avgEventValue: 'avgEventValue',
+  abTestVariantVisitors: 'abTestVariantVisitors',
+  abTestVariantCompletionsAll: 'abTestVariantCompletionsAll',
+  videoPlays: 'videoPlays',
+  videoPlaytime: 'videoPlaytime',
+  avgVideoPlaytime: 'avgVideoPlaytime',
+  avgRelativeVideoPlaytime: 'avgRelativeVideoPlaytime',
+  videoEvents: 'videoEvents',
+  umbracoFormsViews: 'umbracoFormsViews',
+  umbracoFormsSubmissions: 'umbracoFormsSubmissions',
+  umbracoFormsStarts: 'umbracoFormsStarts',
+  umbracoFormsAbandons: 'umbracoFormsAbandons',
+  umbracoFormsErrors: 'umbracoFormsErrors',
+  umbracoFormsFieldFocusses: 'umbracoFormsFieldFocusses',
+  umbracoFormsFieldAbandons: 'umbracoFormsFieldAbandons',
+  umbracoFormsFieldErrors: 'umbracoFormsFieldErrors',
+  avgEngagedTimeOnPage: 'avgEngagedTimeOnPage',
+  pageviewsBot: 'pageviewsBot',
+  pageSessions: 'pageSessions',
+  pageVisitors: 'pageVisitors',
+  pageSessionsWithSubpages: 'pageSessionsWithSubpages',
+  pageVisitorsWithSubpages: 'pageVisitorsWithSubpages',
+  activeSegmentPageviews: 'activeSegmentPageviews',
+  inactiveSegmentPageviews: 'inactiveSegmentPageviews',
+  activeSegmentSessions: 'activeSegmentSessions',
+  inactiveSegmentSessions: 'inactiveSegmentSessions',
+  activeSegmentProfiles: 'activeSegmentProfiles',
+  inactiveSegmentProfiles: 'inactiveSegmentProfiles',
+  activePersonalizedSegmentPageviews: 'activePersonalizedSegmentPageviews',
+  inactivePersonalizedSegmentPageviews: 'inactivePersonalizedSegmentPageviews',
+  activePersonalizedSegmentSessions: 'activePersonalizedSegmentSessions',
+  inactivePersonalizedSegmentSessions: 'inactivePersonalizedSegmentSessions',
+  activePersonalizedSegmentProfiles: 'activePersonalizedSegmentProfiles',
+  inactivePersonalizedSegmentProfiles: 'inactivePersonalizedSegmentProfiles',
+  searchVolume: 'searchVolume',
+  searchVolumeWithSubpages: 'searchVolumeWithSubpages',
+  visitors: 'visitors',
+  campaignEntries: 'campaignEntries',
+  campaignVisitors: 'campaignVisitors',
+  campaignGoals: 'campaignGoals',
+  campaignGoalValue: 'campaignGoalValue',
+  campaignFormSubmissions: 'campaignFormSubmissions',
+  campaignCommerceOrders: 'campaignCommerceOrders',
+  entrySessions: 'entrySessions',
+} as const;
+
+export interface AnalyticsCompareRowModel {
+  dimensions: unknown[];
+  primary: number[];
+  secondary: number[];
+}
+
+export interface AnalyticsCompareQueryResultModel {
+  dimensions: ColumnModel[];
+  metrics: MetricModel[];
+  rows: AnalyticsCompareRowModel[];
+  /** @nullable */
+  primaryMetricTotals?: number[] | null;
+  /** @nullable */
+  secondaryMetricTotals?: number[] | null;
+  /** @nullable */
+  totalRows?: number | null;
+  currentPage: number;
+  rowsPerPage: number;
+  reportsExist: boolean;
+}
+
+export interface AnalyticsVisitorCookieConfigurationModel {
+  ExpirationInDays: number;
+  CookieName: string;
+  LegacyCookieName: string;
+  IncludeSubdomains: boolean;
+}
+
+export interface AnalyticsVisitorCookieConfigurationDtoModel {
+  readonly expirationInDays: number;
+  readonly cookieName: string;
+  readonly legacyCookieName: string;
+  readonly includeSubdomains: boolean;
+}
+
+export interface AnalyticsInternalSiteSearchConfigurationModel {
+  AutomaticSearchTracking: boolean;
+  SearchTermParameters: string;
+  /** @nullable */
+  SearchBoxParameters?: string | null;
+  /** @nullable */
+  CategoryParameters?: string | null;
+}
+
+export interface AnalyticsDataCollectionConfigurationModel {
+  AnonymizeIPAddress: boolean;
+  RequireAnalyticsPermissionForMemberTracking: boolean;
+  FlushRateInRecords: number;
+  FlushIntervalInSeconds: number;
+  RegexTimeoutInMilliseconds: number;
+  InternalSiteSearch: AnalyticsInternalSiteSearchConfigurationModel;
+}
+
+export interface InternalSiteSearchConfigurationDtoModel {
+  readonly automaticSearchTracking: boolean;
+  readonly searchTermParameters: readonly string[];
+  readonly searchBoxParameters: readonly string[];
+  readonly categoryParameters: readonly string[];
+}
+
+export interface AnalyticsDataCollectionConfigurationDtoModel {
+  readonly anonymizeIPAddress: boolean;
+  readonly requireAnalyticsPermissionForMemberTracking: boolean;
+  readonly flushRateInRecords: number;
+  readonly flushIntervalInSeconds: number;
+  readonly regexTimeoutInMilliseconds: number;
+  readonly internalSiteSearch: AnalyticsInternalSiteSearchConfigurationModel | InternalSiteSearchConfigurationDtoModel;
+}
+
+export interface AnalyticsDataStorageConfigurationModel {
+  AnonymizeAnalyticsDataAfterDays: number;
+  DeleteAnalyticsDataAfterDays: number;
+  deleteControlGroupDataAfterDays: number;
+  DeleteRawDataAfterDays: number;
+}
+
+export interface AnalyticsDataStorageConfigurationDtoModel {
+  readonly anonymizeAnalyticsDataAfterDays: number;
+  readonly deleteAnalyticsDataAfterDays: number;
+  readonly deleteControlGroupDataAfterDays: number;
+  readonly deleteRawDataAfterDays: number;
+}
+
+export interface AnalyticsDataProcessingConfigurationModel {
+  IntervalInSeconds: number;
+  SessionLengthInMinutes: number;
+  IsProcessingServer: boolean;
+}
+
+export interface AnalyticsDataProcessingConfigurationDtoModel {
+  readonly intervalInSeconds: number;
+  readonly sessionLengthInMinutes: number;
+  readonly isProcessingServer: boolean;
+}
+
+export interface AnalyticsDataCleanupConfigurationModel {
+  Enabled: boolean;
+  FirstRunTime: string;
+  StartupDelay: string;
+  Interval: string;
+  CommandTimeout: number;
+  /** @deprecated */
+  StartAfterSeconds: number;
+  /** @deprecated */
+  IntervalInSeconds: number;
+  /** @deprecated */
+  NumberOfRows: number;
+}
+
+export interface AnalyticsDataCleanupConfigurationDtoModel {
+  readonly enabled: boolean;
+  readonly firstRunTime: string;
+  readonly startupDelay: string;
+  readonly interval: string;
+  readonly commandTimeout: number;
+  /** @deprecated */
+  readonly startAfterSeconds: number;
+  /** @deprecated */
+  readonly intervalInSeconds: number;
+  /** @deprecated */
+  readonly numberOfRows: number;
+}
+
+export interface AnalyticsConfigurationDtoModel {
+  readonly visitorCookie: AnalyticsVisitorCookieConfigurationModel | AnalyticsVisitorCookieConfigurationDtoModel;
+  readonly dataCollection: AnalyticsDataCollectionConfigurationModel | AnalyticsDataCollectionConfigurationDtoModel;
+  readonly dataStorage: AnalyticsDataStorageConfigurationModel | AnalyticsDataStorageConfigurationDtoModel;
+  readonly dataProcessing: AnalyticsDataProcessingConfigurationModel | AnalyticsDataProcessingConfigurationDtoModel;
+  readonly dataCleanup: AnalyticsDataCleanupConfigurationModel | AnalyticsDataCleanupConfigurationDtoModel;
+}
+
+export interface AnalyticsConfigurationModel {
+  VisitorCookie: AnalyticsVisitorCookieConfigurationModel;
+  DataCollection: AnalyticsDataCollectionConfigurationModel;
+  DataStorage: AnalyticsDataStorageConfigurationModel;
+  DataProcessing: AnalyticsDataProcessingConfigurationModel;
+  DataCleanup: AnalyticsDataCleanupConfigurationModel;
+}
+
+export interface AnalyticsQueryComparisonModel {
+  startDate: string;
+  endDate: string;
+}
+
+export type DimensionModel = typeof DimensionModel[keyof typeof DimensionModel];
+
+
+export const DimensionModel = {
+  UNDEFINED: 'UNDEFINED',
+  usertype: 'usertype',
+  referralPath: 'referralPath',
+  fullReferrer: 'fullReferrer',
+  campaign: 'campaign',
+  source: 'source',
+  medium: 'medium',
+  sourceMedium: 'sourceMedium',
+  browser: 'browser',
+  browserVersion: 'browserVersion',
+  operatingSystem: 'operatingSystem',
+  operatingSystemVersion: 'operatingSystemVersion',
+  deviceCategory: 'deviceCategory',
+  country: 'country',
+  city: 'city',
+  hostname: 'hostname',
+  pageUrl: 'pageUrl',
+  pageId: 'pageId',
+  NodeId: 'NodeId',
+  NodeCulture: 'NodeCulture',
+  NodeSegment: 'NodeSegment',
+  NodeContentType: 'NodeContentType',
+  pagePath: 'pagePath',
+  eventCategory: 'eventCategory',
+  eventAction: 'eventAction',
+  eventLabel: 'eventLabel',
+  date: 'date',
+  year: 'year',
+  month: 'month',
+  week: 'week',
+  day: 'day',
+  hour: 'hour',
+  minute: 'minute',
+  nthMonth: 'nthMonth',
+  nthWeek: 'nthWeek',
+  nthDay: 'nthDay',
+  nthMinute: 'nthMinute',
+  nthHour: 'nthHour',
+  abTest: 'abTest',
+  abTestVariant: 'abTestVariant',
+  goal: 'goal',
+  goalId: 'goalId',
+  goalType: 'goalType',
+  isMainGoal: 'isMainGoal',
+  visitorType: 'visitorType',
+  bot: 'bot',
+  botId: 'botId',
+  botVersion: 'botVersion',
+  botVersionId: 'botVersionId',
+  referralHostname: 'referralHostname',
+  referralIsInternalPage: 'referralIsInternalPage',
+  referralPathAndQuery: 'referralPathAndQuery',
+  browserId: 'browserId',
+  datetime: 'datetime',
+  pageviewSegmentId: 'pageviewSegmentId',
+  pageviewSegmentName: 'pageviewSegmentName',
+  pageviewAppliedSegmentId: 'pageviewAppliedSegmentId',
+  pageviewAppliedSegmentName: 'pageviewAppliedSegmentName',
+  pageviewAppliedPersonalizationId: 'pageviewAppliedPersonalizationId',
+  pageviewAppliedPersonalizationName: 'pageviewAppliedPersonalizationName',
+  videoName: 'videoName',
+  videoUrl: 'videoUrl',
+  videoEventType: 'videoEventType',
+  videoEventTypeName: 'videoEventTypeName',
+  umbracoFormsName: 'umbracoFormsName',
+  umbracoFormsId: 'umbracoFormsId',
+  umbracoFormsFieldName: 'umbracoFormsFieldName',
+  umbracoFormsFieldId: 'umbracoFormsFieldId',
+  umbracoFormsFieldError: 'umbracoFormsFieldError',
+  cityId: 'cityId',
+  countryId: 'countryId',
+  province: 'province',
+  provinceId: 'provinceId',
+  county: 'county',
+  countyId: 'countyId',
+  sourcePlatform: 'sourcePlatform',
+  creativeFormat: 'creativeFormat',
+  marketingTactic: 'marketingTactic',
+  segmentId: 'segmentId',
+  segmentName: 'segmentName',
+  searchTerm: 'searchTerm',
+} as const;
+
+export interface AnalyticsQueryPagingModel {
+  page: number;
+  pageSize: number;
+  includeTotals: boolean;
+}
 
 export interface AnalyticsQueryGetModel {
   startDate: string;
@@ -801,8 +835,18 @@ export interface AnalyticsQueryGetModel {
   realtime: boolean;
   sort: ColumnModel;
   ascending: boolean;
+  /** @deprecated */
   page: number;
+  /** @deprecated */
   pageSize: number;
+  paging?: AnalyticsQueryPagingModel | null;
+  /** @nullable */
+  search?: string | null;
+  /** @nullable */
+  includeTotals?: boolean | null;
+  /** @nullable */
+  includeTotalRows?: boolean | null;
+  comparison?: AnalyticsQueryComparisonModel | null;
   includeSubpages: boolean;
   /** @nullable */
   filter?: string | null;
@@ -815,6 +859,8 @@ export interface AnalyticsQueryResultModel {
   rowsPerPage: number;
   totalRows: number;
   totalPages: number;
+  /** @nullable */
+  metricTotals?: number[] | null;
   readonly fromRow: number;
   readonly toRow: number;
   reportsExist: boolean;
@@ -855,34 +901,9 @@ export interface AppliedPersonalizationContentTypeDtoModel {
   key: string;
   contentTypeId: number;
   /** @nullable */
+  contentTypeUnique?: string | null;
+  /** @nullable */
   culture?: string | null;
-}
-
-export interface SegmentRuleDtoModel {
-  id: number;
-  unique: string;
-  segmentId: number;
-  /** @nullable */
-  type?: string | null;
-  config?: unknown | null;
-  isNegation: boolean;
-  created: string;
-}
-
-export interface SegmentDtoModel {
-  id: number;
-  created: string;
-  unique: string;
-  /** @nullable */
-  name?: string | null;
-  /** @nullable */
-  description?: string | null;
-  /** @nullable */
-  endTime?: string | null;
-  isTemporary: boolean;
-  sortOrder: number;
-  rules: SegmentRuleDtoModel[];
-  controlGroupSize: number;
 }
 
 export type AppliedPersonalizationTypeModel = typeof AppliedPersonalizationTypeModel[keyof typeof AppliedPersonalizationTypeModel];
@@ -899,6 +920,8 @@ export interface AppliedPersonalizationUmbracoPageVariantDtoModel {
   unique: string;
   nodeId: number;
   /** @nullable */
+  nodeKey?: string | null;
+  /** @nullable */
   culture?: string | null;
 }
 
@@ -907,8 +930,7 @@ export interface AppliedPersonalizationDtoModel {
   created: string;
   unique: string;
   /** @nullable */
-  segmentId?: number | null;
-  segment?: SegmentDtoModel | null;
+  segmentKey?: string | null;
   type: AppliedPersonalizationTypeModel;
   /** @nullable */
   umbracoSegmentAlias?: string | null;
@@ -930,7 +952,9 @@ export interface AppliedPersonalizationDtoModel {
   pages: AppliedPersonalizationUmbracoPageVariantDtoModel[];
   contentTypes: AppliedPersonalizationContentTypeDtoModel[];
   /** @nullable */
-  previewUrl?: string | null;
+  previewSegment?: string | null;
+  /** @nullable */
+  previewNodeKey?: string | null;
 }
 
 export interface BackofficeConfigurationDtoModel {
@@ -1260,10 +1284,12 @@ export interface ContentScoringResultModel {
 
 export interface CreateAppliedPersonalizationSegmentResponseModel {
   created: boolean;
+  cultureSharedSegmentedProperties: string[];
 }
 
 export interface CreateSegmentAbTestResponseModel {
   created: boolean;
+  cultureSharedSegmentedProperties: string[];
 }
 
 export interface CustomGoalTypeModel {
@@ -1390,11 +1416,20 @@ export interface DataCleanupLastRunDtoModel {
   failed: boolean;
   /** @nullable */
   errorMessage?: string | null;
-  anonymizedVisitors: number;
-  deletedPageviews: number;
-  deletedVisitors: number;
+  /** @nullable */
+  anonymizedVisitors?: number | null;
+  /** @nullable */
+  deletedPageviews?: number | null;
+  /** @nullable */
+  deletedVisitors?: number | null;
+  /** @nullable */
+  deletedControlGroups?: number | null;
+  /** @nullable */
+  deletedRawRecords?: number | null;
   anonymizeAfterDays: number;
   deleteAfterDays: number;
+  deleteControlGroupDataAfterDays: number;
+  deleteRawDataAfterDays: number;
   databaseSchemaComplete: boolean;
 }
 
@@ -1516,6 +1551,13 @@ export interface EnabledAddonsModel {
   umbracoCommerce: boolean;
 }
 
+export interface EntityItemResponseModel {
+  name: string;
+  unique: string;
+  /** @nullable */
+  description?: string | null;
+}
+
 export interface ExportProfileDtoModel {
   /** @nullable */
   type?: string | null;
@@ -1631,6 +1673,26 @@ export interface GetProfileOverviewRequestModel {
   identifiedName?: string | null;
 }
 
+export interface GoalDtoModel {
+  id: number;
+  key: string;
+  /** @nullable */
+  name?: string | null;
+  value: number;
+  goalTypeId: string;
+  goalTypeConfig: string;
+  isMain: boolean;
+  isInverted: boolean;
+  isActive: boolean;
+  isInvalid: boolean;
+  created: string;
+  createdBy: string;
+  /** @nullable */
+  updated?: string | null;
+  /** @nullable */
+  updatedBy?: string | null;
+}
+
 export interface PersonaScoreModel {
   id: number;
   unique: string;
@@ -1733,7 +1795,7 @@ export interface HeatmapPageVariantModel {
   /** @nullable */
   name?: string | null;
   /** @nullable */
-  queryString?: string | null;
+  segment?: string | null;
 }
 
 export interface HeatmapSettingsRequestModel {
@@ -1991,11 +2053,12 @@ export interface PersonasDtoModel {
   upperScoreLimit?: number | null;
 }
 
-export interface PreviewUrlResponseModel {
+export interface PreviewableSegmentDtoModel {
+  alias: string;
   /** @nullable */
-  errorMessage?: string | null;
+  name?: string | null;
   /** @nullable */
-  previewUrl?: string | null;
+  cultures?: string[] | null;
 }
 
 export interface ProblemDetails {
@@ -2295,6 +2358,33 @@ export interface SearchTermByVisitorDtoModel {
   timestamp: string;
 }
 
+export interface SegmentRuleDtoModel {
+  id: number;
+  unique: string;
+  segmentId: number;
+  /** @nullable */
+  type?: string | null;
+  config?: unknown | null;
+  isNegation: boolean;
+  created: string;
+}
+
+export interface SegmentDtoModel {
+  id: number;
+  created: string;
+  unique: string;
+  /** @nullable */
+  name?: string | null;
+  /** @nullable */
+  description?: string | null;
+  /** @nullable */
+  endTime?: string | null;
+  isTemporary: boolean;
+  sortOrder: number;
+  rules: SegmentRuleDtoModel[];
+  controlGroupSize: number;
+}
+
 export interface SegmentPriorityUpdateModel {
   id: number;
   sortOrder: number;
@@ -2309,14 +2399,34 @@ export interface SegmentSessionsNeededDtoModel {
   moreThanFour: number;
 }
 
+export interface SegmentedPropertyResponseModel {
+  hasSegmentedProperty: boolean;
+  cultureSharedSegmentedProperties: string[];
+}
+
 export interface SessionsResponseModel {
   results: ProfileSessionDtoModel[];
   totalResults: number;
 }
 
+export type VisitorTypeModel = typeof VisitorTypeModel[keyof typeof VisitorTypeModel];
+
+
+export const VisitorTypeModel = {
+  Person: 'Person',
+  Bot: 'Bot',
+  Monitor: 'Monitor',
+  Spam: 'Spam',
+} as const;
+
+export interface SetVisitorTypeRequestModel {
+  visitorType: VisitorTypeModel;
+}
+
 export interface SuspiciousVisitorDtoModel {
   visitorId: number;
   totalPageviews: number;
+  visitorType: VisitorTypeModel;
   /** @nullable */
   ipAddress?: string | null;
   /** @nullable */
@@ -2327,6 +2437,15 @@ export interface SuspiciousActivityResponseModel {
   results: SuspiciousVisitorDtoModel[];
   totalResults: number;
 }
+
+export type SuspiciousActivityVisitorTypeFilterModel = typeof SuspiciousActivityVisitorTypeFilterModel[keyof typeof SuspiciousActivityVisitorTypeFilterModel];
+
+
+export const SuspiciousActivityVisitorTypeFilterModel = {
+  All: 'All',
+  Person: 'Person',
+  NonPerson: 'NonPerson',
+} as const;
 
 export interface TableFilterModel {
   page: number;
@@ -2464,6 +2583,10 @@ export type GetAbTestProjectDetailsParams = {
 id?: string;
 };
 
+export type GetAbTestProjectItemParams = {
+id?: string[];
+};
+
 export type DeleteAbTestVariantParams = {
 variantId?: number;
 };
@@ -2498,15 +2621,11 @@ id?: number;
 
 export type GetAbTestEmptyParams = {
 testType?: AbTestTypeModel;
+nodeKey?: string;
 };
 
 export type GetAbTestPageParams = {
 unique?: string;
-};
-
-export type GetAbTestPreviewUrlParams = {
-abTestId?: number;
-variantId?: number;
 };
 
 export type PostAbTestSegmentParams = {
@@ -2640,6 +2759,10 @@ export type GetGoalDetailsParams = {
 id?: string;
 };
 
+export type GetGoalsItemParams = {
+id?: string[];
+};
+
 export type GetHeatmapsVariantsParams = {
 unique?: string;
 culture?: string;
@@ -2769,14 +2892,18 @@ isTemporary?: boolean;
 amountOfDays?: number;
 };
 
-export type DeleteSegmentsDeleteSegmentContentParams = {
-segment?: string;
-contentId?: string;
+export type GetSegmentsItemParams = {
+id?: string[];
+};
+
+export type GetSegmentsPreviewableSegmentsParams = {
+id?: string;
 };
 
 export type GetSuspiciousActivityOverviewParams = {
 skip?: number;
 take?: number;
+filter?: SuspiciousActivityVisitorTypeFilterModel;
 };
 
 export type DeleteTrafficFilterParams = {
@@ -2852,6 +2979,25 @@ const getAbTestProjectDetails = (
       return customInstance<ProjectModel>(
       {url: `/umbraco/engage/management/api/v1/ab-test-project/details`, method: 'GET',
         params
+    },
+      options);
+    }
+
+const getAbTestProjectItem = (
+    params?: GetAbTestProjectItemParams,
+ options?: SecondParameter<typeof customInstance<EntityItemResponseModel[]>>,) => {
+      return customInstance<EntityItemResponseModel[]>(
+      {url: `/umbraco/engage/management/api/v1/ab-test-project/item`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const getAbTestProjectTreeRoot = (
+
+ options?: SecondParameter<typeof customInstance<EntityItemResponseModel[]>>,) => {
+      return customInstance<EntityItemResponseModel[]>(
+      {url: `/umbraco/engage/management/api/v1/ab-test-project/tree/root`, method: 'GET'
     },
       options);
     }
@@ -2982,16 +3128,6 @@ const getAbTestPage = (
  options?: SecondParameter<typeof customInstance<ProjectAbTestModel[]>>,) => {
       return customInstance<ProjectAbTestModel[]>(
       {url: `/umbraco/engage/management/api/v1/ab-test/page`, method: 'GET',
-        params
-    },
-      options);
-    }
-
-const getAbTestPreviewUrl = (
-    params?: GetAbTestPreviewUrlParams,
- options?: SecondParameter<typeof customInstance<PreviewUrlResponseModel>>,) => {
-      return customInstance<PreviewUrlResponseModel>(
-      {url: `/umbraco/engage/management/api/v1/ab-test/preview-url`, method: 'GET',
         params
     },
       options);
@@ -3374,8 +3510,8 @@ const getContentTypesAll = (
 
 const getContentTypesSegmentedProperty = (
     params?: GetContentTypesSegmentedPropertyParams,
- options?: SecondParameter<typeof customInstance<boolean>>,) => {
-      return customInstance<boolean>(
+ options?: SecondParameter<typeof customInstance<SegmentedPropertyResponseModel>>,) => {
+      return customInstance<SegmentedPropertyResponseModel>(
       {url: `/umbraco/engage/management/api/v1/content-types/segmented-property`, method: 'GET',
         params
     },
@@ -3582,11 +3718,30 @@ const getGoalsAll = (
       options);
     }
 
+const getGoalsItem = (
+    params?: GetGoalsItemParams,
+ options?: SecondParameter<typeof customInstance<EntityItemResponseModel[]>>,) => {
+      return customInstance<EntityItemResponseModel[]>(
+      {url: `/umbraco/engage/management/api/v1/goals/item`, method: 'GET',
+        params
+    },
+      options);
+    }
+
 const getGoalsMain = (
 
  options?: SecondParameter<typeof customInstance<GoalDtoModel[]>>,) => {
       return customInstance<GoalDtoModel[]>(
       {url: `/umbraco/engage/management/api/v1/goals/main`, method: 'GET'
+    },
+      options);
+    }
+
+const getGoalsTreeRoot = (
+
+ options?: SecondParameter<typeof customInstance<EntityItemResponseModel[]>>,) => {
+      return customInstance<EntityItemResponseModel[]>(
+      {url: `/umbraco/engage/management/api/v1/goals/tree/root`, method: 'GET'
     },
       options);
     }
@@ -3754,6 +3909,24 @@ const postPersonaUnlock = (
       {url: `/umbraco/engage/management/api/v1/persona/unlock`, method: 'POST',
       headers: {'Content-Type': 'application/json', },
       data: modifyExplicitScoreRequestModel
+    },
+      options);
+    }
+
+const postPreviewEnd = (
+
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/preview/end`, method: 'POST'
+    },
+      options);
+    }
+
+const postPreviewStart = (
+
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/preview/start`, method: 'POST'
     },
       options);
     }
@@ -4106,11 +4279,11 @@ const getSegmentsAll = (
       options);
     }
 
-const deleteSegmentsDeleteSegmentContent = (
-    params?: DeleteSegmentsDeleteSegmentContentParams,
- options?: SecondParameter<typeof customInstance<boolean>>,) => {
-      return customInstance<boolean>(
-      {url: `/umbraco/engage/management/api/v1/segments/delete-segment-content`, method: 'DELETE',
+const getSegmentsItem = (
+    params?: GetSegmentsItemParams,
+ options?: SecondParameter<typeof customInstance<EntityItemResponseModel[]>>,) => {
+      return customInstance<EntityItemResponseModel[]>(
+      {url: `/umbraco/engage/management/api/v1/segments/item`, method: 'GET',
         params
     },
       options);
@@ -4121,6 +4294,25 @@ const getSegmentsLocationsData = (
  options?: SecondParameter<typeof customInstance<LocationRuleResponseModel>>,) => {
       return customInstance<LocationRuleResponseModel>(
       {url: `/umbraco/engage/management/api/v1/segments/locations/data`, method: 'GET'
+    },
+      options);
+    }
+
+const getSegmentsPreviewableSegments = (
+    params?: GetSegmentsPreviewableSegmentsParams,
+ options?: SecondParameter<typeof customInstance<PreviewableSegmentDtoModel[]>>,) => {
+      return customInstance<PreviewableSegmentDtoModel[]>(
+      {url: `/umbraco/engage/management/api/v1/segments/previewable-segments`, method: 'GET',
+        params
+    },
+      options);
+    }
+
+const getSegmentsTreeRoot = (
+
+ options?: SecondParameter<typeof customInstance<EntityItemResponseModel[]>>,) => {
+      return customInstance<EntityItemResponseModel[]>(
+      {url: `/umbraco/engage/management/api/v1/segments/tree/root`, method: 'GET'
     },
       options);
     }
@@ -4151,6 +4343,18 @@ const getSuspiciousActivityOverview = (
       return customInstance<SuspiciousActivityResponseModel>(
       {url: `/umbraco/engage/management/api/v1/suspicious-activity/overview`, method: 'GET',
         params
+    },
+      options);
+    }
+
+const putSuspiciousActivityVisitorsByVisitorIdVisitorType = (
+    visitorId: number,
+    setVisitorTypeRequestModel?: SetVisitorTypeRequestModel,
+ options?: SecondParameter<typeof customInstance<void>>,) => {
+      return customInstance<void>(
+      {url: `/umbraco/engage/management/api/v1/suspicious-activity/visitors/${visitorId}/visitor-type`, method: 'PUT',
+      headers: {'Content-Type': 'application/json', },
+      data: setVisitorTypeRequestModel
     },
       options);
     }
@@ -4234,13 +4438,15 @@ const getPermissionsUserGroupAll = (
       options);
     }
 
-return {postAbTestProject,deleteAbTestProject,getAbTestProject,putAbTestProject,getAbTestProjectAll,getAbTestProjectDetails,deleteAbTestVariant,getAbTestVariant,postAbTestVariant,getAbTestVariantAll,postAbTestVariantCreate,postAbTestVariantDisable,getAbTestVariantSegment,deleteAbTest,getAbTest,postAbTest,getAbTestAll,getAbTestEmpty,getAbTestPage,getAbTestPreviewUrl,postAbTestRuntimeIndication,postAbTestSegment,postAbTestVariantDetails,getAbTestViewModel,getAddOns,getAnalyticsDistinct,postAnalyticsQuery,deleteAnnotations,postAnnotations,getAnnotationsAll,getAnnotationsEmpty,getAnnotationsGlobal,getAnnotationsPage,deleteAppliedPersonalization,postAppliedPersonalization,getAppliedPersonalizationAll,getAppliedPersonalizationId,postAppliedPersonalizationSegment,getAppliedPersonalizationSegment,deleteCampaignGroup,getCampaignGroup,postCampaignGroup,getCampaignGroupAll,getCampaignGroupUnscored,getCampaignGroupVisitors,getCampaigns,postCockpitDeleteCookie,getCockpitGetUmbracoPageInfo,getCockpitAuthDomains,postCockpitAuthGenerateToken,getConfiguration,getContentScoringAll,getContentScoringExportCustomerJourney,getContentScoringExportPersona,deleteContentScoringJourney,deleteContentScoringPersona,postContentScoringSave,getContentTypesAll,getContentTypesSegmentedProperty,getCultures,deleteCustomerJourney,postCustomerJourney,getCustomerJourneyAll,getCustomerJourneyDetails,getCustomerJourneyEmpty,postCustomerJourneyLock,postCustomerJourneyUnlock,getDataCleanupLastRun,getDataCleanupLogs,getDataCleanupRuns,getDataGenerationLogs,getPermissionsDocumentType,postPermissionsDocumentType,getPermissionsDocumentTypeAll,postGoal,postGoalAll,getGoalAllTypes,getGoalDetails,getGoalsAll,getGoalsMain,postHeatmapsGenerateScrollHeatmap,getHeatmapsVariants,getMainSwitch,postMainSwitchTurnOff,postMainSwitchTurnOn,getPackage,postUmbracoEngagePagedataCollect,postUmbracoEngagePagedataCollectEvent,getUmbracoEngagePagedataPing,postUmbracoEngagePagedataPing,deletePersona,postPersona,getPersonaAll,getPersonaDetails,getPersonaEmpty,postPersonaLock,postPersonaUnlock,getProfileBotVisitors,getProfileCustomerJourneyStepScores,getProfileDetails,getProfileExport,postProfileExportCsv,getProfileGoalCompletions,getProfileLastActiveSegment,postProfileOverview,getProfilePageEvents,getProfilePageviews,getProfilePersonaScores,getProfilePotential,getProfileRelated,getProfileSessions,getProfileStatisticsGrowth,getProfileStatisticsIdentification,getProfileStatisticsTotal,deleteReferralGroup,getReferralGroup,postReferralGroup,getReferralGroupAll,getReferralGroupVisitors,postReferralScoringScored,postReferralScoringUnscored,getReporting,postReportingGenerationStart,getReportingGenerationStatus,getReportingGoalPersonalizationPerformanceBySegmentId,getReportingSegmentSessionsPersonalizationBySegmentId,getReportingSegmentSessionsPotentialBySegmentId,getSearchTerms,deleteSegments,getSegments,postSegments,getSegmentsAll,deleteSegmentsDeleteSegmentContent,getSegmentsLocationsData,postSegmentsUpdatePriority,getStatistics,getSuspiciousActivityOverview,deleteTrafficFilter,getTrafficFilter,postTrafficFilter,getTrafficFilterAll,getTrafficFilterEmpty,getPermissionsUserGroup,postPermissionsUserGroup,getPermissionsUserGroupAll}};
+return {postAbTestProject,deleteAbTestProject,getAbTestProject,putAbTestProject,getAbTestProjectAll,getAbTestProjectDetails,getAbTestProjectItem,getAbTestProjectTreeRoot,deleteAbTestVariant,getAbTestVariant,postAbTestVariant,getAbTestVariantAll,postAbTestVariantCreate,postAbTestVariantDisable,getAbTestVariantSegment,deleteAbTest,getAbTest,postAbTest,getAbTestAll,getAbTestEmpty,getAbTestPage,postAbTestRuntimeIndication,postAbTestSegment,postAbTestVariantDetails,getAbTestViewModel,getAddOns,getAnalyticsDistinct,postAnalyticsQuery,deleteAnnotations,postAnnotations,getAnnotationsAll,getAnnotationsEmpty,getAnnotationsGlobal,getAnnotationsPage,deleteAppliedPersonalization,postAppliedPersonalization,getAppliedPersonalizationAll,getAppliedPersonalizationId,postAppliedPersonalizationSegment,getAppliedPersonalizationSegment,deleteCampaignGroup,getCampaignGroup,postCampaignGroup,getCampaignGroupAll,getCampaignGroupUnscored,getCampaignGroupVisitors,getCampaigns,postCockpitDeleteCookie,getCockpitGetUmbracoPageInfo,getCockpitAuthDomains,postCockpitAuthGenerateToken,getConfiguration,getContentScoringAll,getContentScoringExportCustomerJourney,getContentScoringExportPersona,deleteContentScoringJourney,deleteContentScoringPersona,postContentScoringSave,getContentTypesAll,getContentTypesSegmentedProperty,getCultures,deleteCustomerJourney,postCustomerJourney,getCustomerJourneyAll,getCustomerJourneyDetails,getCustomerJourneyEmpty,postCustomerJourneyLock,postCustomerJourneyUnlock,getDataCleanupLastRun,getDataCleanupLogs,getDataCleanupRuns,getDataGenerationLogs,getPermissionsDocumentType,postPermissionsDocumentType,getPermissionsDocumentTypeAll,postGoal,postGoalAll,getGoalAllTypes,getGoalDetails,getGoalsAll,getGoalsItem,getGoalsMain,getGoalsTreeRoot,postHeatmapsGenerateScrollHeatmap,getHeatmapsVariants,getMainSwitch,postMainSwitchTurnOff,postMainSwitchTurnOn,getPackage,postUmbracoEngagePagedataCollect,postUmbracoEngagePagedataCollectEvent,getUmbracoEngagePagedataPing,postUmbracoEngagePagedataPing,deletePersona,postPersona,getPersonaAll,getPersonaDetails,getPersonaEmpty,postPersonaLock,postPersonaUnlock,postPreviewEnd,postPreviewStart,getProfileBotVisitors,getProfileCustomerJourneyStepScores,getProfileDetails,getProfileExport,postProfileExportCsv,getProfileGoalCompletions,getProfileLastActiveSegment,postProfileOverview,getProfilePageEvents,getProfilePageviews,getProfilePersonaScores,getProfilePotential,getProfileRelated,getProfileSessions,getProfileStatisticsGrowth,getProfileStatisticsIdentification,getProfileStatisticsTotal,deleteReferralGroup,getReferralGroup,postReferralGroup,getReferralGroupAll,getReferralGroupVisitors,postReferralScoringScored,postReferralScoringUnscored,getReporting,postReportingGenerationStart,getReportingGenerationStatus,getReportingGoalPersonalizationPerformanceBySegmentId,getReportingSegmentSessionsPersonalizationBySegmentId,getReportingSegmentSessionsPotentialBySegmentId,getSearchTerms,deleteSegments,getSegments,postSegments,getSegmentsAll,getSegmentsItem,getSegmentsLocationsData,getSegmentsPreviewableSegments,getSegmentsTreeRoot,postSegmentsUpdatePriority,getStatistics,getSuspiciousActivityOverview,putSuspiciousActivityVisitorsByVisitorIdVisitorType,deleteTrafficFilter,getTrafficFilter,postTrafficFilter,getTrafficFilterAll,getTrafficFilterEmpty,getPermissionsUserGroup,postPermissionsUserGroup,getPermissionsUserGroupAll}};
 export type PostAbTestProjectResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestProject']>>>
 export type DeleteAbTestProjectResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteAbTestProject']>>>
 export type GetAbTestProjectResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestProject']>>>
 export type PutAbTestProjectResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['putAbTestProject']>>>
 export type GetAbTestProjectAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestProjectAll']>>>
 export type GetAbTestProjectDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestProjectDetails']>>>
+export type GetAbTestProjectItemResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestProjectItem']>>>
+export type GetAbTestProjectTreeRootResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestProjectTreeRoot']>>>
 export type DeleteAbTestVariantResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteAbTestVariant']>>>
 export type GetAbTestVariantResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestVariant']>>>
 export type PostAbTestVariantResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestVariant']>>>
@@ -4254,7 +4460,6 @@ export type PostAbTestResult = NonNullable<Awaited<ReturnType<ReturnType<typeof 
 export type GetAbTestAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestAll']>>>
 export type GetAbTestEmptyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestEmpty']>>>
 export type GetAbTestPageResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestPage']>>>
-export type GetAbTestPreviewUrlResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getAbTestPreviewUrl']>>>
 export type PostAbTestRuntimeIndicationResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestRuntimeIndication']>>>
 export type PostAbTestSegmentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestSegment']>>>
 export type PostAbTestVariantDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postAbTestVariantDetails']>>>
@@ -4314,7 +4519,9 @@ export type PostGoalAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof
 export type GetGoalAllTypesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getGoalAllTypes']>>>
 export type GetGoalDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getGoalDetails']>>>
 export type GetGoalsAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getGoalsAll']>>>
+export type GetGoalsItemResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getGoalsItem']>>>
 export type GetGoalsMainResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getGoalsMain']>>>
+export type GetGoalsTreeRootResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getGoalsTreeRoot']>>>
 export type PostHeatmapsGenerateScrollHeatmapResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postHeatmapsGenerateScrollHeatmap']>>>
 export type GetHeatmapsVariantsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getHeatmapsVariants']>>>
 export type GetMainSwitchResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getMainSwitch']>>>
@@ -4332,6 +4539,8 @@ export type GetPersonaDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<
 export type GetPersonaEmptyResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getPersonaEmpty']>>>
 export type PostPersonaLockResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postPersonaLock']>>>
 export type PostPersonaUnlockResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postPersonaUnlock']>>>
+export type PostPreviewEndResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postPreviewEnd']>>>
+export type PostPreviewStartResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postPreviewStart']>>>
 export type GetProfileBotVisitorsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileBotVisitors']>>>
 export type GetProfileCustomerJourneyStepScoresResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileCustomerJourneyStepScores']>>>
 export type GetProfileDetailsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getProfileDetails']>>>
@@ -4367,11 +4576,14 @@ export type DeleteSegmentsResult = NonNullable<Awaited<ReturnType<ReturnType<typ
 export type GetSegmentsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSegments']>>>
 export type PostSegmentsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postSegments']>>>
 export type GetSegmentsAllResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSegmentsAll']>>>
-export type DeleteSegmentsDeleteSegmentContentResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteSegmentsDeleteSegmentContent']>>>
+export type GetSegmentsItemResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSegmentsItem']>>>
 export type GetSegmentsLocationsDataResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSegmentsLocationsData']>>>
+export type GetSegmentsPreviewableSegmentsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSegmentsPreviewableSegments']>>>
+export type GetSegmentsTreeRootResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSegmentsTreeRoot']>>>
 export type PostSegmentsUpdatePriorityResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postSegmentsUpdatePriority']>>>
 export type GetStatisticsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getStatistics']>>>
 export type GetSuspiciousActivityOverviewResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getSuspiciousActivityOverview']>>>
+export type PutSuspiciousActivityVisitorsByVisitorIdVisitorTypeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['putSuspiciousActivityVisitorsByVisitorIdVisitorType']>>>
 export type DeleteTrafficFilterResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['deleteTrafficFilter']>>>
 export type GetTrafficFilterResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['getTrafficFilter']>>>
 export type PostTrafficFilterResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getUmbracoEngageManagementAPI>['postTrafficFilter']>>>

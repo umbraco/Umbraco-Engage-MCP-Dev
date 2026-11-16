@@ -15,9 +15,13 @@ It chains to the [Umbraco CMS MCP server](https://www.npmjs.com/package/@umbraco
 | Umbraco | Umbraco Engage | Package |
 |---------|----------------|---------|
 | 18 | 18.2.0 or later | `@umbraco-engage/mcp-dev` (18.x, built from `v18/main`) |
-| **17** | **17.x** | **`@umbraco-engage/mcp-dev@lts-17-beta`** (built from `main`) |
+| **17** | **17.5.0 or later** | **`@umbraco-engage/mcp-dev@lts-17-beta`** (built from `main`) |
 
 Install the version that matches your site's Umbraco major — the API client differs between them.
+
+Umbraco Engage 17.5.0 changed its Management API (A/B tests and applied personalization reference
+goals, projects and segments by key, and two endpoints were removed), so the Umbraco 17 line needs
+Umbraco Engage 17.5.0 or later. Earlier 17.x releases aren't supported (on 17.2.x several tools fail).
 
 The Umbraco 17 line is published under its own `lts-17` dist-tags, so it never takes over `latest`
 or `beta` from the Umbraco 18 line. It is in beta, so install `@lts-17-beta`. A range such as `@17`

@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`post-ab-test-segment still returns the same generic 400 error for a real test's own unique, its real page key, and its real server-assigned segment value 1`] = `
+exports[`post-ab-test-segment returns a 400 error for a real test's own unique, its real page key, and its real server-assigned segment value 1`] = `
 {
   "content": [
     {
-      "text": "{"status":400,"title":"Bad Request"}",
+      "text": "{"type":"Error","title":"Content not found","status":400,"detail":"No content matches the supplied id."}",
       "type": "text",
     },
   ],

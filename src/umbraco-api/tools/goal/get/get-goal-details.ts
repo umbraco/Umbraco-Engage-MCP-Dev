@@ -20,7 +20,7 @@ const outputSchema = getGoalDetailsResponse;
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "get-goal-details",
   description:
-    "Get a single goal's full details (including implicit scoring rules) by its `id` - the goal's `unique` guid, not its numeric `id` field. Use this to resolve the real numeric id needed by post-ab-test's `goalId`. Returns 404 for a non-existent id.",
+    "Get a single goal's full details (including implicit scoring rules) by its `id` - the goal's `unique` guid, not its numeric `id` field. Returns 404 for a non-existent id.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["read"],

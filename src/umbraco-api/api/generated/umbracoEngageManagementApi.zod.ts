@@ -22,25 +22,9 @@ export const postAbTestProjectBody = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -65,16 +49,19 @@ export const postAbTestProjectBody = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
+  "nodeKey": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
 })),
   "contentTypes": zod.array(zod.object({
   "contentTypeId": zod.int(),
@@ -97,6 +84,7 @@ export const postAbTestProjectBody = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 }).nullish(),
@@ -106,7 +94,9 @@ export const postAbTestProjectBody = zod.object({
   "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.int().nullish(),
   "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft'])
 }))
 })
 
@@ -125,25 +115,9 @@ export const postAbTestProjectResponse = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -168,16 +142,19 @@ export const postAbTestProjectResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
+  "nodeKey": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
 })),
   "contentTypes": zod.array(zod.object({
   "contentTypeId": zod.int(),
@@ -200,6 +177,7 @@ export const postAbTestProjectResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 }).nullish(),
@@ -209,7 +187,9 @@ export const postAbTestProjectResponse = zod.object({
   "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.int().nullish(),
   "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft'])
 }))
 })
 
@@ -240,25 +220,9 @@ export const getAbTestProjectResponse = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -283,16 +247,19 @@ export const getAbTestProjectResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
+  "nodeKey": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
 })),
   "contentTypes": zod.array(zod.object({
   "contentTypeId": zod.int(),
@@ -315,6 +282,7 @@ export const getAbTestProjectResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 }).nullish(),
@@ -324,7 +292,9 @@ export const getAbTestProjectResponse = zod.object({
   "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.int().nullish(),
   "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft'])
 }))
 })
 
@@ -344,25 +314,9 @@ export const putAbTestProjectBody = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -387,16 +341,19 @@ export const putAbTestProjectBody = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
+  "nodeKey": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
 })),
   "contentTypes": zod.array(zod.object({
   "contentTypeId": zod.int(),
@@ -419,6 +376,7 @@ export const putAbTestProjectBody = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 }).nullish(),
@@ -428,7 +386,9 @@ export const putAbTestProjectBody = zod.object({
   "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.int().nullish(),
   "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft'])
 }))
 })
 
@@ -447,25 +407,9 @@ export const putAbTestProjectResponse = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -490,16 +434,19 @@ export const putAbTestProjectResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
+  "nodeKey": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
 })),
   "contentTypes": zod.array(zod.object({
   "contentTypeId": zod.int(),
@@ -522,6 +469,7 @@ export const putAbTestProjectResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 }).nullish(),
@@ -531,7 +479,9 @@ export const putAbTestProjectResponse = zod.object({
   "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.int().nullish(),
   "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft'])
 }))
 })
 
@@ -551,25 +501,9 @@ export const getAbTestProjectAllResponseItem = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -594,16 +528,19 @@ export const getAbTestProjectAllResponseItem = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
+  "nodeKey": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
 })),
   "contentTypes": zod.array(zod.object({
   "contentTypeId": zod.int(),
@@ -626,6 +563,7 @@ export const getAbTestProjectAllResponseItem = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 }).nullish(),
@@ -635,7 +573,9 @@ export const getAbTestProjectAllResponseItem = zod.object({
   "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.int().nullish(),
   "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft'])
 }))
 })
 export const getAbTestProjectAllResponse = zod.array(getAbTestProjectAllResponseItem)
@@ -681,6 +621,26 @@ export const getAbTestProjectDetailsResponse = zod.object({
 })
 
 
+export const getAbTestProjectItemQueryParams = zod.object({
+  "id": zod.array(zod.guid()).optional()
+})
+
+export const getAbTestProjectItemResponseItem = zod.object({
+  "name": zod.string(),
+  "unique": zod.guid(),
+  "description": zod.string().nullish()
+})
+export const getAbTestProjectItemResponse = zod.array(getAbTestProjectItemResponseItem)
+
+
+export const getAbTestProjectTreeRootResponseItem = zod.object({
+  "name": zod.string(),
+  "unique": zod.guid(),
+  "description": zod.string().nullish()
+})
+export const getAbTestProjectTreeRootResponse = zod.array(getAbTestProjectTreeRootResponseItem)
+
+
 export const deleteAbTestVariantQueryParams = zod.object({
   "variantId": zod.int().optional()
 })
@@ -708,6 +668,7 @@ export const getAbTestVariantResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })
@@ -729,6 +690,7 @@ export const postAbTestVariantBody = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })
@@ -749,6 +711,7 @@ export const postAbTestVariantResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })
@@ -774,6 +737,7 @@ export const getAbTestVariantAllResponseItem = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })
@@ -800,6 +764,7 @@ export const postAbTestVariantCreateResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })
@@ -825,6 +790,7 @@ export const postAbTestVariantDisableResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })
@@ -850,6 +816,7 @@ export const getAbTestVariantSegmentResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })
@@ -874,25 +841,9 @@ export const getAbTestResponse = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -917,16 +868,19 @@ export const getAbTestResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
+  "nodeKey": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
 })),
   "contentTypes": zod.array(zod.object({
   "contentTypeId": zod.int(),
@@ -949,6 +903,7 @@ export const getAbTestResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 }).nullish(),
@@ -958,7 +913,9 @@ export const getAbTestResponse = zod.object({
   "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.int().nullish(),
   "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft'])
 })
 
 
@@ -967,25 +924,9 @@ export const postAbTestBody = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -1010,16 +951,19 @@ export const postAbTestBody = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
+  "nodeKey": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
 })),
   "contentTypes": zod.array(zod.object({
   "contentTypeId": zod.int(),
@@ -1042,6 +986,7 @@ export const postAbTestBody = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 }).nullish(),
@@ -1051,7 +996,9 @@ export const postAbTestBody = zod.object({
   "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.int().nullish(),
   "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft'])
 }),
   "indication": zod.object({
   "estimatedRuntimeInDays": zod.int().nullish(),
@@ -1082,7 +1029,8 @@ export const postAbTestBody = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -1124,7 +1072,8 @@ export const postAbTestBody = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -1161,7 +1110,8 @@ export const postAbTestBody = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -1198,7 +1148,8 @@ export const postAbTestBody = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -1246,7 +1197,8 @@ export const postAbTestBody = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -1294,6 +1246,7 @@ export const postAbTestBody = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
   "label": zod.string().nullish(),
@@ -1323,11 +1276,11 @@ export const postAbTestBody = zod.object({
   "mainGoalWarning": zod.boolean(),
   "goalWarning": zod.boolean(),
   "status": zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']),
-  "previewUrl": zod.string().nullish(),
   "isWinner": zod.boolean(),
   "isLeading": zod.boolean()
 })).nullish(),
-  "isInvertedGoal": zod.boolean()
+  "isInvertedGoal": zod.boolean(),
+  "cultureSharedSegmentedProperties": zod.array(zod.string()).nullish()
 })
 
 export const postAbTestResponse = zod.object({
@@ -1336,25 +1289,9 @@ export const postAbTestResponse = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -1379,16 +1316,19 @@ export const postAbTestResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
+  "nodeKey": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
 })),
   "contentTypes": zod.array(zod.object({
   "contentTypeId": zod.int(),
@@ -1411,6 +1351,7 @@ export const postAbTestResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 }).nullish(),
@@ -1420,7 +1361,9 @@ export const postAbTestResponse = zod.object({
   "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.int().nullish(),
   "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft'])
 }),
   "indication": zod.object({
   "estimatedRuntimeInDays": zod.int().nullish(),
@@ -1451,7 +1394,8 @@ export const postAbTestResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -1493,7 +1437,8 @@ export const postAbTestResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -1530,7 +1475,8 @@ export const postAbTestResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -1567,7 +1513,8 @@ export const postAbTestResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -1615,7 +1562,8 @@ export const postAbTestResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -1663,6 +1611,7 @@ export const postAbTestResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
   "label": zod.string().nullish(),
@@ -1692,11 +1641,11 @@ export const postAbTestResponse = zod.object({
   "mainGoalWarning": zod.boolean(),
   "goalWarning": zod.boolean(),
   "status": zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']),
-  "previewUrl": zod.string().nullish(),
   "isWinner": zod.boolean(),
   "isLeading": zod.boolean()
 })).nullish(),
-  "isInvertedGoal": zod.boolean()
+  "isInvertedGoal": zod.boolean(),
+  "cultureSharedSegmentedProperties": zod.array(zod.string()).nullish()
 }),
   "validationResults": zod.object({
   "isValid": zod.boolean(),
@@ -1710,25 +1659,9 @@ export const getAbTestAllResponseItem = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -1753,16 +1686,19 @@ export const getAbTestAllResponseItem = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
+  "nodeKey": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
 })),
   "contentTypes": zod.array(zod.object({
   "contentTypeId": zod.int(),
@@ -1785,6 +1721,7 @@ export const getAbTestAllResponseItem = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 }).nullish(),
@@ -1794,13 +1731,16 @@ export const getAbTestAllResponseItem = zod.object({
   "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.int().nullish(),
   "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft'])
 })
 export const getAbTestAllResponse = zod.array(getAbTestAllResponseItem)
 
 
 export const getAbTestEmptyQueryParams = zod.object({
-  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']).optional()
+  "testType": zod.enum(['SinglePage', 'MultiPage', 'ContentType', 'SplitUrl']).optional(),
+  "nodeKey": zod.guid().optional()
 })
 
 export const getAbTestEmptyResponse = zod.object({
@@ -1808,25 +1748,9 @@ export const getAbTestEmptyResponse = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -1851,16 +1775,19 @@ export const getAbTestEmptyResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
+  "nodeKey": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
 })),
   "contentTypes": zod.array(zod.object({
   "contentTypeId": zod.int(),
@@ -1883,6 +1810,7 @@ export const getAbTestEmptyResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 }).nullish(),
@@ -1892,7 +1820,9 @@ export const getAbTestEmptyResponse = zod.object({
   "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.int().nullish(),
   "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft'])
 }),
   "indication": zod.object({
   "estimatedRuntimeInDays": zod.int().nullish(),
@@ -1923,7 +1853,8 @@ export const getAbTestEmptyResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -1965,7 +1896,8 @@ export const getAbTestEmptyResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -2002,7 +1934,8 @@ export const getAbTestEmptyResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -2039,7 +1972,8 @@ export const getAbTestEmptyResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -2087,7 +2021,8 @@ export const getAbTestEmptyResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -2135,6 +2070,7 @@ export const getAbTestEmptyResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
   "label": zod.string().nullish(),
@@ -2164,11 +2100,11 @@ export const getAbTestEmptyResponse = zod.object({
   "mainGoalWarning": zod.boolean(),
   "goalWarning": zod.boolean(),
   "status": zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']),
-  "previewUrl": zod.string().nullish(),
   "isWinner": zod.boolean(),
   "isLeading": zod.boolean()
 })).nullish(),
-  "isInvertedGoal": zod.boolean()
+  "isInvertedGoal": zod.boolean(),
+  "cultureSharedSegmentedProperties": zod.array(zod.string()).nullish()
 })
 
 
@@ -2197,40 +2133,13 @@ export const getAbTestPageResponseItem = zod.object({
 export const getAbTestPageResponse = zod.array(getAbTestPageResponseItem)
 
 
-export const getAbTestPreviewUrlQueryParams = zod.object({
-  "abTestId": zod.int().optional(),
-  "variantId": zod.int().optional()
-})
-
-export const getAbTestPreviewUrlResponse = zod.object({
-  "errorMessage": zod.string().nullish(),
-  "previewUrl": zod.string().nullish()
-})
-
-
 export const postAbTestRuntimeIndicationBody = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -2255,16 +2164,19 @@ export const postAbTestRuntimeIndicationBody = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
+  "nodeKey": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
 })),
   "contentTypes": zod.array(zod.object({
   "contentTypeId": zod.int(),
@@ -2287,6 +2199,7 @@ export const postAbTestRuntimeIndicationBody = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 }).nullish(),
@@ -2296,7 +2209,9 @@ export const postAbTestRuntimeIndicationBody = zod.object({
   "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.int().nullish(),
   "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft'])
 })
 
 export const postAbTestRuntimeIndicationResponse = zod.object({
@@ -2328,7 +2243,8 @@ export const postAbTestRuntimeIndicationResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -2370,7 +2286,8 @@ export const postAbTestRuntimeIndicationResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -2407,7 +2324,8 @@ export const postAbTestRuntimeIndicationResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -2444,7 +2362,8 @@ export const postAbTestRuntimeIndicationResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -2492,7 +2411,8 @@ export const postAbTestRuntimeIndicationResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -2533,7 +2453,8 @@ export const postAbTestSegmentQueryParams = zod.object({
 })
 
 export const postAbTestSegmentResponse = zod.object({
-  "created": zod.boolean()
+  "created": zod.boolean(),
+  "cultureSharedSegmentedProperties": zod.array(zod.string())
 })
 
 
@@ -2541,25 +2462,9 @@ export const postAbTestVariantDetailsBody = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -2584,16 +2489,19 @@ export const postAbTestVariantDetailsBody = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
+  "nodeKey": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
 })),
   "contentTypes": zod.array(zod.object({
   "contentTypeId": zod.int(),
@@ -2616,6 +2524,7 @@ export const postAbTestVariantDetailsBody = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 }).nullish(),
@@ -2625,7 +2534,9 @@ export const postAbTestVariantDetailsBody = zod.object({
   "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.int().nullish(),
   "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft'])
 })
 
 export const postAbTestVariantDetailsResponseItem = zod.object({
@@ -2644,6 +2555,7 @@ export const postAbTestVariantDetailsResponseItem = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
   "label": zod.string().nullish(),
@@ -2673,7 +2585,6 @@ export const postAbTestVariantDetailsResponseItem = zod.object({
   "mainGoalWarning": zod.boolean(),
   "goalWarning": zod.boolean(),
   "status": zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']),
-  "previewUrl": zod.string().nullish(),
   "isWinner": zod.boolean(),
   "isLeading": zod.boolean()
 })
@@ -2689,25 +2600,9 @@ export const getAbTestViewModelResponse = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "projectId": zod.int().nullish(),
-  "goalId": zod.int().nullish(),
+  "projectKey": zod.guid().nullish(),
+  "goalKey": zod.guid().nullish(),
   "status": zod.enum(['Unknown', 'Scheduled', 'Running', 'Stopped', 'Completed', 'Draft']),
-  "goal": zod.object({
-  "id": zod.int(),
-  "key": zod.guid(),
-  "name": zod.string().nullish(),
-  "value": zod.number(),
-  "goalTypeId": zod.guid(),
-  "goalTypeConfig": zod.string(),
-  "isMain": zod.boolean(),
-  "isInverted": zod.boolean(),
-  "isActive": zod.boolean(),
-  "isInvalid": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true}),
-  "createdBy": zod.guid(),
-  "updated": zod.iso.datetime({"offset":true}).nullish(),
-  "updatedBy": zod.guid().nullish()
-}).nullish(),
   "name": zod.string().nullish(),
   "description": zod.string().nullish(),
   "createdByUmbracoUserName": zod.string().nullish(),
@@ -2732,16 +2627,19 @@ export const getAbTestViewModelResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 })),
   "umbracoPageVariants": zod.array(zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
+  "nodeKey": zod.guid(),
   "nodeName": zod.string().nullish(),
   "culture": zod.string().nullish(),
   "abTestId": zod.int().nullish(),
-  "variesBySegment": zod.boolean()
+  "variesBySegment": zod.boolean(),
+  "contentTypeKey": zod.guid()
 })),
   "contentTypes": zod.array(zod.object({
   "contentTypeId": zod.int(),
@@ -2764,6 +2662,7 @@ export const getAbTestViewModelResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int()
 }).nullish(),
@@ -2773,7 +2672,9 @@ export const getAbTestViewModelResponse = zod.object({
   "stoppedByUmbracoUserKey": zod.guid().nullish(),
   "estimatedDailyVisitors": zod.int().nullish(),
   "baselineConversionRate": zod.number().nullish(),
-  "viableVisitorThreshold": zod.int().nullish()
+  "viableVisitorThreshold": zod.int().nullish(),
+  "previewNodeKey": zod.guid().nullish(),
+  "onCompleteAction": zod.enum(['Nothing', 'Publish', 'Draft'])
 }),
   "indication": zod.object({
   "estimatedRuntimeInDays": zod.int().nullish(),
@@ -2804,7 +2705,8 @@ export const getAbTestViewModelResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -2846,7 +2748,8 @@ export const getAbTestViewModelResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -2883,7 +2786,8 @@ export const getAbTestViewModelResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -2920,7 +2824,8 @@ export const getAbTestViewModelResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -2968,7 +2873,8 @@ export const getAbTestViewModelResponse = zod.object({
   "isBenchmark": zod.boolean(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
-  "segment": zod.string()
+  "segment": zod.string(),
+  "previewSegment": zod.string()
 }),
   "visitors": zod.int(),
   "goalCompletions": zod.int(),
@@ -3016,6 +2922,7 @@ export const getAbTestViewModelResponse = zod.object({
   "disabledByUmbracoUserKey": zod.guid().nullish(),
   "isDisabled": zod.boolean(),
   "segment": zod.string().nullish(),
+  "previewSegment": zod.string().nullish(),
   "totalPageviewsForVariant": zod.int(),
   "totalVisitorsForVariant": zod.int(),
   "label": zod.string().nullish(),
@@ -3045,11 +2952,11 @@ export const getAbTestViewModelResponse = zod.object({
   "mainGoalWarning": zod.boolean(),
   "goalWarning": zod.boolean(),
   "status": zod.enum(['Running', 'Warning', 'Disabled', 'Reliable', 'Stopped', 'Scheduled', 'Completed', 'Draft']),
-  "previewUrl": zod.string().nullish(),
   "isWinner": zod.boolean(),
   "isLeading": zod.boolean()
 })).nullish(),
-  "isInvertedGoal": zod.boolean()
+  "isInvertedGoal": zod.boolean(),
+  "cultureSharedSegmentedProperties": zod.array(zod.string()).nullish()
 })
 
 
@@ -3070,24 +2977,37 @@ export const getAnalyticsDistinctResponse = zod.array(getAnalyticsDistinctRespon
 export const postAnalyticsQueryBody = zod.object({
   "startDate": zod.iso.datetime({"offset":true}),
   "endDate": zod.iso.datetime({"offset":true}),
-  "metrics": zod.array(zod.enum(['UNDEFINED', 'users', 'newVisitors', 'percentNewSessions', 'sessions', 'bounceRate', 'sessionDuration', 'avgSessionDuration', 'goalCompletionsAll', 'goalValueAll', 'pageviews', 'pageviewsWithSubpages', 'pageviewsPerSession', 'uniquePageviews', 'avgTimeOnPage', 'totalEvents', 'eventValue', 'avgEventValue', 'abTestVariantVisitors', 'abTestVariantCompletionsAll', 'videoPlays', 'videoPlaytime', 'avgVideoPlaytime', 'avgRelativeVideoPlaytime', 'videoEvents', 'umbracoFormsViews', 'umbracoFormsSubmissions', 'umbracoFormsStarts', 'umbracoFormsAbandons', 'umbracoFormsErrors', 'umbracoFormsFieldFocusses', 'umbracoFormsFieldAbandons', 'umbracoFormsFieldErrors', 'avgEngagedTimeOnPage', 'pageviewsBot', 'pageSessions', 'pageVisitors', 'pageSessionsWithSubpages', 'pageVisitorsWithSubpages', 'activeSegmentPageviews', 'inactiveSegmentPageviews', 'activeSegmentSessions', 'inactiveSegmentSessions', 'activeSegmentProfiles', 'inactiveSegmentProfiles', 'activePersonalizedSegmentPageviews', 'inactivePersonalizedSegmentPageviews', 'activePersonalizedSegmentSessions', 'inactivePersonalizedSegmentSessions', 'activePersonalizedSegmentProfiles', 'inactivePersonalizedSegmentProfiles', 'searchVolume', 'searchVolumeWithSubpages', 'visitors', 'campaignEntries', 'campaignVisitors', 'campaignGoals', 'campaignGoalValue', 'campaignFormSubmissions', 'campaignCommerceOrders'])),
+  "metrics": zod.array(zod.enum(['UNDEFINED', 'users', 'newVisitors', 'percentNewSessions', 'sessions', 'bounceRate', 'sessionDuration', 'avgSessionDuration', 'goalCompletionsAll', 'goalValueAll', 'pageviews', 'pageviewsWithSubpages', 'pageviewsPerSession', 'uniquePageviews', 'avgTimeOnPage', 'totalEvents', 'eventValue', 'avgEventValue', 'abTestVariantVisitors', 'abTestVariantCompletionsAll', 'videoPlays', 'videoPlaytime', 'avgVideoPlaytime', 'avgRelativeVideoPlaytime', 'videoEvents', 'umbracoFormsViews', 'umbracoFormsSubmissions', 'umbracoFormsStarts', 'umbracoFormsAbandons', 'umbracoFormsErrors', 'umbracoFormsFieldFocusses', 'umbracoFormsFieldAbandons', 'umbracoFormsFieldErrors', 'avgEngagedTimeOnPage', 'pageviewsBot', 'pageSessions', 'pageVisitors', 'pageSessionsWithSubpages', 'pageVisitorsWithSubpages', 'activeSegmentPageviews', 'inactiveSegmentPageviews', 'activeSegmentSessions', 'inactiveSegmentSessions', 'activeSegmentProfiles', 'inactiveSegmentProfiles', 'activePersonalizedSegmentPageviews', 'inactivePersonalizedSegmentPageviews', 'activePersonalizedSegmentSessions', 'inactivePersonalizedSegmentSessions', 'activePersonalizedSegmentProfiles', 'inactivePersonalizedSegmentProfiles', 'searchVolume', 'searchVolumeWithSubpages', 'visitors', 'campaignEntries', 'campaignVisitors', 'campaignGoals', 'campaignGoalValue', 'campaignFormSubmissions', 'campaignCommerceOrders', 'entrySessions'])),
   "dimensions": zod.array(zod.enum(['UNDEFINED', 'usertype', 'referralPath', 'fullReferrer', 'campaign', 'source', 'medium', 'sourceMedium', 'browser', 'browserVersion', 'operatingSystem', 'operatingSystemVersion', 'deviceCategory', 'country', 'city', 'hostname', 'pageUrl', 'pageId', 'NodeId', 'NodeCulture', 'NodeSegment', 'NodeContentType', 'pagePath', 'eventCategory', 'eventAction', 'eventLabel', 'date', 'year', 'month', 'week', 'day', 'hour', 'minute', 'nthMonth', 'nthWeek', 'nthDay', 'nthMinute', 'nthHour', 'abTest', 'abTestVariant', 'goal', 'goalId', 'goalType', 'isMainGoal', 'visitorType', 'bot', 'botId', 'botVersion', 'botVersionId', 'referralHostname', 'referralIsInternalPage', 'referralPathAndQuery', 'browserId', 'datetime', 'pageviewSegmentId', 'pageviewSegmentName', 'pageviewAppliedSegmentId', 'pageviewAppliedSegmentName', 'pageviewAppliedPersonalizationId', 'pageviewAppliedPersonalizationName', 'videoName', 'videoUrl', 'videoEventType', 'videoEventTypeName', 'umbracoFormsName', 'umbracoFormsId', 'umbracoFormsFieldName', 'umbracoFormsFieldId', 'umbracoFormsFieldError', 'cityId', 'countryId', 'province', 'provinceId', 'county', 'countyId', 'sourcePlatform', 'creativeFormat', 'marketingTactic', 'segmentId', 'segmentName', 'searchTerm'])),
   "realtime": zod.boolean(),
-  "sort": zod.enum(['UNDEFINED', 'usertype', 'referralPath', 'fullReferrer', 'campaign', 'source', 'medium', 'sourceMedium', 'browser', 'browserVersion', 'operatingSystem', 'operatingSystemVersion', 'deviceCategory', 'country', 'city', 'hostname', 'pageUrl', 'pageId', 'NodeId', 'NodeCulture', 'NodeSegment', 'NodeContentType', 'pagePath', 'eventCategory', 'eventAction', 'eventLabel', 'date', 'year', 'month', 'week', 'day', 'hour', 'minute', 'nthMonth', 'nthWeek', 'nthDay', 'nthMinute', 'nthHour', 'abTest', 'abTestVariant', 'goal', 'goalId', 'goalType', 'isMainGoal', 'visitorType', 'bot', 'botId', 'botVersion', 'botVersionId', 'referralHostname', 'referralIsInternalPage', 'referralPathAndQuery', 'browserId', 'datetime', 'pageviewSegmentId', 'pageviewSegmentName', 'pageviewAppliedSegmentId', 'pageviewAppliedSegmentName', 'pageviewAppliedPersonalizationId', 'pageviewAppliedPersonalizationName', 'videoName', 'videoUrl', 'videoEventType', 'videoEventTypeName', 'umbracoFormsName', 'umbracoFormsId', 'umbracoFormsFieldName', 'umbracoFormsFieldId', 'umbracoFormsFieldError', 'cityId', 'countryId', 'province', 'provinceId', 'county', 'countyId', 'sourcePlatform', 'creativeFormat', 'marketingTactic', 'segmentId', 'segmentName', 'searchTerm', 'users', 'newVisitors', 'percentNewSessions', 'sessions', 'bounceRate', 'sessionDuration', 'avgSessionDuration', 'goalCompletionsAll', 'goalValueAll', 'pageviews', 'pageviewsWithSubpages', 'pageviewsPerSession', 'uniquePageviews', 'avgTimeOnPage', 'totalEvents', 'eventValue', 'avgEventValue', 'abTestVariantVisitors', 'abTestVariantCompletionsAll', 'videoPlays', 'videoPlaytime', 'avgVideoPlaytime', 'avgRelativeVideoPlaytime', 'videoEvents', 'umbracoFormsViews', 'umbracoFormsSubmissions', 'umbracoFormsStarts', 'umbracoFormsAbandons', 'umbracoFormsErrors', 'umbracoFormsFieldFocusses', 'umbracoFormsFieldAbandons', 'umbracoFormsFieldErrors', 'avgEngagedTimeOnPage', 'pageviewsBot', 'pageSessions', 'pageVisitors', 'pageSessionsWithSubpages', 'pageVisitorsWithSubpages', 'activeSegmentPageviews', 'inactiveSegmentPageviews', 'activeSegmentSessions', 'inactiveSegmentSessions', 'activeSegmentProfiles', 'inactiveSegmentProfiles', 'activePersonalizedSegmentPageviews', 'inactivePersonalizedSegmentPageviews', 'activePersonalizedSegmentSessions', 'inactivePersonalizedSegmentSessions', 'activePersonalizedSegmentProfiles', 'inactivePersonalizedSegmentProfiles', 'searchVolume', 'searchVolumeWithSubpages', 'visitors', 'campaignEntries', 'campaignVisitors', 'campaignGoals', 'campaignGoalValue', 'campaignFormSubmissions', 'campaignCommerceOrders']),
+  "sort": zod.enum(['UNDEFINED', 'usertype', 'referralPath', 'fullReferrer', 'campaign', 'source', 'medium', 'sourceMedium', 'browser', 'browserVersion', 'operatingSystem', 'operatingSystemVersion', 'deviceCategory', 'country', 'city', 'hostname', 'pageUrl', 'pageId', 'NodeId', 'NodeCulture', 'NodeSegment', 'NodeContentType', 'pagePath', 'eventCategory', 'eventAction', 'eventLabel', 'date', 'year', 'month', 'week', 'day', 'hour', 'minute', 'nthMonth', 'nthWeek', 'nthDay', 'nthMinute', 'nthHour', 'abTest', 'abTestVariant', 'goal', 'goalId', 'goalType', 'isMainGoal', 'visitorType', 'bot', 'botId', 'botVersion', 'botVersionId', 'referralHostname', 'referralIsInternalPage', 'referralPathAndQuery', 'browserId', 'datetime', 'pageviewSegmentId', 'pageviewSegmentName', 'pageviewAppliedSegmentId', 'pageviewAppliedSegmentName', 'pageviewAppliedPersonalizationId', 'pageviewAppliedPersonalizationName', 'videoName', 'videoUrl', 'videoEventType', 'videoEventTypeName', 'umbracoFormsName', 'umbracoFormsId', 'umbracoFormsFieldName', 'umbracoFormsFieldId', 'umbracoFormsFieldError', 'cityId', 'countryId', 'province', 'provinceId', 'county', 'countyId', 'sourcePlatform', 'creativeFormat', 'marketingTactic', 'segmentId', 'segmentName', 'searchTerm', 'users', 'newVisitors', 'percentNewSessions', 'sessions', 'bounceRate', 'sessionDuration', 'avgSessionDuration', 'goalCompletionsAll', 'goalValueAll', 'pageviews', 'pageviewsWithSubpages', 'pageviewsPerSession', 'uniquePageviews', 'avgTimeOnPage', 'totalEvents', 'eventValue', 'avgEventValue', 'abTestVariantVisitors', 'abTestVariantCompletionsAll', 'videoPlays', 'videoPlaytime', 'avgVideoPlaytime', 'avgRelativeVideoPlaytime', 'videoEvents', 'umbracoFormsViews', 'umbracoFormsSubmissions', 'umbracoFormsStarts', 'umbracoFormsAbandons', 'umbracoFormsErrors', 'umbracoFormsFieldFocusses', 'umbracoFormsFieldAbandons', 'umbracoFormsFieldErrors', 'avgEngagedTimeOnPage', 'pageviewsBot', 'pageSessions', 'pageVisitors', 'pageSessionsWithSubpages', 'pageVisitorsWithSubpages', 'activeSegmentPageviews', 'inactiveSegmentPageviews', 'activeSegmentSessions', 'inactiveSegmentSessions', 'activeSegmentProfiles', 'inactiveSegmentProfiles', 'activePersonalizedSegmentPageviews', 'inactivePersonalizedSegmentPageviews', 'activePersonalizedSegmentSessions', 'inactivePersonalizedSegmentSessions', 'activePersonalizedSegmentProfiles', 'inactivePersonalizedSegmentProfiles', 'searchVolume', 'searchVolumeWithSubpages', 'visitors', 'campaignEntries', 'campaignVisitors', 'campaignGoals', 'campaignGoalValue', 'campaignFormSubmissions', 'campaignCommerceOrders', 'entrySessions']),
   "ascending": zod.boolean(),
   "page": zod.int(),
   "pageSize": zod.int(),
+  "paging": zod.object({
+  "page": zod.int(),
+  "pageSize": zod.int(),
+  "includeTotals": zod.boolean()
+}).nullish(),
+  "search": zod.string().nullish(),
+  "includeTotals": zod.boolean().nullish(),
+  "includeTotalRows": zod.boolean().nullish(),
+  "comparison": zod.object({
+  "startDate": zod.iso.datetime({"offset":true}),
+  "endDate": zod.iso.datetime({"offset":true})
+}).nullish(),
   "includeSubpages": zod.boolean(),
   "filter": zod.string().nullish()
 })
 
 export const postAnalyticsQueryResponse = zod.object({
-  "columns": zod.array(zod.enum(['UNDEFINED', 'usertype', 'referralPath', 'fullReferrer', 'campaign', 'source', 'medium', 'sourceMedium', 'browser', 'browserVersion', 'operatingSystem', 'operatingSystemVersion', 'deviceCategory', 'country', 'city', 'hostname', 'pageUrl', 'pageId', 'NodeId', 'NodeCulture', 'NodeSegment', 'NodeContentType', 'pagePath', 'eventCategory', 'eventAction', 'eventLabel', 'date', 'year', 'month', 'week', 'day', 'hour', 'minute', 'nthMonth', 'nthWeek', 'nthDay', 'nthMinute', 'nthHour', 'abTest', 'abTestVariant', 'goal', 'goalId', 'goalType', 'isMainGoal', 'visitorType', 'bot', 'botId', 'botVersion', 'botVersionId', 'referralHostname', 'referralIsInternalPage', 'referralPathAndQuery', 'browserId', 'datetime', 'pageviewSegmentId', 'pageviewSegmentName', 'pageviewAppliedSegmentId', 'pageviewAppliedSegmentName', 'pageviewAppliedPersonalizationId', 'pageviewAppliedPersonalizationName', 'videoName', 'videoUrl', 'videoEventType', 'videoEventTypeName', 'umbracoFormsName', 'umbracoFormsId', 'umbracoFormsFieldName', 'umbracoFormsFieldId', 'umbracoFormsFieldError', 'cityId', 'countryId', 'province', 'provinceId', 'county', 'countyId', 'sourcePlatform', 'creativeFormat', 'marketingTactic', 'segmentId', 'segmentName', 'searchTerm', 'users', 'newVisitors', 'percentNewSessions', 'sessions', 'bounceRate', 'sessionDuration', 'avgSessionDuration', 'goalCompletionsAll', 'goalValueAll', 'pageviews', 'pageviewsWithSubpages', 'pageviewsPerSession', 'uniquePageviews', 'avgTimeOnPage', 'totalEvents', 'eventValue', 'avgEventValue', 'abTestVariantVisitors', 'abTestVariantCompletionsAll', 'videoPlays', 'videoPlaytime', 'avgVideoPlaytime', 'avgRelativeVideoPlaytime', 'videoEvents', 'umbracoFormsViews', 'umbracoFormsSubmissions', 'umbracoFormsStarts', 'umbracoFormsAbandons', 'umbracoFormsErrors', 'umbracoFormsFieldFocusses', 'umbracoFormsFieldAbandons', 'umbracoFormsFieldErrors', 'avgEngagedTimeOnPage', 'pageviewsBot', 'pageSessions', 'pageVisitors', 'pageSessionsWithSubpages', 'pageVisitorsWithSubpages', 'activeSegmentPageviews', 'inactiveSegmentPageviews', 'activeSegmentSessions', 'inactiveSegmentSessions', 'activeSegmentProfiles', 'inactiveSegmentProfiles', 'activePersonalizedSegmentPageviews', 'inactivePersonalizedSegmentPageviews', 'activePersonalizedSegmentSessions', 'inactivePersonalizedSegmentSessions', 'activePersonalizedSegmentProfiles', 'inactivePersonalizedSegmentProfiles', 'searchVolume', 'searchVolumeWithSubpages', 'visitors', 'campaignEntries', 'campaignVisitors', 'campaignGoals', 'campaignGoalValue', 'campaignFormSubmissions', 'campaignCommerceOrders'])),
+  "columns": zod.array(zod.enum(['UNDEFINED', 'usertype', 'referralPath', 'fullReferrer', 'campaign', 'source', 'medium', 'sourceMedium', 'browser', 'browserVersion', 'operatingSystem', 'operatingSystemVersion', 'deviceCategory', 'country', 'city', 'hostname', 'pageUrl', 'pageId', 'NodeId', 'NodeCulture', 'NodeSegment', 'NodeContentType', 'pagePath', 'eventCategory', 'eventAction', 'eventLabel', 'date', 'year', 'month', 'week', 'day', 'hour', 'minute', 'nthMonth', 'nthWeek', 'nthDay', 'nthMinute', 'nthHour', 'abTest', 'abTestVariant', 'goal', 'goalId', 'goalType', 'isMainGoal', 'visitorType', 'bot', 'botId', 'botVersion', 'botVersionId', 'referralHostname', 'referralIsInternalPage', 'referralPathAndQuery', 'browserId', 'datetime', 'pageviewSegmentId', 'pageviewSegmentName', 'pageviewAppliedSegmentId', 'pageviewAppliedSegmentName', 'pageviewAppliedPersonalizationId', 'pageviewAppliedPersonalizationName', 'videoName', 'videoUrl', 'videoEventType', 'videoEventTypeName', 'umbracoFormsName', 'umbracoFormsId', 'umbracoFormsFieldName', 'umbracoFormsFieldId', 'umbracoFormsFieldError', 'cityId', 'countryId', 'province', 'provinceId', 'county', 'countyId', 'sourcePlatform', 'creativeFormat', 'marketingTactic', 'segmentId', 'segmentName', 'searchTerm', 'users', 'newVisitors', 'percentNewSessions', 'sessions', 'bounceRate', 'sessionDuration', 'avgSessionDuration', 'goalCompletionsAll', 'goalValueAll', 'pageviews', 'pageviewsWithSubpages', 'pageviewsPerSession', 'uniquePageviews', 'avgTimeOnPage', 'totalEvents', 'eventValue', 'avgEventValue', 'abTestVariantVisitors', 'abTestVariantCompletionsAll', 'videoPlays', 'videoPlaytime', 'avgVideoPlaytime', 'avgRelativeVideoPlaytime', 'videoEvents', 'umbracoFormsViews', 'umbracoFormsSubmissions', 'umbracoFormsStarts', 'umbracoFormsAbandons', 'umbracoFormsErrors', 'umbracoFormsFieldFocusses', 'umbracoFormsFieldAbandons', 'umbracoFormsFieldErrors', 'avgEngagedTimeOnPage', 'pageviewsBot', 'pageSessions', 'pageVisitors', 'pageSessionsWithSubpages', 'pageVisitorsWithSubpages', 'activeSegmentPageviews', 'inactiveSegmentPageviews', 'activeSegmentSessions', 'inactiveSegmentSessions', 'activeSegmentProfiles', 'inactiveSegmentProfiles', 'activePersonalizedSegmentPageviews', 'inactivePersonalizedSegmentPageviews', 'activePersonalizedSegmentSessions', 'inactivePersonalizedSegmentSessions', 'activePersonalizedSegmentProfiles', 'inactivePersonalizedSegmentProfiles', 'searchVolume', 'searchVolumeWithSubpages', 'visitors', 'campaignEntries', 'campaignVisitors', 'campaignGoals', 'campaignGoalValue', 'campaignFormSubmissions', 'campaignCommerceOrders', 'entrySessions'])),
   "currentPage": zod.int(),
   "rows": zod.array(zod.array(zod.unknown())),
   "rowsPerPage": zod.int(),
   "totalRows": zod.int(),
   "totalPages": zod.int(),
+  "metricTotals": zod.array(zod.number()).nullish(),
   "fromRow": zod.int(),
   "toRow": zod.int(),
   "reportsExist": zod.boolean()
@@ -3223,27 +3143,7 @@ export const postAppliedPersonalizationBody = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "segmentId": zod.int().nullish(),
-  "segment": zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "isTemporary": zod.boolean(),
-  "sortOrder": zod.int(),
-  "rules": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "segmentId": zod.int(),
-  "type": zod.string().nullish(),
-  "config": zod.unknown().nullish(),
-  "isNegation": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true})
-})),
-  "controlGroupSize": zod.number()
-}).nullish(),
+  "segmentKey": zod.guid().nullish(),
   "type": zod.enum(['SinglePage', 'MultiPage', 'ContentType']),
   "umbracoSegmentAlias": zod.string().nullish(),
   "name": zod.string().nullish(),
@@ -3258,42 +3158,25 @@ export const postAppliedPersonalizationBody = zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
   "nodeId": zod.int(),
+  "nodeKey": zod.guid().nullish(),
   "culture": zod.string().nullish()
 })),
   "contentTypes": zod.array(zod.object({
   "id": zod.int(),
   "key": zod.guid(),
   "contentTypeId": zod.int(),
+  "contentTypeUnique": zod.guid().nullish(),
   "culture": zod.string().nullish()
 })),
-  "previewUrl": zod.string().nullish()
+  "previewSegment": zod.string().nullish(),
+  "previewNodeKey": zod.guid().nullish()
 })
 
 export const postAppliedPersonalizationResponse = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "segmentId": zod.int().nullish(),
-  "segment": zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "isTemporary": zod.boolean(),
-  "sortOrder": zod.int(),
-  "rules": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "segmentId": zod.int(),
-  "type": zod.string().nullish(),
-  "config": zod.unknown().nullish(),
-  "isNegation": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true})
-})),
-  "controlGroupSize": zod.number()
-}).nullish(),
+  "segmentKey": zod.guid().nullish(),
   "type": zod.enum(['SinglePage', 'MultiPage', 'ContentType']),
   "umbracoSegmentAlias": zod.string().nullish(),
   "name": zod.string().nullish(),
@@ -3308,15 +3191,18 @@ export const postAppliedPersonalizationResponse = zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
   "nodeId": zod.int(),
+  "nodeKey": zod.guid().nullish(),
   "culture": zod.string().nullish()
 })),
   "contentTypes": zod.array(zod.object({
   "id": zod.int(),
   "key": zod.guid(),
   "contentTypeId": zod.int(),
+  "contentTypeUnique": zod.guid().nullish(),
   "culture": zod.string().nullish()
 })),
-  "previewUrl": zod.string().nullish()
+  "previewSegment": zod.string().nullish(),
+  "previewNodeKey": zod.guid().nullish()
 })
 
 
@@ -3324,27 +3210,7 @@ export const getAppliedPersonalizationAllResponseItem = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "segmentId": zod.int().nullish(),
-  "segment": zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "isTemporary": zod.boolean(),
-  "sortOrder": zod.int(),
-  "rules": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "segmentId": zod.int(),
-  "type": zod.string().nullish(),
-  "config": zod.unknown().nullish(),
-  "isNegation": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true})
-})),
-  "controlGroupSize": zod.number()
-}).nullish(),
+  "segmentKey": zod.guid().nullish(),
   "type": zod.enum(['SinglePage', 'MultiPage', 'ContentType']),
   "umbracoSegmentAlias": zod.string().nullish(),
   "name": zod.string().nullish(),
@@ -3359,15 +3225,18 @@ export const getAppliedPersonalizationAllResponseItem = zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
   "nodeId": zod.int(),
+  "nodeKey": zod.guid().nullish(),
   "culture": zod.string().nullish()
 })),
   "contentTypes": zod.array(zod.object({
   "id": zod.int(),
   "key": zod.guid(),
   "contentTypeId": zod.int(),
+  "contentTypeUnique": zod.guid().nullish(),
   "culture": zod.string().nullish()
 })),
-  "previewUrl": zod.string().nullish()
+  "previewSegment": zod.string().nullish(),
+  "previewNodeKey": zod.guid().nullish()
 })
 export const getAppliedPersonalizationAllResponse = zod.array(getAppliedPersonalizationAllResponseItem)
 
@@ -3380,27 +3249,7 @@ export const getAppliedPersonalizationIdResponse = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "segmentId": zod.int().nullish(),
-  "segment": zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "isTemporary": zod.boolean(),
-  "sortOrder": zod.int(),
-  "rules": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "segmentId": zod.int(),
-  "type": zod.string().nullish(),
-  "config": zod.unknown().nullish(),
-  "isNegation": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true})
-})),
-  "controlGroupSize": zod.number()
-}).nullish(),
+  "segmentKey": zod.guid().nullish(),
   "type": zod.enum(['SinglePage', 'MultiPage', 'ContentType']),
   "umbracoSegmentAlias": zod.string().nullish(),
   "name": zod.string().nullish(),
@@ -3415,15 +3264,18 @@ export const getAppliedPersonalizationIdResponse = zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
   "nodeId": zod.int(),
+  "nodeKey": zod.guid().nullish(),
   "culture": zod.string().nullish()
 })),
   "contentTypes": zod.array(zod.object({
   "id": zod.int(),
   "key": zod.guid(),
   "contentTypeId": zod.int(),
+  "contentTypeUnique": zod.guid().nullish(),
   "culture": zod.string().nullish()
 })),
-  "previewUrl": zod.string().nullish()
+  "previewSegment": zod.string().nullish(),
+  "previewNodeKey": zod.guid().nullish()
 })
 
 
@@ -3434,7 +3286,8 @@ export const postAppliedPersonalizationSegmentQueryParams = zod.object({
 })
 
 export const postAppliedPersonalizationSegmentResponse = zod.object({
-  "created": zod.boolean()
+  "created": zod.boolean(),
+  "cultureSharedSegmentedProperties": zod.array(zod.string())
 })
 
 
@@ -3446,27 +3299,7 @@ export const getAppliedPersonalizationSegmentResponse = zod.object({
   "id": zod.int(),
   "created": zod.iso.datetime({"offset":true}),
   "unique": zod.guid(),
-  "segmentId": zod.int().nullish(),
-  "segment": zod.object({
-  "id": zod.int(),
-  "created": zod.iso.datetime({"offset":true}),
-  "unique": zod.guid(),
-  "name": zod.string().nullish(),
-  "description": zod.string().nullish(),
-  "endTime": zod.iso.datetime({"offset":true}).nullish(),
-  "isTemporary": zod.boolean(),
-  "sortOrder": zod.int(),
-  "rules": zod.array(zod.object({
-  "id": zod.int(),
-  "unique": zod.guid(),
-  "segmentId": zod.int(),
-  "type": zod.string().nullish(),
-  "config": zod.unknown().nullish(),
-  "isNegation": zod.boolean(),
-  "created": zod.iso.datetime({"offset":true})
-})),
-  "controlGroupSize": zod.number()
-}).nullish(),
+  "segmentKey": zod.guid().nullish(),
   "type": zod.enum(['SinglePage', 'MultiPage', 'ContentType']),
   "umbracoSegmentAlias": zod.string().nullish(),
   "name": zod.string().nullish(),
@@ -3481,15 +3314,18 @@ export const getAppliedPersonalizationSegmentResponse = zod.object({
   "id": zod.int(),
   "unique": zod.guid(),
   "nodeId": zod.int(),
+  "nodeKey": zod.guid().nullish(),
   "culture": zod.string().nullish()
 })),
   "contentTypes": zod.array(zod.object({
   "id": zod.int(),
   "key": zod.guid(),
   "contentTypeId": zod.int(),
+  "contentTypeUnique": zod.guid().nullish(),
   "culture": zod.string().nullish()
 })),
-  "previewUrl": zod.string().nullish()
+  "previewSegment": zod.string().nullish(),
+  "previewNodeKey": zod.guid().nullish()
 })
 
 
@@ -3760,6 +3596,7 @@ export const getConfigurationResponse = zod.object({
 }),
   "DataCollection": zod.object({
   "AnonymizeIPAddress": zod.boolean(),
+  "RequireAnalyticsPermissionForMemberTracking": zod.boolean(),
   "FlushRateInRecords": zod.int(),
   "FlushIntervalInSeconds": zod.int(),
   "RegexTimeoutInMilliseconds": zod.int(),
@@ -3805,6 +3642,7 @@ export const getConfigurationResponse = zod.object({
 })]),
   "dataCollection": zod.union([zod.object({
   "AnonymizeIPAddress": zod.boolean(),
+  "RequireAnalyticsPermissionForMemberTracking": zod.boolean(),
   "FlushRateInRecords": zod.int(),
   "FlushIntervalInSeconds": zod.int(),
   "RegexTimeoutInMilliseconds": zod.int(),
@@ -3816,6 +3654,7 @@ export const getConfigurationResponse = zod.object({
 })
 }),zod.object({
   "anonymizeIPAddress": zod.boolean(),
+  "requireAnalyticsPermissionForMemberTracking": zod.boolean(),
   "flushRateInRecords": zod.int(),
   "flushIntervalInSeconds": zod.int(),
   "regexTimeoutInMilliseconds": zod.int(),
@@ -4053,7 +3892,10 @@ export const getContentTypesSegmentedPropertyQueryParams = zod.object({
   "unique": zod.guid().optional()
 })
 
-export const getContentTypesSegmentedPropertyResponse = zod.boolean()
+export const getContentTypesSegmentedPropertyResponse = zod.object({
+  "hasSegmentedProperty": zod.boolean(),
+  "cultureSharedSegmentedProperties": zod.array(zod.string())
+})
 
 
 export const getCulturesQueryParams = zod.object({
@@ -4283,11 +4125,15 @@ export const getDataCleanupLastRunResponse = zod.object({
   "totalDurationMs": zod.int(),
   "failed": zod.boolean(),
   "errorMessage": zod.string().nullish(),
-  "anonymizedVisitors": zod.int(),
-  "deletedPageviews": zod.int(),
-  "deletedVisitors": zod.int(),
+  "anonymizedVisitors": zod.int().nullish(),
+  "deletedPageviews": zod.int().nullish(),
+  "deletedVisitors": zod.int().nullish(),
+  "deletedControlGroups": zod.int().nullish(),
+  "deletedRawRecords": zod.int().nullish(),
   "anonymizeAfterDays": zod.int(),
   "deleteAfterDays": zod.int(),
+  "deleteControlGroupDataAfterDays": zod.int(),
+  "deleteRawDataAfterDays": zod.int(),
   "databaseSchemaComplete": zod.boolean()
 })
 
@@ -4570,6 +4416,18 @@ export const getGoalsAllResponseItem = zod.object({
 export const getGoalsAllResponse = zod.array(getGoalsAllResponseItem)
 
 
+export const getGoalsItemQueryParams = zod.object({
+  "id": zod.array(zod.guid()).optional()
+})
+
+export const getGoalsItemResponseItem = zod.object({
+  "name": zod.string(),
+  "unique": zod.guid(),
+  "description": zod.string().nullish()
+})
+export const getGoalsItemResponse = zod.array(getGoalsItemResponseItem)
+
+
 export const getGoalsMainResponseItem = zod.object({
   "id": zod.int(),
   "key": zod.guid(),
@@ -4587,6 +4445,14 @@ export const getGoalsMainResponseItem = zod.object({
   "updatedBy": zod.guid().nullish()
 })
 export const getGoalsMainResponse = zod.array(getGoalsMainResponseItem)
+
+
+export const getGoalsTreeRootResponseItem = zod.object({
+  "name": zod.string(),
+  "unique": zod.guid(),
+  "description": zod.string().nullish()
+})
+export const getGoalsTreeRootResponse = zod.array(getGoalsTreeRootResponseItem)
 
 
 export const postHeatmapsGenerateScrollHeatmapBody = zod.object({
@@ -4618,7 +4484,7 @@ export const getHeatmapsVariantsQueryParams = zod.object({
 
 export const getHeatmapsVariantsResponseItem = zod.object({
   "name": zod.string().nullish(),
-  "queryString": zod.string().nullish()
+  "segment": zod.string().nullish()
 })
 export const getHeatmapsVariantsResponse = zod.array(getHeatmapsVariantsResponseItem)
 
@@ -4890,6 +4756,12 @@ export const postPersonaUnlockBody = zod.object({
 })
 
 export const postPersonaUnlockResponse = zod.unknown()
+
+
+export const postPreviewEndResponse = zod.unknown()
+
+
+export const postPreviewStartResponse = zod.unknown()
 
 
 export const getProfileBotVisitorsResponse = zod.record(zod.string(), zod.string())
@@ -5589,12 +5461,16 @@ export const getSegmentsAllResponseItem = zod.object({
 export const getSegmentsAllResponse = zod.array(getSegmentsAllResponseItem)
 
 
-export const deleteSegmentsDeleteSegmentContentQueryParams = zod.object({
-  "segment": zod.string().optional(),
-  "contentId": zod.guid().optional()
+export const getSegmentsItemQueryParams = zod.object({
+  "id": zod.array(zod.guid()).optional()
 })
 
-export const deleteSegmentsDeleteSegmentContentResponse = zod.boolean()
+export const getSegmentsItemResponseItem = zod.object({
+  "name": zod.string(),
+  "unique": zod.guid(),
+  "description": zod.string().nullish()
+})
+export const getSegmentsItemResponse = zod.array(getSegmentsItemResponseItem)
 
 
 export const getSegmentsLocationsDataResponse = zod.object({
@@ -5603,6 +5479,26 @@ export const getSegmentsLocationsDataResponse = zod.object({
   "cities": zod.record(zod.string(), zod.array(zod.string())),
   "counties": zod.record(zod.string(), zod.array(zod.string()))
 })
+
+
+export const getSegmentsPreviewableSegmentsQueryParams = zod.object({
+  "id": zod.guid().optional()
+})
+
+export const getSegmentsPreviewableSegmentsResponseItem = zod.object({
+  "alias": zod.string(),
+  "name": zod.string().nullish(),
+  "cultures": zod.array(zod.string()).nullish()
+})
+export const getSegmentsPreviewableSegmentsResponse = zod.array(getSegmentsPreviewableSegmentsResponseItem)
+
+
+export const getSegmentsTreeRootResponseItem = zod.object({
+  "name": zod.string(),
+  "unique": zod.guid(),
+  "description": zod.string().nullish()
+})
+export const getSegmentsTreeRootResponse = zod.array(getSegmentsTreeRootResponseItem)
 
 
 export const postSegmentsUpdatePriorityBodyItem = zod.object({
@@ -5628,18 +5524,31 @@ export const getSuspiciousActivityOverviewQueryTakeDefault = 20;
 
 export const getSuspiciousActivityOverviewQueryParams = zod.object({
   "skip": zod.int().optional(),
-  "take": zod.int().default(getSuspiciousActivityOverviewQueryTakeDefault)
+  "take": zod.int().default(getSuspiciousActivityOverviewQueryTakeDefault),
+  "filter": zod.enum(['All', 'Person', 'NonPerson']).optional()
 })
 
 export const getSuspiciousActivityOverviewResponse = zod.object({
   "results": zod.array(zod.object({
   "visitorId": zod.int(),
   "totalPageviews": zod.int(),
+  "visitorType": zod.enum(['Person', 'Bot', 'Monitor', 'Spam']),
   "ipAddress": zod.string().nullish(),
   "userAgent": zod.string().nullish()
 })),
   "totalResults": zod.int()
 })
+
+
+export const putSuspiciousActivityVisitorsByVisitorIdVisitorTypeParams = zod.object({
+  "visitorId": zod.int()
+})
+
+export const putSuspiciousActivityVisitorsByVisitorIdVisitorTypeBody = zod.object({
+  "visitorType": zod.enum(['Person', 'Bot', 'Monitor', 'Spam'])
+})
+
+export const putSuspiciousActivityVisitorsByVisitorIdVisitorTypeResponse = zod.unknown()
 
 
 export const deleteTrafficFilterQueryParams = zod.object({

@@ -6,6 +6,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working on the 
 
 An MCP server for [Umbraco Engage](https://umbraco.com/products/umbraco-engage/), built from the `@umbraco-cms/mcp-template` starter kit.
 
+**Minimum Umbraco Engage: 17.5.0.** Compared with 17.2.1 (the version this line was generated
+against before), Engage 17.5.0 brought 17.x's Management API in line with Engage 18.2.0: A/B tests
+reference goals and projects by `goalKey`/`projectKey` (plus a required `onCompleteAction`), A/B
+page variants need `nodeKey`/`contentTypeKey`, applied personalization references `segmentKey`, `GET
+/content-types/segmented-property` returns an object, and `GET /ab-test/preview-url` and `DELETE
+/segments/delete-segment-content` were removed. The tools on this line follow that API, so
+`post-ab-test`, `post-applied-personalization` and friends fail against Engage 17.2.x. 17.3.x/17.4.x
+weren't checked, so treat 17.5.0 as the minimum.
+
 ## Commands
 
 ```bash
@@ -147,7 +156,7 @@ Treat a CI failure the same as a local test failure — it's a real regression t
 
 ## Demo Site Setup
 
-Run `npm run umbraco:bootstrap` (or `npm run umbraco:start` to bootstrap and launch it in one step) to materialize `demo-site/` from the tracked `demo-site-template/` via `scripts/bootstrap-demo-site.sh` — idempotent, pass `--force` to recreate it. `demo-site-template/` is the source of truth (Umbraco.Cms 17.6.0 + Umbraco.Cms.DevelopmentMode.Backoffice 17.6.0 + Umbraco.Engage 17.2.1 — see its `demo-site-template.csproj`); `demo-site/` itself stays gitignored, since it's each developer's/CI's own working instance including generated `bin/`/`obj/`/`wwwroot/`/`umbraco/` and local secrets in `appsettings.local.json`.
+Run `npm run umbraco:bootstrap` (or `npm run umbraco:start` to bootstrap and launch it in one step) to materialize `demo-site/` from the tracked `demo-site-template/` via `scripts/bootstrap-demo-site.sh` — idempotent, pass `--force` to recreate it. `demo-site-template/` is the source of truth (Umbraco.Cms 17.6.0 + Umbraco.Cms.DevelopmentMode.Backoffice 17.6.0 + Umbraco.Engage 17.5.0 — see its `demo-site-template.csproj`); `demo-site/` itself stays gitignored, since it's each developer's/CI's own working instance including generated `bin/`/`obj/`/`wwwroot/`/`umbraco/` and local secrets in `appsettings.local.json`.
 
 After bootstrapping, write `demo-site/appsettings.local.json` with your DB connection string (see `.github/workflows/test.yml`'s "Configure Umbraco for CI" step for the exact shape), then run `npm run umbraco:start` (or `cd demo-site && dotnet run` if already bootstrapped).
 
@@ -156,7 +165,7 @@ CI (`.github/workflows/test.yml`) does this from scratch on every push/PR: boots
 If you ever need to rebuild `demo-site-template/` from scratch instead (e.g. bumping the Umbraco/Engage version), the original manual steps were:
 
 1. **`demo-site/demo-site.csproj`** — `Microsoft.NET.Sdk.Web`, `net10.0`, referencing:
-   - `Umbraco.Cms` — pin to a version Engage supports (check the target `Umbraco.Engage` nuspec's `Umbraco.Engage.Core` → `Umbraco.Cms.Web.Website` dependency range; `17.6.0` paired with `Umbraco.Engage 17.2.1` is confirmed working). Use exactly `17.2.1`, not `17.2.0` — the `get-package` integration test's checked-in snapshot expects `version: "17.2.1+cb3108d"` (the NuGet package's embedded repository commit); any other Engage version fails that snapshot on build/version alone.
+   - `Umbraco.Cms` — pin to a version Engage supports (check the target `Umbraco.Engage` nuspec's `Umbraco.Engage.Core` → `Umbraco.Cms.Web.Website` dependency range; `17.6.0` paired with `Umbraco.Engage 17.5.0` is confirmed working). Use exactly `17.5.0` — the `get-package` integration test's checked-in snapshot expects `version: "17.5.0+49e5bc0"` (the NuGet package's embedded repository commit); any other Engage version fails that snapshot on build/version alone.
    - `Umbraco.Cms.DevelopmentMode.Backoffice` (same version)
    - `Umbraco.Engage` — do **not** add the `Clean` starter-kit package alongside it unless you pin a `Clean` version whose own `Umbraco.Cms.Web.Website` dependency matches (mismatched ranges cause an `NU1107` version-conflict restore failure)
 2. **`Program.cs`** — copy the minimal `CreateUmbracoBuilder().AddBackOffice().AddWebsite().AddComposers().Build()` pattern from a sibling `umbraco-mcp-*` repo's `demo-site/Program.cs`
