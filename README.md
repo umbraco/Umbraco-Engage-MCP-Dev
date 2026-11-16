@@ -6,7 +6,7 @@ An MCP (Model Context Protocol) server for [Umbraco Engage](https://umbraco.com/
 
 > **Renamed:** this package was previously published as `@umbraco-engage/mcp-dev`. If your MCP
 > client config still names it, change it to `@umbraco-engage/mcp` (Umbraco 18) or
-> `@umbraco-engage/mcp@lts-17-beta` (Umbraco 17). The command is now `engage-mcp-server` (it was `umbraco-engage-mcp-dev`): `npx` finds it automatically,
+> `@umbraco-engage/mcp@lts-17` (Umbraco 17). The command is now `engage-mcp-server` (it was `umbraco-engage-mcp-dev`): `npx` finds it automatically,
 > but update any script that runs the old command directly.
 
 ## Intro
