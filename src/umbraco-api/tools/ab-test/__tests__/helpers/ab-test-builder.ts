@@ -3,7 +3,6 @@ import { ContentPageFixture } from "../../../../../testing/content-page-fixture.
 import postAbTestTool from "../../post/post-ab-test.js";
 import deleteAbTestTool from "../../delete/delete-ab-test.js";
 import postGoalTool from "../../../goal/post/post-goal.js";
-import getGoalDetailsTool from "../../../goal/get/get-goal-details.js";
 import getGoalAllTypesTool from "../../../goal/get/get-goal-all-types.js";
 
 export const TEST_AB_TEST_NAME = "_Test AB Test";
@@ -15,7 +14,7 @@ export const TEST_AB_TEST_GOAL_NAME = "_Test AB Test Goal";
  *   1. A real published Umbraco content page (via ContentPageFixture, over
  *      the chained CMS MCP server) - post-ab-test's `pageUnique` needs a
  *      real page key, not a placeholder guid.
- *   2. A real goal (post-goal) - post-ab-test's `goalId` needs a real,
+ *   2. A real goal (post-goal) - post-ab-test's `goalKey` needs a real,
  *      resolvable numeric id, not the goal's uuid `unique`.
  *   3. post-ab-test itself, which now builds the full server payload
  *      internally from this minimal input.
@@ -29,7 +28,7 @@ export class AbTestBuilder {
   private name: string = TEST_AB_TEST_NAME;
   private goalName: string = TEST_AB_TEST_GOAL_NAME;
   private contentPage = new ContentPageFixture();
-  private projectId?: number;
+  private projectKey?: string;
   private testType: "SinglePage" | "MultiPage" | "ContentType" | "SplitUrl" = "SinglePage";
   private secondPage?: ContentPageFixture;
 
@@ -46,8 +45,8 @@ export class AbTestBuilder {
     return this;
   }
 
-  withProjectId(projectId: number): this {
-    this.projectId = projectId;
+  withProjectKey(projectKey: string): this {
+    this.projectKey = projectKey;
     return this;
   }
 
@@ -117,36 +116,15 @@ export class AbTestBuilder {
     }
     const goalUnique = (goalResult.structuredContent as { unique: string }).unique;
 
-    // 3. Resolve the goal's real numeric id - post-ab-test's `goalId` needs
-    // this numeric id, not the goal's uuid `unique`.
-    const goalDetails = await getGoalDetailsTool.handler({ id: goalUnique }, context);
-    if (goalDetails.isError) {
-      throw new Error(
-        `Failed to resolve goal details for A/B test: ${JSON.stringify(goalDetails.content)}`,
-      );
-    }
-    const goalNumericId = (goalDetails.structuredContent as { id: number }).id;
-
-    // 4. Persist - post-ab-test builds the full server payload internally.
+    // 3. Persist - post-ab-test builds the full server payload internally.
     const created = await postAbTestTool.handler(
       {
         name: this.name,
         testType: this.testType,
-        goalId: goalNumericId,
-        goal: {
-          key: goalUnique,
-          name: this.goalName,
-          value: 1,
-          goalTypeId: customGoalType.id,
-          goalTypeConfig: "{}",
-          isMain: false,
-          isInverted: false,
-          isActive: true,
-          isInvalid: false,
-        },
+        goalKey: goalUnique,
         pageUnique: pageKey,
         secondVariantPageUnique: this.secondPage?.getKey(),
-        projectId: this.projectId,
+        projectKey: this.projectKey,
         secondVariantName: "Variant B",
         participationPercentage: 1,
         minimumDetectableEffect: 0.1,

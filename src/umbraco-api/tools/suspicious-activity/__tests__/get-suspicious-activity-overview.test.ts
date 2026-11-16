@@ -10,7 +10,7 @@ describe("get-suspicious-activity-overview", () => {
 
   it("returns suspicious activity overview", async () => {
     const context = createMockRequestHandlerExtra();
-    const result = await getSuspiciousActivityOverviewTool.handler({}, context);
+    const result = await getSuspiciousActivityOverviewTool.handler({ filter: undefined }, context);
     expect(createSnapshotResult(result)).toMatchSnapshot();
   });
 });

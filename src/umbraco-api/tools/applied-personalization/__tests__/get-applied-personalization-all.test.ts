@@ -26,18 +26,24 @@ describe("get-applied-personalization-all", () => {
 
     const singleItemResult = { ...result, structuredContent: { items: found } };
     const snapshot = normalizeVolatileFields(createSnapshotResult(singleItemResult)) as {
-      structuredContent?: { items: { unique: string; umbracoSegmentAlias: string }[] };
+      structuredContent?: {
+        items: { unique: string; umbracoSegmentAlias: string; previewSegment: string | null }[];
+      };
     };
     // `unique` is a fresh random guid every run (a fixed one would collide
     // with the soft-delete unique constraint on a second run - see the
-    // builder), and `umbracoSegmentAlias` embeds the row's own real,
-    // server-generated numeric id - neither is covered by
+    // builder), and `umbracoSegmentAlias`/`previewSegment` embed the row's
+    // own real, server-generated numeric id - none is covered by
     // normalizeVolatileFields/createSnapshotResult, so blank them manually.
     if (snapshot.structuredContent) {
       snapshot.structuredContent.items = snapshot.structuredContent.items.map((item) => ({
         ...item,
         unique: "00000000-0000-0000-0000-000000000000",
         umbracoSegmentAlias: "NORMALIZED_SEGMENT_ALIAS",
+        previewSegment: item.previewSegment?.replace(
+          /^engage_personalization_\d+$/,
+          "engage_personalization_NORMALIZED_ID",
+        ) ?? null,
       }));
     }
     expect(snapshot).toMatchSnapshot();

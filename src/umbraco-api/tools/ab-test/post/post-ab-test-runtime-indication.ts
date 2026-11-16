@@ -46,6 +46,7 @@ function buildVariantStub(index: number): FullBody["variants"][number] {
     disabledByUmbracoUserKey: null,
     isDisabled: false,
     segment: null,
+    previewSegment: null,
     totalPageviewsForVariant: 0,
     totalVisitorsForVariant: 0,
   };
@@ -64,10 +65,9 @@ const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
       id: 0,
       unique: randomUUID(),
       created: new Date().toISOString(),
-      projectId: null,
-      goalId: null,
+      projectKey: null,
+      goalKey: null,
       status: "Draft",
-      goal: null,
       name: null,
       description: null,
       createdByUmbracoUserName: null,
@@ -87,6 +87,8 @@ const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
       estimatedDailyVisitors: params.estimatedDailyVisitors,
       baselineConversionRate: params.baselineConversionRate,
       viableVisitorThreshold: null,
+      previewNodeKey: null,
+      onCompleteAction: "Nothing",
     };
     return executeGetApiCall<ReturnType<ApiClient["postAbTestRuntimeIndication"]>, ApiClient>(
       (client) => client.postAbTestRuntimeIndication(body, CAPTURE_RAW_HTTP_RESPONSE),

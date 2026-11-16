@@ -4,6 +4,7 @@ exports[`get-content-types-segmented-property returns segmented property flag fo
 {
   "content": [],
   "structuredContent": {
+    "cultureSharedSegmentedProperties": [],
     "hasSegmentedProperty": false,
   },
 }

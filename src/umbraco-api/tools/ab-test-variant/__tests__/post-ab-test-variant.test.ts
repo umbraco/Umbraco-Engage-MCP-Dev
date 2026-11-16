@@ -30,6 +30,7 @@ describe("post-ab-test-variant", () => {
         disabledByUmbracoUserKey: undefined,
         isDisabled: false,
         segment: undefined,
+        previewSegment: null,
         totalPageviewsForVariant: 0,
         totalVisitorsForVariant: 0,
       },

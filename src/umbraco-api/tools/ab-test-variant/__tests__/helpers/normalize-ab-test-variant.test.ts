@@ -43,9 +43,10 @@ describe("normalizeAbTestVariantIdentifiers", () => {
   });
 
   it("normalizes the auto-generated ab-testing segment string", () => {
-    const input = { segment: "engage_ab-testing_456" };
+    const input = { segment: "engage_ab-testing_456", previewSegment: "engage_ab-testing_456" };
     expect(normalizeAbTestVariantIdentifiers(input)).toEqual({
       segment: "engage_ab-testing_NORMALIZED_ID",
+      previewSegment: "engage_ab-testing_NORMALIZED_ID",
     });
   });
 

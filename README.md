@@ -4,6 +4,11 @@
 
 An MCP (Model Context Protocol) server for [Umbraco Engage](https://umbraco.com/products/umbraco-engage/) that enables AI-powered marketing, analytics, and personalization workflows. It provides comprehensive access to the Umbraco Engage Management API, allowing your AI agent to run A/B tests, query analytics, manage personas and segments, configure campaigns and goals, inspect visitor profiles, and more — all through natural conversation.
 
+> **Renamed:** this package was previously published as `@umbraco-engage/mcp-dev`. If your MCP
+> client config still names it, change it to `@umbraco-engage/mcp` (Umbraco 18) or
+> `@umbraco-engage/mcp@lts-17` (Umbraco 17). The command is now `engage-mcp-server` (it was `umbraco-engage-mcp-dev`): `npx` finds it automatically,
+> but update any script that runs the old command directly.
+
 ## Intro
 
 The MCP server authenticates using an Umbraco API user, ensuring secure, permission-based access to the Umbraco Engage API. Credentials are provided via OAuth2 client credentials and used for every request to the Engage Management API.
@@ -14,16 +19,23 @@ It chains to the [Umbraco CMS MCP server](https://www.npmjs.com/package/@umbraco
 
 | Umbraco | Umbraco Engage | Package |
 |---------|----------------|---------|
-| 18 | 18.2.0 or later | `@umbraco-engage/mcp-dev` (18.x, built from `v18/main`) |
-| **17** | **17.x** | **`@umbraco-engage/mcp-dev@lts-17-beta`** (built from `main`) |
+| 18 | 18.2.0 or later | `@umbraco-engage/mcp` (18.x, built from `v18/main`) |
+| **17** | **17.5.0 or later** | **`@umbraco-engage/mcp@lts-17`** (built from `main`) |
 
 Install the version that matches your site's Umbraco major — the API client differs between them.
 
+Umbraco Engage 17.5.0 changed its Management API (A/B tests and applied personalization reference
+goals, projects and segments by key, and two endpoints were removed), so the Umbraco 17 line needs
+Umbraco Engage 17.5.0 or later. On an older Umbraco Engage the affected tools (A/B tests, personalization,
+analytics queries and a few others) refuse to run, with a message naming the required version; the
+other tools keep working.
+
 The Umbraco 17 line is published under its own `lts-17` dist-tags, so it never takes over `latest`
-or `beta` from the Umbraco 18 line. It is in beta, so install `@lts-17-beta`. A range such as `@17`
-doesn't match prereleases and won't find a version until 17.0.0 is released.
+or `beta` from the Umbraco 18 line. Install `@lts-17`.
 
 ## Quick Start
+
+**Requirements:** Node.js 22.23.4+, 24.22.1+ or 26.12.1+. Earlier releases are affected by [CVE-2026-111497](https://nodejs.org/en/blog/vulnerability/october-2026-security-releases) (Brotli decoder out-of-bounds write), which Node's built-in `fetch` reaches when it decompresses a Brotli response from Umbraco. Upgrading Node.js is the only fix. Check your version with `node --version`.
 
 ### 1. Create an Umbraco API User
 
@@ -40,7 +52,7 @@ Add the server to your MCP client configuration (Claude Desktop, Cursor, VS Code
   "mcpServers": {
     "umbraco-engage": {
       "command": "npx",
-      "args": ["@umbraco-engage/mcp-dev@lts-17-beta"],
+      "args": ["@umbraco-engage/mcp@lts-17"],
       "env": {
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",
         "UMBRACO_CLIENT_ID": "your-api-user-id",
@@ -59,6 +71,10 @@ For local development against a built copy of this repo, the bundled `.mcp.json`
 ## Configuration
 
 All settings can be provided as environment variables or CLI flags.
+
+CLI flags win over environment variables, and environment variables (including your MCP
+client's `env` block) win over a `.env` file in the working directory. A file passed with
+`--env <path>` overrides both the environment and `./.env`.
 
 ### Connection
 

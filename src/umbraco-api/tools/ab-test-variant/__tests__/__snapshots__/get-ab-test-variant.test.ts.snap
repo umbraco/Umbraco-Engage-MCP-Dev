@@ -27,6 +27,7 @@ exports[`get-ab-test-variant returns the real, persisted variant data for a real
     "isDisabled": false,
     "javascript": "",
     "name": "",
+    "previewSegment": "engage_ab-testing_NORMALIZED_ID",
     "redirectNodeKey": null,
     "segment": "engage_ab-testing_NORMALIZED_ID",
     "totalPageviewsForVariant": 0,
