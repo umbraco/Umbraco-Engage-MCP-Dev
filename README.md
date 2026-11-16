@@ -6,7 +6,7 @@ An MCP (Model Context Protocol) server for [Umbraco Engage](https://umbraco.com/
 
 > **Renamed:** this package was previously published as `@umbraco-engage/mcp-dev`. If your MCP
 > client config still names it, change it to `@umbraco-engage/mcp` (Umbraco 18) or
-> `@umbraco-engage/mcp@lts-17-beta` (Umbraco 17). The command is now `engage-mcp-server` (it was `umbraco-engage-mcp-dev`): `npx` finds it automatically,
+> `@umbraco-engage/mcp@lts-17` (Umbraco 17). The command is now `engage-mcp-server` (it was `umbraco-engage-mcp-dev`): `npx` finds it automatically,
 > but update any script that runs the old command directly.
 
 ## Intro
@@ -20,7 +20,7 @@ It chains to the [Umbraco CMS MCP server](https://www.npmjs.com/package/@umbraco
 | Umbraco | Umbraco Engage | Package |
 |---------|----------------|---------|
 | 18 | 18.2.0 or later | `@umbraco-engage/mcp` (18.x, built from `v18/main`) |
-| **17** | **17.5.0 or later** | **`@umbraco-engage/mcp@lts-17-beta`** (built from `main`) |
+| **17** | **17.5.0 or later** | **`@umbraco-engage/mcp@lts-17`** (built from `main`) |
 
 Install the version that matches your site's Umbraco major — the API client differs between them.
 
@@ -31,8 +31,7 @@ analytics queries and a few others) refuse to run, with a message naming the req
 other tools keep working.
 
 The Umbraco 17 line is published under its own `lts-17` dist-tags, so it never takes over `latest`
-or `beta` from the Umbraco 18 line. It is in beta, so install `@lts-17-beta`. A range such as `@17`
-doesn't match prereleases and won't find a version until 17.0.0 is released.
+or `beta` from the Umbraco 18 line. Install `@lts-17`.
 
 ## Quick Start
 
@@ -53,7 +52,7 @@ Add the server to your MCP client configuration (Claude Desktop, Cursor, VS Code
   "mcpServers": {
     "umbraco-engage": {
       "command": "npx",
-      "args": ["@umbraco-engage/mcp@lts-17-beta"],
+      "args": ["@umbraco-engage/mcp@lts-17"],
       "env": {
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",
         "UMBRACO_CLIENT_ID": "your-api-user-id",
