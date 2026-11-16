@@ -14,8 +14,8 @@ It chains to the [Umbraco CMS MCP server](https://www.npmjs.com/package/@umbraco
 
 | Umbraco | Umbraco Engage | Package |
 |---------|----------------|---------|
-| 18 | 18.2.0 or later | `@umbraco-engage/mcp-dev` (18.x, built from `v18/main`) |
-| **17** | **17.5.0 or later** | **`@umbraco-engage/mcp-dev@lts-17-beta`** (built from `main`) |
+| 18 | 18.2.0 or later | `@umbraco-engage/mcp` (18.x, built from `v18/main`) |
+| **17** | **17.5.0 or later** | **`@umbraco-engage/mcp@lts-17-beta`** (built from `main`) |
 
 Install the version that matches your site's Umbraco major — the API client differs between them.
 
@@ -46,7 +46,7 @@ Add the server to your MCP client configuration (Claude Desktop, Cursor, VS Code
   "mcpServers": {
     "umbraco-engage": {
       "command": "npx",
-      "args": ["@umbraco-engage/mcp-dev@lts-17-beta"],
+      "args": ["@umbraco-engage/mcp@lts-17-beta"],
       "env": {
         "NODE_TLS_REJECT_UNAUTHORIZED": "0",
         "UMBRACO_CLIENT_ID": "your-api-user-id",
