@@ -88,7 +88,7 @@ export class AbTestProjectBuilder {
     return this.createdId;
   }
 
-  /** The project's numeric `id` - what post-ab-test's `projectId` field actually expects (NOT `unique`/getId()). */
+  /** The project's numeric `id` (post-ab-test's `projectKey` takes the `unique` guid from getId() instead). */
   getNumericId(): number {
     if (this.createdNumericId === undefined) {
       throw new Error("A/B test project not created yet. Call create() first.");

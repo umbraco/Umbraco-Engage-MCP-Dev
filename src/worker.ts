@@ -136,6 +136,9 @@ export class UmbracoMcpAgent extends McpAgent<HostedMcpEnv, unknown, AuthProps> 
   server!: McpServer;
 
   async init() {
+    // `createPerRequestServer` throws `UmbracoSignInUnavailableError` when this
+    // session has no usable Umbraco sign-in, so a failed start surfaces as an
+    // error rather than a degraded server.
     this.server = await createPerRequestServer(
       serverOptions,
       this.env,
@@ -196,6 +199,8 @@ const provider = new OAuthProvider({
   authorizeEndpoint: "/authorize",
   tokenEndpoint: "/token",
   clientRegistrationEndpoint: "/register",
+  // Advertise and accept S256 only (the hosted authorize handler also enforces it).
+  allowPlainPKCE: false,
 });
 
 export default createWorkerExport(provider, options);

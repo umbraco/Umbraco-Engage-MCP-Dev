@@ -9,7 +9,10 @@ import {
 } from "@umbraco-cms/mcp-server-sdk";
 import { z } from "zod";
 import { postAbTestBody, postAbTestResponse } from "../../../api/generated/umbracoEngageManagementApi.zod.js";
-import type { getUmbracoEngageManagementAPI } from "../../../api/generated/umbracoEngageManagementApi.js";
+import type {
+  getUmbracoEngageManagementAPI,
+  AbTestDetailModel,
+} from "../../../api/generated/umbracoEngageManagementApi.js";
 import { buildUmbracoPageVariants } from "./build-umbraco-page-variants.js";
 
 type ApiClient = ReturnType<typeof getUmbracoEngageManagementAPI>;
@@ -81,10 +84,12 @@ const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
       },
       indication: null,
       variants: null,
-      isInvertedGoal: test.goal?.isInverted ?? false,
+      isInvertedGoal: current.data.isInvertedGoal ?? false,
     };
+    // The zod-inferred body marks indication.status nullable where the
+    // generated TS model (and the spec) don't; indication is always null here.
     return executeGetApiCall<ReturnType<ApiClient["postAbTest"]>, ApiClient>(
-      (client) => client.postAbTest(body, CAPTURE_RAW_HTTP_RESPONSE),
+      (client) => client.postAbTest(body as AbTestDetailModel, CAPTURE_RAW_HTTP_RESPONSE),
     );
   },
 };

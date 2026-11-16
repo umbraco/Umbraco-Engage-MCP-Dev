@@ -16,7 +16,7 @@ type FullBody = z.infer<typeof postAbTestProjectBody>;
 // have no meaningful non-empty value on creation, and `id`/`unique`/
 // `created` are mechanical identifiers the caller has no reason to invent.
 // A/B tests are added to the project afterwards via the ab-test collection's
-// own tools (using this project's `unique` as their `projectId`).
+// own tools (using this project's `unique` as their `projectKey`).
 const inputSchema = z.object({
   name: z.string().nullish(),
   description: z.string().nullish(),

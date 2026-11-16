@@ -63,7 +63,7 @@ const outputSchema = z.object({ unique: postGoalResponse });
 const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
   name: "post-goal",
   description:
-    "Create a new goal (a trackable conversion event, e.g. a page visit or custom event, used by A/B tests and scoring). Returns the created goal's `unique` guid - resolve its real numeric id afterward via get-goal-details before using it as post-ab-test's `goalId`.",
+    "Create a new goal (a trackable conversion event, e.g. a page visit or custom event, used by A/B tests and scoring). Returns the created goal's `unique` guid - pass it as post-ab-test's `goalKey`.",
   inputSchema: inputSchema.shape,
   outputSchema,
   slices: ["create"],

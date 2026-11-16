@@ -11,7 +11,7 @@ exports[`get-customer-journey-details should return details for an existing cust
     "expiration": 0,
     "expirationType": "never",
     "id": "00000000-0000-0000-0000-000000000000",
-    "minimumDeviation": 0,
+    "minimumDeviation": 1,
     "minimumDeviationType": "Absolute",
     "minimumParticipationScoreThreshold": 25,
     "steps": [],

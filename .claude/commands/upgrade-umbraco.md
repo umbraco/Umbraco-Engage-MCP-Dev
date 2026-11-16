@@ -48,7 +48,7 @@ curl -s "https://api.nuget.org/v3-flatcontainer/umbraco.engage/index.json" \
       if not any(x in v for x in ['rc','beta','alpha','pre'])))"
 ```
 
-**Check compatibility before bumping either package independently**: Engage pins a supported `Umbraco.Cms.Web.Website` dependency range in its own nuspec (`Umbraco.Engage.Core`). Don't bump `Umbraco.Cms` past what the target `Umbraco.Engage` version supports, and vice versa — CLAUDE.md's Demo Site Setup section documents `17.6.0` + `17.2.1` as the last confirmed-working pair. Also confirm the matching version of `Umbraco.Cms.DevelopmentMode.Backoffice` (kept in lockstep with `Umbraco.Cms`).
+**Check compatibility before bumping either package independently**: Engage pins a supported `Umbraco.Cms.Web.Website` dependency range in its own nuspec (`Umbraco.Engage.Core`). Don't bump `Umbraco.Cms` past what the target `Umbraco.Engage` version supports, and vice versa — CLAUDE.md's Demo Site Setup section documents `17.6.0` + `17.5.0` as the last confirmed-working pair. Also confirm the matching version of `Umbraco.Cms.DevelopmentMode.Backoffice` (kept in lockstep with `Umbraco.Cms`).
 
 ### 3. Update package versions in the template
 
@@ -122,7 +122,7 @@ Failures fall into three buckets:
 
 `npm run test:rerun-failures` reruns just the suites listed in `test-failures.log`.
 
-**Known pitfall:** `package/__tests__/get-package.test.ts` snapshots the exact Engage version string (`version: "17.2.1+cb3108d"` as of writing — see CLAUDE.md's Demo Site Setup section). A version bump *always* fails this snapshot on the version field alone; that's expected, not a regression — accept it along with the rest.
+**Known pitfall:** `package/__tests__/get-package.test.ts` snapshots the exact Engage version string (`version: "17.5.0+49e5bc0"` as of writing — see CLAUDE.md's Demo Site Setup section). A version bump *always* fails this snapshot on the version field alone; that's expected, not a regression — accept it along with the rest.
 
 ### 9. Plan and add tools for new endpoints
 

@@ -39,7 +39,7 @@ export function deleteTestGoals(): void {
   const query = `
     DELETE FROM ${GOAL_TABLE}
     WHERE (name LIKE '[_]Test%' OR name LIKE '[_]Probe%')
-      AND NOT EXISTS (SELECT 1 FROM ${AB_TEST_TABLE} t WHERE t.goalId = ${GOAL_TABLE}.id);
+      AND NOT EXISTS (SELECT 1 FROM ${AB_TEST_TABLE} t WHERE t.goalKey = ${GOAL_TABLE}.[key]);
   `;
   runSql(password, query);
 }

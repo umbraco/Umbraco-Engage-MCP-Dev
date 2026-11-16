@@ -42,6 +42,7 @@ function buildVariant(index: number, name: string): FullBody["variants"][number]
     disabledByUmbracoUserKey: null,
     isDisabled: false,
     segment: null,
+    previewSegment: null,
     totalPageviewsForVariant: 0,
     totalVisitorsForVariant: 0,
   };
@@ -60,10 +61,9 @@ const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
       id: 0,
       unique: randomUUID(),
       created: new Date().toISOString(),
-      projectId: null,
-      goalId: null,
+      projectKey: null,
+      goalKey: null,
       status: "Draft",
-      goal: null,
       name: null,
       description: null,
       createdByUmbracoUserName: null,
@@ -83,6 +83,8 @@ const tool: ToolDefinition<typeof inputSchema.shape, typeof outputSchema> = {
       estimatedDailyVisitors: 0,
       baselineConversionRate: 0.05,
       viableVisitorThreshold: null,
+      previewNodeKey: null,
+      onCompleteAction: "Nothing",
     };
     const result = await executeGetApiCall<ReturnType<ApiClient["postAbTestVariantDetails"]>, ApiClient>(
       (client) => client.postAbTestVariantDetails(body, CAPTURE_RAW_HTTP_RESPONSE),
